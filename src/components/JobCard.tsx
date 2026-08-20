@@ -125,20 +125,21 @@ export default function JobCard({ job }: { job: JobProps }) {
       
       <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center relative z-10">
         <span className="text-xs text-slate-500 font-medium">Updated recently</span>
-        {job.officialUrl ? (
-          <a 
-            href={job.officialUrl} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className={`text-xs font-semibold px-3 py-1.5 rounded-lg text-white ${accentColor} hover:opacity-90 transition`}
-          >
-            Official Website &rarr;
-          </a>
-        ) : (
-          <Link href={`/jobs/${job.id}`} className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+        <div className="flex gap-2 items-center">
+          <Link href={`/jobs/${job.id}`} className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline px-2 py-1.5">
             View Details &rarr;
           </Link>
-        )}
+          {job.officialUrl && (
+            <a 
+              href={job.officialUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className={`text-xs font-semibold px-3 py-1.5 rounded-lg text-white ${accentColor} hover:opacity-90 transition`}
+            >
+              Apply / Official Link
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );
