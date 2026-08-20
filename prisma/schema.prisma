@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Job {
+  id             String       @id @default(uuid())
+  hash           String       @unique // SHA-256 hash to prevent duplicate entries from scrapers
+  title          String
+  organization   String
+  jobType        String       // GOVERNMENT, PRIVATE, EXAM_UPDATE
+  category       String       // ASSAM_STATE, CENTRAL_GOVT, LOCAL_PRIVATE
+  vacancies      String
+  qualification  String       // Stored as comma-separated string
+  district       String
+  ageLimit       String
+  startDate      DateTime?
+  endDate        DateTime?
+  officialPdfUrl String?
+  applyUrl       String?
+  status         String       @default("DRAFT") // DRAFT, PUBLISHED
+  sourceName     String
+  employerId     String?
+  employer       Employer?    @relation(fields: [employerId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Employer {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  isVerified Boolean  @default(false)
+  jobs       Job[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

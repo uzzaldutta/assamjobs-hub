@@ -1,0 +1,92 @@
+process.env.DATABASE_URL = "file:./dev.db";
+import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
+import { createClient } from '@libsql/client'
+import crypto from 'crypto'
+
+import 'dotenv/config'
+const libsql = createClient({
+  url: process.env.DATABASE_URL || "file:dev.db",
+})
+const adapter = new PrismaLibSql(libsql)
+const prisma = new PrismaClient({ adapter })
+
+const mockJobs = [
+  {
+    title: "Junior Assistant & Grade IV",
+    organization: "Directorate of Secondary Education, Assam",
+    jobType: "GOVERNMENT",
+    category: "ASSAM_STATE",
+    vacancies: "1,240",
+    district: "All Assam",
+    endDate: new Date("2026-09-15"),
+    qualification: "12th Pass",
+    ageLimit: "18-40",
+    sourceName: "Admin",
+    status: "PUBLISHED"
+  },
+  {
+    title: "Customer Support Executive",
+    organization: "TechMahindra Guwahati",
+    jobType: "PRIVATE",
+    category: "LOCAL_PRIVATE",
+    vacancies: "50",
+    district: "Kamrup (M)",
+    endDate: new Date("2026-08-30"),
+    qualification: "Graduate",
+    ageLimit: "18-30",
+    sourceName: "Admin",
+    status: "PUBLISHED"
+  },
+  {
+    title: "ADRE Grade III Final Result Declared",
+    organization: "State Level Recruitment Commission",
+    jobType: "EXAM_UPDATE",
+    category: "ASSAM_STATE",
+    vacancies: "12,000",
+    district: "All Assam",
+    endDate: new Date("2026-08-20"),
+    qualification: "Graduate",
+    ageLimit: "N/A",
+    sourceName: "Admin",
+    status: "PUBLISHED"
+  },
+  {
+    title: "Data Entry Operator",
+    organization: "National Health Mission (NHM), Assam",
+    jobType: "GOVERNMENT",
+    category: "ASSAM_STATE",
+    vacancies: "120",
+    district: "Dibrugarh",
+    endDate: new Date("2026-09-05"),
+    qualification: "Graduate with DCA",
+    ageLimit: "21-45",
+    sourceName: "Admin",
+    status: "PUBLISHED"
+  }
+];
+
+async function main() {
+  console.log("Seeding database...")
+  for (const job of mockJobs) {
+    const hash = crypto.createHash('sha256').update(job.title + job.organization).digest('hex')
+    await prisma.job.upsert({
+      where: { hash },
+      update: {},
+      create: {
+        ...job,
+        hash
+      }
+    })
+  }
+  console.log("Database seeded!")
+}
+
+main()
+  .catch(e => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
