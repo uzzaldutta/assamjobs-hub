@@ -58,10 +58,13 @@ export default function RootLayout({
             <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
               {/* Header */}
               <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-3 flex items-center justify-between">
-                <div className="flex flex-col">
-                  <h1 className="text-xl font-bold text-gradient leading-tight">AssamJobs Hub</h1>
-                  <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">অসম চাকৰি হাবে</span>
-                </div>
+                <Link href="/" className="flex items-center gap-3">
+                  <img src="/logo.jpg" alt="AssamJobs Hub Logo" className="w-12 h-12 rounded-xl object-contain bg-white shadow-sm border border-slate-200 dark:border-slate-800" />
+                  <div className="flex flex-col">
+                    <h1 className="text-xl font-bold text-gradient leading-tight">AssamJobs Hub</h1>
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest">& TENDERS</span>
+                  </div>
+                </Link>
                 
 
                 {/* Desktop Navigation */}
