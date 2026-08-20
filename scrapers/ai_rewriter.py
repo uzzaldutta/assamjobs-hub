@@ -102,12 +102,13 @@ def rewrite_and_extract_job(raw_text: str, source_url: str) -> dict:
         if "indeed" in str(data.get("organization", "")).lower() or "jobassam" in str(data.get("organization", "")).lower():
             data["organization"] = "Private Company"
 
-        # Sleep for 5 seconds to prevent hitting the Gemini Free Tier limit of 15 Requests Per Minute
-        import time
-        time.sleep(5)
-        
         return data
         
     except Exception as e:
         print(f"AI Rewriting failed: {e}")
         return None
+        
+    finally:
+        # ALWAYS Sleep for 5 seconds to prevent hitting the Gemini Free Tier limit
+        import time
+        time.sleep(5)
