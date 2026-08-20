@@ -160,7 +160,18 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
         )}
 
         <div className="mt-8">
-          <div className="prose prose-slate prose-sm sm:prose-base dark:prose-invert max-w-none text-slate-700 dark:text-slate-300">
+          <div className="prose prose-indigo prose-sm sm:prose-base dark:prose-invert max-w-none text-slate-700 dark:text-slate-300
+            prose-headings:text-indigo-950 dark:prose-headings:text-indigo-200 
+            prose-h2:text-2xl prose-h2:font-extrabold prose-h2:border-b-2 prose-h2:border-indigo-100 dark:prose-h2:border-indigo-900/50 prose-h2:pb-2 prose-h2:mt-10
+            prose-h3:text-xl prose-h3:text-indigo-700 dark:prose-h3:text-indigo-400 prose-h3:font-bold
+            prose-strong:text-indigo-900 dark:prose-strong:text-indigo-300 prose-strong:font-bold
+            prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+            prose-ul:bg-gradient-to-br prose-ul:from-indigo-50/50 prose-ul:to-white dark:prose-ul:from-indigo-900/10 dark:prose-ul:to-slate-900 prose-ul:p-5 prose-ul:rounded-2xl prose-ul:border prose-ul:border-indigo-100 dark:prose-ul:border-indigo-900/30
+            prose-li:marker:text-indigo-500 prose-li:my-1
+            prose-table:w-full prose-table:overflow-hidden prose-table:rounded-xl prose-table:shadow-sm prose-table:border prose-table:border-indigo-100 dark:prose-table:border-indigo-900/50
+            prose-th:bg-indigo-600 prose-th:text-white prose-th:font-semibold prose-th:p-3 prose-th:text-left
+            prose-td:p-3 prose-td:border-b prose-td:border-indigo-50 dark:prose-td:border-slate-800
+          ">
             {job.unique_description ? (
               <ReactMarkdown>{job.unique_description}</ReactMarkdown>
             ) : (
