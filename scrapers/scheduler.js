@@ -4,9 +4,14 @@ const path = require('path');
 function runScraper(scriptName) {
   return new Promise((resolve) => {
     console.log(`\n[SCHEDULER] Starting ${scriptName}...`);
-    const childProcess = spawn('python', [path.join(__dirname, scriptName)], {
+    const childProcess = spawn(process.platform === 'win32' ? 'python' : 'python3', [path.join(__dirname, scriptName)], {
       stdio: 'inherit',
       env: { ...process.env }
+    });
+
+    childProcess.on('error', (err) => {
+      console.error(`[SCHEDULER ERROR] Failed to start ${scriptName}:`, err);
+      resolve(false);
     });
 
     childProcess.on('close', (code) => {
