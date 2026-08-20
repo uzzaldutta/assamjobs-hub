@@ -4,12 +4,12 @@ const path = require('path');
 function runScraper(scriptName) {
   return new Promise((resolve) => {
     console.log(`\n[SCHEDULER] Starting ${scriptName}...`);
-    const process = spawn('python', [path.join(__dirname, scriptName)], {
+    const childProcess = spawn('python', [path.join(__dirname, scriptName)], {
       stdio: 'inherit',
       env: { ...process.env }
     });
 
-    process.on('close', (code) => {
+    childProcess.on('close', (code) => {
       if (code !== 0) {
         console.error(`[SCHEDULER] ${scriptName} failed with exit code ${code}`);
         resolve(false);
