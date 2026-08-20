@@ -49,6 +49,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
       <head>
         <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#4f46e5" />
+        <link rel="apple-touch-icon" href="/logo.jpg" />
         <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossOrigin="anonymous" strategy="afterInteractive" />
       </head>
       <body className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
@@ -75,7 +78,7 @@ export default function RootLayout({
                   <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
                   <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
                   <Link href="/calendar" className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-500 transition flex items-center gap-1"><Calendar size={14} /> Calendar</Link>
-                  <Link href="/training" className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-500 transition">Training</Link>
+                  <Link href="/syllabus" className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-500 transition">Syllabus</Link>
                   <Link href="/tenders" className="text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-500 transition">Tenders</Link>
                   <div className="flex items-center gap-2">
                     <LanguageToggle />
@@ -112,9 +115,9 @@ export default function RootLayout({
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                   <span className="text-[10px] mt-1 font-medium">Results</span>
                 </Link>
-                <Link href="/training" className="flex flex-col items-center text-slate-400 hover:text-amber-500 transition">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                  <span className="text-[10px] mt-1 font-medium">Training</span>
+                <Link href="/syllabus" className="flex flex-col items-center text-slate-400 hover:text-amber-500 transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                  <span className="text-[10px] mt-1 font-medium">Syllabus</span>
                 </Link>
               </nav>
             </div>
