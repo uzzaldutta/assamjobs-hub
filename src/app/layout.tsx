@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
-import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText } from "lucide-react";
+import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar } from "lucide-react";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/components/LanguageContext";
@@ -74,6 +74,7 @@ export default function RootLayout({
                   <Link href="/ai-match" className="text-sm font-medium text-indigo-600 dark:text-indigo-400 flex items-center gap-1"><Sparkles size={14} /> AI Match</Link>
                   <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
                   <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
+                  <Link href="/calendar" className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-500 transition flex items-center gap-1"><Calendar size={14} /> Calendar</Link>
                   <Link href="/training" className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-500 transition">Training</Link>
                   <Link href="/tenders" className="text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-500 transition">Tenders</Link>
                   <div className="flex items-center gap-2">
