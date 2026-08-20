@@ -73,23 +73,44 @@ export default function RootLayout({
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-6">
                   <Link href="/" className="text-sm font-medium text-indigo-600 dark:text-indigo-400">Home</Link>
-                  <Link href="/saved" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Saved</Link>
-                  <Link href="/ai-match" className="text-sm font-medium text-indigo-600 dark:text-indigo-400 flex items-center gap-1"><Sparkles size={14} /> AI Match</Link>
-                  <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
-                  <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
                   <Link href="/calendar" className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-500 transition flex items-center gap-1"><Calendar size={14} /> Calendar</Link>
                   <Link href="/syllabus" className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-500 transition">Syllabus</Link>
-                  <Link href="/tenders" className="text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-500 transition">Tenders</Link>
+                  <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
+                  <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
+                  
+                  {/* Tools Dropdown Group (Simplified for now, will link to a hub page or use basic CSS hover) */}
+                  <div className="relative group">
+                    <button className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition flex items-center gap-1">
+                      Tools <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                      <Link href="/tools/age-calculator" className="block px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-t-xl">Age Calculator</Link>
+                      <Link href="/tools/photo-resizer" className="block px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Photo Resizer</Link>
+                      <Link href="/tools/standard-form" className="block px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Auto Standard Form</Link>
+                      <Link href="/tools/cv-maker" className="block px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-b-xl">AI CV Maker</Link>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4">
+                    <a href="https://play.google.com/store/apps/details?id=com.ifree.assamesecalendar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-xs font-bold hover:bg-green-100 dark:hover:bg-green-900/50 transition border border-green-200 dark:border-green-800">
+                      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
+                      Get Calendar App
+                    </a>
+                  </div>
+
                   <div className="flex items-center gap-2">
-                    <LanguageToggle />
                     <ThemeToggle />
-                    <a href="#" className="text-sm font-medium px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">Sign In</a>
                   </div>
                 </nav>
 
-                <button className="md:hidden p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-                </button>
+                <div className="md:hidden flex items-center gap-3">
+                  <a href="https://play.google.com/store/apps/details?id=com.ifree.assamesecalendar" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
+                  </a>
+                  <button className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                  </button>
+                </div>
               </header>
               
               {/* Main Content Area */}
