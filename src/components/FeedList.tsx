@@ -18,7 +18,9 @@ export default function FeedList({
   const [district, setDistrict] = useState("ALL");
   const [qualification, setQualification] = useState("ALL");
 
-  const filteredJobs = initialJobs.filter((job) => {
+  const [sortBy, setSortBy] = useState("newest");
+
+  let filteredJobs = initialJobs.filter((job) => {
     // 1. Search filter
     const matchesSearch = 
       (job.title || "").toLowerCase().includes(search.toLowerCase()) || 
@@ -47,6 +49,24 @@ export default function FeedList({
     }
 
     return matchesSearch && matchesCategory && matchesDistrict && matchesQualification;
+  });
+
+  // Apply Sorting
+  filteredJobs.sort((a, b) => {
+    if (sortBy === "closing_soon") {
+      if (!a.lastDate) return 1;
+      if (!b.lastDate) return -1;
+      const dateA = new Date(a.lastDate).getTime();
+      const dateB = new Date(b.lastDate).getTime();
+      return dateA - dateB;
+    } 
+    else if (sortBy === "vacancies") {
+      // Extract numbers from vacancy strings like "1,240" or "50+"
+      const parseVacancies = (str: string) => parseInt((str || "0").replace(/[^0-9]/g, "")) || 0;
+      return parseVacancies(b.vacancies) - parseVacancies(a.vacancies);
+    }
+    // "newest" defaults to original server order (scraped_at descending)
+    return 0; 
   });
 
   return (
@@ -89,7 +109,7 @@ export default function FeedList({
             <select
               value={qualification}
               onChange={(e) => setQualification(e.target.value)}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm hidden md:block"
             >
               <option value="ALL">All Qualifications</option>
               <option value="10th">10th Pass</option>
@@ -99,6 +119,17 @@ export default function FeedList({
               <option value="Diploma">Diploma</option>
               <option value="ITI">ITI</option>
               <option value="Post Graduate">Post Graduate</option>
+            </select>
+            
+            {/* Sort By Dropdown */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 font-bold shadow-sm"
+            >
+              <option value="newest">Newest First</option>
+              <option value="closing_soon">Closing Soon</option>
+              <option value="vacancies">Most Vacancies</option>
             </select>
           </div>
         </div>
