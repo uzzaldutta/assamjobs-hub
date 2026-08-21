@@ -12,6 +12,7 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pdf-parse'],
+  turbopack: {}, // Suppress Turbopack error when using Webpack-based PWA plugin
 };
 
 export default withPWA(nextConfig);
