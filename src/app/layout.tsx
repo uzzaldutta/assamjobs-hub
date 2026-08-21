@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
+import SubscribeForm from "@/components/SubscribeForm";
 import Script from "next/script";
 
 const inter = Inter({
@@ -122,9 +123,80 @@ export default function RootLayout({
               </header>
               
               {/* Main Content Area */}
-              <main className="flex-1 flex flex-col relative z-10 pb-20 md:pb-8 mx-auto w-full max-w-7xl pt-4">
-                {children}
-              </main>
+              <div className="flex-1 flex flex-col md:flex-row relative z-10 pb-20 md:pb-8 mx-auto w-full max-w-7xl pt-4 gap-6 px-4 md:px-0">
+                
+                {/* Global Left Sidebar (Desktop Only) */}
+                <aside className="hidden lg:block w-64 shrink-0 space-y-6 mt-6">
+                  {/* Quick Links */}
+                  <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
+                    <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Quick Links</h4>
+                    <ul className="space-y-2 text-sm">
+                      <li><Link href="/syllabus" className="text-indigo-600 dark:text-indigo-400 hover:underline">Syllabus & Exam Pattern</Link></li>
+                      <li><Link href="/admit-cards" className="text-indigo-600 dark:text-indigo-400 hover:underline">Download Admit Cards</Link></li>
+                      <li><Link href="/results" className="text-indigo-600 dark:text-indigo-400 hover:underline">Check Results</Link></li>
+                    </ul>
+                  </div>
+
+                  {/* Subscribe Form */}
+                  <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
+                    <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Get Job Alerts</h4>
+                    {/* The original SubscribeForm component relies on client-side logic. 
+                        Since layout.tsx is a Server Component and we don't have SubscribeForm imported yet, 
+                        I need to import it at the top of this file. */}
+                    <SubscribeForm />
+                  </div>
+
+                  {/* Free Applicant Tools Card */}
+                  <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 shadow-md text-white">
+                    <h4 className="font-bold mb-3 text-sm flex items-center gap-2">
+                      <Sparkles size={16} /> Free Applicant Tools
+                    </h4>
+                    <ul className="space-y-2 text-sm font-medium">
+                      <li><Link href="/tools/standard-form" className="flex items-center gap-2 hover:text-indigo-100 transition"><FileText size={14}/> Auto Standard Form</Link></li>
+                      <li><Link href="/tools/salary-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><CreditCard size={14}/> Salary Calculator</Link></li>
+                      <li><Link href="/tools/typing-test" className="flex items-center gap-2 hover:text-indigo-100 transition"><Award size={14}/> Typing Speed Test</Link></li>
+                      <li><Link href="/tools/photo-resizer" className="flex items-center gap-2 hover:text-indigo-100 transition"><MapPin size={14}/> Photo & Sign Resizer</Link></li>
+                      <li><Link href="/tools/cgpa-converter" className="flex items-center gap-2 hover:text-indigo-100 transition"><GraduationCap size={14}/> CGPA to Percentage</Link></li>
+                      <li><Link href="/tools/pdf-merger" className="flex items-center gap-2 hover:text-indigo-100 transition"><Bookmark size={14}/> Image to PDF Merger</Link></li>
+                      <li><Link href="/tools/age-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Calendar size={14}/> Age Calculator</Link></li>
+                      <li><Link href="/tools/cv-maker" className="flex items-center gap-2 hover:text-indigo-100 transition"><Briefcase size={14}/> AI CV Maker</Link></li>
+                    </ul>
+                  </div>
+                </aside>
+
+                <main className="flex-1 min-w-0 flex flex-col">
+                  {children}
+                  
+                  {/* Global Bottom Tools Section */}
+                  <div className="mt-12 mb-8 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+                    <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                      <Sparkles className="text-indigo-500" size={20} /> Featured Applicant Tools
+                    </h3>
+                    <div className="flex overflow-x-auto pb-4 gap-4 snap-x hide-scrollbar">
+                      <Link href="/tools/standard-form" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group">
+                        <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
+                      </Link>
+                      <Link href="/tools/salary-calculator" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:emerald-500 transition text-center group">
+                        <CreditCard className="mx-auto mb-2 text-emerald-500 group-hover:scale-110 transition" size={24} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Salary Calculator</span>
+                      </Link>
+                      <Link href="/tools/typing-test" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:teal-500 transition text-center group">
+                        <Award className="mx-auto mb-2 text-teal-500 group-hover:scale-110 transition" size={24} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Typing Test</span>
+                      </Link>
+                      <Link href="/tools/pdf-merger" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:rose-500 transition text-center group">
+                        <Bookmark className="mx-auto mb-2 text-rose-500 group-hover:scale-110 transition" size={24} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">PDF Merger</span>
+                      </Link>
+                      <Link href="/tools/cgpa-converter" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:amber-500 transition text-center group">
+                        <GraduationCap className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">CGPA to %</span>
+                      </Link>
+                    </div>
+                  </div>
+                </main>
+              </div>
 
               {/* Bottom Navigation for Mobile */}
               <nav className="md:hidden fixed bottom-0 w-full z-50 glass border-t border-slate-200 dark:border-slate-800 flex justify-around items-center p-3 pb-safe bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">

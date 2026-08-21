@@ -56,23 +56,8 @@ export default async function Home() {
       {/* Main Layout Grid */}
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        {/* Left Sidebar (Filters) - Desktop Only */}
-        <div className="hidden lg:block col-span-1 space-y-6 mt-6">
-           <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
-             <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Quick Links</h4>
-             <ul className="space-y-2 text-sm">
-               <li><Link href="/syllabus" className="text-indigo-600 dark:text-indigo-400 hover:underline">Syllabus & Exam Pattern</Link></li>
-               <li><Link href="/admit-cards" className="text-indigo-600 dark:text-indigo-400 hover:underline">Download Admit Cards</Link></li>
-               <li><Link href="/papers" className="text-indigo-600 dark:text-indigo-400 hover:underline">Previous Year Papers</Link></li>
-               <li><Link href="/results" className="text-indigo-600 dark:text-indigo-400 hover:underline">Check Results</Link></li>
-             </ul>
-           </div>
-           
-           <SubscribeForm />
-        </div>
-
         {/* Center Feed (Jobs) */}
-        <div className="col-span-1 lg:col-span-3 mt-6">
+        <div className="col-span-1 lg:col-span-4 mt-6">
           <FeedList initialJobs={allJobs} />
         </div>
       </div>
