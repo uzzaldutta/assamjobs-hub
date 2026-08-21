@@ -30,8 +30,61 @@ async def scrape_tenders():
             logger.info(f"Navigating to {TARGET_URL}")
             await page.goto(TARGET_URL, timeout=60000)
             
-            # The site uses a table for tenders. Let's wait for the table.
-            await page.wait_for_selector("table.list_table", timeout=15000)
+            # The site uses a table for tenders. But first, we might need to bypass a CAPTCHA.
+            import pytesseract
+            from PIL import Image
+            import io
+            
+            try:
+                # Check if captcha is present
+                await page.wait_for_selector("#captchaImage", timeout=10000)
+                logger.info("Captcha detected. Attempting to solve with OCR...")
+                
+                solved = False
+                for attempt in range(3):
+                    logger.info(f"Captcha attempt {attempt + 1}/3")
+                    
+                    # Screenshot the captcha
+                    captcha_img_bytes = await page.locator("#captchaImage").screenshot()
+                    img = Image.open(io.BytesIO(captcha_img_bytes))
+                    img = img.convert('L') # Convert to grayscale for better OCR
+                    
+                    # Extract text using Google Tesseract
+                    captcha_text = pytesseract.image_to_string(img, config='--psm 8 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789').strip()
+                    logger.info(f"OCR extracted text: '{captcha_text}'")
+                    
+                    # Clean the text (sometimes OCR adds spaces or weird chars)
+                    captcha_text = "".join(e for e in captcha_text if e.isalnum())
+                    
+                    if not captcha_text or len(captcha_text) < 4:
+                        logger.warning("OCR failed to read enough characters. Refreshing captcha...")
+                        await page.click("#captcha") # The refresh button id is 'captcha'
+                        await page.wait_for_timeout(3000)
+                        continue
+                        
+                    # Fill the box and submit
+                    await page.fill("#captchaText", captcha_text)
+                    await page.click("#submit")
+                    
+                    # Check if we got through (table appears)
+                    try:
+                        await page.wait_for_selector("table.list_table tr.list_header ~ tr", timeout=10000)
+                        logger.info("OCR Captcha solved successfully!")
+                        solved = True
+                        break
+                    except Exception:
+                        logger.warning("Incorrect Captcha. Retrying...")
+                        # If incorrect, the page either reloads or shows an error.
+                        # Wait for a new captcha image to render before the next attempt
+                        await page.wait_for_timeout(2000)
+                        
+                if not solved:
+                    logger.error("Failed to solve CAPTCHA after 3 attempts.")
+                    return []
+                    
+            except Exception as e:
+                logger.info("No CAPTCHA found or already logged in. Waiting for table...")
+                await page.wait_for_selector("table.list_table", timeout=15000)
             
             # Get the rows of the table (skipping header)
             rows = await page.locator("table.list_table tr.list_header ~ tr").all()
