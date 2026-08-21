@@ -30,8 +30,10 @@ async function runPipeline() {
   console.log("=== STARTING FULL EXTRACTION PIPELINE ===");
   
   await runScraper('assamcareer_scraper.py');
+  await runScraper('assamcareer_private_scraper.py');
   await runScraper('assamtenders_scraper.py');
   await runScraper('jobassam_scraper.py');
+  await runScraper('govtjobguru_scraper.py');
   await runScraper('indeed_scraper.py');
 
   console.log("=== EXTRACTION PIPELINE COMPLETE ===");
