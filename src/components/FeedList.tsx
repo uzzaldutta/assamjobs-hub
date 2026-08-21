@@ -20,6 +20,9 @@ export default function FeedList({
 
   const [sortBy, setSortBy] = useState("newest");
 
+  // State for pagination (Load More)
+  const [visibleCount, setVisibleCount] = useState(15);
+
   let filteredJobs = initialJobs.filter((job) => {
     // 1. Search filter
     const matchesSearch = 
@@ -69,6 +72,14 @@ export default function FeedList({
     return 0; 
   });
 
+  // Reset pagination when filters change
+  const handleFilterChange = (setter: any, value: any) => {
+    setter(value);
+    setVisibleCount(15);
+  };
+
+  const visibleJobs = filteredJobs.slice(0, visibleCount);
+
   return (
     <div className="w-full">
       {/* Search and Filters */}
@@ -84,7 +95,7 @@ export default function FeedList({
               type="text"
               placeholder="Search jobs or organizations..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleFilterChange(setSearch, e.target.value)}
               className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition"
             />
           </div>
@@ -92,7 +103,7 @@ export default function FeedList({
           <div className="flex gap-3">
             <select
               value={district}
-              onChange={(e) => setDistrict(e.target.value)}
+              onChange={(e) => handleFilterChange(setDistrict, e.target.value)}
               className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
             >
               <option value="ALL">All Districts</option>
@@ -108,7 +119,7 @@ export default function FeedList({
             
             <select
               value={qualification}
-              onChange={(e) => setQualification(e.target.value)}
+              onChange={(e) => handleFilterChange(setQualification, e.target.value)}
               className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm hidden md:block"
             >
               <option value="ALL">All Qualifications</option>
@@ -124,7 +135,7 @@ export default function FeedList({
             {/* Sort By Dropdown */}
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+              onChange={(e) => handleFilterChange(setSortBy, e.target.value)}
               className="bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 font-bold shadow-sm"
             >
               <option value="newest">Newest First</option>
@@ -138,35 +149,35 @@ export default function FeedList({
         {!hideFilters && (
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <button 
-              onClick={() => setFilter("ALL")}
+              onClick={() => handleFilterChange(setFilter, "ALL")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "ALL" ? "bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <Activity size={14} /> All Updates
             </button>
             
             <button 
-              onClick={() => setFilter("GOVT")}
+              onClick={() => handleFilterChange(setFilter, "GOVT")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "GOVT" ? "bg-emerald-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <Briefcase size={14} /> Govt Jobs
             </button>
             
             <button 
-              onClick={() => setFilter("PRIVATE")}
+              onClick={() => handleFilterChange(setFilter, "PRIVATE")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "PRIVATE" ? "bg-blue-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <Building2 size={14} /> Private Jobs
             </button>
 
             <button 
-              onClick={() => setFilter("EXAM")}
+              onClick={() => handleFilterChange(setFilter, "EXAM")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "EXAM" ? "bg-violet-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <GraduationCap size={14} /> Exams & Results
             </button>
             
             <button 
-              onClick={() => setFilter("TENDER")}
+              onClick={() => handleFilterChange(setFilter, "TENDER")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "TENDER" ? "bg-orange-500 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <FileText size={14} /> Tenders
@@ -177,16 +188,30 @@ export default function FeedList({
 
       {/* Results List */}
       <div className="space-y-4">
-        {filteredJobs.length > 0 ? (
-          filteredJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))
+        {visibleJobs.length > 0 ? (
+          <>
+            {visibleJobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+            
+            {visibleCount < filteredJobs.length && (
+              <div className="pt-6 pb-2 text-center">
+                <button 
+                  onClick={() => setVisibleCount(prev => prev + 15)}
+                  className="px-8 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold text-sm rounded-xl border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition shadow-sm inline-flex items-center gap-2"
+                >
+                  <Activity size={16} />
+                  Load More Updates ({filteredJobs.length - visibleCount} remaining)
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
             <Filter className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-3" />
             <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">No updates found</h3>
             <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">Try adjusting your search or filters.</p>
-            <button onClick={() => {setSearch(""); setFilter("ALL");}} className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+            <button onClick={() => {handleFilterChange(setSearch, ""); handleFilterChange(setFilter, "ALL");}} className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium text-sm">
               Clear all filters
             </button>
           </div>
