@@ -66,7 +66,7 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
           <ArrowLeft size={20} />
           <span className="font-medium text-sm">Back to Feed</span>
         </Link>
-        <ShareButtons title={job.title} description={job.unique_description || ""} />
+        <ShareButtons title={job.title} />
       </div>
 
       <div className="px-4 pt-6 max-w-4xl mx-auto w-full">
