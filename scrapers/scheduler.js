@@ -31,7 +31,7 @@ async function runPipeline() {
   
   await runScraper('assamcareer_scraper.py');
   await runScraper('assamcareer_private_scraper.py');
-  await runScraper('assamtenders_scraper.py');
+  await runScraper('assamtenders_dotcom_scraper.py');
   await runScraper('jobassam_scraper.py');
   await runScraper('govtjobguru_scraper.py');
   await runScraper('indeed_scraper.py');

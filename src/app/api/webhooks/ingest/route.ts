@@ -37,12 +37,36 @@ export async function POST(request: Request) {
     }));
 
     if (records.length > 0) {
-      const { error } = await supabase
-        .from('jobs')
-        .insert(records);
+      for (const record of records) {
+        // Check for duplicates
+        const { data: existingData, error: searchError } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('title', record.title)
+          .eq('organization', record.organization)
+          .limit(1);
+          
+        if (searchError) {
+          console.error("Error checking for duplicates:", searchError);
+          continue;
+        }
+        
+        if (existingData && existingData.length > 0) {
+          console.log(`Duplicate found for: ${record.title}. Skipping.`);
+          continue;
+        }
 
-      if (error) throw error;
-      insertedCount = records.length;
+        // Insert new record
+        const { error: insertError } = await supabase
+          .from('jobs')
+          .insert([record]);
+
+        if (insertError) {
+          console.error("Error inserting record:", insertError);
+        } else {
+          insertedCount++;
+        }
+      }
     }
 
     return NextResponse.json({ 
