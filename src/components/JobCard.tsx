@@ -10,12 +10,13 @@ interface JobProps {
   id: string;
   title: string;
   organization: string;
-  type: "GOVERNMENT" | "PRIVATE" | "EXAM_UPDATE" | "TRAINING" | "TENDER";
+  type: "GOVERNMENT" | "PRIVATE" | "EXAM_UPDATE" | "TRAINING" | "TENDER" | "SCHOLARSHIP" | "ADMISSION";
   category: string;
   vacancies: string;
   district: string;
   lastDate?: string;
   officialUrl?: string;
+  createdAt?: string;
 }
 
 export default function JobCard({ job }: { job: JobProps }) {
@@ -124,7 +125,9 @@ export default function JobCard({ job }: { job: JobProps }) {
       {isPrivate && <div className="relative z-10"><FraudWarningBanner /></div>}
       
       <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center relative z-10">
-        <span className="text-xs text-slate-500 font-medium">Updated recently</span>
+        <span className="text-xs text-slate-500 font-medium">
+          {job.createdAt ? `Published: ${job.createdAt}` : 'Updated recently'}
+        </span>
         <div className="flex gap-2 items-center">
           <Link href={`/jobs/${job.id}`} className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline px-2 py-1.5">
             View Details &rarr;

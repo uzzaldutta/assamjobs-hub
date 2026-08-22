@@ -26,13 +26,14 @@ export default async function Home() {
       .select('*')
       .order('scraped_at', { ascending: false });
       
-    if (data) {
+      if (data) {
       // Map cloud database fields to frontend props
       liveJobs = data.map(job => ({
         ...job,
         type: job.job_type,
         lastDate: job.last_date,
-        officialUrl: job.official_pdf_url || job.apply_url
+        officialUrl: job.official_pdf_url || job.apply_url,
+        createdAt: new Date(job.scraped_at || job.created_at || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
       }));
     }
   } catch(e) {
