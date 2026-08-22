@@ -1,6 +1,12 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
+if (!process.env.GEMINI_API_KEY || !process.env.API_BASE_URL) {
+  console.error("\n[CRITICAL ERROR] The GitHub Action is missing the required Secrets! (GEMINI_API_KEY or API_BASE_URL)");
+  console.error("Please add these keys to your GitHub Repository Settings -> Secrets and Variables -> Actions.");
+  process.exit(1);
+}
+
 function runScraper(scriptName) {
   return new Promise((resolve) => {
     console.log(`\n[SCHEDULER] Starting ${scriptName}...`);
