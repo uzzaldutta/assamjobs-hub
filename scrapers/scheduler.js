@@ -41,6 +41,7 @@ async function runPipeline() {
   await runScraper('jobassam_scraper.py');
   await runScraper('govtjobguru_scraper.py');
   await runScraper('indeed_scraper.py');
+  await runScraper('admissions_scraper.py');
 
   console.log("=== EXTRACTION PIPELINE COMPLETE ===");
 }

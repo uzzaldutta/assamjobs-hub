@@ -76,6 +76,7 @@ export default function RootLayout({
                   <Link href="/" className="text-sm font-medium text-indigo-600 dark:text-indigo-400">Home</Link>
                   <Link href="/calendar" className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-500 transition flex items-center gap-1"><Calendar size={14} /> Calendar</Link>
                   <Link href="/syllabus" className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-500 transition">Syllabus</Link>
+                  <Link href="/admissions" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admissions</Link>
                   <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
                   <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
                   
@@ -132,6 +133,7 @@ export default function RootLayout({
                     <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Quick Links</h4>
                     <ul className="space-y-2 text-sm">
                       <li><Link href="/syllabus" className="text-indigo-600 dark:text-indigo-400 hover:underline">Syllabus & Exam Pattern</Link></li>
+                      <li><Link href="/admissions" className="text-indigo-600 dark:text-indigo-400 hover:underline">All-India Admissions</Link></li>
                       <li><Link href="/admit-cards" className="text-indigo-600 dark:text-indigo-400 hover:underline">Download Admit Cards</Link></li>
                       <li><Link href="/results" className="text-indigo-600 dark:text-indigo-400 hover:underline">Check Results</Link></li>
                     </ul>
