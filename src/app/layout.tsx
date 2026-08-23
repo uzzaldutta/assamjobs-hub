@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
-import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar, Wallet, BookOpen } from "lucide-react";
+import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar, Wallet, BookOpen, Compass, Mic } from "lucide-react";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/components/LanguageContext";
@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 import SubscribeForm from "@/components/SubscribeForm";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import Footer from "@/components/Footer";
 import Script from "next/script";
 
 const inter = Inter({
@@ -164,43 +165,44 @@ export default function RootLayout({
                   {/* Quick Links */}
                   <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
                     <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Quick Links</h4>
-                    <ul className="space-y-2 text-sm">
-                      <li><Link href="/syllabus" className="text-indigo-600 dark:text-indigo-400 hover:underline">Syllabus & Exam Pattern</Link></li>
-                      <li><Link href="/admissions" className="text-indigo-600 dark:text-indigo-400 hover:underline">All-India Admissions</Link></li>
-                      <li><Link href="/tenders" className="font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-2"><FileText size={14}/> Browse Tenders</Link></li>
-                      <li><Link href="/admit-cards" className="text-indigo-600 dark:text-indigo-400 hover:underline">Download Admit Cards</Link></li>
-                      <li><Link href="/results" className="text-indigo-600 dark:text-indigo-400 hover:underline">Check Results</Link></li>
+                    <ul className="space-y-3 text-sm font-bold">
+                      <li>
+                        <Link href="/tools/career-advisor" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-fuchsia-600 dark:text-fuchsia-400">
+                          <Compass size={16} /> AI Career Advisor
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/tools/study-planner" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-cyan-600 dark:text-cyan-400">
+                          <Calendar size={16} /> AI Study Planner
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/tools/interview-coach" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-amber-600 dark:text-amber-400">
+                          <Mic size={16} /> AI Interview Coach
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/tools/marks-calculator" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 font-medium">
+                          SEBA/AHSEC Marks Calculator
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/tools/fee-calculator" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 font-medium">
+                          Exam Fee Calculator
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/tools/typing-test" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 font-medium">
+                          Typing Speed Tester
+                        </Link>
+                      </li>
                     </ul>
                   </div>
 
                   {/* Subscribe Form */}
                   <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
                     <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Get Job Alerts</h4>
-                    {/* The original SubscribeForm component relies on client-side logic. 
-                        Since layout.tsx is a Server Component and we don't have SubscribeForm imported yet, 
-                        I need to import it at the top of this file. */}
                     <SubscribeForm />
-                  </div>
-
-                  {/* Free Applicant Tools Card */}
-                  <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 shadow-md text-white">
-                    <h4 className="font-bold mb-3 text-sm flex items-center gap-2">
-                      <Sparkles size={16} /> Free Applicant Tools
-                    </h4>
-                    <ul className="space-y-2 text-sm font-medium">
-                      <li><Link href="/tools/study-planner" className="flex items-center gap-2 hover:text-indigo-100 transition text-cyan-300"><BookOpen size={14}/> AI Study Planner</Link></li>
-                      <li><Link href="/tools/standard-form" className="flex items-center gap-2 hover:text-indigo-100 transition"><FileText size={14}/> Auto Standard Form</Link></li>
-                      <li><Link href="/tools/interview-prep" className="flex items-center gap-2 hover:text-indigo-100 transition text-yellow-300"><Sparkles size={14}/> AI Interview Coach</Link></li>
-                      <li><Link href="/tools/fee-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Wallet size={14}/> Exam Fee Calculator</Link></li>
-                      <li><Link href="/tools/marks-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Award size={14}/> Marks Calculator</Link></li>
-                      <li><Link href="/tools/salary-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><CreditCard size={14}/> Salary Calculator</Link></li>
-                      <li><Link href="/tools/typing-test" className="flex items-center gap-2 hover:text-indigo-100 transition"><Award size={14}/> Typing Speed Test</Link></li>
-                      <li><Link href="/tools/photo-resizer" className="flex items-center gap-2 hover:text-indigo-100 transition"><MapPin size={14}/> Photo & Sign Resizer</Link></li>
-                      <li><Link href="/tools/cgpa-converter" className="flex items-center gap-2 hover:text-indigo-100 transition"><GraduationCap size={14}/> CGPA to Percentage</Link></li>
-                      <li><Link href="/tools/pdf-merger" className="flex items-center gap-2 hover:text-indigo-100 transition"><Bookmark size={14}/> Image to PDF Merger</Link></li>
-                      <li><Link href="/tools/age-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Calendar size={14}/> Age Calculator</Link></li>
-                      <li><Link href="/tools/cv-maker" className="flex items-center gap-2 hover:text-indigo-100 transition"><Briefcase size={14}/> AI CV Maker</Link></li>
-                    </ul>
                   </div>
                 </aside>
 
@@ -217,19 +219,23 @@ export default function RootLayout({
                         <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
                       </Link>
-                      <Link href="/tools/salary-calculator" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:emerald-500 transition text-center group">
+                      <Link href="/tools/salary-calculator" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-emerald-500 transition text-center group">
                         <CreditCard className="mx-auto mb-2 text-emerald-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Salary Calculator</span>
                       </Link>
-                      <Link href="/tools/typing-test" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:teal-500 transition text-center group">
+                      <Link href="/tools/typing-test" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-teal-500 transition text-center group">
                         <Award className="mx-auto mb-2 text-teal-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Typing Test</span>
                       </Link>
-                      <Link href="/tools/pdf-merger" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:rose-500 transition text-center group">
+                      <Link href="/tools/pdf-merger" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-rose-500 transition text-center group">
                         <Bookmark className="mx-auto mb-2 text-rose-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">PDF Merger</span>
                       </Link>
-                      <Link href="/tools/cgpa-converter" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:amber-500 transition text-center group">
+                      <Link href="/tools/age-calculator" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-blue-500 transition text-center group">
+                        <Calendar className="mx-auto mb-2 text-blue-500 group-hover:scale-110 transition" size={24} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Age Calculator</span>
+                      </Link>
+                      <Link href="/tools/cgpa-converter" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group">
                         <GraduationCap className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">CGPA to %</span>
                       </Link>
@@ -237,6 +243,8 @@ export default function RootLayout({
                   </div>
                 </main>
               </div>
+
+              <Footer />
 
               {/* Bottom Navigation for Mobile */}
               <nav className="md:hidden fixed bottom-0 w-full z-50 glass border-t border-slate-200 dark:border-slate-800 flex justify-around items-center p-3 pb-safe bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
