@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 import SubscribeForm from "@/components/SubscribeForm";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Script from "next/script";
 
 const inter = Inter({
@@ -114,8 +115,9 @@ export default function RootLayout({
                     </button>
                     <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all grid grid-cols-1 divide-y divide-slate-100 dark:divide-slate-800">
                       <div className="p-2">
-                        <Link href="/tools/study-planner" className="block px-3 py-2 text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">🗓️ AI Study Planner</Link>
-                        <Link href="/tools/interview-prep" className="block px-3 py-2 text-sm text-yellow-600 dark:text-yellow-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">✨ AI Interview Coach</Link>
+                        <Link href="/tools/career-advisor" className="block px-3 py-2 text-sm text-fuchsia-600 dark:text-fuchsia-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">🧭 AI Career Advisor</Link>
+                        <Link href="/tools/study-planner" className="block px-3 py-2 text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">📅 AI Study Planner</Link>
+                        <Link href="/tools/interview-prep" className="block px-3 py-2 text-sm text-yellow-600 dark:text-yellow-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">🎤 AI Interview Coach</Link>
                         <Link href="/tools/marks-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">SEBA/AHSEC Marks Calculator</Link>
                         <Link href="/tools/fee-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Exam Fee Calculator</Link>
                         <Link href="/tools/typing-test" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Typing Speed Tester</Link>
@@ -259,6 +261,8 @@ export default function RootLayout({
                   <span className="text-[10px] mt-1 font-medium">Tools</span>
                 </Link>
               </nav>
+
+              <FloatingWhatsApp />
             </div>
           </LanguageProvider>
         </ThemeProvider>

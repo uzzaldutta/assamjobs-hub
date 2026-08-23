@@ -34,6 +34,14 @@ export default function ToolsIndexPage() {
       bg: "bg-cyan-50 dark:bg-cyan-900/20"
     },
     {
+      id: "career-advisor",
+      title: "AI Career Path Advisor",
+      description: "Enter your qualifications and get a personalized list of Govt jobs you are eligible for.",
+      icon: <Sparkles className="w-6 h-6" />,
+      color: "border-fuchsia-100 dark:border-fuchsia-900 hover:border-fuchsia-500",
+      bg: "bg-fuchsia-50 dark:bg-fuchsia-900/20"
+    },
+    {
       id: "fee-calculator",
       title: "Exam Fee Calculator",
       description: "Check your exact application fee and exemptions for major exams based on caste.",
