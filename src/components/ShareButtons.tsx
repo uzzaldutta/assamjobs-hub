@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 
 interface ShareButtonsProps {
   title: string;
+  compact?: boolean;
 }
 
-export default function ShareButtons({ title }: ShareButtonsProps) {
+export default function ShareButtons({ title, compact = false }: ShareButtonsProps) {
   const [url, setUrl] = useState("");
 
   useEffect(() => {
@@ -33,11 +34,22 @@ export default function ShareButtons({ title }: ShareButtonsProps) {
         console.log('Error sharing', error);
       }
     } else {
-      // Fallback: Copy to clipboard
       navigator.clipboard.writeText(url);
       alert("Link copied to clipboard!");
     }
   };
+
+  if (compact) {
+    return (
+      <button 
+        onClick={handleNativeShare}
+        className="p-2 text-slate-600 hover:bg-slate-100 rounded-full dark:text-slate-300 dark:hover:bg-slate-800 transition shadow-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"
+        title="Share Job"
+      >
+        <Share2 size={18} />
+      </button>
+    );
+  }
 
   return (
     <div className="flex flex-wrap gap-3 mt-6">

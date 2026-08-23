@@ -4,6 +4,7 @@ import ShareButtons from "@/components/ShareButtons";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
+import AdminEditButton from "@/components/AdminEditButton";
 
 export default async function JobDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -66,8 +67,23 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
           <ArrowLeft size={20} />
           <span className="font-medium text-sm">Back to Feed</span>
         </Link>
-        <ShareButtons title={job.title} />
+        <div className="flex items-center gap-2">
+          {job.lastDate && job.lastDate !== "Check Official Website" && (
+            <a 
+              href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Deadline:+${encodeURIComponent(job.title)}&dates=${new Date(job.lastDate).toISOString().replace(/-|:|\.\d\d\d/g, "")}/${new Date(new Date(job.lastDate).getTime() + 24*60*60*1000).toISOString().replace(/-|:|\.\d\d\d/g, "")}&details=Last+date+to+apply+for+${encodeURIComponent(job.organization)}.+Don't+miss+it!`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 text-slate-600 hover:bg-slate-100 rounded-full dark:text-slate-300 dark:hover:bg-slate-800 transition shadow-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"
+              title="Add Deadline to Google Calendar"
+            >
+              <Calendar size={18} className="text-amber-500" />
+            </a>
+          )}
+          <ShareButtons title={job.title} compact={true} />
+        </div>
       </div>
+      
+      <AdminEditButton jobId={id} />
 
       <div className="px-4 pt-6 max-w-4xl mx-auto w-full">
         <div className="flex items-center gap-2 mb-3">
@@ -192,7 +208,13 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
           </div>
         )}
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-12 border-t border-slate-200 dark:border-slate-800 pt-8">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-2">Help a friend out!</h3>
+          <p className="text-slate-500 text-sm mb-4">Share this job opportunity with someone who might be looking for a job.</p>
+          <ShareButtons title={job.title} />
+        </div>
+
+        <div className="mt-12 mb-12 flex justify-center">
           <Link href={`/cover-letter/${job.id}?title=${encodeURIComponent(job.title)}&org=${encodeURIComponent(job.organization)}`} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
             <Sparkles size={18} />
             Write an AI Cover Letter for this Job
