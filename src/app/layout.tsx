@@ -22,23 +22,33 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "AssamJobs Hub - Latest Govt & Private Jobs in Assam",
-  description: "Get the latest updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results. Find your perfect career today.",
+  description: "Get the latest updates on Assam Govt Jobs, ADRE, Assam Police, APSC, Private Jobs, Admit Cards, and Results. Prepare with Free Mock Tests and AI Career Tools.",
+  keywords: ["Assam Jobs", "Assam Govt Jobs", "ADRE Grade 3", "ADRE Grade 4", "Assam Police Recruitment", "APSC", "Assam Career", "Job in Assam", "Assam Tenders", "Mock Tests Assam"],
+  alternates: {
+    canonical: "https://y-ruddy-nine-46.vercel.app",
+  },
   openGraph: {
     title: "AssamJobs Hub | Latest Jobs & Results",
-    description: "Daily updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results.",
-    url: "https://assamjobs-hub.vercel.app",
+    description: "Daily updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results. Take free mock tests and use AI career tools to boost your preparation.",
+    url: "https://y-ruddy-nine-46.vercel.app",
     siteName: "AssamJobs Hub",
     images: [
       {
-        url: "https://assamjobs-hub.vercel.app/og-image.jpg",
+        url: "https://y-ruddy-nine-46.vercel.app/logo.jpg",
         width: 1200,
         height: 630,
         alt: "AssamJobs Hub",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "AssamJobs Hub | Latest Jobs & Results",
+    description: "Daily updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results.",
+    images: ["https://y-ruddy-nine-46.vercel.app/logo.jpg"],
+  }
 };
 
 export default function RootLayout({

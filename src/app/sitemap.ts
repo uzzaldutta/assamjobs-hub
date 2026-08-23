@@ -14,6 +14,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/saved`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.5 },
     
     // Tools
+    { url: `${baseUrl}/tools`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/tools/study-planner`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/tools/interview-prep`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/tools/tender-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/tools/fee-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/tools/marks-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools/typing-test`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools/salary-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools/cgpa-converter`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
@@ -22,6 +28,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/tools/age-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools/cv-maker`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools/standard-form`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    
+    // Mock Tests
+    { url: `${baseUrl}/mock-tests`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/mock-tests/assam-gk`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/mock-tests/english-grammar`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/mock-tests/logical-reasoning`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ];
 
   // Fetch jobs for dynamic URLs

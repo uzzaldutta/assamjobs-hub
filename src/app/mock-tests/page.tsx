@@ -19,22 +19,22 @@ export default function MockTestsIndex() {
       bg: "bg-blue-50 text-blue-600"
     },
     {
-      id: "coming-soon",
+      id: "english-grammar",
       title: "General English (Grammar)",
       category: "English",
-      questions: 20,
-      time: "15 Mins",
-      color: "border-slate-200 opacity-60 cursor-not-allowed",
-      bg: "bg-slate-100 text-slate-500"
+      questions: 5,
+      time: "5 Mins",
+      color: "border-violet-200 hover:border-violet-500",
+      bg: "bg-violet-50 text-violet-600"
     },
     {
-      id: "coming-soon-2",
+      id: "logical-reasoning",
       title: "Logical Reasoning & Math",
       category: "Aptitude",
-      questions: 15,
-      time: "20 Mins",
-      color: "border-slate-200 opacity-60 cursor-not-allowed",
-      bg: "bg-slate-100 text-slate-500"
+      questions: 5,
+      time: "5 Mins",
+      color: "border-amber-200 hover:border-amber-500",
+      bg: "bg-amber-50 text-amber-600"
     }
   ];
 
