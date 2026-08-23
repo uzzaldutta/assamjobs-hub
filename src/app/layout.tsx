@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
-import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar, Wallet } from "lucide-react";
+import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar, Wallet, BookOpen } from "lucide-react";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/components/LanguageContext";
@@ -94,6 +94,7 @@ export default function RootLayout({
                   <Link href="/admissions" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admissions</Link>
                   <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
                   <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
+                  <Link href="/mock-tests" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition flex items-center gap-1"><BookOpen size={14} /> Mock Tests</Link>
                   <Link href="/tenders" className="text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl transition shadow-sm flex items-center gap-1"><FileText size={16}/> Tenders</Link>
                   
                   {/* Tools Dropdown Group */}
@@ -103,6 +104,7 @@ export default function RootLayout({
                     </button>
                     <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all grid grid-cols-1 divide-y divide-slate-100 dark:divide-slate-800">
                       <div className="p-2">
+                        <Link href="/tools/study-planner" className="block px-3 py-2 text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">🗓️ AI Study Planner</Link>
                         <Link href="/tools/interview-prep" className="block px-3 py-2 text-sm text-yellow-600 dark:text-yellow-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">✨ AI Interview Coach</Link>
                         <Link href="/tools/marks-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">SEBA/AHSEC Marks Calculator</Link>
                         <Link href="/tools/fee-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Exam Fee Calculator</Link>
@@ -174,6 +176,7 @@ export default function RootLayout({
                       <Sparkles size={16} /> Free Applicant Tools
                     </h4>
                     <ul className="space-y-2 text-sm font-medium">
+                      <li><Link href="/tools/study-planner" className="flex items-center gap-2 hover:text-indigo-100 transition text-cyan-300"><BookOpen size={14}/> AI Study Planner</Link></li>
                       <li><Link href="/tools/standard-form" className="flex items-center gap-2 hover:text-indigo-100 transition"><FileText size={14}/> Auto Standard Form</Link></li>
                       <li><Link href="/tools/interview-prep" className="flex items-center gap-2 hover:text-indigo-100 transition text-yellow-300"><Sparkles size={14}/> AI Interview Coach</Link></li>
                       <li><Link href="/tools/fee-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Wallet size={14}/> Exam Fee Calculator</Link></li>

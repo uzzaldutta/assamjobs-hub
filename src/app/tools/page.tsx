@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Calculator, FileText, Image as ImageIcon, Type, Briefcase, GraduationCap, FileOutput, ShieldQuestion, ChevronRight, Award, Sparkles, Wallet, CreditCard, MapPin, Bookmark, Calendar } from "lucide-react";
+import { Calculator, FileText, Image as ImageIcon, Type, Briefcase, GraduationCap, FileOutput, ShieldQuestion, ChevronRight, Award, Sparkles, Wallet, CreditCard, MapPin, Bookmark, Calendar, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Free Applicant Tools | AssamJobs Hub",
@@ -24,6 +24,14 @@ export default function ToolsIndexPage() {
       icon: <Sparkles className="w-6 h-6" />,
       color: "border-violet-100 dark:border-violet-900 hover:border-violet-500",
       bg: "bg-violet-50 dark:bg-violet-900/20"
+    },
+    {
+      id: "study-planner",
+      title: "AI Study Planner",
+      description: "Generate a custom day-by-day study timetable optimized for Assam exams.",
+      icon: <BookOpen className="w-6 h-6" />,
+      color: "border-cyan-100 dark:border-cyan-900 hover:border-cyan-500",
+      bg: "bg-cyan-50 dark:bg-cyan-900/20"
     },
     {
       id: "fee-calculator",
