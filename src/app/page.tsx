@@ -49,13 +49,19 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen">
       
       {/* Search Header */}
-      <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-6 pb-8 rounded-b-[2rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4">
-        <h2 className="text-2xl font-bold text-white mb-1">Find your next job in Assam</h2>
-        <p className="text-indigo-100 text-sm mb-5">Latest Govt & Private updates in one place</p>
-        <Link href="/tenders" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 border border-amber-400/50">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Browse All Tenders
-        </Link>
+      <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-8 pb-10 rounded-b-[2rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4">
+        <h2 className="text-3xl font-extrabold text-white mb-2">Accelerate your career in Assam</h2>
+        <p className="text-indigo-100 text-base mb-6 max-w-lg">Get instant updates on Govt & Private jobs, take free mock tests, and use AI tools to stand out from the crowd.</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/mock-tests" className="inline-flex items-center gap-2 bg-white text-indigo-700 hover:bg-indigo-50 font-bold py-3 px-6 rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Take Free Mock Tests
+          </Link>
+          <Link href="/tools" className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 border border-indigo-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            Explore AI Tools
+          </Link>
+        </div>
       </div>
 
       {/* Main Layout Grid */}
