@@ -3,7 +3,7 @@ import json
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from dotenv import load_dotenv
-from google import genai
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -11,6 +11,8 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     print("WARNING: GEMINI_API_KEY not found in environment. AI rewriting will run in simulation mode.")
+else:
+    genai.configure(api_key=api_key)
 
 class JobData(BaseModel):
     title: str
@@ -79,13 +81,10 @@ def rewrite_and_extract_job(raw_text: str, source_url: str) -> dict:
     """
     
     try:
-        client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(
-            model='gemini-1.5-flash',
-            contents=prompt,
-            config={
-                'response_mime_type': 'application/json'
-            }
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(
+            prompt,
+            generation_config={'response_mime_type': 'application/json'}
         )
         data = json.loads(response.text)
         
