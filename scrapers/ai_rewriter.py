@@ -81,7 +81,7 @@ def rewrite_and_extract_job(raw_text: str, source_url: str) -> dict:
     try:
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model='gemini-3.6-flash',
+            model='gemini-1.5-flash',
             contents=prompt,
             config={
                 'response_mime_type': 'application/json'
