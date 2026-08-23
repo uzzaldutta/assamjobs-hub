@@ -101,35 +101,35 @@ export default function JobCard({ job }: { job: JobProps }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-1 relative z-10 pointer-events-none">
-        <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
-          <Building2 size={14} className="text-slate-400" />
-          <span className="truncate">{job.organization}</span>
+      <div className="flex flex-wrap gap-y-2 gap-x-3 mt-2 relative z-10 pointer-events-none">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/50 px-2.5 py-1 rounded-md">
+          <Building2 size={14} className="text-slate-500" />
+          <span className="truncate max-w-[150px]">{job.organization}</span>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
-          <MapPin size={14} className="text-slate-400" />
-          <span className="truncate">{job.district}</span>
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/50 px-2.5 py-1 rounded-md">
+          <MapPin size={14} className="text-slate-500" />
+          <span className="truncate max-w-[100px]">{job.district}</span>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
-          <Users size={14} className="text-slate-400" />
+        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-md shadow-sm border border-emerald-100 dark:border-emerald-800/50">
+          <Users size={14} className="text-emerald-600 dark:text-emerald-500" />
           <span>{job.vacancies} {t("posts")}</span>
         </div>
         {job.lastDate && (
-          <div className="flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400 font-medium">
-            <Calendar size={14} />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/30 px-2.5 py-1 rounded-md shadow-sm border border-rose-100 dark:border-rose-800/50">
+            <Calendar size={14} className="text-rose-500" />
             <span>{t("ends")}: {job.lastDate}</span>
           </div>
         )}
       </div>
 
-      {isPrivate && <div className="relative z-10"><FraudWarningBanner /></div>}
+      {isPrivate && <div className="relative z-10 mt-1"><FraudWarningBanner /></div>}
       
-      <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center relative z-10">
-        <span className="text-xs text-slate-500 font-medium">
-          {job.createdAt ? `Published: ${job.createdAt}` : 'Updated recently'}
+      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-3 justify-between items-center relative z-10">
+        <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider">
+          {job.createdAt ? `Added: ${job.createdAt}` : 'Updated recently'}
         </span>
-        <div className="flex gap-2 items-center">
-          <Link href={`/jobs/${job.id}`} className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline px-2 py-1.5">
+        <div className="flex gap-2 items-center w-full sm:w-auto">
+          <Link href={`/jobs/${job.id}`} className="text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 px-4 py-2 rounded-lg transition-colors text-center flex-1 sm:flex-none">
             View Details &rarr;
           </Link>
           {job.officialUrl && (
@@ -137,9 +137,9 @@ export default function JobCard({ job }: { job: JobProps }) {
               href={job.officialUrl} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className={`text-xs font-semibold px-3 py-1.5 rounded-lg text-white ${accentColor} hover:opacity-90 transition`}
+              className={`text-xs font-bold px-4 py-2 rounded-lg text-white ${accentColor} shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all text-center flex-1 sm:flex-none`}
             >
-              Apply / Official Link
+              Apply / Link
             </a>
           )}
         </div>
