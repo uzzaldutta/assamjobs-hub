@@ -67,35 +67,40 @@ export default async function Home() {
       {/* Main Layout Grid */}
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        {/* Recent Posts Section */}
+        {/* Recent Posts Section (Marquee) */}
         <div className="col-span-1 lg:col-span-4 mt-6">
           <div className="flex items-center gap-2 mb-4">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
             </span>
-            <h3 className="text-xl font-bold text-slate-800 dark:text-white">Recent Posts</h3>
+            <h3 className="text-xl font-bold text-slate-800 dark:text-white">Recent Job Updates</h3>
           </div>
           
-          <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x">
-            {allJobs.slice(0, 5).map((job) => (
-              <Link key={job.id} href={`/jobs/${job.id}`} className="min-w-[280px] max-w-[300px] snap-start bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700 transition flex flex-col justify-between group">
-                <div>
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-md">
-                      {job.type}
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-medium">New</span>
-                  </div>
-                  <h4 className="font-bold text-slate-800 dark:text-white text-sm line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
-                    {job.title}
-                  </h4>
-                </div>
-                <div className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center justify-between">
-                  <span className="truncate max-w-[150px]">{job.organization}</span>
-                  <span className="text-pink-600 dark:text-pink-400">View →</span>
-                </div>
-              </Link>
+          <div className="flex overflow-hidden relative w-full group py-2">
+            {/* We render two identical lists side-by-side to create the seamless infinite scroll effect */}
+            {[1, 2].map((listIndex) => (
+              <div key={listIndex} className="flex gap-4 min-w-max animate-marquee pr-4" aria-hidden={listIndex === 2}>
+                {allJobs.filter(job => job.type !== "TENDER").slice(0, 8).map((job) => (
+                  <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className="w-[300px] shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700 transition flex flex-col justify-between cursor-pointer">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-md">
+                          {job.type}
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">New</span>
+                      </div>
+                      <h4 className="font-bold text-slate-800 dark:text-white text-sm line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
+                        {job.title}
+                      </h4>
+                    </div>
+                    <div className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                      <span className="truncate max-w-[150px]">{job.organization}</span>
+                      <span className="text-indigo-600 dark:text-indigo-400 font-bold">Read More →</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             ))}
           </div>
         </div>
