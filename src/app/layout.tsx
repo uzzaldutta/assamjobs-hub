@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
-import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar } from "lucide-react";
+import { Sparkles, Home, Briefcase, CreditCard, Award, Bookmark, Search, MapPin, GraduationCap, FileText, Calendar, Wallet } from "lucide-react";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/components/LanguageContext";
@@ -103,13 +103,16 @@ export default function RootLayout({
                     </button>
                     <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all grid grid-cols-1 divide-y divide-slate-100 dark:divide-slate-800">
                       <div className="p-2">
+                        <Link href="/tools/interview-prep" className="block px-3 py-2 text-sm text-yellow-600 dark:text-yellow-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">✨ AI Interview Coach</Link>
+                        <Link href="/tools/marks-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">SEBA/AHSEC Marks Calculator</Link>
+                        <Link href="/tools/fee-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Exam Fee Calculator</Link>
                         <Link href="/tools/typing-test" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Typing Speed Tester</Link>
-                        <Link href="/tools/salary-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Salary Calculator (Assam)</Link>
+                        <Link href="/tools/salary-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Salary Calculator</Link>
                         <Link href="/tools/cgpa-converter" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">CGPA to Percentage</Link>
-                        <Link href="/tools/pdf-merger" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Image to PDF Merger</Link>
                       </div>
                       <div className="p-2">
                         <Link href="/tools/standard-form" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Auto Standard Form</Link>
+                        <Link href="/tools/pdf-merger" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Image to PDF Merger</Link>
                         <Link href="/tools/age-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Age Calculator</Link>
                         <Link href="/tools/photo-resizer" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Photo & Sign Resizer</Link>
                         <Link href="/tools/cv-maker" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">AI CV Maker</Link>
@@ -172,6 +175,9 @@ export default function RootLayout({
                     </h4>
                     <ul className="space-y-2 text-sm font-medium">
                       <li><Link href="/tools/standard-form" className="flex items-center gap-2 hover:text-indigo-100 transition"><FileText size={14}/> Auto Standard Form</Link></li>
+                      <li><Link href="/tools/interview-prep" className="flex items-center gap-2 hover:text-indigo-100 transition text-yellow-300"><Sparkles size={14}/> AI Interview Coach</Link></li>
+                      <li><Link href="/tools/fee-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Wallet size={14}/> Exam Fee Calculator</Link></li>
+                      <li><Link href="/tools/marks-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><Award size={14}/> Marks Calculator</Link></li>
                       <li><Link href="/tools/salary-calculator" className="flex items-center gap-2 hover:text-indigo-100 transition"><CreditCard size={14}/> Salary Calculator</Link></li>
                       <li><Link href="/tools/typing-test" className="flex items-center gap-2 hover:text-indigo-100 transition"><Award size={14}/> Typing Speed Test</Link></li>
                       <li><Link href="/tools/photo-resizer" className="flex items-center gap-2 hover:text-indigo-100 transition"><MapPin size={14}/> Photo & Sign Resizer</Link></li>

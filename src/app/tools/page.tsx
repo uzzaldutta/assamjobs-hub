@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles, FileText, CreditCard, Award, MapPin, GraduationCap, Bookmark, Calendar, Briefcase } from "lucide-react";
+import { Calculator, FileText, Image as ImageIcon, Type, Briefcase, GraduationCap, FileOutput, ShieldQuestion, ChevronRight, Award, Sparkles, Wallet, CreditCard, MapPin, Bookmark, Calendar } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Free Applicant Tools | AssamJobs Hub",
@@ -9,6 +9,30 @@ export const metadata: Metadata = {
 
 export default function ToolsIndexPage() {
   const tools = [
+    {
+      id: "marks-calculator",
+      title: "SEBA / AHSEC Marks Calculator",
+      description: "Calculate your exact percentage, best of 5, and division instantly.",
+      icon: <Award className="w-6 h-6" />,
+      color: "border-blue-100 dark:border-blue-900 hover:border-blue-500",
+      bg: "bg-blue-50 dark:bg-blue-900/20"
+    },
+    {
+      id: "interview-prep",
+      title: "AI Interview Coach",
+      description: "Type any job title and instantly get the top 10 most likely interview questions.",
+      icon: <Sparkles className="w-6 h-6" />,
+      color: "border-violet-100 dark:border-violet-900 hover:border-violet-500",
+      bg: "bg-violet-50 dark:bg-violet-900/20"
+    },
+    {
+      id: "fee-calculator",
+      title: "Exam Fee Calculator",
+      description: "Check your exact application fee and exemptions for major exams based on caste.",
+      icon: <Wallet className="w-6 h-6" />,
+      color: "border-emerald-100 dark:border-emerald-900 hover:border-emerald-500",
+      bg: "bg-emerald-50 dark:bg-emerald-900/20"
+    },
     {
       id: "standard-form",
       title: "Auto Standard Form",
