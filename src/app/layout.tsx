@@ -98,19 +98,19 @@ export default function RootLayout({
                 
 
                 {/* Desktop Navigation */}
-                <nav className="hidden lg:flex items-center gap-3 xl:gap-5">
-                  <Link href="/" className="text-sm font-medium text-indigo-600 dark:text-indigo-400 whitespace-nowrap">Home</Link>
-                  <Link href="/calendar" className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-500 transition flex items-center gap-1 whitespace-nowrap"><Calendar size={14} /> Calendar</Link>
-                  <Link href="/syllabus" className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-500 transition whitespace-nowrap">Syllabus</Link>
-                  <Link href="/admissions" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition whitespace-nowrap">Admissions</Link>
-                  <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition whitespace-nowrap">Admit Cards</Link>
-                  <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition whitespace-nowrap">Results</Link>
-                  <Link href="/mock-tests" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition flex items-center gap-1 whitespace-nowrap"><BookOpen size={14} /> Mock Tests</Link>
-                  <Link href="/tenders" className="text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-xl transition shadow-sm flex items-center gap-1 whitespace-nowrap"><FileText size={16}/> Tenders</Link>
+                <nav className="hidden lg:flex items-center p-1.5 bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/50 rounded-2xl shadow-sm">
+                  <Link href="/" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Home</Link>
+                  <Link href="/calendar" className="text-sm font-bold text-pink-600 dark:text-pink-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap"><Calendar size={14} /> Calendar</Link>
+                  <Link href="/syllabus" className="text-sm font-bold text-amber-600 dark:text-amber-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Syllabus</Link>
+                  <Link href="/admissions" className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all whitespace-nowrap">Admissions</Link>
+                  <Link href="/admit-cards" className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all whitespace-nowrap">Admit Cards</Link>
+                  <Link href="/results" className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all whitespace-nowrap">Results</Link>
+                  <Link href="/mock-tests" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap"><BookOpen size={14} /> Mock Tests</Link>
+                  <Link href="/tenders" className="text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 rounded-xl shadow-md hover:shadow-lg hover:from-amber-400 hover:to-orange-400 transition-all flex items-center gap-1.5 whitespace-nowrap"><FileText size={16}/> Tenders</Link>
                   
                   {/* Tools Dropdown Group */}
-                  <div className="relative group">
-                    <button className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition flex items-center gap-1 whitespace-nowrap">
+                  <div className="relative group ml-1">
+                    <button className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all flex items-center gap-1.5 whitespace-nowrap">
                       Tools <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all grid grid-cols-1 divide-y divide-slate-100 dark:divide-slate-800">
