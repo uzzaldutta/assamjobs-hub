@@ -1,4 +1,5 @@
 import FeedList from "@/components/FeedList";
+import RecentMarquee from "@/components/RecentMarquee";
 import { CreditCard } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -38,7 +39,8 @@ export default async function AdmitCardsPage() {
         <p className="text-indigo-100 text-sm mb-2">Get the latest hall tickets for upcoming exams</p>
       </div>
 
-      <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-6">
+      <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
+        <RecentMarquee jobs={allAdmitCards.slice(0, 8)} title="Recent Admit Cards" />
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">Latest Admit Cards</h3>
         </div>

@@ -1,4 +1,5 @@
 import FeedList from "@/components/FeedList";
+import RecentMarquee from "@/components/RecentMarquee";
 import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -35,7 +36,8 @@ export default async function AdmissionsPage() {
         <p className="text-indigo-100 text-sm mb-2">Latest admission notifications for top colleges, universities, and institutes</p>
       </div>
 
-      <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-6">
+      <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
+        <RecentMarquee jobs={allAdmissions.slice(0, 8)} title="Recent Admissions" />
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">All-India & Assam Admissions</h3>
         </div>
