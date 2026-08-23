@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Save, AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-export default function EditJobPage({ params }: { params: { id: string } }) {
+export default function EditJobPage() {
+  const params = useParams();
+  const id = params.id as string;
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [token, setToken] = useState<string>("");
@@ -40,7 +42,7 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
       const { data, error } = await supabase
         .from('jobs')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
         
       if (data) {
@@ -77,7 +79,7 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
           "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
-          id: params.id,
+          id: id,
           ...formData
         })
       });
@@ -86,7 +88,7 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
       
       setStatus("success");
       setTimeout(() => {
-        router.push(`/jobs/${params.id}`);
+        router.push(`/jobs/${id}`);
       }, 1500);
       
     } catch (err) {
@@ -100,7 +102,7 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4">
       <div className="max-w-3xl mx-auto">
-        <Link href={`/jobs/${params.id}`} className="text-indigo-600 hover:text-indigo-700 font-medium text-sm flex items-center gap-1 mb-6">
+        <Link href={`/jobs/${id}`} className="text-indigo-600 hover:text-indigo-700 font-medium text-sm flex items-center gap-1 mb-6">
           <ArrowLeft size={16} /> Back to Job Post
         </Link>
         
