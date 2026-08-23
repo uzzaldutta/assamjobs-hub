@@ -26,12 +26,28 @@ export default function AdminPage() {
     unique_description_assamese: ""
   });
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "admin123") {
-      setIsAuthenticated(true);
-    } else {
-      alert("Incorrect password");
+    setIsLoggingIn(true);
+    
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      
+      if (res.ok) {
+        setIsAuthenticated(true);
+      } else {
+        alert("Incorrect password");
+      }
+    } catch(err) {
+      alert("Login failed");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -46,11 +62,14 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/admin/add-job", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${password}`
+        },
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Failed to add job");
+      if (!res.ok) throw new Error("Failed to add job (Unauthorized or Server Error)");
 
       setStatus("success");
       setFormData({
@@ -85,8 +104,8 @@ export default function AdminPage() {
                   <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-950 text-slate-900 dark:text-white" />
                 </div>
               </div>
-              <button type="submit" className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Unlock Dashboard
+              <button type="submit" disabled={isLoggingIn} className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+                {isLoggingIn ? "Verifying..." : "Unlock Dashboard"}
               </button>
             </form>
           </div>

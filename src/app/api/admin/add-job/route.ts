@@ -3,6 +3,13 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   try {
+    const authHeader = req.headers.get("authorization");
+    const correctPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
+    
+    if (authHeader !== `Bearer ${correctPassword}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const data = await req.json();
 
     const newEntry = {
