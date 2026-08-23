@@ -99,7 +99,7 @@ export default function RootLayout({
                 
 
                 {/* Desktop Navigation */}
-                <nav className="hidden lg:flex items-center p-1.5 bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/50 rounded-2xl shadow-sm">
+                <nav className="hidden lg:flex items-center p-1.5 bg-emerald-50/80 dark:bg-emerald-900/40 backdrop-blur-xl border border-emerald-200/60 dark:border-emerald-700/50 rounded-2xl shadow-sm">
                   <Link href="/" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Home</Link>
                   <Link href="/calendar" className="text-sm font-bold text-pink-600 dark:text-pink-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap"><Calendar size={14} /> Calendar</Link>
                   <Link href="/syllabus" className="text-sm font-bold text-amber-600 dark:text-amber-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Syllabus</Link>
