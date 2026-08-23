@@ -1,5 +1,5 @@
 import FeedList from "@/components/FeedList";
-import { FileText } from "lucide-react";
+import { FileText, Calculator } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -40,8 +40,15 @@ export default async function TendersPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-6 pb-8 md:pb-6 rounded-b-[2rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4 max-w-7xl mx-auto w-full">
-        <h2 className="text-2xl font-bold text-white mb-1">Government Tenders</h2>
-        <p className="text-indigo-100 text-sm mb-2">Latest e-Procurement notices and active tenders from Govt of Assam</p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">Government Tenders</h2>
+            <p className="text-indigo-100 text-sm mb-2 md:mb-0">Latest e-Procurement notices and active tenders from Govt of Assam</p>
+          </div>
+          <Link href="/tools/tender-calculator" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-5 rounded-xl transition shadow-md whitespace-nowrap self-start md:self-auto">
+            <Calculator size={18} /> Contractor Toolkit
+          </Link>
+        </div>
       </div>
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-6">
