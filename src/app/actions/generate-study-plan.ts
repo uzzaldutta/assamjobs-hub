@@ -14,7 +14,7 @@ export async function generateStudyPlan(examName: string, days: number, weakSubj
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
     const prompt = `You are an expert exam preparation coach for Indian competitive exams, specifically those in Assam (like APSC, ADRE, Assam Police, etc).
     A student has asked you to create a structured study timetable.

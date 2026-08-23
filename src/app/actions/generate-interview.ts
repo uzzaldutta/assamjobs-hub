@@ -14,7 +14,7 @@ export async function generateInterviewQuestions(jobTitle: string) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
     const prompt = `You are an expert career coach in India (specifically Assam). 
     I am preparing for an interview for the position of: "${jobTitle}".

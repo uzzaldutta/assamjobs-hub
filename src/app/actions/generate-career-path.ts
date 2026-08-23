@@ -14,7 +14,7 @@ export async function generateCareerPath(education: string, skills: string) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
     const prompt = `You are an expert career counselor for government and private jobs in Assam, India.
     A candidate has provided their qualifications.
