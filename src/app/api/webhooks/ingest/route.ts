@@ -38,20 +38,48 @@ export async function POST(request: Request) {
 
     if (records.length > 0) {
       for (const record of records) {
-        // Check for duplicates
-        const { data: existingData, error: searchError } = await supabase
+        // Check for duplicates (By title/org OR by apply_url/pdf_url to prevent cross-site duplicates)
+        let isDuplicate = false;
+        
+        // 1. Check title and organization
+        const { data: existingTitle, error: searchError } = await supabase
           .from('jobs')
           .select('id')
           .eq('title', record.title)
           .eq('organization', record.organization)
           .limit(1);
           
-        if (searchError) {
-          console.error("Error checking for duplicates:", searchError);
-          continue;
+        if (existingTitle && existingTitle.length > 0) {
+          isDuplicate = true;
+        }
+
+        // 2. Check apply_url to prevent cross-website duplicates
+        if (!isDuplicate && record.apply_url && record.apply_url.length > 10) {
+          const { data: existingUrl } = await supabase
+            .from('jobs')
+            .select('id')
+            .eq('apply_url', record.apply_url)
+            .limit(1);
+          if (existingUrl && existingUrl.length > 0) {
+            isDuplicate = true;
+            console.log(`Cross-site duplicate found by apply_url: ${record.apply_url}`);
+          }
         }
         
-        if (existingData && existingData.length > 0) {
+        // 3. Check official_pdf_url
+        if (!isDuplicate && record.official_pdf_url && record.official_pdf_url.length > 10) {
+          const { data: existingPdf } = await supabase
+            .from('jobs')
+            .select('id')
+            .eq('official_pdf_url', record.official_pdf_url)
+            .limit(1);
+          if (existingPdf && existingPdf.length > 0) {
+            isDuplicate = true;
+            console.log(`Cross-site duplicate found by pdf_url: ${record.official_pdf_url}`);
+          }
+        }
+
+        if (isDuplicate) {
           console.log(`Duplicate found for: ${record.title}. Skipping.`);
           continue;
         }
