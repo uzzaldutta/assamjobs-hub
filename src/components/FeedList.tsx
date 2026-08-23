@@ -215,7 +215,7 @@ export default function FeedList({
       </div>
 
       {/* Results List */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {visibleJobs.length > 0 ? (
           <>
             {visibleJobs.map((job) => (
@@ -223,7 +223,7 @@ export default function FeedList({
             ))}
             
             {visibleCount < filteredJobs.length && (
-              <div className="pt-6 pb-2 text-center">
+              <div className="pt-6 pb-2 text-center col-span-full">
                 <button 
                   onClick={() => setVisibleCount(prev => prev + 15)}
                   className="px-8 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold text-sm rounded-xl border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition shadow-sm inline-flex items-center gap-2"

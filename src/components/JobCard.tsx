@@ -76,7 +76,7 @@ export default function JobCard({ job }: { job: JobProps }) {
   }
   
   return (
-    <div className="glass-card rounded-xl p-4 mb-4 flex flex-col gap-3 group relative overflow-hidden border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+    <div className="glass-card rounded-xl p-4 flex flex-col gap-3 group relative overflow-hidden border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all h-full">
       {/* Accent edge line */}
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${accentColor}`}></div>
 
