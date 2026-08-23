@@ -79,6 +79,7 @@ export default function RootLayout({
                   <Link href="/admissions" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admissions</Link>
                   <Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Admit Cards</Link>
                   <Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition">Results</Link>
+                  <Link href="/tenders" className="text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl transition shadow-sm flex items-center gap-1"><FileText size={16}/> Tenders</Link>
                   
                   {/* Tools Dropdown Group */}
                   <div className="relative group">
@@ -134,6 +135,7 @@ export default function RootLayout({
                     <ul className="space-y-2 text-sm">
                       <li><Link href="/syllabus" className="text-indigo-600 dark:text-indigo-400 hover:underline">Syllabus & Exam Pattern</Link></li>
                       <li><Link href="/admissions" className="text-indigo-600 dark:text-indigo-400 hover:underline">All-India Admissions</Link></li>
+                      <li><Link href="/tenders" className="font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-2"><FileText size={14}/> Browse Tenders</Link></li>
                       <li><Link href="/admit-cards" className="text-indigo-600 dark:text-indigo-400 hover:underline">Download Admit Cards</Link></li>
                       <li><Link href="/results" className="text-indigo-600 dark:text-indigo-400 hover:underline">Check Results</Link></li>
                     </ul>
@@ -206,9 +208,9 @@ export default function RootLayout({
                   <Home size={20} />
                   <span className="text-[10px] mt-1 font-medium">Home</span>
                 </Link>
-                <Link href="/saved" className="flex flex-col items-center text-slate-400 hover:text-indigo-500 transition">
-                  <Bookmark size={20} />
-                  <span className="text-[10px] mt-1 font-medium">Saved</span>
+                <Link href="/tenders" className="flex flex-col items-center text-amber-500 hover:text-amber-600 transition">
+                  <FileText size={20} />
+                  <span className="text-[10px] mt-1 font-bold">Tenders</span>
                 </Link>
                 <Link href="/admit-cards" className="flex flex-col items-center text-slate-400 hover:text-indigo-500 transition">
                   <CreditCard size={20} />
