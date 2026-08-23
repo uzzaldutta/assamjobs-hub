@@ -59,3 +59,15 @@ h1, h2, h3, h4, h5, h6 {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0mm;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

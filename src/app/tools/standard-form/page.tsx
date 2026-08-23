@@ -7,17 +7,25 @@ export default function StandardForm() {
   const [formData, setFormData] = useState({
     postName: "",
     department: "",
+    advertisement: "",
     name: "",
-    fatherName: "",
-    motherName: "",
-    dob: "",
-    age: "",
     address: "",
-    mobile: "",
-    email: "",
-    caste: "",
-    exchangeNo: "",
+    fatherName: "",
+    fatherAddress: "",
+    placeOfBirth: "",
+    citizenInfo: "By Birth",
     qualification: "",
+    otherQualification: "",
+    community: "",
+    religion: "",
+    age: "",
+    occupation: "",
+    previousAppt: "",
+    retrenched: "No",
+    ncc: "No",
+    exchangeNo: "",
+    assembly: "",
+    challan: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,49 +45,21 @@ export default function StandardForm() {
             <FileText className="text-indigo-600" size={28} />
             <h1 className="text-2xl md:text-3xl font-bold">Assam Standard Form Generator</h1>
           </div>
-          <p className="text-slate-500 mb-8">Fill in your details below and click Print. The output will automatically format itself exactly like the official Assam Standard Form of Application for Govt jobs.</p>
+          <p className="text-slate-500 mb-8">Fill in your details below and click Print. The output will perfectly match the Assam Gazette Part IX.</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Name of the Post applied for</label>
-              <input type="text" name="postName" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Department / Office</label>
-              <input type="text" name="department" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Full Name (In Block Letters)</label>
-              <input type="text" name="name" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none uppercase" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Father's Name</label>
-              <input type="text" name="fatherName" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none uppercase" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Date of Birth</label>
-              <input type="date" name="dob" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Age (as on date of advt)</label>
-              <input type="text" name="age" onChange={handleChange} placeholder="e.g. 24 Yrs 2 M" className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none" />
-            </div>
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-semibold">Present Address (With PIN Code)</label>
-              <textarea name="address" onChange={handleChange} rows={3} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none uppercase"></textarea>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Mobile Number</label>
-              <input type="text" name="mobile" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Employment Exchange Reg. No</label>
-              <input type="text" name="exchangeNo" onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none" />
-            </div>
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-semibold">Educational Qualifications</label>
-              <input type="text" name="qualification" onChange={handleChange} placeholder="e.g. B.A. from Gauhati University" className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none uppercase" />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" name="department" onChange={handleChange} placeholder="To (Department Name)" className="w-full p-2 rounded border" />
+            <input type="text" name="postName" onChange={handleChange} placeholder="Post Applied For" className="w-full p-2 rounded border" />
+            <input type="text" name="advertisement" onChange={handleChange} placeholder="Advertisement Reference" className="w-full p-2 rounded border" />
+            <input type="text" name="name" onChange={handleChange} placeholder="1. Full Name (Block Letters)" className="w-full p-2 rounded border uppercase" />
+            <textarea name="address" onChange={handleChange} placeholder="2. Present Address" className="w-full p-2 rounded border"></textarea>
+            <input type="text" name="fatherName" onChange={handleChange} placeholder="3. Father's Name" className="w-full p-2 rounded border" />
+            <input type="text" name="placeOfBirth" onChange={handleChange} placeholder="4. Place of birth (Police St. & District)" className="w-full p-2 rounded border" />
+            <input type="text" name="qualification" onChange={handleChange} placeholder="6. Educational Qualification" className="w-full p-2 rounded border" />
+            <input type="text" name="community" onChange={handleChange} placeholder="8. Community (SC/ST/OBC)" className="w-full p-2 rounded border" />
+            <input type="text" name="age" onChange={handleChange} placeholder="9. Age on 1st January (HSLC)" className="w-full p-2 rounded border" />
+            <input type="text" name="exchangeNo" onChange={handleChange} placeholder="14. Employment Exchange Reg No" className="w-full p-2 rounded border" />
+            <input type="text" name="challan" onChange={handleChange} placeholder="Treasury Challan Amount (if any)" className="w-full p-2 rounded border" />
           </div>
 
           <button onClick={handlePrint} className="mt-8 w-full md:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition flex items-center justify-center gap-2">
@@ -88,79 +68,123 @@ export default function StandardForm() {
         </div>
       </div>
 
-      {/* Printable Area - Only visible when printing, or we can make it look like a paper on screen */}
-      <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white p-[20mm] text-black shadow-2xl print:shadow-none print:p-0 mt-8 print:mt-0 font-serif border border-slate-200">
+      {/* Printable Area - EXACTLY MATCHING GAZETTE PART IX */}
+      <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white p-[15mm] text-black shadow-2xl print:shadow-none print:p-0 print:m-0 mt-8 print:mt-0 font-serif leading-tight print-container">
         
-        <div className="text-center font-bold text-lg underline mb-6 tracking-wide">
-          STANDARD FORM OF APPLICATION
+        <div className="text-center font-bold text-lg mb-1">STANDARD FORM OF APPLICATION</div>
+        <div className="text-center font-bold text-md mb-6">(ASSAM GAZETTE PART IX)</div>
+
+        <div className="mb-4">
+          <div>To</div>
+          <div className="ml-8 w-3/4 border-b border-dotted border-black min-h-[20px] font-semibold">{formData.department}</div>
+          <div className="ml-8 w-3/4 border-b border-dotted border-black min-h-[20px]"></div>
         </div>
 
-        <div className="flex justify-between items-start mb-6">
-          <div className="text-sm w-3/4">
-            <p>To,</p>
-            <p className="ml-4 min-h-[1.5rem] border-b border-dotted border-black w-3/4 font-semibold">{formData.department}</p>
-            <p className="ml-4 min-h-[1.5rem] border-b border-dotted border-black w-3/4"></p>
-          </div>
-          <div className="w-[35mm] h-[45mm] border border-black flex items-center justify-center text-[10px] text-center text-gray-400 p-2">
-            Paste recent passport size photograph
-          </div>
+        <div className="flex mb-1">
+          <div className="whitespace-nowrap">Sub:- Application for the post of</div>
+          <div className="flex-grow border-b border-dotted border-black ml-2 font-semibold uppercase">{formData.postName}</div>
+        </div>
+        <div className="flex mb-4">
+          <div className="whitespace-nowrap">Ref:- Your Advertisement</div>
+          <div className="flex-grow border-b border-dotted border-black ml-2 font-semibold">{formData.advertisement}</div>
         </div>
 
-        <table className="w-full text-sm border-collapse">
+        <div className="mb-2">Sir</div>
+        <div className="indent-8 mb-6 text-justify">
+          In response to your advertisement quoted above on the subject I have the honour to offer myself as a candidate for the same with the particulars furnished in the prescribed form.
+        </div>
+
+        <table className="w-full text-[15px] border-none mb-6">
           <tbody>
-            <tr>
-              <td className="py-2 w-1/3">1. Name of the post applied for</td>
-              <td className="py-2 border-b border-dotted border-black font-semibold uppercase">{formData.postName}</td>
+            <tr className="align-bottom">
+              <td className="py-2 w-2/3">1. Name in full(block letters)</td>
+              <td className="py-2 w-4 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black font-bold uppercase tracking-wide">{formData.name}</td>
             </tr>
-            <tr>
-              <td className="py-2">2. Name of Candidate (in BLOCK letters)</td>
-              <td className="py-2 border-b border-dotted border-black font-bold uppercase tracking-widest">{formData.name}</td>
+            <tr className="align-bottom">
+              <td className="py-2">2. Present Address</td>
+              <td className="py-2 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black uppercase leading-tight min-h-[2rem]">{formData.address}</td>
             </tr>
-            <tr>
-              <td className="py-2">3. Father's / Husband's Name</td>
+            <tr className="align-bottom">
+              <td className="py-2">3. Father's Name & Present address</td>
+              <td className="py-2 text-center">:</td>
               <td className="py-2 border-b border-dotted border-black uppercase">{formData.fatherName}</td>
             </tr>
-            <tr>
-              <td className="py-2">4. Date of Birth</td>
-              <td className="py-2 border-b border-dotted border-black font-semibold">{formData.dob}</td>
+            <tr className="align-bottom">
+              <td className="py-2">4. Place of birth including Police St. and District</td>
+              <td className="py-2 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black">{formData.placeOfBirth}</td>
             </tr>
-            <tr>
-              <td className="py-2">5. Age (As on date of advt)</td>
-              <td className="py-2 border-b border-dotted border-black">{formData.age}</td>
+            <tr className="align-bottom">
+              <td className="py-2 pr-4 leading-snug">5. Are you a citizen of India if so, how (Copy of citizenship certificates should be enclosed where necessary)</td>
+              <td className="py-2 text-center align-bottom">:</td>
+              <td className="py-2 border-b border-dotted border-black align-bottom">{formData.citizenInfo}</td>
             </tr>
-            <tr>
-              <td className="py-2 align-top">6. Present Address</td>
-              <td className="py-2 border-b border-dotted border-black uppercase min-h-[3rem]">{formData.address}</td>
+            <tr className="align-bottom">
+              <td className="py-2 pr-4 leading-snug">6. Educational qualification and also the name & full address of the education institution (which read last copies of certificate should be enclosed)</td>
+              <td className="py-2 text-center align-bottom">:</td>
+              <td className="py-2 border-b border-dotted border-black align-bottom uppercase">{formData.qualification}</td>
             </tr>
-            <tr>
-              <td className="py-2">7. Mobile Number</td>
-              <td className="py-2 border-b border-dotted border-black">{formData.mobile}</td>
+            <tr className="align-bottom">
+              <td className="py-2">7. Other Qualification</td>
+              <td className="py-2 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black">{formData.otherQualification}</td>
             </tr>
-            <tr>
-              <td className="py-2">8. Employment Exchange Reg No.</td>
+            <tr className="align-bottom">
+              <td className="py-2 pr-4 leading-snug">8. Community (a) State your religion (b) Are you member of SC/ST (Answer 'yes' or 'No' if yes state particular's by a copy of certificate)</td>
+              <td className="py-2 text-center align-bottom">:</td>
+              <td className="py-2 border-b border-dotted border-black align-bottom">{formData.community}</td>
+            </tr>
+            <tr className="align-bottom">
+              <td className="py-2 pr-4 leading-snug">9. Age on the 1st. January 200 (according to H.S.L.C. Examination copy of which should be enclosed)</td>
+              <td className="py-2 text-center align-bottom">:</td>
+              <td className="py-2 border-b border-dotted border-black align-bottom">{formData.age}</td>
+            </tr>
+            <tr className="align-bottom">
+              <td className="py-2">10. Present occupation, if any</td>
+              <td className="py-2 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black">{formData.occupation}</td>
+            </tr>
+            <tr className="align-bottom">
+              <td className="py-2">11. Previous appointment held, if any</td>
+              <td className="py-2 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black">{formData.previousAppt}</td>
+            </tr>
+            <tr className="align-bottom">
+              <td className="py-2 pr-4 leading-snug">12. Are you a temporary or retrenched personal of a temporary Deptt. of the Govt. of Assam ? Answer 'yes' or 'No' if yes state Particulars</td>
+              <td className="py-2 text-center align-bottom">:</td>
+              <td className="py-2 border-b border-dotted border-black align-bottom">{formData.retrenched}</td>
+            </tr>
+            <tr className="align-bottom">
+              <td className="py-2 pr-4 leading-snug">13. re you trained in a member of the N.C.C.or Territorial army, or trained Home Guards and civil defence volunteer's if so, give particulars</td>
+              <td className="py-2 text-center align-bottom">:</td>
+              <td className="py-2 border-b border-dotted border-black align-bottom">{formData.ncc}</td>
+            </tr>
+            <tr className="align-bottom">
+              <td className="py-2">14. Name of Employment Exchange & Regd. No</td>
+              <td className="py-2 text-center">:</td>
               <td className="py-2 border-b border-dotted border-black font-semibold">{formData.exchangeNo}</td>
             </tr>
-            <tr>
-              <td className="py-2">9. Educational Qualification</td>
-              <td className="py-2 border-b border-dotted border-black uppercase">{formData.qualification}</td>
+            <tr className="align-bottom">
+              <td className="py-2">15. The Name of the Assembly or Constitution</td>
+              <td className="py-2 text-center">:</td>
+              <td className="py-2 border-b border-dotted border-black">{formData.assembly}</td>
             </tr>
           </tbody>
         </table>
 
-        <div className="mt-12 text-sm leading-relaxed text-justify">
-          <p className="indent-8">
-            I do hereby declare that all the statements made in the application are true, complete and correct to the best of my knowledge and belief. I understand that in the event of any particulars or information given herein being found false or incorrect, my candidature for the examination/interview is liable to be rejected or cancelled.
-          </p>
+        <div className="mb-4 leading-relaxed text-justify">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I am a candidate for the post of <span className="border-b border-dotted border-black font-semibold inline-block min-w-[200px] text-center uppercase">{formData.postName}</span> and the fact state above are true to the best of my knowledge and belief. In case of a false statement, I am liable to any action Govt. may deem fit and proper.<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A treasury challan of Rs. <span className="border-b border-dotted border-black font-semibold inline-block min-w-[100px] text-center">{formData.challan}</span> is attached herewith
         </div>
 
-        <div className="flex justify-between items-end mt-20 text-sm">
+        <div className="flex justify-between items-end mt-12 text-[15px]">
           <div>
-            <p>Date: ........................</p>
-            <p className="mt-4">Place: ........................</p>
+            <p>Date.................................</p>
           </div>
-          <div className="text-center">
-            <div className="w-48 border-b border-black mb-1"></div>
-            <p>Signature of the Candidate</p>
+          <div className="text-right">
+            <p>Signature of the Applicant</p>
           </div>
         </div>
 
