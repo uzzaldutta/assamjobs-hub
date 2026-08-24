@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Menu, X, Compass, Calendar, Mic, FileText, Briefcase, Calculator, Keyboard } from "lucide-react";
 import SubscribeForm from "./SubscribeForm";
@@ -8,30 +9,22 @@ import { ThemeToggle } from "./ThemeToggle";
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  return (
-    <>
-      <div className="flex items-center gap-2 lg:hidden">
-        <ThemeToggle />
-        <button 
-          onClick={() => setIsOpen(true)}
-          className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
-        >
-          <Menu size={20} />
-        </button>
-      </div>
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-      {/* Slide-out Drawer */}
-      {isOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end">
-          {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
-          />
-          
-          {/* Drawer */}
-          <div className="relative w-4/5 max-w-sm bg-white dark:bg-slate-900 h-full overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
+  const drawerContent = (
+    <div className="fixed inset-0 z-[100] flex justify-end">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={() => setIsOpen(false)}
+      />
+      
+      {/* Drawer */}
+      <div className="relative w-4/5 max-w-sm bg-white dark:bg-slate-900 h-full overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
             <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur z-10">
               <h2 className="font-bold text-lg text-slate-800 dark:text-white">Menu</h2>
               <button 
@@ -91,7 +84,21 @@ export default function MobileMenu() {
             </div>
           </div>
         </div>
-      )}
+  );
+
+  return (
+    <>
+      <div className="flex items-center gap-2 lg:hidden">
+        <ThemeToggle />
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+        >
+          <Menu size={20} />
+        </button>
+      </div>
+
+      {mounted && isOpen && createPortal(drawerContent, document.body)}
     </>
   );
 }
