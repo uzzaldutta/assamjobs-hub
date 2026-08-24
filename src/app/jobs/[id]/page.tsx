@@ -236,7 +236,7 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
 
           {job.officialUrl || job.apply_url ? (
             <a href={job.officialUrl || job.apply_url} target="_blank" rel="noopener noreferrer" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-[0_8px_16px_-6px_rgba(79,70,229,0.5)] transition-all flex items-center justify-center gap-2">
-              Official Website / চৰকাৰী ৱেবছাইট
+              {job.job_type === "STUDY_MATERIAL" ? "Download PDF Material" : "Official Website / চৰকাৰী ৱেবছাইট"}
             </a>
           ) : (
             <button className="flex-1 bg-slate-300 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold py-3.5 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2">

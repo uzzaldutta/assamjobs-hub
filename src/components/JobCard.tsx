@@ -139,7 +139,7 @@ export default function JobCard({ job }: { job: JobProps }) {
               rel="noopener noreferrer" 
               className={`text-xs font-bold px-4 py-2 rounded-lg text-white ${accentColor} shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all text-center flex-1 sm:flex-none`}
             >
-              Apply / Link
+              {job.type === "STUDY_MATERIAL" ? "Download PDF" : "Apply / Link"}
             </a>
           )}
         </div>
