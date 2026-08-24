@@ -10,7 +10,7 @@ interface JobProps {
   id: string;
   title: string;
   organization: string;
-  type: "GOVERNMENT" | "PRIVATE" | "EXAM_UPDATE" | "TRAINING" | "TENDER" | "SCHOLARSHIP" | "ADMISSION";
+  type: "GOVERNMENT" | "PRIVATE" | "EXAM_UPDATE" | "TRAINING" | "TENDER" | "SCHOLARSHIP" | "ADMISSION" | "STUDY_MATERIAL";
   category: string;
   vacancies: string;
   district: string;

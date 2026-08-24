@@ -1,7 +1,5 @@
 import FeedList from "@/components/FeedList";
 import RecentMarquee from "@/components/RecentMarquee";
-import { BookOpen } from "lucide-react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export const revalidate = 60;
