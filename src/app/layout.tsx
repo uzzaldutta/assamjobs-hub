@@ -92,10 +92,13 @@ export default function RootLayout({
               {/* Header */}
               <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-3 flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-3">
-                  <img src="/logo.jpg" alt="AssamJobs Hub Logo" className="w-12 h-12 rounded-xl object-contain bg-white shadow-sm border border-slate-200 dark:border-slate-800" />
+                  <div className="relative group">
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500"></div>
+                    <img src="/logo.jpg?v=2" alt="AssamJobs Hub Logo" className="relative w-12 h-12 rounded-xl object-contain bg-white shadow-sm border border-slate-200 dark:border-slate-800" />
+                  </div>
                   <div className="flex flex-col">
-                    <h1 className="text-xl font-bold text-gradient leading-tight">AssamJobs Hub</h1>
-                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest">& TENDERS</span>
+                    <h1 className="text-xl font-black text-slate-900 dark:text-white leading-tight font-outfit tracking-tight">AssamJobs Hub</h1>
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest">Jobs & Tenders</span>
                   </div>
                 </Link>
                 
