@@ -8,10 +8,10 @@ from ai_rewriter import rewrite_and_extract_job
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-TARGET_URL = "https://www.sarkariresult.com/admission/"
+TARGET_URL = "https://www.assamcareer.com/search/label/Admission"
 
 async def scrape_admissions():
-    logger.info("Starting All-India Admissions Scraper...")
+    logger.info("Starting AssamCareer Admissions Scraper...")
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
@@ -29,18 +29,17 @@ async def scrape_admissions():
             await page.goto(TARGET_URL, timeout=60000)
             
             # Wait for admission links to appear
-            await page.wait_for_selector("a", timeout=15000)
+            await page.wait_for_selector(".post-title a", timeout=15000)
             
             # Extract links inside the post box
-            all_links = await page.locator("a").all()
+            all_links = await page.locator(".post-title a").all()
             admission_links = []
             
             for link in all_links:
                 href = await link.get_attribute("href")
                 text = await link.inner_text()
-                if href and "sarkariresult.com" in href and len(text.strip()) > 5:
-                    if "admission" in href or "online" in href or "form" in href:
-                        admission_links.append(href)
+                if href and "assamcareer.com" in href and len(text.strip()) > 5:
+                    admission_links.append(href)
             
             # Remove duplicates while preserving order
             admission_links = list(dict.fromkeys(admission_links))
@@ -62,8 +61,8 @@ async def scrape_admissions():
                     await admission_page.goto(admission_url, timeout=60000)
                     
                     # Extract text from the body
-                    await admission_page.wait_for_selector("body")
-                    raw_text = await admission_page.locator("body").inner_text()
+                    await admission_page.wait_for_selector(".post-body")
+                    raw_text = await admission_page.inner_text(".post-body")
                     
                     logger.info(f"Extracted raw text. Sending to AI for ADMISSION extraction...")
                     
