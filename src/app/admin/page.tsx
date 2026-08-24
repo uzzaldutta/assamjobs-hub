@@ -104,28 +104,53 @@ export default function AdminPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
     try {
+      let finalPdfUrl = formData.official_pdf_url;
+
+      // Handle PDF Upload to Supabase Storage
+      if (pdfFile) {
+        const fileExt = pdfFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        
+        const { data, error } = await supabase.storage
+          .from('pdfs')
+          .upload(`study-materials/${fileName}`, pdfFile);
+          
+        if (error) {
+          alert(`Failed to upload PDF: ${error.message}. Please create a public bucket named 'pdfs' in your Supabase dashboard first!`);
+          throw error;
+        }
+
+        const { data: { publicUrl } } = supabase.storage.from('pdfs').getPublicUrl(`study-materials/${fileName}`);
+        finalPdfUrl = publicUrl;
+      }
+
+      const payload = { ...formData, official_pdf_url: finalPdfUrl };
+
       const res = await fetch("/api/admin/add-job", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${password}`
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error("Failed to add job");
 
       setStatus("success");
       setFormData({
-        title: "", organization: "", job_type: formData.job_type, category: "ASSAM_STATE",
+        title: "", organization: "", job_type: formData.job_type, category: formData.category,
         vacancies: "", qualification: "", district: "All Assam", age_limit: "",
         application_fee: "None", selection_process: "", last_date: "",
         official_pdf_url: "", apply_url: "", unique_description: "", unique_description_assamese: ""
       });
+      setPdfFile(null);
       fetchJobs(); // Refresh the table
       setTimeout(() => setStatus("idle"), 3000);
     } catch (error) {
@@ -290,8 +315,23 @@ export default function AdminPage() {
                 <input type="url" name="apply_url" value={formData.apply_url} onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950" />
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-semibold">Official PDF URL (Optional)</label>
+                <label className="text-sm font-semibold">Upload PDF (Overrides URL below)</label>
+                <input type="file" accept=".pdf" onChange={(e) => setPdfFile(e.target.files?.[0] || null)} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-900/30 dark:file:text-indigo-400" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-semibold">OR Paste PDF Link</label>
                 <input type="url" name="official_pdf_url" value={formData.official_pdf_url} onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-semibold">Category / Subject</label>
+                <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950">
+                  <option value="ASSAM_STATE">Assam State</option>
+                  <option value="CENTRAL_GOVT">Central Govt</option>
+                  <option value="SYLLABUS">Syllabus</option>
+                  <option value="PREVIOUS_PAPERS">Previous Year Papers</option>
+                  <option value="NOTES">Study Notes & Books</option>
+                  <option value="CURRENT_AFFAIRS">Current Affairs & GK</option>
+                </select>
               </div>
               <div className="space-y-1 md:col-span-2">
                 <label className="text-sm font-semibold flex justify-between">
