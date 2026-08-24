@@ -47,6 +47,7 @@ export default function MobileMenu() {
                 <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3 uppercase tracking-wider">Quick Links</h3>
                 <div className="grid grid-cols-1 gap-2">
                   <Link onClick={() => setIsOpen(false)} href="/syllabus" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">Syllabus & Exam Pattern</Link>
+                  <Link onClick={() => setIsOpen(false)} href="/study-materials" className="p-3 bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-xl font-medium text-sm text-fuchsia-700 dark:text-fuchsia-400">Study Materials (PDF)</Link>
                   <Link onClick={() => setIsOpen(false)} href="/admissions" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">All-India Admissions</Link>
                   <Link onClick={() => setIsOpen(false)} href="/tenders" className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl font-bold text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2"><FileText size={16}/> Browse Tenders</Link>
                 </div>

@@ -71,6 +71,7 @@ export default async function Home() {
           <Link href="/admit-cards" className="shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full text-sm font-bold text-slate-700 dark:text-slate-200 shadow-sm">Admit Cards</Link>
           <Link href="/results" className="shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full text-sm font-bold text-slate-700 dark:text-slate-200 shadow-sm">Results</Link>
           <Link href="/syllabus" className="shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full text-sm font-bold text-slate-700 dark:text-slate-200 shadow-sm">Syllabus</Link>
+          <Link href="/study-materials" className="shrink-0 bg-fuchsia-50 dark:bg-fuchsia-900/20 border border-fuchsia-200 dark:border-fuchsia-900/50 px-4 py-2 rounded-full text-sm font-bold text-fuchsia-700 dark:text-fuchsia-400 shadow-sm">Study Materials</Link>
           <Link href="/tenders" className="shrink-0 bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-900/50 px-4 py-2 rounded-full text-sm font-bold text-amber-700 dark:text-amber-400 shadow-sm">Tenders</Link>
           <Link href="/mock-tests" className="shrink-0 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-900/50 px-4 py-2 rounded-full text-sm font-bold text-indigo-700 dark:text-indigo-400 shadow-sm">Mock Tests</Link>
         </div>

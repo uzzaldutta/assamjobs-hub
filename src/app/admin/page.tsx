@@ -272,8 +272,9 @@ export default function AdminPage() {
                   <option value="GOVERNMENT">Government Job</option>
                   <option value="PRIVATE">Private Job</option>
                   <option value="EXAM_UPDATE">Result / Admit Card</option>
-                  <option value="ADMISSION">Admission</option>
                   <option value="TENDER">Tender</option>
+                  <option value="ADMISSION">Admission</option>
+                  <option value="STUDY_MATERIAL">Study Material (PDF)</option>
                 </select>
               </div>
               <div className="space-y-1">
