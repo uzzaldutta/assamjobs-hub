@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { Menu, X, Compass, Calendar, Mic, FileText, Briefcase, Calculator, Keyboard } from "lucide-react";
+import { Menu, X, Compass, Calendar, Mic, FileText, Calculator, Keyboard } from "lucide-react";
 import SubscribeForm from "./SubscribeForm";
 import { ThemeToggle } from "./ThemeToggle";
 
