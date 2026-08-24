@@ -126,7 +126,7 @@ export default function JobCard({ job }: { job: JobProps }) {
       
       <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-3 justify-between items-center relative z-10">
         <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider">
-          {job.createdAt ? `Added: ${job.createdAt}` : 'Updated recently'}
+          {job.createdAt ? `Published: ${job.createdAt}` : 'Updated recently'}
         </span>
         <div className="flex gap-2 items-center w-full sm:w-auto">
           <Link href={`/jobs/${job.id}`} className="text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 px-4 py-2 rounded-lg transition-colors text-center flex-1 sm:flex-none">
