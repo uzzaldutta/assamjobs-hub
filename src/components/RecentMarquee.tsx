@@ -74,10 +74,10 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
     let animationFrameId: number;
     const scrollStep = () => {
       if (el) {
-        el.scrollTop += 1; // Scroll speed
+        el.scrollLeft += 1; // Scroll speed
         // Reset to beginning seamlessly if we hit halfway point (since we duplicated the list)
-        if (el.scrollTop >= el.scrollHeight / 2) {
-          el.scrollTop -= el.scrollHeight / 2;
+        if (el.scrollLeft >= el.scrollWidth / 2) {
+          el.scrollLeft -= el.scrollWidth / 2;
         }
       }
       animationFrameId = requestAnimationFrame(scrollStep);
@@ -98,7 +98,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
   // Reset scroll when switching tabs
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
+      scrollRef.current.scrollLeft = 0;
     }
   }, [activeTab]);
 
@@ -139,12 +139,12 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
         onTouchStart={handleInteraction}
         onTouchMove={handleInteraction}
         onWheel={handleInteraction}
-        className="flex flex-col overflow-y-auto hide-scrollbar relative w-full h-[450px] py-2 touch-pan-y snap-y snap-mandatory border-t border-b border-slate-100 dark:border-slate-800"
+        className="flex overflow-x-auto hide-scrollbar relative w-full py-2 touch-pan-x snap-x snap-mandatory"
         style={{ scrollBehavior: 'auto' }} // Ensure immediate tracking
       >
         {/* We render two identical lists side-by-side to create the seamless scroll effect */}
         {[1, 2].map((listIndex) => (
-          <div key={`${activeTab}-${listIndex}`} className="flex flex-col gap-3 min-h-max pb-3 w-full" aria-hidden={listIndex === 2}>
+          <div key={`${activeTab}-${listIndex}`} className="flex gap-4 min-w-max pr-4" aria-hidden={listIndex === 2}>
             {displayJobs.map((job) => {
               const expiring = isExpiringSoon(job.lastDate);
               const isNew = !expiring && isNewJob(job.createdAt);
@@ -157,7 +157,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
               }
 
               return (
-                <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`relative overflow-hidden w-full shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border snap-start ${borderClass}`}>
+                <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`relative overflow-hidden w-[300px] shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border snap-start ${borderClass}`}>
                   
                   {/* Flashing Background Layer */}
                   {expiring && <div className="absolute inset-0 bg-red-500/10 dark:bg-red-500/20 animate-pulse pointer-events-none"></div>}
