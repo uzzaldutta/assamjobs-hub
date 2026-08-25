@@ -7,38 +7,73 @@ import Link from "next/link";
 const QUESTIONS = [
   {
     id: 1,
-    question: "If A is the brother of B; B is the sister of C; and C is the father of D, how D is related to A?",
-    options: ["Nephew", "Niece", "Cannot be determined", "Brother"],
+    question: "Find the next term: 3, 6, 12, 24, ?",
+    options: ["36", "42", "48", "54"],
     answer: 2,
-    explanation: "D's gender is not mentioned in the question. D could be a nephew or niece. Thus, it cannot be determined."
+    explanation: "The series doubles each time: 3x2=6, 6x2=12, 12x2=24, so 24x2 = 48."
   },
   {
     id: 2,
-    question: "Find the next number in the series: 2, 6, 12, 20, 30, ___",
-    options: ["40", "42", "44", "48"],
-    answer: 1,
-    explanation: "The differences between consecutive terms are: 4, 6, 8, 10. The next difference should be 12. So, 30 + 12 = 42."
+    question: "The opposite direction of East is:",
+    options: ["North", "South", "West", "North-West"],
+    answer: 2,
+    explanation: "West is exactly 180 degrees opposite to East on a compass."
   },
   {
     id: 3,
-    question: "Which word does NOT belong with the others?",
-    options: ["Tulip", "Rose", "Bud", "Daisy"],
-    answer: 2,
-    explanation: "Tulip, Rose, and Daisy are all specific types of flowers. A bud is a stage of development for a flower."
+    question: "If DOG is coded as EPH, then CAT would be coded as:",
+    options: ["DBU", "DCU", "DBV", "CBU"],
+    answer: 0,
+    explanation: "Each letter is shifted 1 position forward in the alphabet (D->E, O->P, G->H). Applying this to CAT: C->D, A->B, T->U."
   },
   {
     id: 4,
-    question: "If 'APPLE' is coded as 'EQTPI', what is the code for 'MANGO'?",
-    options: ["QERKS", "QERJS", "QESKS", "QERKR"],
-    answer: 0,
-    explanation: "Each letter is shifted forward by 4 positions (A+4=E, P+4=T, etc.). So, M+4=Q, A+4=E, N+4=R, G+4=K, O+4=S."
+    question: "The daughter of my father’s sister is my:",
+    options: ["Sister", "Cousin", "Aunt", "Niece"],
+    answer: 1,
+    explanation: "Your father's sister is your aunt. Her daughter is your cousin."
   },
   {
     id: 5,
-    question: "A clock shows 3:00. What is the angle between the hour and minute hands?",
-    options: ["45 degrees", "90 degrees", "180 degrees", "360 degrees"],
+    question: "Find the missing number: 5, 10, 15, ?, 25",
+    options: ["18", "19", "20", "22"],
+    answer: 2,
+    explanation: "The series increases by 5 each time: 5, 10, 15, 20, 25."
+  },
+  {
+    id: 6,
+    question: "Find the next number in the series: 4, 8, 16, 32, ?",
+    options: ["48", "56", "64", "72"],
+    answer: 2,
+    explanation: "Each number is multiplied by 2 to get the next. 32 x 2 = 64."
+  },
+  {
+    id: 7,
+    question: "Fish is related to Water in the same way as Bird is related to:",
+    options: ["Nest", "Air", "Tree", "Egg"],
     answer: 1,
-    explanation: "At 3:00, the minute hand is at 12 and the hour hand is at 3, creating a perfect right angle (90 degrees)."
+    explanation: "A fish moves and lives primarily in water, just as a bird flies and moves primarily in the air."
+  },
+  {
+    id: 8,
+    question: "Facing East, a man turns 90° anticlockwise and then 90° clockwise. He is now facing:",
+    options: ["North", "South", "East", "West"],
+    answer: 2,
+    explanation: "A 90 degree turn left followed by a 90 degree turn right leaves him in the exact original direction (East)."
+  },
+  {
+    id: 9,
+    question: "If Sunday is the 1st day of the week, which day corresponds to the 6th day?",
+    options: ["Thursday", "Friday", "Saturday", "Monday"],
+    answer: 1,
+    explanation: "1-Sun, 2-Mon, 3-Tue, 4-Wed, 5-Thu, 6-Fri."
+  },
+  {
+    id: 10,
+    question: "A woman said, “He is the son of my husband’s sister.” How is the boy related to the woman?",
+    options: ["Son", "Nephew", "Brother", "Cousin"],
+    answer: 1,
+    explanation: "Her husband's sister is her sister-in-law. The son of a sister-in-law is a nephew."
   }
 ];
 

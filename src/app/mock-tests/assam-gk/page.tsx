@@ -7,38 +7,73 @@ import Link from "next/link";
 const QUESTIONS = [
   {
     id: 1,
-    question: "Who was the first Chief Minister of Assam?",
-    options: ["Bishnuram Medhi", "Gopinath Bordoloi", "Bimala Prasad Chaliha", "Tarun Ram Phukan"],
+    question: "Assam’s capital city is:",
+    options: ["Guwahati", "Dispur", "Jorhat", "Silchar"],
     answer: 1,
-    explanation: "Gopinath Bordoloi was the first Chief Minister of Assam and was also awarded the Bharat Ratna."
+    explanation: "Dispur became the capital of Assam in 1973, shifting from Shillong."
   },
   {
     id: 2,
-    question: "In which year did the Battle of Saraighat take place?",
-    options: ["1669", "1671", "1826", "1228"],
+    question: "The largest city of Assam is:",
+    options: ["Dispur", "Guwahati", "Tezpur", "Dibrugarh"],
     answer: 1,
-    explanation: "The Battle of Saraighat was fought in 1671 between the Mughal Empire and the Ahom Kingdom led by Lachit Borphukan."
+    explanation: "Guwahati is the largest city in Assam and the largest metropolis in Northeast India."
   },
   {
     id: 3,
-    question: "Kaziranga National Park was declared a World Heritage Site in which year?",
-    options: ["1974", "1985", "1990", "2001"],
+    question: "Assam’s Kaziranga National Park lies along which river’s bank?",
+    options: ["Barak", "Brahmaputra", "Subansiri", "Manas"],
     answer: 1,
-    explanation: "Kaziranga was declared a UNESCO World Heritage Site in 1985 for its unique natural environment."
+    explanation: "Kaziranga National Park lies along the mighty Brahmaputra river."
   },
   {
     id: 4,
-    question: "Who wrote the state anthem of Assam 'O Mur Apunar Desh'?",
-    options: ["Jyoti Prasad Agarwala", "Bishnu Prasad Rabha", "Lakshminath Bezbaroa", "Bhupen Hazarika"],
-    answer: 2,
-    explanation: "Lakshminath Bezbaroa, a pioneer of modern Assamese literature, wrote the state anthem."
+    question: "The Ahom capital was later shifted to:",
+    options: ["Charaideo", "Sivasagar", "Guwahati", "Tezpur"],
+    answer: 1,
+    explanation: "The Ahom capital was shifted to Sivasagar (formerly Rangpur/Garhgaon area) by later kings."
   },
   {
     id: 5,
-    question: "Which one is the highest peak in Assam?",
-    options: ["Japvo", "Singhasan", "Chenghehishon", "Tumjang"],
-    answer: 2,
-    explanation: "Chenghehishon (also known as Laike) in the Karbi Anglong hills is the highest peak in Assam."
+    question: "Mahatma Gandhi was born in the year:",
+    options: ["1869", "1875", "1885", "1890"],
+    answer: 0,
+    explanation: "Mahatma Gandhi was born on October 2, 1869, in Porbandar, Gujarat."
+  },
+  {
+    id: 6,
+    question: "Sukaphaa, founder of the Ahom kingdom, established his capital at:",
+    options: ["Sivasagar", "Charaideo", "Guwahati", "Dibrugarh"],
+    answer: 1,
+    explanation: "Charaideo was the first capital of the Ahom kingdom established by Sukaphaa in 1253."
+  },
+  {
+    id: 7,
+    question: "Rongali (Bohag) Bihu, marking the Assamese New Year, is celebrated in which month?",
+    options: ["January", "April", "October", "August"],
+    answer: 1,
+    explanation: "Rongali Bihu is celebrated in mid-April, marking the onset of the Assamese New Year and the coming of Spring."
+  },
+  {
+    id: 8,
+    question: "The first Assamese-language newspaper, published in 1846, was:",
+    options: ["Asom Bandhu", "Orunodoi", "Natun Asomiya", "Assam Tribune"],
+    answer: 1,
+    explanation: "Orunodoi was the first Assamese-language magazine, published from Sivasagar in 1846 by American Baptist Missionaries."
+  },
+  {
+    id: 9,
+    question: "Majuli, located in Assam, is recognised as the world’s largest:",
+    options: ["Delta", "River island", "Wetland", "Mangrove forest"],
+    answer: 1,
+    explanation: "Majuli is the world's largest river island, located on the Brahmaputra River."
+  },
+  {
+    id: 10,
+    question: "The state song of Assam, ‘O Mur Apunar Desh’, was written by:",
+    options: ["Lakshminath Bezbaroa", "Hem Baruah", "Jyoti Prasad Agarwala", "Nabin Chandra Bordoloi"],
+    answer: 0,
+    explanation: "It was written by Lakshminath Bezbaroa, a prominent figure in modern Assamese literature."
   }
 ];
 

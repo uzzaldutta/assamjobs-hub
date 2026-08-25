@@ -7,38 +7,73 @@ import Link from "next/link";
 const QUESTIONS = [
   {
     id: 1,
-    question: "Choose the correct synonym for 'ABUNDANT':",
-    options: ["Scarce", "Plentiful", "Minimal", "Rare"],
+    question: "Choose the correct synonym of ‘Brave’:",
+    options: ["Timid", "Courageous", "Weak", "Careless"],
     answer: 1,
-    explanation: "'Plentiful' means existing in or yielding great quantities, which is the exact synonym of 'Abundant'."
+    explanation: "Courageous is the exact synonym for Brave."
   },
   {
     id: 2,
-    question: "Select the correctly spelt word:",
-    options: ["Accomodation", "Acommodation", "Accommodation", "Acomodation"],
-    answer: 2,
-    explanation: "The correct spelling is 'Accommodation' (double 'c' and double 'm')."
+    question: "Choose the correct antonym of ‘Genuine’:",
+    options: ["Real", "Fake", "Honest", "True"],
+    answer: 1,
+    explanation: "Fake is the exact opposite (antonym) of Genuine."
   },
   {
     id: 3,
-    question: "Fill in the blank: He is afraid ___ dogs.",
-    options: ["from", "of", "with", "by"],
-    answer: 1,
-    explanation: "The preposition 'of' is always used after 'afraid' (afraid of)."
+    question: "Choose the correctly spelt word:",
+    options: ["Necessary", "Neccessary", "Necesary", "Neccesary"],
+    answer: 0,
+    explanation: "'Necessary' is spelt with one 'c' and double 's'."
   },
   {
     id: 4,
-    question: "What is the antonym of 'DILIGENT'?",
-    options: ["Hardworking", "Careful", "Lazy", "Active"],
-    answer: 2,
-    explanation: "'Diligent' means having or showing care and conscientiousness in one's work. The opposite is 'Lazy'."
+    question: "Choose the correct verb: “The team ___ playing well this season.”",
+    options: ["is", "are", "were", "be"],
+    answer: 0,
+    explanation: "The word 'team' is a collective noun and typically takes a singular verb ('is') when acting as a single unit."
   },
   {
     id: 5,
-    question: "Identify the tense: 'They have been playing for two hours.'",
-    options: ["Present Perfect", "Present Continuous", "Present Perfect Continuous", "Past Continuous"],
-    answer: 2,
-    explanation: "'have been playing' indicates Present Perfect Continuous tense."
+    question: "The idiom ‘a piece of cake’ means:",
+    options: ["A dessert", "Something very easy", "A small gift", "A difficult task"],
+    answer: 1,
+    explanation: "If a task is 'a piece of cake', it means it is extremely easy to complete."
+  },
+  {
+    id: 6,
+    question: "Choose the correct article: “She is ___ university student.”",
+    options: ["a", "an", "the", "no article"],
+    answer: 0,
+    explanation: "We use 'a' before 'university' because it starts with a consonant 'yoo' sound, not a vowel sound."
+  },
+  {
+    id: 7,
+    question: "Choose the correct synonym of ‘Diligent’:",
+    options: ["Lazy", "Hardworking", "Careless", "Slow"],
+    answer: 1,
+    explanation: "Diligent means showing care and conscientiousness in one's work or duties (Hardworking)."
+  },
+  {
+    id: 8,
+    question: "One-word substitution: ‘One who cannot read or write’:",
+    options: ["Illiterate", "Innocent", "Ignorant", "Incompetent"],
+    answer: 0,
+    explanation: "Illiterate refers to a person who is unable to read or write."
+  },
+  {
+    id: 9,
+    question: "Choose the correct passive voice of: “They built a bridge.”",
+    options: ["A bridge was built by them.", "A bridge is built by them.", "A bridge built by them.", "A bridge has build by them."],
+    answer: 0,
+    explanation: "The past simple 'built' becomes 'was built' in the passive voice."
+  },
+  {
+    id: 10,
+    question: "The idiom ‘spill the beans’ means:",
+    options: ["To waste food", "To reveal a secret", "To cook dinner", "To argue"],
+    answer: 1,
+    explanation: "'Spill the beans' is a common idiom meaning to accidentally or prematurely reveal secret information."
   }
 ];
 
