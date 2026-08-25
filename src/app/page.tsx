@@ -45,7 +45,19 @@ export default async function Home() {
   // Combine live jobs with mock jobs, ensuring live jobs appear first
   const liveJobIds = new Set(liveJobs.map(j => String(j.id)));
   const filteredMockJobs = mockJobs.filter(j => !liveJobIds.has(String(j.id)));
-  const allJobs = [...liveJobs, ...filteredMockJobs];
+  let allJobs = [...liveJobs, ...filteredMockJobs];
+  
+  // Deduplicate array (keeps the first occurrence based on Title + Organization)
+  const seenHashes = new Set();
+  allJobs = allJobs.filter(job => {
+    // Create a normalized hash (lowercase, no spaces) to catch slight variations
+    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
+    if (seenHashes.has(hash)) {
+      return false;
+    }
+    seenHashes.add(hash);
+    return true;
+  });
 
   return (
     <div className="flex flex-col min-h-screen">

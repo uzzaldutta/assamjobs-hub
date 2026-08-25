@@ -1,5 +1,5 @@
-import PageHeader from "@/components/PageHeader";
 "use client";
+import PageHeader from "@/components/PageHeader";
 
 import { FileText, Download, GraduationCap, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
@@ -34,6 +34,16 @@ const mockSyllabus = [
 export default function SyllabusPage() {
   const [expandedId, setExpandedId] = useState<string | null>(mockSyllabus[0].id);
 
+
+  // Deduplicate array (keeps the first occurrence based on Title + Organization)
+  const seenHashes = new Set();
+  allSyllabus = allSyllabus.filter(job => {
+    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
+    if (seenHashes.has(hash)) return false;
+    seenHashes.add(hash);
+    return true;
+  });
+
   return (
     <div className="flex flex-col min-h-screen">
       
@@ -52,7 +62,17 @@ export default function SyllabusPage() {
         <div className="space-y-4">
           {mockSyllabus.map(item => {
             const isExpanded = expandedId === item.id;
-            return (
+          
+  // Deduplicate array (keeps the first occurrence based on Title + Organization)
+  const seenHashes = new Set();
+  allSyllabus = allSyllabus.filter(job => {
+    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
+    if (seenHashes.has(hash)) return false;
+    seenHashes.add(hash);
+    return true;
+  });
+
+  return (
               <div 
                 key={item.id} 
                 className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isExpanded ? 'border-indigo-300 shadow-md bg-white dark:bg-slate-900' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200'}`}

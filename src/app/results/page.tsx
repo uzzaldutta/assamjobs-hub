@@ -30,6 +30,16 @@ export default async function ResultsPage() {
     console.error("Could not load from Supabase", e);
   }
 
+
+  // Deduplicate array (keeps the first occurrence based on Title + Organization)
+  const seenHashes = new Set();
+  allResults = allResults.filter(job => {
+    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
+    if (seenHashes.has(hash)) return false;
+    seenHashes.add(hash);
+    return true;
+  });
+
   return (
     <div className="flex flex-col min-h-screen">
       <PageHeader 

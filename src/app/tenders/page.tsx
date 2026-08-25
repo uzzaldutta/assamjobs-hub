@@ -35,6 +35,16 @@ export default async function TendersPage() {
     ];
   }
 
+
+  // Deduplicate array (keeps the first occurrence based on Title + Organization)
+  const seenHashes = new Set();
+  allTenders = allTenders.filter(job => {
+    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
+    if (seenHashes.has(hash)) return false;
+    seenHashes.add(hash);
+    return true;
+  });
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
       <PageHeader 
