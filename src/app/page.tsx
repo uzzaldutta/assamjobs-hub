@@ -52,18 +52,36 @@ export default async function Home() {
       
       <HeroSection />
 
-      {/* Mobile Quick Categories (Wrapped Grid) */}
-      <div className="lg:hidden w-full px-4 pt-4 pb-2 -mt-4 relative z-20">
-        <div className="flex flex-wrap gap-2 justify-center">
-          <Link href="/admissions" className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-full text-[13px] font-bold text-emerald-700 dark:text-emerald-300 shadow-sm">Admissions</Link>
-          <Link href="/" className="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 px-3 py-1.5 rounded-full text-[13px] font-bold text-indigo-700 dark:text-indigo-300 shadow-sm">Govt Jobs</Link>
-          <Link href="/" className="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 px-3 py-1.5 rounded-full text-[13px] font-bold text-indigo-700 dark:text-indigo-300 shadow-sm">Private Jobs</Link>
-          <Link href="/admit-cards" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Admit Cards</Link>
-          <Link href="/results" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Results</Link>
-          <Link href="/syllabus" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Syllabus</Link>
-          <Link href="/study-materials" className="bg-fuchsia-50 dark:bg-fuchsia-900/30 border border-fuchsia-200 dark:border-fuchsia-800 px-3 py-1.5 rounded-full text-[13px] font-bold text-fuchsia-700 dark:text-fuchsia-300 shadow-sm">Study Materials</Link>
-          <Link href="/tenders" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-amber-200 dark:border-amber-900/50 px-3 py-1.5 rounded-full text-[13px] font-bold text-amber-700 dark:text-amber-400 shadow-sm">Tenders</Link>
-          <Link href="/mock-tests" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-indigo-200 dark:border-indigo-900/50 px-3 py-1.5 rounded-full text-[13px] font-bold text-indigo-700 dark:text-indigo-400 shadow-sm">Mock Tests</Link>
+      {/* Mobile Quick Categories (Grid Layout) */}
+      <div className="lg:hidden w-full px-4 pt-6 pb-2 -mt-4 relative z-20">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+          <Link href="/admissions" className="flex flex-col items-center justify-center p-2.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">Admissions</span>
+          </Link>
+          <Link href="/govt-jobs" className="flex flex-col items-center justify-center p-2.5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-300">Govt Jobs</span>
+          </Link>
+          <Link href="/private-jobs" className="flex flex-col items-center justify-center p-2.5 bg-fuchsia-50 dark:bg-fuchsia-900/30 border border-fuchsia-100 dark:border-fuchsia-800 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-fuchsia-700 dark:text-fuchsia-300">Private Jobs</span>
+          </Link>
+          <Link href="/admit-cards" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Admit Cards</span>
+          </Link>
+          <Link href="/results" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Results</span>
+          </Link>
+          <Link href="/syllabus" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Syllabus</span>
+          </Link>
+          <Link href="/study-materials" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Materials</span>
+          </Link>
+          <Link href="/tenders" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Tenders</span>
+          </Link>
+          <Link href="/mock-tests" className="flex flex-col items-center justify-center p-2.5 col-span-3 sm:col-span-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-800 rounded-2xl shadow-sm text-center">
+            <span className="text-[11px] font-black text-blue-700 dark:text-blue-300">Mock Tests</span>
+          </Link>
         </div>
       </div>
 
