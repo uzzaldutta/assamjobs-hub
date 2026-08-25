@@ -90,21 +90,25 @@ export default function RootLayout({
             {/* Responsive main container */}
             <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
               {/* Header */}
-              <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-3 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-3">
-                  <div className="relative group">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500"></div>
-                    <img src="/logo.jpg?v=2" alt="AssamJobs Hub Logo" className="relative w-12 h-12 rounded-xl object-contain bg-white shadow-sm border border-slate-200 dark:border-slate-800" />
+              <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300">
+                <div className="w-full px-4 sm:px-6 lg:px-8">
+                  
+                  {/* Top Tier: Logo & Tools */}
+                  <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-800/50 lg:border-none">
+                    <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+                      <img src="/logo.jpg?v=4" alt="AssamJobs Hub Logo" className="h-10 md:h-12 w-auto object-contain rounded-lg" />
+                    </Link>
+                    
+                    <div className="flex items-center gap-2">
+                      <LanguageToggle />
+                      <ThemeToggle />
+                      <MobileMenu className="lg:hidden" />
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <h1 className="text-xl font-black text-slate-900 dark:text-white leading-tight font-outfit tracking-tight">AssamJobs Hub</h1>
-                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest">Jobs & Tenders</span>
-                  </div>
-                </Link>
-                
 
-                {/* Desktop Navigation */}
-                <nav className="hidden lg:flex items-center p-1.5 bg-emerald-50/80 dark:bg-emerald-900/40 backdrop-blur-xl border border-emerald-200/60 dark:border-emerald-700/50 rounded-2xl shadow-sm">
+                  {/* Bottom Tier: Centered Desktop Navigation */}
+                  <div className="hidden lg:flex justify-center pb-3 pt-1 w-full">
+                    <nav className="flex items-center p-1.5 bg-emerald-50/50 dark:bg-emerald-900/20 backdrop-blur-xl border border-emerald-200/50 dark:border-emerald-700/30 rounded-2xl shadow-sm w-full max-w-5xl justify-between mx-auto">
                   <Link href="/" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Home</Link>
                   <Link href="/calendar" className="text-sm font-bold text-pink-600 dark:text-pink-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap"><Calendar size={14} /> Calendar</Link>
                   <Link href="/syllabus" className="text-sm font-bold text-amber-600 dark:text-amber-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Syllabus</Link>
@@ -153,10 +157,7 @@ export default function RootLayout({
                     <ThemeToggle />
                   </div>
                 </nav>
-
-                <div className="lg:hidden flex items-center gap-2">
-                  <LanguageToggle />
-                  <MobileMenu />
+                  </div>
                 </div>
               </header>
               
