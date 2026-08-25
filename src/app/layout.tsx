@@ -93,13 +93,33 @@ export default function RootLayout({
               <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300">
                 <div className="w-full px-4 sm:px-6 lg:px-8">
                   
-                  {/* Top Tier: Logo & Tools */}
-                  <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-800/50 lg:border-none">
-                    <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-                      <img src="/logo.jpg?v=4" alt="AssamJobs Hub Logo" className="h-16 md:h-24 w-auto object-contain rounded-lg mix-blend-multiply dark:mix-blend-normal" />
+                  {/* Top Tier: Logo, Search & Tools */}
+                  <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800/50 lg:border-none gap-6">
+                    <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0">
+                      <img src="/logo.jpg?v=4" alt="AssamJobs Hub Logo" className="h-12 md:h-16 w-auto object-contain rounded-lg mix-blend-multiply dark:mix-blend-normal" />
                     </Link>
+
+                    {/* Global Search Bar (Hidden on Mobile) */}
+                    <div className="hidden md:flex flex-1 max-w-2xl relative group">
+                      <input 
+                        type="text" 
+                        placeholder="Search for jobs, mock tests, results..." 
+                        className="w-full bg-slate-100/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-full py-2.5 pl-12 pr-4 text-sm font-medium text-slate-800 dark:text-slate-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all shadow-inner"
+                      />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-full transition-colors shadow-sm">
+                        Search
+                      </button>
+                    </div>
                     
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="hidden lg:flex flex-col items-end mr-2">
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Need Help?</span>
+                        <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">support@assamjobs.in</span>
+                      </div>
+                      <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden lg:block mx-1"></div>
                       <LanguageToggle />
                       <ThemeToggle />
                       <MobileMenu />
