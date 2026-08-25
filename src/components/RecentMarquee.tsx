@@ -139,7 +139,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
         onTouchStart={handleInteraction}
         onTouchMove={handleInteraction}
         onWheel={handleInteraction}
-        className="flex overflow-x-auto hide-scrollbar relative w-full py-2 touch-pan-x snap-x snap-mandatory"
+        className="flex overflow-x-auto hide-scrollbar relative w-full py-2 touch-pan-x"
         style={{ scrollBehavior: 'auto' }} // Ensure immediate tracking
       >
         {/* We render two identical lists side-by-side to create the seamless scroll effect */}
@@ -157,7 +157,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
               }
 
               return (
-                <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`relative overflow-hidden w-[300px] shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border snap-start ${borderClass}`}>
+                <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`relative overflow-hidden w-[300px] shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border ${borderClass}`}>
                   
                   {/* Flashing Background Layer */}
                   {expiring && <div className="absolute inset-0 bg-red-500/10 dark:bg-red-500/20 animate-pulse pointer-events-none"></div>}
