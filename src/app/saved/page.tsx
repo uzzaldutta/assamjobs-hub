@@ -1,70 +1,52 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import FeedList from "@/components/FeedList";
-import { Bookmark, Search } from "lucide-react";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import JobCard from "@/components/JobCard";
 import Link from "next/link";
+import { Bookmark, ArrowLeft } from "lucide-react";
 
 export default function SavedJobsPage() {
-  const [savedJobs, setSavedJobs] = useState<any[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    // Load from local storage
-    const loadSavedJobs = () => {
-      try {
-        const saved = JSON.parse(localStorage.getItem("saved_jobs") || "[]");
-        setSavedJobs(saved);
-      } catch (e) {
-        console.error("Failed to parse saved jobs", e);
-      }
-    };
-
-    loadSavedJobs();
-    setIsLoaded(true);
-
-    // Listen for custom event to update in real time if they unsave something
-    window.addEventListener('saved_jobs_updated', loadSavedJobs);
-    return () => window.removeEventListener('saved_jobs_updated', loadSavedJobs);
-  }, []);
-
-  if (!isLoaded) return null; // Hydration fix
+  const { savedJobs, isLoaded } = useBookmarks();
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-6 text-center">
-        <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center justify-center gap-2">
-          <Bookmark className="text-indigo-500 fill-indigo-500" size={24} />
-          Your Saved Jobs
-        </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm max-w-md mx-auto">
-          Jobs you bookmark are saved directly to your device so you can view them anytime, even offline.
-        </p>
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      {/* Page Header (Unified Pattern) */}
+      <div className="flex items-center gap-3 mb-8">
+        <Link href="/" className="p-2 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
+        </Link>
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <Bookmark className="text-indigo-600 dark:text-indigo-400" /> Saved Opportunities
+          </h1>
+          <p className="text-slate-500 text-sm font-medium">Access your bookmarked jobs and exams.</p>
+        </div>
       </div>
 
-      <div className="flex-1 px-4 py-6 max-w-4xl mx-auto w-full">
-        {savedJobs.length > 0 ? (
-          // Use FeedList but hide filters since they probably don't need district filtering for 5 saved jobs
-          <FeedList initialJobs={savedJobs} hideFilters={true} />
-        ) : (
-          <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm px-4">
-            <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Bookmark size={28} />
-            </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No jobs saved yet</h3>
-            <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6 text-sm">
-              Tap the bookmark icon on any job card to save it here for quick access later.
-            </p>
-            <Link 
-              href="/"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-md"
-            >
-              <Search size={18} />
-              Browse Latest Jobs
-            </Link>
+      {!isLoaded ? (
+        <div className="flex justify-center py-20">
+          <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+        </div>
+      ) : savedJobs.length === 0 ? (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center shadow-sm">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Bookmark size={32} className="text-slate-400" />
           </div>
-        )}
-      </div>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">No saved items yet</h2>
+          <p className="text-slate-500 mb-6 max-w-sm mx-auto">
+            Click the bookmark icon on any job, exam, or admission update to save it here for quick access later.
+          </p>
+          <Link href="/" className="inline-flex items-center justify-center bg-indigo-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors">
+            Explore Opportunities
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {savedJobs.map((job) => (
+            <JobCard key={job.id} job={job} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

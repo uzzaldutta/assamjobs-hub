@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Building2, MapPin, Calendar, Clock, Bookmark, ArrowRight, Users } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
+import { useBookmarks } from "@/hooks/useBookmarks";
 
 interface JobCardProps {
   job: any;
@@ -10,6 +11,9 @@ interface JobCardProps {
 
 export default function JobCard({ job }: JobCardProps) {
   const { t } = useLanguage();
+  const { isSaved, toggleSave, isLoaded } = useBookmarks();
+  
+  const saved = isLoaded ? isSaved(job.id) : false;
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700 transition-all flex flex-col group">
@@ -19,8 +23,14 @@ export default function JobCard({ job }: JobCardProps) {
         <span className="text-[10px] md:text-xs font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2.5 py-1 rounded-md">
           {job.type}
         </span>
-        <button className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-          <Bookmark size={18} />
+        <button 
+          onClick={(e) => {
+            e.preventDefault(); // Prevent navigating if this is ever inside a link
+            toggleSave(job);
+          }}
+          className={`${saved ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'} transition-colors`}
+        >
+          <Bookmark size={18} className={saved ? "fill-indigo-600 dark:fill-indigo-400" : ""} />
         </button>
       </div>
 

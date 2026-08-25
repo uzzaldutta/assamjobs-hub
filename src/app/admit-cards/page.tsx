@@ -1,3 +1,4 @@
+import PageHeader from "@/components/PageHeader";
 import FeedList from "@/components/FeedList";
 import RecentMarquee from "@/components/RecentMarquee";
 import { CreditCard } from "lucide-react";
@@ -34,10 +35,11 @@ export default async function AdmitCardsPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-6 pb-8 md:pb-6 rounded-b-[2rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4 max-w-7xl mx-auto w-full">
-        <h2 className="text-2xl font-bold text-white mb-1">Download Admit Cards</h2>
-        <p className="text-indigo-100 text-sm mb-2">Get the latest hall tickets for upcoming exams</p>
-      </div>
+      <PageHeader 
+        title="Download Admit Cards" 
+        subtitle="Get the latest hall tickets for upcoming exams" 
+        theme="purple" 
+      />
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
         <RecentMarquee jobs={allAdmitCards} title="Recent Admit Cards" />

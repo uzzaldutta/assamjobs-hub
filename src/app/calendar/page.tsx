@@ -2,16 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, getDay, parseISO } from "date-fns";
-import { ChevronLeft, ChevronRight, Briefcase, Calendar as CalendarIcon, MapPin } from "lucide-react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isToday, isThisWeek, parseISO, isAfter, isBefore, addDays } from "date-fns";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import FraudWarningBanner from "@/components/FraudWarningBanner";
+import PageHeader from "@/components/PageHeader";
 
 export default function CalendarApp() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [filter, setFilter] = useState("ALL");
 
   useEffect(() => {
     async function fetchJobs() {
@@ -20,155 +21,180 @@ export default function CalendarApp() {
         .select('*')
         .not('last_date', 'is', null);
       
-      if (data) {
-        setJobs(data);
-      }
+      if (data) setJobs(data);
       setLoading(false);
     }
     fetchJobs();
   }, []);
 
-  const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
-  const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
-  
-  // Calculate empty days for the first row to align correctly (0 = Sunday, 1 = Monday)
-  const startDayOfWeek = getDay(monthStart);
-  const paddingDays = Array.from({ length: startDayOfWeek }).map((_, i) => i);
+  const daysInMonth = eachDayOfInterval({
+    start: startOfMonth(currentDate),
+    end: endOfMonth(currentDate)
+  });
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
-  // Get jobs for the selected day
-  const selectedJobs = selectedDate 
-    ? jobs.filter(job => job.last_date && isSameDay(parseISO(job.last_date), selectedDate))
-    : [];
+  // Get jobs closing on a specific date
+  const getJobsClosingOn = (date: Date) => {
+    return jobs.filter(job => {
+      if (!job.last_date) return false;
+      const jobDate = parseISO(job.last_date);
+      if (filter === "GOVT" && job.job_type !== "GOVERNMENT") return false;
+      if (filter === "ADMISSION" && job.job_type !== "ADMISSION") return false;
+      if (filter === "TENDER" && job.job_type !== "TENDER") return false;
+      return isSameDay(jobDate, date);
+    });
+  };
+
+  const getJobsClosingThisWeek = () => {
+    return jobs.filter(job => {
+      if (!job.last_date) return false;
+      const jobDate = parseISO(job.last_date);
+      return isThisWeek(jobDate) && isAfter(jobDate, new Date());
+    });
+  };
+
+  const selectedDateJobs = selectedDate ? getJobsClosingOn(selectedDate) : [];
+  const closingThisWeek = getJobsClosingThisWeek();
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 px-4 py-8 max-w-7xl mx-auto w-full">
-      
-      <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-3xl p-6 md:p-10 mb-8 shadow-xl text-white">
-        <h1 className="text-3xl md:text-4xl font-extrabold flex items-center gap-3 mb-2">
-          <CalendarIcon size={36} /> Job Deadlines Calendar
-        </h1>
-        <p className="text-indigo-100 max-w-2xl text-sm md:text-base">
-          Never miss an application deadline again. Track upcoming last dates for Government, Private, and Tender applications across Assam.
-        </p>
-      </div>
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
+      <PageHeader 
+        title="Application Deadlines" 
+        subtitle="Never miss an important date again"
+        theme="blue"
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="max-w-5xl mx-auto w-full px-4 py-6">
         
-        {/* Calendar Grid Section */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+        {/* Filters */}
+        <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-6 pb-2">
+          {["ALL", "GOVT", "ADMISSION", "TENDER"].map(f => (
+            <button 
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-colors whitespace-nowrap ${filter === f ? 'bg-blue-600 text-white shadow-md' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'}`}
+            >
+              {f === "ALL" ? "All Updates" : f === "GOVT" ? "Govt Jobs" : f === "ADMISSION" ? "Admissions" : "Tenders"}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
-              {format(currentDate, 'MMMM yyyy')}
-            </h2>
-            <div className="flex gap-2">
-              <button onClick={prevMonth} className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition">
-                <ChevronLeft size={20} />
-              </button>
-              <button onClick={nextMonth} className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition">
-                <ChevronRight size={20} />
-              </button>
+          {/* Calendar Widget */}
+          <div className="col-span-1 lg:col-span-1">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-4">
+              <div className="flex justify-between items-center mb-6">
+                <button onClick={prevMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition"><ChevronLeft size={20} /></button>
+                <h2 className="text-lg font-black text-slate-800 dark:text-white uppercase tracking-wider">
+                  {format(currentDate, 'MMMM yyyy')}
+                </h2>
+                <button onClick={nextMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition"><ChevronRight size={20} /></button>
+              </div>
+              
+              <div className="grid grid-cols-7 gap-1 mb-2">
+                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                  <div key={day} className="text-center text-xs font-bold text-slate-400 py-1">{day}</div>
+                ))}
+              </div>
+              
+              <div className="grid grid-cols-7 gap-1">
+                {Array.from({ length: daysInMonth[0].getDay() }).map((_, i) => (
+                  <div key={`empty-${i}`} className="p-2"></div>
+                ))}
+                
+                {daysInMonth.map(date => {
+                  const closingJobs = getJobsClosingOn(date);
+                  const isSelected = selectedDate && isSameDay(date, selectedDate);
+                  const isTodayDate = isToday(date);
+                  
+                  return (
+                    <button
+                      key={date.toISOString()}
+                      onClick={() => setSelectedDate(date)}
+                      className={`relative flex flex-col items-center justify-center p-2 rounded-xl transition-all aspect-square ${isSelected ? 'bg-blue-600 text-white shadow-md font-bold' : isTodayDate ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'}`}
+                    >
+                      <span className="text-sm">{format(date, 'd')}</span>
+                      
+                      {/* Dots indicator */}
+                      {closingJobs.length > 0 && (
+                        <div className="absolute bottom-1 flex gap-0.5">
+                          {closingJobs.slice(0, 3).map((_, i) => (
+                            <span key={i} className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white' : 'bg-red-500'}`}></span>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-2 mb-2">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-              <div key={day} className="text-center text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 py-2">
-                {day}
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-7 gap-2">
-            {paddingDays.map(i => (
-              <div key={`pad-${i}`} className="aspect-square rounded-2xl bg-slate-50/50 dark:bg-slate-800/20" />
-            ))}
+          {/* Deadlines List */}
+          <div className="col-span-1 lg:col-span-2">
             
-            {daysInMonth.map(day => {
-              const jobsOnDay = jobs.filter(j => j.last_date && isSameDay(parseISO(j.last_date), day));
-              const isSelected = selectedDate && isSameDay(day, selectedDate);
-              const isToday = isSameDay(day, new Date());
+            {/* Selected Date */}
+            <div className="mb-8">
+              <h3 className="text-lg font-black text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
+                Closing on {selectedDate ? format(selectedDate, 'dd MMMM yyyy') : 'Selected Date'}
+              </h3>
               
-              return (
-                <button
-                  key={day.toISOString()}
-                  onClick={() => setSelectedDate(day)}
-                  className={`
-                    aspect-square rounded-2xl flex flex-col items-center justify-center relative transition-all border-2 
-                    ${isSelected ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30' : 'border-transparent hover:border-indigo-200 bg-slate-50 dark:bg-slate-800/50'}
-                  `}
-                >
-                  <span className={`font-semibold text-sm ${isToday ? 'bg-indigo-600 text-white w-7 h-7 rounded-full flex items-center justify-center' : 'text-slate-700 dark:text-slate-300'}`}>
-                    {format(day, 'd')}
-                  </span>
-                  
-                  {jobsOnDay.length > 0 && (
-                    <div className="absolute bottom-2 flex gap-1 justify-center w-full">
-                      <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.6)]"></div>
-                      {jobsOnDay.length > 1 && <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>}
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Selected Day Details Section */}
-        <div className="lg:col-span-1 flex flex-col gap-4">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 sticky top-24">
-            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4 border-b border-slate-100 dark:border-slate-800 pb-4 flex items-center justify-between">
-              <span>{selectedDate ? format(selectedDate, 'MMM do, yyyy') : "Select a Date"}</span>
-              {selectedJobs.length > 0 && (
-                <span className="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-xs px-2.5 py-1 rounded-full font-bold">
-                  {selectedJobs.length} Deadline{selectedJobs.length > 1 ? 's' : ''}
-                </span>
-              )}
-            </h3>
-
-            {loading ? (
-              <div className="text-center py-10 text-slate-400 animate-pulse">Loading calendar data...</div>
-            ) : !selectedDate ? (
-              <div className="text-center py-12 text-slate-400 flex flex-col items-center">
-                <CalendarIcon size={48} className="mb-3 opacity-20" />
-                <p>Click on any date to see jobs closing on that day.</p>
-              </div>
-            ) : selectedJobs.length === 0 ? (
-              <div className="text-center py-12 text-slate-400 flex flex-col items-center">
-                <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-3">
-                  <CalendarIcon size={24} className="text-slate-300 dark:text-slate-600" />
+              {selectedDateJobs.length === 0 ? (
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-8 text-center border border-slate-100 dark:border-slate-800">
+                  <CalendarIcon size={32} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                  <p className="text-slate-500 font-medium">No deadlines on this date.</p>
                 </div>
-                <p>No deadlines on this day.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {selectedJobs.map(job => (
-                  <div key={job.id} className="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700/50 transition-colors group bg-slate-50/50 dark:bg-slate-900/50">
-                    <span className="text-[9px] uppercase font-bold text-slate-500 mb-1 block">
-                      {job.job_type.replace('_', ' ')}
-                    </span>
-                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200 leading-tight mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {job.title}
-                    </h4>
-                    <div className="flex flex-col gap-1.5 mb-3 text-xs text-slate-500 dark:text-slate-400">
-                      <div className="flex items-center gap-1.5"><Briefcase size={12}/> {job.organization}</div>
-                      <div className="flex items-center gap-1.5"><MapPin size={12}/> {job.district || "Assam"}</div>
-                    </div>
-                    <Link href={`/jobs/${job.id}`} className="block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-2 rounded-xl transition">
-                      View Details
+              ) : (
+                <div className="space-y-3">
+                  {selectedDateJobs.map(job => (
+                    <Link href={`/jobs/${job.id}`} key={job.id} className="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 hover:shadow-md transition-shadow group">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <span className="text-[10px] font-bold text-red-600 bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded uppercase tracking-wider mb-1 inline-block">Deadline Today</span>
+                          <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{job.title}</h4>
+                          <p className="text-sm text-slate-500 mt-1">{job.organization}</p>
+                        </div>
+                        <ArrowRight size={16} className="text-slate-300 group-hover:text-blue-500" />
+                      </div>
                     </Link>
-                  </div>
-                ))}
-              </div>
-            )}
-            
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Upcoming This Week */}
+            <div>
+              <h3 className="text-lg font-black text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-orange-500"></span>
+                Closing This Week
+              </h3>
+              
+              {closingThisWeek.length === 0 ? (
+                <p className="text-slate-500 text-sm">Nothing closing this week.</p>
+              ) : (
+                <div className="space-y-3">
+                  {closingThisWeek.map(job => (
+                    <Link href={`/jobs/${job.id}`} key={job.id} className="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 hover:shadow-md transition-shadow group">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-orange-600 transition-colors">{job.title}</h4>
+                          <p className="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                            <Clock size={12} className="text-orange-500" /> Closes on {format(parseISO(job.last_date), 'MMM dd')}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
-
       </div>
     </div>
   );
