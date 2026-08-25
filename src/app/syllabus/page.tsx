@@ -1,6 +1,6 @@
 "use client";
-import PageHeader from "@/components/PageHeader";
 
+import PageHeader from "@/components/PageHeader";
 import { FileText, Download, GraduationCap, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
@@ -34,45 +34,22 @@ const mockSyllabus = [
 export default function SyllabusPage() {
   const [expandedId, setExpandedId] = useState<string | null>(mockSyllabus[0].id);
 
-
-  // Deduplicate array (keeps the first occurrence based on Title + Organization)
-  const seenHashes = new Set();
-  allSyllabus = allSyllabus.filter(job => {
-    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
-    if (seenHashes.has(hash)) return false;
-    seenHashes.add(hash);
-    return true;
-  });
-
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
       
-      {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 px-4 pt-8 pb-10 rounded-b-[2.5rem] md:rounded-3xl shadow-lg relative z-0 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-extrabold text-white mb-2 flex items-center gap-3">
-          <GraduationCap size={32} /> Syllabus & Exam Pattern
-        </h1>
-        <p className="text-indigo-100 text-sm max-w-2xl">
-          Prepare for your upcoming Assam Govt exams with detailed syllabus breakdowns, exam patterns, and downloadable PDFs.
-        </p>
-      </div>
+      <PageHeader 
+        title="Exam Syllabus" 
+        subtitle="Download official syllabuses for all major Assam exams"
+        theme="blue"
+      />
 
-      <div className="px-4 md:px-0 mt-8 max-w-5xl mx-auto w-full pb-20">
+      <div className="px-4 mt-8 max-w-5xl mx-auto w-full pb-20">
         
         <div className="space-y-4">
           {mockSyllabus.map(item => {
             const isExpanded = expandedId === item.id;
           
-  // Deduplicate array (keeps the first occurrence based on Title + Organization)
-  const seenHashes = new Set();
-  allSyllabus = allSyllabus.filter(job => {
-    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
-    if (seenHashes.has(hash)) return false;
-    seenHashes.add(hash);
-    return true;
-  });
-
-  return (
+            return (
               <div 
                 key={item.id} 
                 className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isExpanded ? 'border-indigo-300 shadow-md bg-white dark:bg-slate-900' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200'}`}
