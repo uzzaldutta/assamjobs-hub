@@ -148,12 +148,14 @@ export default function RootLayout({
                     </a>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 pl-4">
+                    <LanguageToggle />
                     <ThemeToggle />
                   </div>
                 </nav>
 
-                <div className="lg:hidden flex items-center gap-3">
+                <div className="lg:hidden flex items-center gap-2">
+                  <LanguageToggle />
                   <MobileMenu />
                 </div>
               </header>
