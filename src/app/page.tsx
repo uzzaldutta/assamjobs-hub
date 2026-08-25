@@ -19,7 +19,8 @@ const mockJobs = [
   { id: "4", title: "Data Entry Operator", organization: "National Health Mission (NHM), Assam", type: "GOVERNMENT", category: "ASSAM_STATE", vacancies: "120", district: "Dibrugarh", lastDate: "2026-09-05" }
 ];
 
-export default async function Home({ searchParams }: { searchParams?: { search?: string } }) {
+export default async function Home(props: { searchParams?: Promise<{ search?: string }> }) {
+  const searchParams = await props.searchParams;
   const searchQuery = searchParams?.search;
 
   let liveJobs: any[] = [];
