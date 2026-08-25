@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import JobCard from "./JobCard";
 import { Search, Filter, Briefcase, GraduationCap, FileText, Activity } from "lucide-react";
 
@@ -87,17 +88,24 @@ export default function FeedList({
         
         {/* Search Bar & Dropdowns */}
         <div className="flex flex-col md:flex-row gap-3">
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-slate-400" />
+          <div className="relative flex-1 flex gap-2">
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search jobs or organizations..."
+                value={search}
+                onChange={(e) => handleFilterChange(setSearch, e.target.value)}
+                className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition"
+              />
             </div>
-            <input
-              type="text"
-              placeholder="Search jobs or organizations..."
-              value={search}
-              onChange={(e) => handleFilterChange(setSearch, e.target.value)}
-              className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition"
-            />
+            
+            <Link href="/ai-match" className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold px-4 py-3 rounded-xl transition shadow-sm text-sm shrink-0 group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+              <span className="hidden sm:inline">AI Match</span>
+            </Link>
           </div>
           
           <div className="grid grid-cols-2 md:flex flex-wrap gap-2 w-full md:w-auto mt-2 md:mt-0">
