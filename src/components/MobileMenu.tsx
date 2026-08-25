@@ -97,12 +97,11 @@ export default function MobileMenu() {
   return (
     <>
       <div className="flex items-center gap-2 lg:hidden">
-        <ThemeToggle />
         <button 
           onClick={() => setIsOpen(true)}
           className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
         >
-          <Menu size={20} />
+          <Menu size={24} strokeWidth={2.5} />
         </button>
       </div>
 
