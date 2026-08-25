@@ -12,6 +12,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Footer from "@/components/Footer";
 import MobileMenu from "@/components/MobileMenu";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import DesktopNav from "@/components/DesktopNav";
 import Script from "next/script";
 
 const inter = Inter({
@@ -91,96 +92,44 @@ export default function RootLayout({
             <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
               {/* Header */}
               <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300">
-                <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center h-16 md:h-20">
                   
-                  {/* Top Tier: Logo, Search & Tools */}
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800/50 lg:border-none gap-6">
-                    <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0">
-                      <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-12 md:h-16 w-auto object-contain drop-shadow-sm" />
-                    </Link>
+                  {/* Logo */}
+                  <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
+                    <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-10 md:h-14 w-auto object-contain drop-shadow-sm" />
+                  </Link>
 
-                    {/* Global Search Bar (Hidden on Mobile) */}
-                    <div className="hidden md:flex flex-1 max-w-2xl relative group">
-                      <input 
-                        type="text" 
-                        placeholder="Search for jobs, mock tests, results..." 
-                        className="w-full bg-slate-100/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-full py-2.5 pl-12 pr-4 text-sm font-medium text-slate-800 dark:text-slate-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all shadow-inner"
-                      />
-                      <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                      <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-full transition-colors shadow-sm">
-                        Search
-                      </button>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 shrink-0">
-                      <div className="hidden lg:flex flex-col items-end mr-2">
-                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Need Help?</span>
-                        <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">support@assamjobs.in</span>
-                      </div>
-                      <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden lg:block mx-1"></div>
-                      <LanguageToggle />
-                      <ThemeToggle />
-                      <MobileMenu />
-                    </div>
+                  {/* Desktop Navigation */}
+                  <div className="flex-1 hidden lg:flex justify-center">
+                    <DesktopNav />
                   </div>
-
-                  {/* Bottom Tier: Centered Desktop Navigation */}
-                  <div className="hidden lg:flex justify-center pb-3 pt-1 w-full">
-                    <nav className="flex items-center p-1.5 bg-emerald-50/50 dark:bg-emerald-900/20 backdrop-blur-xl border border-emerald-200/50 dark:border-emerald-700/30 rounded-2xl shadow-sm w-full max-w-5xl justify-between mx-auto">
-                  <Link href="/" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Home</Link>
-                  <Link href="/calendar" className="text-sm font-bold text-pink-600 dark:text-pink-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap"><Calendar size={14} /> Calendar</Link>
-                  <Link href="/syllabus" className="text-sm font-bold text-amber-600 dark:text-amber-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap">Syllabus</Link>
-                  <Link href="/admissions" className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all whitespace-nowrap">Admissions</Link>
-                  <Link href="/admit-cards" className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all whitespace-nowrap">Admit Cards</Link>
-                  <Link href="/results" className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all whitespace-nowrap">Results</Link>
-                  <Link href="/study-materials" className="text-sm font-bold text-fuchsia-600 dark:text-fuchsia-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all whitespace-nowrap flex items-center gap-1.5"><FileText size={14}/> Study Materials</Link>
-                  <Link href="/mock-tests" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap"><BookOpen size={14} /> Mock Tests</Link>
-                  <Link href="/tenders" className="text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 rounded-xl shadow-md hover:shadow-lg hover:from-amber-400 hover:to-orange-400 transition-all flex items-center gap-1.5 whitespace-nowrap"><FileText size={16}/> Tenders</Link>
                   
-                  {/* Tools Dropdown Group */}
-                  <div className="relative group ml-1">
-                    <button className="text-sm font-bold text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm hover:text-indigo-500 transition-all flex items-center gap-1.5 whitespace-nowrap">
-                      Tools <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  {/* Tools & Toggles (Desktop & Mobile) */}
+                  <div className="flex items-center gap-4 shrink-0">
+                    <button className="hidden lg:flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 w-10 h-10 rounded-full transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all grid grid-cols-1 divide-y divide-slate-100 dark:divide-slate-800">
-                      <div className="p-2">
-                        <Link href="/tools/career-advisor" className="block px-3 py-2 text-sm text-fuchsia-600 dark:text-fuchsia-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">🧭 AI Career Advisor</Link>
-                        <Link href="/tools/study-planner" className="block px-3 py-2 text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">📅 AI Study Planner</Link>
-                        <Link href="/tools/interview-prep" className="block px-3 py-2 text-sm text-yellow-600 dark:text-yellow-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">🎤 AI Interview Coach</Link>
-                        <Link href="/tools/marks-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">SEBA/AHSEC Marks Calculator</Link>
-                        <Link href="/tools/fee-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Exam Fee Calculator</Link>
-                        <Link href="/tools/typing-test" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Typing Speed Tester</Link>
-                        <Link href="/tools/salary-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Salary Calculator</Link>
-                        <Link href="/tools/cgpa-converter" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">CGPA to Percentage</Link>
-                      </div>
-                      <div className="p-2">
-                        <Link href="/tools/standard-form" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Auto Standard Form</Link>
-                        <Link href="/tools/pdf-merger" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Image to PDF Merger</Link>
-                        <Link href="/tools/age-calculator" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Age Calculator</Link>
-                        <Link href="/tools/photo-resizer" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Photo & Sign Resizer</Link>
-                        <Link href="/tools/cv-maker" className="block px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">AI CV Maker</Link>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4">
-                    <a href="https://play.google.com/store/apps/details?id=com.ifree.assamesecalendar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-xs font-bold hover:bg-green-100 dark:hover:bg-green-900/50 transition border border-green-200 dark:border-green-800">
-                      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
-                      Get Calendar App
-                    </a>
-                  </div>
-
-                  <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 pl-4">
+                    <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden lg:block mx-1"></div>
                     <LanguageToggle />
                     <ThemeToggle />
-                  </div>
-                </nav>
+                    
+                    {/* Notification Bell (Mobile & Desktop) */}
+                    <button className="relative p-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                      <span className="absolute top-1.5 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                    </button>
+
+                    {/* Desktop Sign In */}
+                    <button className="hidden lg:flex bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-sm shadow-emerald-600/20 transition-all text-sm ml-2">
+                      Sign In
+                    </button>
+                    
+                    {/* Mobile Hamburger (Now moved to Bottom Nav, but keeping a simplified one for settings fallback if needed, or remove it entirely) */}
+                    {/* We are removing MobileMenu component here since we have BottomNav! */}
                   </div>
                 </div>
               </header>
-              
+
               {/* Main Content Area */}
               <div className="flex-1 flex flex-col md:flex-row relative z-10 pb-20 md:pb-8 mx-auto w-full max-w-7xl pt-4 gap-6 px-4 md:px-0">
                 

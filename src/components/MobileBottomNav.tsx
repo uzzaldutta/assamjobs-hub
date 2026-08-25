@@ -2,42 +2,45 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, CreditCard, LayoutDashboard, Wrench } from "lucide-react";
+import { Home, Briefcase, Search, BookOpen, Menu } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const { t } = useLanguage();
 
-  const navItems = [
-    { name: t("nav_home"), href: "/", icon: Home },
-    { name: t("nav_study"), href: "/study-materials", icon: BookOpen },
-    { name: t("nav_admits"), href: "/admit-cards", icon: CreditCard },
-    { name: t("nav_results"), href: "/results", icon: LayoutDashboard },
-    { name: t("nav_tools"), href: "/tools", icon: Wrench },
-  ];
-
   return (
-    <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50 glass border border-slate-200/50 dark:border-slate-700/50 flex justify-around items-center p-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none">
-      {navItems.map((item) => {
-        const isActive = pathname === item.href;
-        return (
-          <Link 
-            key={item.href} 
-            href={item.href} 
-            className={`relative flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-300 ${
-              isActive 
-                ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/20" 
-                : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-            }`}
-          >
-            <item.icon size={isActive ? 22 : 20} strokeWidth={isActive ? 2.5 : 2} className="transition-all duration-300" />
-            <span className={`text-[10px] mt-0.5 transition-all duration-300 ${isActive ? "font-bold" : "font-medium"}`}>
-              {item.name}
-            </span>
-          </Link>
-        );
-      })}
-    </nav>
+    <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
+      <div className="flex justify-around items-center h-16 px-2">
+        
+        <Link href="/" className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${pathname === "/" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <Home size={20} className={pathname === "/" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+          <span className="text-[10px] font-bold">Home</span>
+        </Link>
+
+        <Link href="/govt-jobs" className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${pathname.includes("/jobs") || pathname === "/govt-jobs" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <Briefcase size={20} className={pathname.includes("/jobs") ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+          <span className="text-[10px] font-bold">Jobs</span>
+        </Link>
+
+        <button className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+          <div className="bg-emerald-600 text-white p-2 rounded-full shadow-lg shadow-emerald-500/30 -mt-5">
+            <Search size={20} />
+          </div>
+          <span className="text-[10px] font-bold mt-0.5">Search</span>
+        </button>
+
+        <Link href="/study-materials" className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${pathname === "/study-materials" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <BookOpen size={20} className={pathname === "/study-materials" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+          <span className="text-[10px] font-bold">Study</span>
+        </Link>
+
+        <Link href="/settings" className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${pathname === "/settings" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <Menu size={20} className={pathname === "/settings" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+          <span className="text-[10px] font-bold">More</span>
+        </Link>
+
+      </div>
+    </div>
   );
 }

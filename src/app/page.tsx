@@ -52,35 +52,35 @@ export default async function Home() {
       
       <HeroSection />
 
-      {/* Mobile Quick Categories (Grid Layout) */}
-      <div className="lg:hidden w-full px-4 pt-6 pb-2 -mt-4 relative z-20">
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
-          <Link href="/admissions" className="flex flex-col items-center justify-center p-2.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">Admissions</span>
+      {/* 4 Large Quick Categories (Unified Desktop & Mobile) */}
+      <div className="w-full px-4 md:px-0 pt-6 pb-4 relative z-20 max-w-5xl mx-auto -mt-6 md:mt-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <Link href="/govt-jobs" className="flex flex-col items-center justify-center p-4 md:p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all group">
+            <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <span className="text-2xl">🏛</span>
+            </div>
+            <span className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Govt Jobs</span>
           </Link>
-          <Link href="/govt-jobs" className="flex flex-col items-center justify-center p-2.5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-300">Govt Jobs</span>
+          
+          <Link href="/private-jobs" className="flex flex-col items-center justify-center p-4 md:p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-700 transition-all group">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <span className="text-2xl">💼</span>
+            </div>
+            <span className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Private Jobs</span>
           </Link>
-          <Link href="/private-jobs" className="flex flex-col items-center justify-center p-2.5 bg-fuchsia-50 dark:bg-fuchsia-900/30 border border-fuchsia-100 dark:border-fuchsia-800 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-fuchsia-700 dark:text-fuchsia-300">Private Jobs</span>
+
+          <Link href="/admissions" className="flex flex-col items-center justify-center p-4 md:p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md hover:border-purple-300 dark:hover:border-purple-700 transition-all group">
+            <div className="w-12 h-12 rounded-full bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <span className="text-2xl">🎓</span>
+            </div>
+            <span className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Admissions</span>
           </Link>
-          <Link href="/admit-cards" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Admit Cards</span>
-          </Link>
-          <Link href="/results" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Results</span>
-          </Link>
-          <Link href="/syllabus" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Syllabus</span>
-          </Link>
-          <Link href="/study-materials" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Materials</span>
-          </Link>
-          <Link href="/tenders" className="flex flex-col items-center justify-center p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">Tenders</span>
-          </Link>
-          <Link href="/mock-tests" className="flex flex-col items-center justify-center p-2.5 col-span-3 sm:col-span-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-800 rounded-2xl shadow-sm text-center">
-            <span className="text-[11px] font-black text-blue-700 dark:text-blue-300">Mock Tests</span>
+
+          <Link href="/admit-cards" className="flex flex-col items-center justify-center p-4 md:p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-700 transition-all group">
+            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <span className="text-2xl">📝</span>
+            </div>
+            <span className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Exams</span>
           </Link>
         </div>
       </div>
