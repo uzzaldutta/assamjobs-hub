@@ -109,10 +109,12 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 px-4 md:px-0">
         <div className="flex items-center gap-2">
           <span className="relative flex h-3 w-3">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${activeTab === 'closing' ? 'bg-red-400' : 'bg-indigo-400'}`}></span>
-            <span className={`relative inline-flex rounded-full h-3 w-3 ${activeTab === 'closing' ? 'bg-red-500' : 'bg-indigo-500'}`}></span>
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${activeTab === 'closing' ? 'bg-red-400' : 'bg-emerald-400'}`}></span>
+            <span className={`relative inline-flex rounded-full h-3 w-3 ${activeTab === 'closing' ? 'bg-red-500' : 'bg-emerald-500'}`}></span>
           </span>
-          <h3 className="text-xl font-bold text-slate-800 dark:text-white">{title}</h3>
+          <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+            {activeTab === 'recent' ? 'Latest Updates' : 'Closing Soon'}
+          </h3>
         </div>
         
         <div className="flex p-1 rounded-xl w-fit gap-2">
