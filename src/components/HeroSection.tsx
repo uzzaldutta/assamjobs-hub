@@ -2,23 +2,44 @@
 
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
+import { BookOpen, Sparkles, PencilRuler } from "lucide-react";
 
 export default function HeroSection() {
   const { t } = useLanguage();
 
   return (
-    <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-5 pb-6 md:pt-8 md:pb-10 rounded-b-[1.5rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4">
-      <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-1.5 leading-tight">{t("hero_title")}</h2>
-      <p className="text-indigo-100 text-sm md:text-base mb-4 max-w-lg">{t("hero_subtitle")}</p>
-      <div className="flex flex-row flex-wrap items-center gap-2 md:gap-3">
-        <Link href="/mock-tests" className="inline-flex items-center gap-1.5 bg-white text-indigo-700 hover:bg-indigo-50 font-bold py-2 px-4 md:py-3 md:px-6 rounded-xl shadow-md transition-transform hover:scale-105 active:scale-95 text-sm md:text-base">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          {t("hero_btn_mock")}
-        </Link>
-        <Link href="/tools" className="inline-flex items-center gap-1.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-xl shadow-md transition-transform hover:scale-105 active:scale-95 border border-indigo-400 text-sm md:text-base">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-          {t("hero_btn_ai")}
-        </Link>
+    <div className="bg-gradient-to-br from-indigo-600/95 to-violet-800/95 dark:from-indigo-950/95 dark:to-violet-950/95 backdrop-blur-xl border-b border-indigo-400/20 px-4 pt-4 pb-5 md:pt-6 md:pb-8 rounded-b-[1.5rem] md:rounded-2xl shadow-xl shadow-indigo-900/10 relative z-0 md:mt-4">
+      
+      {/* Background ambient glow */}
+      <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-fuchsia-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div className="relative z-10">
+        <h2 className="text-xl md:text-2xl font-black text-white mb-1.5 leading-tight tracking-tight">
+          {t("hero_title")}
+        </h2>
+        
+        <p className="text-indigo-50 dark:text-indigo-200/80 text-[13px] md:text-sm mb-4 max-w-lg leading-relaxed">
+          {t("hero_subtitle")}
+        </p>
+        
+        <div className="flex flex-row flex-wrap items-center gap-2">
+          
+          <Link href="/study-materials" className="inline-flex items-center gap-1.5 bg-white text-indigo-700 hover:bg-indigo-50 font-bold py-1.5 px-3 rounded-lg shadow-sm transition-transform hover:scale-105 active:scale-95 text-[11px] md:text-xs uppercase tracking-wider">
+            <BookOpen size={13} strokeWidth={2.5} />
+            {t("nav_study")}
+          </Link>
+
+          <Link href="/tools" className="inline-flex items-center gap-1.5 bg-indigo-500/40 hover:bg-indigo-500/60 text-white font-bold py-1.5 px-3 rounded-lg shadow-sm transition-transform hover:scale-105 active:scale-95 border border-indigo-300/30 text-[11px] md:text-xs uppercase tracking-wider backdrop-blur-md">
+            <Sparkles size={13} strokeWidth={2.5} className="text-fuchsia-300" />
+            {t("hero_btn_ai")}
+          </Link>
+
+          <Link href="/mock-tests" className="inline-flex items-center gap-1.5 bg-indigo-500/40 hover:bg-indigo-500/60 text-white font-bold py-1.5 px-3 rounded-lg shadow-sm transition-transform hover:scale-105 active:scale-95 border border-indigo-300/30 text-[11px] md:text-xs uppercase tracking-wider backdrop-blur-md">
+            <PencilRuler size={13} strokeWidth={2.5} className="text-amber-300" />
+            {t("hero_btn_mock")}
+          </Link>
+
+        </div>
       </div>
     </div>
   );

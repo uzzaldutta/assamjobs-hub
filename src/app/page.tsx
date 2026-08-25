@@ -52,15 +52,15 @@ export default async function Home() {
       
       <HeroSection />
 
-      {/* Mobile Quick Categories (Horizontal Scroll) */}
-      <div className="lg:hidden w-full overflow-x-auto hide-scrollbar px-4 pt-4 pb-2 -mt-4 relative z-20">
-        <div className="flex gap-2">
-          <Link href="/admit-cards" className="shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full text-sm font-bold text-slate-700 dark:text-slate-200 shadow-sm">Admit Cards</Link>
-          <Link href="/results" className="shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full text-sm font-bold text-slate-700 dark:text-slate-200 shadow-sm">Results</Link>
-          <Link href="/syllabus" className="shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full text-sm font-bold text-slate-700 dark:text-slate-200 shadow-sm">Syllabus</Link>
-          <Link href="/study-materials" className="shrink-0 bg-fuchsia-50 dark:bg-fuchsia-900/20 border border-fuchsia-200 dark:border-fuchsia-900/50 px-4 py-2 rounded-full text-sm font-bold text-fuchsia-700 dark:text-fuchsia-400 shadow-sm">Study Materials</Link>
-          <Link href="/tenders" className="shrink-0 bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-900/50 px-4 py-2 rounded-full text-sm font-bold text-amber-700 dark:text-amber-400 shadow-sm">Tenders</Link>
-          <Link href="/mock-tests" className="shrink-0 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-900/50 px-4 py-2 rounded-full text-sm font-bold text-indigo-700 dark:text-indigo-400 shadow-sm">Mock Tests</Link>
+      {/* Mobile Quick Categories (Wrapped Grid) */}
+      <div className="lg:hidden w-full px-4 pt-4 pb-2 -mt-4 relative z-20">
+        <div className="flex flex-wrap gap-2 justify-center">
+          <Link href="/admit-cards" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Admit Cards</Link>
+          <Link href="/results" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Results</Link>
+          <Link href="/syllabus" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Syllabus</Link>
+          <Link href="/study-materials" className="bg-fuchsia-50 dark:bg-fuchsia-900/30 border border-fuchsia-200 dark:border-fuchsia-800 px-3 py-1.5 rounded-full text-[13px] font-bold text-fuchsia-700 dark:text-fuchsia-300 shadow-sm">Study Materials</Link>
+          <Link href="/tenders" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-amber-200 dark:border-amber-900/50 px-3 py-1.5 rounded-full text-[13px] font-bold text-amber-700 dark:text-amber-400 shadow-sm">Tenders</Link>
+          <Link href="/mock-tests" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-indigo-200 dark:border-indigo-900/50 px-3 py-1.5 rounded-full text-[13px] font-bold text-indigo-700 dark:text-indigo-400 shadow-sm">Mock Tests</Link>
         </div>
       </div>
 
