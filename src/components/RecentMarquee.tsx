@@ -64,35 +64,42 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
               }
 
               return (
-                <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`w-[300px] shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border ${borderClass}`}>
-                  <div>
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-md">
-                        {job.type}
-                      </span>
-                      {expiring ? (
-                        <span className="text-[10px] text-red-600 dark:text-red-500 font-bold flex items-center gap-1 animate-pulse">
-                          <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> Ends Soon
+                <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`relative overflow-hidden w-[300px] shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border ${borderClass}`}>
+                  
+                  {/* Flashing Background Layer */}
+                  {expiring && <div className="absolute inset-0 bg-red-500/10 dark:bg-red-500/20 animate-pulse pointer-events-none"></div>}
+                  {isNew && <div className="absolute inset-0 bg-emerald-500/10 dark:bg-emerald-500/20 animate-pulse pointer-events-none"></div>}
+
+                  <div className="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-md">
+                          {job.type}
                         </span>
-                      ) : isNew ? (
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold flex items-center gap-1 animate-pulse">
-                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> New Match
-                        </span>
+                        {expiring ? (
+                          <span className="text-[10px] text-red-600 dark:text-red-500 font-bold flex items-center gap-1 animate-pulse">
+                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> Ends Soon
+                          </span>
+                        ) : isNew ? (
+                          <span className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold flex items-center gap-1 animate-pulse">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> New Match
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-slate-400 font-medium">Active</span>
+                        )}
+                      </div>
+                      <h4 className="font-bold text-slate-800 dark:text-white text-sm line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
+                        {job.title}
+                      </h4>
+                    </div>
+                    <div className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                      <span className="truncate max-w-[150px]">{job.organization}</span>
+                      {expiring && job.lastDate ? (
+                        <span className="text-red-600 dark:text-red-400 font-bold text-[10px] truncate max-w-[100px]">End: {job.lastDate}</span>
                       ) : (
-                        <span className="text-[10px] text-slate-400 font-medium">Active</span>
+                        <span className="text-indigo-600 dark:text-indigo-400 font-bold">Read More &rarr;</span>
                       )}
                     </div>
-                    <h4 className="font-bold text-slate-800 dark:text-white text-sm line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
-                      {job.title}
-                    </h4>
-                  </div>
-                  <div className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center justify-between">
-                    <span className="truncate max-w-[150px]">{job.organization}</span>
-                    {expiring && job.lastDate ? (
-                      <span className="text-red-500 dark:text-red-400 font-bold text-[10px] truncate max-w-[100px]">End: {job.lastDate}</span>
-                    ) : (
-                      <span className="text-indigo-600 dark:text-indigo-400 font-bold">Read More →</span>
-                    )}
                   </div>
                 </Link>
               );
