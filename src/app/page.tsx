@@ -114,13 +114,13 @@ export default async function Home({ searchParams }: { searchParams?: { search?:
             {/* 4 Quick Categories */}
             <div className="max-w-7xl mx-auto w-full px-4 my-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Link href="/?filter=GOVERNMENT" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all text-center group">
+                <Link href="/govt-jobs" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all text-center group">
                   <div className="w-12 h-12 md:w-16 md:h-16 mx-auto bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                   </div>
                   <h3 className="font-bold text-slate-800 dark:text-white text-sm md:text-base">Govt Jobs</h3>
                 </Link>
-                <Link href="/?filter=PRIVATE" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md hover:indigo-300 transition-all text-center group">
+                <Link href="/private-jobs" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md hover:indigo-300 transition-all text-center group">
                   <div className="w-12 h-12 md:w-16 md:h-16 mx-auto bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
                   </div>
