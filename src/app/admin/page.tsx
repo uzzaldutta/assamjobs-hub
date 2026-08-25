@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List } from "lucide-react";
+import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -9,9 +9,28 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"manage" | "create">("manage");
+  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners">("manage");
+
 
   // CMS State
+  const [banners, setBanners] = useState<any[]>([]);
+  const [isLoadingBanners, setIsLoadingBanners] = useState(false);
+  const [editingBanner, setEditingBanner] = useState<any>(null);
+  
+  // Banner Form State
+  const [bannerFormData, setBannerFormData] = useState({
+    headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0
+  });
+
+  const fetchBanners = async () => {
+    setIsLoadingBanners(true);
+    try {
+      const { data } = await supabase.from("hero_banners").select("*").order("order_index", { ascending: true });
+      if (data) setBanners(data);
+    } catch (e) { console.error(e); }
+    setIsLoadingBanners(false);
+  };
+
   const [jobs, setJobs] = useState<any[]>([]);
   const [isLoadingJobs, setIsLoadingJobs] = useState(false);
 
@@ -44,7 +63,8 @@ export default function AdminPage() {
       if (res.ok) {
         setIsAuthenticated(true);
         localStorage.setItem("adminToken", token);
-        fetchJobs(); // Fetch CMS data
+        fetchJobs();
+        fetchBanners();
       } else {
         localStorage.removeItem("adminToken");
       }
@@ -162,13 +182,13 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="sm:mx-auto sm:w-full sm:max-w-xl">
           <div className="mx-auto h-12 w-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
             <Lock size={24} />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900 dark:text-white">Admin Hub</h2>
         </div>
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
           <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow sm:rounded-2xl sm:px-10 border border-slate-200 dark:border-slate-800">
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
@@ -207,14 +227,66 @@ export default function AdminPage() {
         </div>
 
         {/* CMS Tabs */}
-        <div className="flex gap-2 mb-6 bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-md">
+        <div className="flex gap-2 mb-6 bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-xl">
           <button onClick={() => setActiveTab("manage")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "manage" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
             <List size={16} /> Manage Feeds
           </button>
           <button onClick={() => setActiveTab("create")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "create" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
             <PlusCircle size={16} /> Create Post
           </button>
+          <button onClick={() => setActiveTab("banners")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "banners" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
+            <Image size={16} /> Banners
+          </button>
         </div>
+
+        
+        {activeTab === "banners" && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+              <h2 className="text-xl font-bold mb-4">{editingBanner ? "Edit Banner" : "Add New Banner"}</h2>
+              <form onSubmit={handleBannerSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input required placeholder="Headline" value={bannerFormData.headline} onChange={e => setBannerFormData({...bannerFormData, headline: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input required placeholder="Subtext" value={bannerFormData.subtext} onChange={e => setBannerFormData({...bannerFormData, subtext: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input required placeholder="Button Text" value={bannerFormData.cta_text} onChange={e => setBannerFormData({...bannerFormData, cta_text: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input required placeholder="Button Link" value={bannerFormData.cta_link} onChange={e => setBannerFormData({...bannerFormData, cta_link: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input required placeholder="Gradient From (e.g. from-blue-600)" value={bannerFormData.gradient_from} onChange={e => setBannerFormData({...bannerFormData, gradient_from: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input required placeholder="Gradient To (e.g. to-indigo-500)" value={bannerFormData.gradient_to} onChange={e => setBannerFormData({...bannerFormData, gradient_to: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input type="number" required placeholder="Order Index" value={bannerFormData.order_index} onChange={e => setBannerFormData({...bannerFormData, order_index: parseInt(e.target.value)})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <div className="flex items-center gap-4">
+                  <button type="submit" className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl w-full">
+                    {status === "loading" ? "Saving..." : (editingBanner ? "Update Banner" : "Create Banner")}
+                  </button>
+                  {editingBanner && (
+                    <button type="button" onClick={() => { setEditingBanner(null); setBannerFormData({ headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0 }); }} className="text-slate-500 font-bold">Cancel</button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden p-6">
+              <h2 className="text-xl font-bold mb-4">Active Banners</h2>
+              <div className="grid grid-cols-1 gap-4">
+                {banners.map((b) => (
+                  <div key={b.id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex justify-between items-center bg-slate-50 dark:bg-slate-950">
+                    <div>
+                      <h3 className="font-bold">{b.headline}</h3>
+                      <p className="text-sm text-slate-500">{b.subtext}</p>
+                      <div className="text-xs mt-2 flex gap-2">
+                        <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">Order: {b.order_index}</span>
+                        <span className={`bg-gradient-to-r ${b.gradient_from} ${b.gradient_to} text-white px-2 py-1 rounded`}>Colors</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => { setEditingBanner(b); setBannerFormData(b); }} className="p-2 bg-slate-200 dark:bg-slate-800 rounded-lg"><Edit size={16} /></button>
+                      <button onClick={() => handleDeleteBanner(b.id)} className="p-2 bg-red-100 text-red-600 rounded-lg"><Trash2 size={16} /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
 
         {activeTab === "manage" && (
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
