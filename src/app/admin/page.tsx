@@ -126,6 +126,46 @@ export default function AdminPage() {
 
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
+  const handleBannerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const url = editingBanner ? `/api/admin/banners/${editingBanner.id}` : "/api/admin/banners";
+      const method = editingBanner ? "PUT" : "POST";
+      
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${password}`
+        },
+        body: JSON.stringify(bannerFormData)
+      });
+      
+      if (!res.ok) throw new Error("Failed");
+      
+      setStatus("success");
+      setEditingBanner(null);
+      setBannerFormData({ headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0 });
+      fetchBanners();
+      setTimeout(() => setStatus("idle"), 3000);
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
+
+  const handleDeleteBanner = async (id: string) => {
+    if (!confirm("Are you sure?")) return;
+    try {
+      await fetch(`/api/admin/banners/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${password}` }
+      });
+      fetchBanners();
+    } catch (error) { console.error(error); }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
