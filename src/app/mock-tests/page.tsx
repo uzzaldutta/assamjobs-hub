@@ -48,6 +48,32 @@ export default function MockTestsIndex() {
 
       <div className="max-w-5xl mx-auto w-full px-4 py-8">
         
+        {/* Premium AI Generator Banner */}
+        <div className="mb-8 relative overflow-hidden bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl p-8 sm:p-10 shadow-xl border border-indigo-500/50 group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute -bottom-10 left-10 w-40 h-40 bg-fuchsia-500/20 rounded-full blur-2xl"></div>
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-white">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-white/20 backdrop-blur-md text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1 border border-white/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                  New Feature
+                </span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black mb-3 leading-tight tracking-tight">AI Mock Test Generator</h2>
+              <p className="text-indigo-100 font-medium text-lg max-w-xl">
+                Type any exam name or subject, and our Gemini 3.6 AI will instantly craft a custom 20-question mock test just for you.
+              </p>
+            </div>
+            
+            <Link href="/mock-tests/ai-generator" className="shrink-0 w-full md:w-auto bg-white text-indigo-700 hover:bg-slate-50 font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center justify-center gap-2 group-hover:scale-105 active:scale-95">
+              Generate Test Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
+
+        
         {/* Practice Dashboard */}
         {isLoaded && (
           <div className="mb-10 bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
