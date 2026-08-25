@@ -45,6 +45,15 @@ export default async function TendersPage() {
     return true;
   });
 
+  // Filter out non-job spam/promotional posts scraped by accident
+  const spamKeywords = ["bio-data maker", "scheme", "merit award", "scholarship", "whatsapp group", "telegram", "join our"];
+  allTenders = allTenders.filter(job => {
+    if (!job.title) return false;
+    const lowerTitle = job.title.toLowerCase();
+    return !spamKeywords.some(keyword => lowerTitle.includes(keyword));
+  });
+
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
       <PageHeader 

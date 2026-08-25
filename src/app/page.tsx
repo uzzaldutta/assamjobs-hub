@@ -62,6 +62,15 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
     return true;
   });
 
+  // Filter out non-job spam/promotional posts scraped by accident
+  const spamKeywords = ["bio-data maker", "scheme", "merit award", "scholarship", "whatsapp group", "telegram", "join our"];
+  allJobs = allJobs.filter(job => {
+    if (!job.title) return false;
+    const lowerTitle = job.title.toLowerCase();
+    return !spamKeywords.some(keyword => lowerTitle.includes(keyword));
+  });
+
+
 
   // Apply Search Filter
   if (searchQuery) {
