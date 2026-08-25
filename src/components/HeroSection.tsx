@@ -20,7 +20,7 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 px-5 pt-10 pb-12 md:pt-16 md:pb-16 rounded-[2rem] shadow-sm relative z-0 md:mt-6 overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 px-5 pt-6 pb-8 md:pt-10 md:pb-10 rounded-[2rem] shadow-sm relative z-0 md:mt-4 overflow-hidden">
       
       {/* Subtle modern abstract elements */}
       <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 via-emerald-500 to-emerald-400"></div>
@@ -28,25 +28,25 @@ export default function HeroSection() {
       <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-emerald-50 dark:bg-emerald-900/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto">
-        <h2 className="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-2xl md:text-4xl font-black mb-3 leading-tight tracking-tight text-slate-900 dark:text-white">
           Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500">Opportunity</span> in Assam
         </h2>
         
-        <p className="text-slate-500 dark:text-slate-400 text-sm md:text-lg mb-10 max-w-2xl font-medium">
+        <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base mb-6 max-w-2xl font-medium">
           Get live Govt & Private job alerts, download premium study materials, and outsmart the competition.
         </p>
         
-        {/* Giant Search Bar */}
-        <form onSubmit={handleSearch} className="w-full relative group max-w-2xl mb-6">
+        {/* Compact Search Bar */}
+        <form onSubmit={handleSearch} className="w-full relative group max-w-2xl mb-5">
           <input 
             type="text" 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search jobs, exams, or organizations..." 
-            className="w-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl py-4 pl-14 pr-32 text-lg font-medium text-slate-800 dark:text-slate-200 focus:border-blue-500 dark:focus:border-blue-500 outline-none transition-all shadow-lg shadow-slate-200/50 dark:shadow-none"
+            className="w-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-12 pr-28 text-base font-medium text-slate-800 dark:text-slate-200 focus:border-blue-500 dark:focus:border-blue-500 outline-none transition-all shadow-md shadow-slate-200/50 dark:shadow-none"
           />
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-6 h-6 group-focus-within:text-blue-500 transition-colors" />
-          <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-sm">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-blue-500 transition-colors" />
+          <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg transition-colors shadow-sm">
             Search
           </button>
         </form>
