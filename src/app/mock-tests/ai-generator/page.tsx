@@ -89,8 +89,8 @@ export default function AIMockTestGenerator() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
       <PageHeader 
         title="✨ AI Mock Test Generator"
-        description="Type any exam name or subject, and our AI will generate a challenging 20-question mock test instantly."
-        color="from-violet-600 to-indigo-600"
+        subtitle="Type any exam name or subject, and our AI will generate a challenging 20-question mock test instantly."
+        theme="purple"
       />
 
       <div className="container mx-auto px-4 md:px-6 -mt-8 relative z-10 max-w-4xl">
