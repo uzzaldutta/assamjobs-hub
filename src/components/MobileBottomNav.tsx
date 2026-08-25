@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, FileText, CreditCard, LayoutDashboard, Wrench } from "lucide-react";
+import { Home, BookOpen, CreditCard, LayoutDashboard, Wrench } from "lucide-react";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
 
   const navItems = [
     { name: "Home", href: "/", icon: Home },
-    { name: "Tenders", href: "/tenders", icon: FileText },
+    { name: "Study", href: "/study-materials", icon: BookOpen },
     { name: "Admits", href: "/admit-cards", icon: CreditCard },
     { name: "Results", href: "/results", icon: LayoutDashboard },
     { name: "Tools", href: "/tools", icon: Wrench },
