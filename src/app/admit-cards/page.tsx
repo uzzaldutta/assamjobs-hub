@@ -40,7 +40,7 @@ export default async function AdmitCardsPage() {
       </div>
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
-        <RecentMarquee jobs={allAdmitCards.slice(0, 8)} title="Recent Admit Cards" />
+        <RecentMarquee jobs={allAdmitCards} title="Recent Admit Cards" />
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">Latest Admit Cards</h3>
         </div>

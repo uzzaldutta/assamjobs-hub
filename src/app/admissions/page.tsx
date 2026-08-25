@@ -37,7 +37,7 @@ export default async function AdmissionsPage() {
       </div>
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
-        <RecentMarquee jobs={allAdmissions.slice(0, 15)} title="Recent Admissions" />
+        <RecentMarquee jobs={allAdmissions} title="Recent Admissions" />
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">All-India & Assam Admissions</h3>
         </div>

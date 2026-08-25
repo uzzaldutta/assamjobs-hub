@@ -1,4 +1,6 @@
-"use client";
+import os
+
+content = """\"use client\";
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
@@ -154,3 +156,8 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
     </div>
   );
 }
+"""
+
+with open(r"src\components\RecentMarquee.tsx", "w", encoding="utf-8") as f:
+    f.write(content)
+print("Updated RecentMarquee.tsx")

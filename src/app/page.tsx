@@ -69,7 +69,7 @@ export default async function Home() {
         
         {/* Recent Posts Section (Marquee) */}
         <div className="col-span-1 lg:col-span-4 mt-2">
-          <RecentMarquee jobs={allJobs.filter(job => job.type !== "TENDER").slice(0, 15)} title="Recent Job Updates" />
+          <RecentMarquee jobs={allJobs.filter(job => job.type !== "TENDER")} title="Recent Job Updates" />
         </div>
 
         {/* Center Feed (Jobs) */}

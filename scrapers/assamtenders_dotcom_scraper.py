@@ -29,7 +29,7 @@ async def scrape_assamtenders_dotcom():
             await page.goto(TARGET_URL, timeout=60000)
             
             # Tenders are usually links with 'Tenderdetailbrief.aspx' in href
-            await page.wait_for_selector('a[href*="Tenderdetailbrief.aspx"]', timeout=15000)
+            await page.wait_for_selector('a[href*="Tenderdetailbrief.aspx"]', timeout=30000)
             
             tender_links = await page.locator('a[href*="Tenderdetailbrief.aspx"]').all()
             logger.info(f"Found {len(tender_links)} tender links. Processing top 10...")

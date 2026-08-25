@@ -35,7 +35,7 @@ export default async function StudyMaterialsPage() {
       </div>
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
-        <RecentMarquee jobs={allMaterials.slice(0, 15)} title="Recent Uploads" />
+        <RecentMarquee jobs={allMaterials} title="Recent Uploads" />
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">Browse Study Materials</h3>
         </div>
