@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { Menu, X, Compass, Calendar, Mic, FileText, Calculator, Keyboard } from "lucide-react";
+import { Menu, X, Compass, Calendar, Mic, FileText, Calculator, Keyboard, Settings } from "lucide-react";
 import SubscribeForm from "./SubscribeForm";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -73,6 +73,13 @@ export default function MobileMenu() {
                     <Keyboard size={18} className="text-slate-400" /> Typing Speed Test
                   </Link>
                 </div>
+              </div>
+
+              {/* Settings Link */}
+              <div className="pt-2">
+                <Link onClick={() => setIsOpen(false)} href="/settings" className="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold text-sm text-slate-800 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700">
+                  <Settings size={20} className="text-slate-500" /> App Settings & Admin
+                </Link>
               </div>
 
               {/* App Download */}
