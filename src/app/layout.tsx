@@ -102,7 +102,7 @@ export default function RootLayout({
                     <div className="flex items-center gap-2">
                       <LanguageToggle />
                       <ThemeToggle />
-                      <MobileMenu className="lg:hidden" />
+                      <MobileMenu />
                     </div>
                   </div>
 
