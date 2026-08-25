@@ -1,149 +1,74 @@
-import { Metadata } from "next";
+import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
-import { Calculator, FileText, Image as ImageIcon, Type, Briefcase, GraduationCap, FileOutput, ShieldQuestion, ChevronRight, Award, Sparkles, Wallet, CreditCard, MapPin, Bookmark, Calendar, BookOpen } from "lucide-react";
+import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Free Applicant Tools | AssamJobs Hub",
-  description: "Free tools for job applicants in Assam including Standard Form, Salary Calculator, Typing Test, and more.",
-};
+const toolsData = [
+  {
+    category: "AI Career Tools",
+    description: "Smart tools powered by AI to accelerate your career",
+    items: [
+      { name: "Career Advisor", icon: <Compass className="text-blue-500" size={24} />, link: "/tools/career-advisor", color: "bg-blue-50 dark:bg-blue-900/30", border: "border-blue-200 dark:border-blue-800" },
+      { name: "Study Planner", icon: <Calendar className="text-indigo-500" size={24} />, link: "/tools/study-planner", color: "bg-indigo-50 dark:bg-indigo-900/30", border: "border-indigo-200 dark:border-indigo-800" },
+      { name: "Interview Coach", icon: <Mic className="text-purple-500" size={24} />, link: "/tools/interview-prep", color: "bg-purple-50 dark:bg-purple-900/30", border: "border-purple-200 dark:border-purple-800" },
+      { name: "AI CV Maker", icon: <FileText className="text-emerald-500" size={24} />, link: "/tools/cv-maker", color: "bg-emerald-50 dark:bg-emerald-900/30", border: "border-emerald-200 dark:border-emerald-800" },
+    ]
+  },
+  {
+    category: "Job Application Tools",
+    description: "Everything you need to prepare your documents perfectly",
+    items: [
+      { name: "Photo & Sign Resizer", icon: <ImageIcon className="text-pink-500" size={24} />, link: "/tools/photo-resizer", color: "bg-pink-50 dark:bg-pink-900/30", border: "border-pink-200 dark:border-pink-800" },
+      { name: "Image to PDF", icon: <FileOutput className="text-red-500" size={24} />, link: "/tools/pdf-merger", color: "bg-red-50 dark:bg-red-900/30", border: "border-red-200 dark:border-red-800" },
+      { name: "Standard Form", icon: <FileSpreadsheet className="text-amber-500" size={24} />, link: "/tools/standard-form", color: "bg-amber-50 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800" },
+    ]
+  },
+  {
+    category: "Calculators & Tests",
+    description: "Quick utilities for students and job seekers",
+    items: [
+      { name: "Salary Calculator", icon: <Calculator className="text-teal-500" size={24} />, link: "/tools/salary-calculator", color: "bg-teal-50 dark:bg-teal-900/30", border: "border-teal-200 dark:border-teal-800" },
+      { name: "CGPA to Percentage", icon: <GraduationCap className="text-orange-500" size={24} />, link: "/tools/cgpa-converter", color: "bg-orange-50 dark:bg-orange-900/30", border: "border-orange-200 dark:border-orange-800" },
+      { name: "Marks Calculator", icon: <BarChart className="text-fuchsia-500" size={24} />, link: "/tools/marks-calculator", color: "bg-fuchsia-50 dark:bg-fuchsia-900/30", border: "border-fuchsia-200 dark:border-fuchsia-800" },
+      { name: "Typing Test", icon: <Keyboard className="text-cyan-500" size={24} />, link: "/tools/typing-test", color: "bg-cyan-50 dark:bg-cyan-900/30", border: "border-cyan-200 dark:border-cyan-800" },
+    ]
+  }
+];
 
-export default function ToolsIndexPage() {
-  const tools = [
-    {
-      id: "marks-calculator",
-      title: "SEBA / AHSEC Marks Calculator",
-      description: "Calculate your exact percentage, best of 5, and division instantly.",
-      icon: <Award className="w-6 h-6" />,
-      color: "border-blue-100 dark:border-blue-900 hover:border-blue-500",
-      bg: "bg-blue-50 dark:bg-blue-900/20"
-    },
-    {
-      id: "interview-prep",
-      title: "AI Interview Coach",
-      description: "Type any job title and instantly get the top 10 most likely interview questions.",
-      icon: <Sparkles className="w-6 h-6" />,
-      color: "border-violet-100 dark:border-violet-900 hover:border-violet-500",
-      bg: "bg-violet-50 dark:bg-violet-900/20"
-    },
-    {
-      id: "study-planner",
-      title: "AI Study Planner",
-      description: "Generate a custom day-by-day study timetable optimized for Assam exams.",
-      icon: <BookOpen className="w-6 h-6" />,
-      color: "border-cyan-100 dark:border-cyan-900 hover:border-cyan-500",
-      bg: "bg-cyan-50 dark:bg-cyan-900/20"
-    },
-    {
-      id: "career-advisor",
-      title: "AI Career Path Advisor",
-      description: "Enter your qualifications and get a personalized list of Govt jobs you are eligible for.",
-      icon: <Sparkles className="w-6 h-6" />,
-      color: "border-fuchsia-100 dark:border-fuchsia-900 hover:border-fuchsia-500",
-      bg: "bg-fuchsia-50 dark:bg-fuchsia-900/20"
-    },
-    {
-      id: "fee-calculator",
-      title: "Exam Fee Calculator",
-      description: "Check your exact application fee and exemptions for major exams based on caste.",
-      icon: <Wallet className="w-6 h-6" />,
-      color: "border-emerald-100 dark:border-emerald-900 hover:border-emerald-500",
-      bg: "bg-emerald-50 dark:bg-emerald-900/20"
-    },
-    {
-      id: "standard-form",
-      title: "Auto Standard Form",
-      description: "Generate Assam Govt Standard Form automatically.",
-      icon: <FileText size={28} className="text-indigo-500" />,
-      color: "border-indigo-100 dark:border-indigo-900 hover:border-indigo-500",
-      bg: "bg-indigo-50 dark:bg-indigo-900/20"
-    },
-    {
-      id: "salary-calculator",
-      title: "Salary Calculator",
-      description: "Calculate in-hand salary for Assam Govt employees.",
-      icon: <CreditCard size={28} className="text-emerald-500" />,
-      color: "border-emerald-100 dark:border-emerald-900 hover:border-emerald-500",
-      bg: "bg-emerald-50 dark:bg-emerald-900/20"
-    },
-    {
-      id: "typing-test",
-      title: "Typing Speed Test",
-      description: "Practice for ADRE skill tests with live WPM tracking.",
-      icon: <Award size={28} className="text-teal-500" />,
-      color: "border-teal-100 dark:border-teal-900 hover:border-teal-500",
-      bg: "bg-teal-50 dark:bg-teal-900/20"
-    },
-    {
-      id: "photo-resizer",
-      title: "Photo & Sign Resizer",
-      description: "Resize images to exact KB/Pixel requirements.",
-      icon: <MapPin size={28} className="text-pink-500" />,
-      color: "border-pink-100 dark:border-pink-900 hover:border-pink-500",
-      bg: "bg-pink-50 dark:bg-pink-900/20"
-    },
-    {
-      id: "cgpa-converter",
-      title: "CGPA Converter",
-      description: "Convert CGPA to percentage according to university rules.",
-      icon: <GraduationCap size={28} className="text-amber-500" />,
-      color: "border-amber-100 dark:border-amber-900 hover:border-amber-500",
-      bg: "bg-amber-50 dark:bg-amber-900/20"
-    },
-    {
-      id: "pdf-merger",
-      title: "Image to PDF",
-      description: "Convert and merge multiple images into a single PDF.",
-      icon: <Bookmark size={28} className="text-rose-500" />,
-      color: "border-rose-100 dark:border-rose-900 hover:border-rose-500",
-      bg: "bg-rose-50 dark:bg-rose-900/20"
-    },
-    {
-      id: "age-calculator",
-      title: "Age Calculator",
-      description: "Calculate your exact age as of a specific cut-off date.",
-      icon: <Calendar size={28} className="text-blue-500" />,
-      color: "border-blue-100 dark:border-blue-900 hover:border-blue-500",
-      bg: "bg-blue-50 dark:bg-blue-900/20"
-    },
-    {
-      id: "cv-maker",
-      title: "AI CV Maker",
-      description: "Create a professional ATS-friendly resume instantly.",
-      icon: <Briefcase size={28} className="text-purple-500" />,
-      color: "border-purple-100 dark:border-purple-900 hover:border-purple-500",
-      bg: "bg-purple-50 dark:bg-purple-900/20"
-    }
-  ];
-
+export default function ToolsHubPage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-6 pb-8 md:pb-6 rounded-b-[2rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4 max-w-7xl mx-auto w-full text-center">
-        <h2 className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-2">
-          <Sparkles className="text-yellow-300" /> Free Applicant Tools
-        </h2>
-        <p className="text-indigo-100 text-sm max-w-lg mx-auto">
-          A suite of free, privacy-friendly tools designed specifically to help Assam job seekers format documents and prepare for exams.
-        </p>
-      </div>
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
+      <PageHeader 
+        title="Tools Hub" 
+        subtitle="AI tools, calculators, and utilities to help your career"
+        theme="blue"
+      />
 
-      <div className="px-4 md:px-0 relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-        {tools.map((tool) => (
-          <Link 
-            key={tool.id} 
-            href={`/tools/${tool.id}`}
-            className={`flex flex-col items-center p-5 rounded-2xl bg-white dark:bg-slate-900 border ${tool.color} shadow-sm transition-all hover:shadow-md hover:-translate-y-1 group`}
-          >
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 ${tool.bg} group-hover:scale-110 transition-transform duration-300`}>
-              {tool.icon}
+      <div className="max-w-5xl mx-auto w-full px-4 py-8">
+        <div className="space-y-12">
+          {toolsData.map((section, index) => (
+            <div key={index}>
+              <div className="mb-6">
+                <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white">{section.category}</h2>
+                <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1">{section.description}</p>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {section.items.map((tool, idx) => (
+                  <Link 
+                    key={idx} 
+                    href={tool.link}
+                    className="group bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all flex flex-col items-center text-center"
+                  >
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 border ${tool.color} ${tool.border} group-hover:scale-110 transition-transform duration-300`}>
+                      {tool.icon}
+                    </div>
+                    <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">{tool.name}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
-            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 text-center">
-              {tool.title}
-            </h3>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 text-center leading-relaxed">
-              {tool.description}
-            </p>
-          </Link>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
