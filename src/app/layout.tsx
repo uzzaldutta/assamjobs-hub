@@ -96,7 +96,7 @@ export default function RootLayout({
                   {/* Top Tier: Logo & Tools */}
                   <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-800/50 lg:border-none">
                     <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-                      <img src="/logo.jpg?v=4" alt="AssamJobs Hub Logo" className="h-10 md:h-12 w-auto object-contain rounded-lg" />
+                      <img src="/logo.jpg?v=4" alt="AssamJobs Hub Logo" className="h-16 md:h-24 w-auto object-contain rounded-lg mix-blend-multiply dark:mix-blend-normal" />
                     </Link>
                     
                     <div className="flex items-center gap-2">
