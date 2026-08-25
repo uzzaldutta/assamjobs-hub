@@ -151,6 +151,16 @@ export default function AIMatchPage() {
             </div>
           )}
 
+          {results && (
+            <div className="mb-2">
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <Sparkles size={20} className="text-indigo-600 dark:text-indigo-400" /> 
+                Your Top Matches
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Based on your resume and skills</p>
+            </div>
+          )}
+
           {results && results.map((match, idx) => (
             <div key={idx} className="relative">
               {/* Match Score Badge */}
