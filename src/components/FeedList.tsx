@@ -100,11 +100,11 @@ export default function FeedList({
             />
           </div>
           
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 md:flex flex-wrap gap-2 w-full md:w-auto mt-2 md:mt-0">
             <select
               value={district}
               onChange={(e) => handleFilterChange(setDistrict, e.target.value)}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
             >
               <option value="ALL">All Assam (All Districts)</option>
               <option value="Bajali">Bajali</option>
@@ -148,7 +148,7 @@ export default function FeedList({
             <select
               value={qualification}
               onChange={(e) => handleFilterChange(setQualification, e.target.value)}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm hidden md:block"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
             >
               <option value="ALL">All Qualifications</option>
               <option value="10th">10th Pass</option>
@@ -164,7 +164,7 @@ export default function FeedList({
             <select
               value={sortBy}
               onChange={(e) => handleFilterChange(setSortBy, e.target.value)}
-              className="bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 font-bold shadow-sm"
+              className="w-full col-span-2 md:col-span-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-xl px-3 py-2.5 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 font-bold shadow-sm"
             >
               <option value="newest">Newest First</option>
               <option value="closing_soon">Closing Soon</option>
