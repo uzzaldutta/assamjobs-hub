@@ -3,16 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, BookOpen, CreditCard, LayoutDashboard, Wrench } from "lucide-react";
+import { useLanguage } from "./LanguageContext";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   const navItems = [
-    { name: "Home", href: "/", icon: Home },
-    { name: "Study", href: "/study-materials", icon: BookOpen },
-    { name: "Admits", href: "/admit-cards", icon: CreditCard },
-    { name: "Results", href: "/results", icon: LayoutDashboard },
-    { name: "Tools", href: "/tools", icon: Wrench },
+    { name: t("nav_home"), href: "/", icon: Home },
+    { name: t("nav_study"), href: "/study-materials", icon: BookOpen },
+    { name: t("nav_admits"), href: "/admit-cards", icon: CreditCard },
+    { name: t("nav_results"), href: "/results", icon: LayoutDashboard },
+    { name: t("nav_tools"), href: "/tools", icon: Wrench },
   ];
 
   return (
