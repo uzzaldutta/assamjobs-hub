@@ -118,13 +118,13 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
         <div className="flex bg-slate-200/50 dark:bg-slate-800 p-1 rounded-xl w-fit">
           <button 
             onClick={() => setActiveTab('recent')} 
-            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition ${activeTab === 'recent' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition ${activeTab === 'recent' ? 'bg-emerald-600 shadow-sm text-white' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'}`}
           >
             <Sparkles size={14} /> Recent
           </button>
           <button 
             onClick={() => setActiveTab('closing')} 
-            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition ${activeTab === 'closing' ? 'bg-white dark:bg-slate-700 shadow-sm text-red-500 dark:text-red-400' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition ${activeTab === 'closing' ? 'bg-red-700 shadow-sm text-white' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'}`}
           >
             <Clock size={14} /> Closing Soon
           </button>

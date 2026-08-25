@@ -55,6 +55,7 @@ export default async function Home() {
       {/* Mobile Quick Categories (Wrapped Grid) */}
       <div className="lg:hidden w-full px-4 pt-4 pb-2 -mt-4 relative z-20">
         <div className="flex flex-wrap gap-2 justify-center">
+          <Link href="/admissions" className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-full text-[13px] font-bold text-emerald-700 dark:text-emerald-300 shadow-sm">Admissions</Link>
           <Link href="/admit-cards" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Admit Cards</Link>
           <Link href="/results" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Results</Link>
           <Link href="/syllabus" className="bg-white/90 backdrop-blur-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full text-[13px] font-bold text-slate-700 dark:text-slate-200 shadow-sm">Syllabus</Link>
