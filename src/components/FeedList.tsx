@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import JobCard from "./JobCard";
-import { Search, Filter, Briefcase, GraduationCap, FileText, Activity } from "lucide-react";
+import { Search, Filter, Briefcase, GraduationCap, FileText, Activity, Building2 } from "lucide-react";
 
 export default function FeedList({ 
   initialJobs, 
