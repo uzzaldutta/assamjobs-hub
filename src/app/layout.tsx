@@ -8,7 +8,6 @@ import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 import SubscribeForm from "@/components/SubscribeForm";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Footer from "@/components/Footer";
 import MobileMenu from "@/components/MobileMenu";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -220,7 +219,6 @@ export default function RootLayout({
               <Footer />
 
               <MobileBottomNav />
-              <FloatingWhatsApp />
             </div>
           </LanguageProvider>
         </ThemeProvider>
