@@ -3,7 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
 import { Sparkles, CreditCard, Award, Bookmark, GraduationCap, FileText, Calendar, BookOpen, Compass, Mic } from "lucide-react";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@teispace/next-themes";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
