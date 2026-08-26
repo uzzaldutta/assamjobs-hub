@@ -106,7 +106,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto group">
         
         {/* Animated Banner Content */}
-        <div className="w-full relative min-h-[140px] md:min-h-[160px] flex flex-col items-center justify-center">
+        <div className="w-full relative min-h-[160px] md:min-h-[180px] flex flex-col items-center justify-center">
           {banners.map((banner, idx) => (
             <div 
               key={banner.id}
@@ -116,7 +116,7 @@ export default function HeroSection() {
                   : "opacity-0 -translate-y-8 scale-95 -z-10 pointer-events-none"
               }`}
             >
-              <h2 className="text-2xl md:text-4xl font-black mb-3 leading-tight tracking-tight text-slate-900 dark:text-white">
+              <h2 className="text-xl md:text-3xl font-black mb-2 md:mb-3 leading-tight tracking-tight text-slate-900 dark:text-white px-8">
                 {banner.headline.includes("Opportunity") ? (
                   <>Find Your Next <span className={`text-transparent bg-clip-text bg-gradient-to-r ${banner.gradient_from} ${banner.gradient_to}`}>Opportunity</span> in Assam</>
                 ) : (
@@ -126,14 +126,14 @@ export default function HeroSection() {
                 )}
               </h2>
               
-              <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-2xl font-medium mx-auto">
+              <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm max-w-2xl font-medium mx-auto px-4 leading-relaxed">
                 {banner.subtext}
               </p>
 
               {banner.cta_text && banner.cta_link && (
                 <Link 
                   href={banner.cta_link} 
-                  className={`mt-4 inline-block bg-gradient-to-r ${banner.gradient_from} ${banner.gradient_to} text-white font-bold px-6 py-2 rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95`}
+                  className={`mt-4 inline-block bg-gradient-to-r ${banner.gradient_from} ${banner.gradient_to} text-white font-bold px-5 py-2 text-sm rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95`}
                 >
                   {banner.cta_text}
                 </Link>
@@ -143,16 +143,16 @@ export default function HeroSection() {
         </div>
         
         {/* Compact Search Bar */}
-        <form onSubmit={handleSearch} className="w-full relative max-w-2xl mb-5 mt-4 z-20">
+        <form onSubmit={handleSearch} className="w-full relative max-w-2xl mb-4 mt-6 md:mt-4 z-20">
           <input 
             type="text" 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search jobs, exams, or organizations..." 
-            className="w-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-12 pr-28 text-base font-medium text-slate-800 dark:text-slate-200 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all shadow-md shadow-slate-200/50 dark:shadow-none"
+            className="w-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-2.5 pl-10 pr-24 text-sm font-medium text-slate-800 dark:text-slate-200 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all shadow-md shadow-slate-200/50 dark:shadow-none"
           />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 transition-colors" />
-          <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-lg transition-colors shadow-sm">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 transition-colors" />
+          <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-1.5 text-sm rounded-lg transition-colors shadow-sm">
             Search
           </button>
         </form>
