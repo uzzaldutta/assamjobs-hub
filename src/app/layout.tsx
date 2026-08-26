@@ -116,10 +116,7 @@ export default function RootLayout({
                     {/* Notification Bell (Mobile & Desktop) */}
                     <NotificationBell />
 
-                    {/* Desktop Sign In */}
-                    <button className="hidden lg:flex bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-sm shadow-emerald-600/20 transition-all text-sm ml-2">
-                      Sign In
-                    </button>
+                    {/* Removed Sign In button per user request */}
                     
                     {/* Mobile Hamburger (Now moved to Bottom Nav, but keeping a simplified one for settings fallback if needed, or remove it entirely) */}
                     {/* We are removing MobileMenu component here since we have BottomNav! */}
