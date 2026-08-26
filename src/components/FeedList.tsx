@@ -87,28 +87,29 @@ export default function FeedList({
       <div className="mb-6 space-y-4">
         
         {/* Search Bar & Dropdowns */}
-        <div className="flex flex-col md:flex-row gap-3">
-          <div className="relative flex-1 flex gap-2">
-            <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-slate-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search jobs or organizations..."
-                value={search}
-                onChange={(e) => handleFilterChange(setSearch, e.target.value)}
-                className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition"
-              />
+        <div className="flex flex-col gap-3">
+          {/* Top Row: Prominent Search Input */}
+          <div className="relative w-full">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-slate-400" />
             </div>
-            
-            <Link href="/ai-match" className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold px-4 py-3 rounded-xl transition shadow-sm text-sm shrink-0 group">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-              <span className="hidden sm:inline">AI Match</span>
-            </Link>
+            <input
+              type="text"
+              placeholder="Search jobs, exams, or organizations..."
+              value={search}
+              onChange={(e) => handleFilterChange(setSearch, e.target.value)}
+              className="block w-full pl-12 pr-4 py-3.5 border-2 border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-base shadow-sm transition"
+            />
           </div>
           
-          <div className="grid grid-cols-2 md:flex flex-wrap gap-2 w-full md:w-auto mt-2 md:mt-0">
+          {/* Bottom Row: AI Match & Dropdowns */}
+          <div className="flex flex-col md:flex-row gap-2 justify-end w-full">
+            <Link href="/ai-match" className="flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-sm text-sm shrink-0 group w-full md:w-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+              <span>AI Match</span>
+            </Link>
+            
+            <div className="grid grid-cols-2 md:flex md:w-auto gap-2 w-full">
             <select
               value={district}
               onChange={(e) => handleFilterChange(setDistrict, e.target.value)}
@@ -180,6 +181,7 @@ export default function FeedList({
             </select>
           </div>
         </div>
+      </div>
 
         {/* Filter Pills */}
         {!hideFilters && (
@@ -256,18 +258,3 @@ export default function FeedList({
     </div>
   );
 }
-// Add the missing import
-import { Building2 } from "lucide-react";
-        {/* Global Safety Banner */}
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 rounded-xl p-4 mb-6 flex items-start gap-3">
-          <div className="bg-amber-100 dark:bg-amber-900/50 p-2 rounded-lg shrink-0 mt-0.5">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-          </div>
-          <div className="flex-1">
-            <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300 mb-1">Safety & Fraud Alert</h4>
-            <p className="text-xs text-amber-700 dark:text-amber-400/80 leading-relaxed">
-              AssamJobs Hub never asks for money to provide jobs. Be cautious of fraudulent calls or emails demanding payment for recruitment. Verify official notifications before applying.
-            </p>
-          </div>
-        </div>
-

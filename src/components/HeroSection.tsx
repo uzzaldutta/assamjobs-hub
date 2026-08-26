@@ -217,6 +217,9 @@ export default function HeroSection() {
           <Link href="/?search=ADRE" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">ADRE</Link>
           <Link href="/?search=Assam+Police" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">Assam Police</Link>
           <Link href="/?search=APSC" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">APSC</Link>
+          <Link href="/?search=TET" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">TET</Link>
+          <Link href="/?search=DHS" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">DHS</Link>
+          <Link href="/?search=Bank" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">Bank</Link>
           <Link href="/private-jobs" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">Private Jobs</Link>
         </div>
 
