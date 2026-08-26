@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
-import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search } from "lucide-react";
+import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText } from "lucide-react";
 
 export default function DesktopNav() {
   const { t } = useLanguage();
@@ -19,7 +19,6 @@ export default function DesktopNav() {
           <Link href="/govt-jobs" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_govt")}</Link>
           <Link href="/private-jobs" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_private")}</Link>
           <Link href="/admissions" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_admissions")}</Link>
-          <Link href="/tenders" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">Tenders</Link>
         </div>
       </div>
 
@@ -43,6 +42,11 @@ export default function DesktopNav() {
       {/* Study Materials */}
       <Link href="/study-materials" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
         <BookOpen size={16} /> {t("nav_study")}
+      </Link>
+
+      {/* Tenders */}
+      <Link href="/tenders" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+        <FileText size={16} /> Tenders
       </Link>
 
       {/* Tools Dropdown */}
