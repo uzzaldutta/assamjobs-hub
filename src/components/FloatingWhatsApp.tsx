@@ -21,7 +21,7 @@ export default function FloatingWhatsApp() {
       href="https://whatsapp.com/channel/0029VaA2B5m9MF92" // Dummy/Placeholder WhatsApp link
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-50 flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 px-4 rounded-full shadow-2xl hover:bg-[#128C7E] hover:scale-105 transition-all animate-in slide-in-from-bottom-8 fade-in duration-700"
+      className="fixed top-1/2 -translate-y-1/2 right-2 md:right-4 z-50 flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 px-4 rounded-full shadow-2xl hover:bg-[#128C7E] hover:scale-105 transition-all animate-in slide-in-from-right-8 fade-in duration-700"
     >
       <div className="relative flex h-3 w-3 absolute -top-1 -right-1">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
