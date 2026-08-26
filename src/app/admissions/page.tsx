@@ -1,5 +1,6 @@
 import FeedList from "@/components/FeedList";
 import RecentMarquee from "@/components/RecentMarquee";
+import AdSidebar from "@/components/AdSidebar";
 import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -38,11 +39,17 @@ export default async function AdmissionsPage() {
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
         <RecentMarquee jobs={allAdmissions} title="Recent Admissions" />
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-slate-800 dark:text-slate-100">All-India & Assam Admissions</h3>
+        <div className="px-4 py-8 max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 flex flex-col">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-slate-800 dark:text-slate-100">All-India & Assam Admissions</h3>
+              </div>
+              <FeedList initialJobs={allAdmissions} defaultFilter="ADMISSION" hideFilters={true} />
+            </div>
+            <AdSidebar />
+          </div>
         </div>
-        {/* Pass defaultFilter as "ADMISSION" to ensure it matches the tag in FeedList */}
-        <FeedList initialJobs={allAdmissions} defaultFilter="ADMISSION" hideFilters={true} />
       </div>
     </div>
   );

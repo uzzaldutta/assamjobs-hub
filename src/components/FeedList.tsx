@@ -226,7 +226,7 @@ export default function FeedList({
 
       {/* Results List Scrollable Box */}
       <div className="max-h-[700px] overflow-y-auto pr-2 pb-4 border-t border-slate-100 dark:border-slate-800 pt-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 md:gap-4">
         {visibleJobs.length > 0 ? (
           <>
             {visibleJobs.map((job) => (

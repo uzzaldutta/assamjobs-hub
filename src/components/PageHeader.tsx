@@ -15,6 +15,16 @@ interface PageHeaderProps {
 export default function PageHeader({ title, subtitle, theme, showSearch, onSearch }: PageHeaderProps) {
   const router = useRouter();
   
+  const handleBack = () => {
+    // If there is browser history within the app, go back. 
+    // Otherwise (e.g. opened a direct link), go to home to avoid doing nothing.
+    if (window.history.length > 2) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+  
   // Theme dictionaries
   const themes = {
     blue: {
@@ -50,7 +60,7 @@ export default function PageHeader({ title, subtitle, theme, showSearch, onSearc
       <div className="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         
         <div className="flex items-start gap-4">
-          <button onClick={() => router.back()} className="mt-1 p-2 bg-white/50 dark:bg-slate-800/50 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-colors backdrop-blur-sm shrink-0">
+          <button onClick={handleBack} className="mt-1 p-2 bg-white/50 dark:bg-slate-800/50 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-all active:scale-90 active:bg-white dark:active:bg-slate-700 backdrop-blur-sm shrink-0">
             <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
           </button>
           <div>

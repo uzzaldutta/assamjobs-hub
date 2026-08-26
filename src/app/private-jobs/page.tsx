@@ -1,5 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import FeedList from "@/components/FeedList";
+import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
 
 export const revalidate = 60;
@@ -53,7 +54,12 @@ export default async function PrivateJobsPage() {
         theme="green"
       />
       <div className="px-4 py-8 max-w-7xl mx-auto w-full">
-        <FeedList initialJobs={jobs} defaultFilter="PRIVATE" hideFilters={true} />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8 flex flex-col">
+            <FeedList initialJobs={jobs} defaultFilter="PRIVATE" hideFilters={true} />
+          </div>
+          <AdSidebar />
+        </div>
       </div>
     </div>
   );

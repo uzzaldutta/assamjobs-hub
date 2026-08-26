@@ -1,5 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import TendersDashboard from "@/components/TendersDashboard";
+import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
 
 export const revalidate = 60;
@@ -61,7 +62,14 @@ export default async function TendersPage() {
         subtitle="Latest e-Procurement notices and active tenders from Govt of Assam"
         theme="blue"
       />
-      <TendersDashboard initialTenders={allTenders} />
+      <div className="px-4 py-8 max-w-7xl mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8 flex flex-col">
+            <TendersDashboard initialTenders={allTenders} />
+          </div>
+          <AdSidebar />
+        </div>
+      </div>
     </div>
   );
 }

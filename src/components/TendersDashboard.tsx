@@ -23,7 +23,7 @@ export default function TendersDashboard({ initialTenders }: { initialTenders: a
   });
 
   return (
-    <div className="max-w-7xl mx-auto w-full px-4 py-8">
+    <div className="w-full">
       
       {/* Professional Filters */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 mb-8 shadow-sm">

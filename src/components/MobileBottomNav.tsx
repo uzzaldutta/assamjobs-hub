@@ -23,31 +23,31 @@ export default function MobileBottomNav() {
       <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe z-[60] shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
         <div className="flex justify-around items-center h-16 px-2 relative">
           
-          <Link href="/" onClick={handleHomeClick} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${pathname === "/" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <Link href="/" onClick={handleHomeClick} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${pathname === "/" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
             <Home size={20} className={pathname === "/" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
-            <span className="text-[10px] font-bold">Home</span>
+            <span className="text-[10px] font-bold">{t("nav_home")}</span>
           </Link>
 
-          <button onClick={() => setActivePopup(activePopup === "jobs" ? null : "jobs")} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${activePopup === "jobs" || pathname.includes("/jobs") ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <button onClick={() => setActivePopup(activePopup === "jobs" ? null : "jobs")} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${activePopup === "jobs" || pathname.includes("/jobs") ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
             <Briefcase size={20} className={activePopup === "jobs" || pathname.includes("/jobs") ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
-            <span className="text-[10px] font-bold">Jobs</span>
+            <span className="text-[10px] font-bold">{t("nav_jobs")}</span>
           </button>
 
-          <Link href="/results" onClick={() => setActivePopup(null)} className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+          <Link href="/results" onClick={() => setActivePopup(null)} className="flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
             <div className={`p-2 rounded-full shadow-lg -mt-5 transition-colors ${pathname.includes("/results") ? "bg-emerald-700 text-white shadow-emerald-600/40 scale-110" : "bg-emerald-600 text-white shadow-emerald-500/30 hover:bg-emerald-700"}`}>
               <ClipboardList size={20} />
             </div>
-            <span className={`text-[10px] font-bold mt-0.5 ${pathname.includes("/results") ? "text-emerald-600 dark:text-emerald-400" : ""}`}>Results</span>
+            <span className={`text-[10px] font-bold mt-0.5 ${pathname.includes("/results") ? "text-emerald-600 dark:text-emerald-400" : ""}`}>{t("nav_results")}</span>
           </Link>
 
-          <Link href="/tenders" onClick={() => setActivePopup(null)} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${pathname === "/tenders" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <Link href="/tenders" onClick={() => setActivePopup(null)} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${pathname === "/tenders" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
             <FileText size={20} className={pathname === "/tenders" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
-            <span className="text-[10px] font-bold">Tenders</span>
+            <span className="text-[10px] font-bold">{t("nav_tenders")}</span>
           </Link>
 
-          <button onClick={() => setActivePopup(activePopup === "more" ? null : "more")} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${activePopup === "more" || pathname === "/settings" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+          <button onClick={() => setActivePopup(activePopup === "more" ? null : "more")} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${activePopup === "more" || pathname === "/settings" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
             <Menu size={20} className={activePopup === "more" || pathname === "/settings" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
-            <span className="text-[10px] font-bold">More</span>
+            <span className="text-[10px] font-bold">{t("nav_more")}</span>
           </button>
 
         </div>

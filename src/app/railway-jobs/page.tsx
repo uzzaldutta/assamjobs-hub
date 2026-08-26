@@ -5,14 +5,14 @@ import { supabase } from "@/lib/supabase";
 
 export const revalidate = 60;
 
-export default async function GovtJobsPage() {
+export default async function RailwayJobsPage() {
   let jobs: any[] = [];
   
   try {
     const { data } = await supabase
       .from('jobs')
       .select('*')
-      .eq('job_type', 'GOVERNMENT')
+      .eq('job_type', 'RAILWAY')
       .order('scraped_at', { ascending: false });
       
     if (data) {
@@ -37,26 +37,17 @@ export default async function GovtJobsPage() {
     return true;
   });
 
-  // Filter out non-job spam/promotional posts scraped by accident
-  const spamKeywords = ["bio-data maker", "scheme", "merit award", "scholarship", "whatsapp group", "telegram", "join our"];
-  jobs = jobs.filter(job => {
-    if (!job.title) return false;
-    const lowerTitle = job.title.toLowerCase();
-    return !spamKeywords.some(keyword => lowerTitle.includes(keyword));
-  });
-
-
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
       <PageHeader 
-        title="Government Jobs" 
-        subtitle="Latest Govt Jobs in Assam, APSC, ADRE, and Central Govt Notifications."
-        theme="blue"
+        title="Railway Jobs" 
+        subtitle="Latest RRB, RRC, and NFR Railway Recruitment Notifications"
+        theme="orange"
       />
       <div className="px-4 py-8 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 flex flex-col">
-            <FeedList initialJobs={jobs} defaultFilter="GOVERNMENT" hideFilters={true} />
+            <FeedList initialJobs={jobs} defaultFilter="RAILWAY" hideFilters={true} />
           </div>
           <AdSidebar />
         </div>

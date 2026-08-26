@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
-import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText } from "lucide-react";
+import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home } from "lucide-react";
 
 export default function DesktopNav() {
   const { t } = useLanguage();
@@ -10,10 +10,15 @@ export default function DesktopNav() {
   return (
     <nav className="hidden lg:flex items-center gap-6 font-semibold text-sm text-slate-700 dark:text-slate-200">
       
+      {/* Home */}
+      <Link href="/" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+        <Home size={16} /> {t("nav_home")}
+      </Link>
+
       {/* Jobs Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
-          <Briefcase size={16} /> Jobs <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+          <Briefcase size={16} /> {t("nav_jobs")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
           <Link href="/govt-jobs" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_govt")}</Link>
@@ -25,7 +30,7 @@ export default function DesktopNav() {
       {/* Exams Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
-          <GraduationCap size={16} /> Exams <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+          <GraduationCap size={16} /> {t("nav_exams")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
           <Link href="/admit-cards" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_admit")}</Link>
@@ -46,13 +51,13 @@ export default function DesktopNav() {
 
       {/* Tenders */}
       <Link href="/tenders" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
-        <FileText size={16} /> Tenders
+        <FileText size={16} /> {t("nav_tenders")}
       </Link>
 
       {/* Tools Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
-          <Wrench size={16} /> Tools <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+          <Wrench size={16} /> {t("nav_tools")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
           <Link href="/tools/career-advisor" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">AI Career Advisor</Link>
@@ -65,7 +70,7 @@ export default function DesktopNav() {
 
       {/* Calendar */}
       <Link href="/calendar" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
-        <CalendarDays size={16} /> Exam Calendar
+        <CalendarDays size={16} /> {t("nav_calendar")}
       </Link>
 
     </nav>

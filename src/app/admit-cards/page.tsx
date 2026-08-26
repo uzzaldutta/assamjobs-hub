@@ -1,6 +1,7 @@
 import PageHeader from "@/components/PageHeader";
 import FeedList from "@/components/FeedList";
 import RecentMarquee from "@/components/RecentMarquee";
+import AdSidebar from "@/components/AdSidebar";
 import { CreditCard } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -53,10 +54,17 @@ export default async function AdmitCardsPage() {
 
       <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
         <RecentMarquee jobs={allAdmitCards} title="Recent Admit Cards" />
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-slate-800 dark:text-slate-100">Latest Admit Cards</h3>
+        <div className="px-4 py-8 max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 flex flex-col">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-slate-800 dark:text-slate-100">Latest Admit Cards</h3>
+              </div>
+              <FeedList initialJobs={allAdmitCards} defaultFilter="EXAM" hideFilters={true} />
+            </div>
+            <AdSidebar />
+          </div>
         </div>
-        <FeedList initialJobs={allAdmitCards} defaultFilter="EXAM" hideFilters={true} />
       </div>
     </div>
   );
