@@ -84,7 +84,7 @@ export default function HeroSection() {
 
   return (
     <div 
-      className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 px-5 pt-6 pb-8 md:pt-10 md:pb-10 rounded-[2rem] shadow-sm relative z-0 md:mt-4 overflow-hidden transition-all duration-500"
+      className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 px-4 pt-4 pb-6 md:pt-10 md:pb-10 rounded-[2rem] shadow-sm relative z-0 md:mt-4 overflow-hidden transition-all duration-500"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -105,7 +105,7 @@ export default function HeroSection() {
       )}
 
       <div className="relative z-20 flex flex-col items-center text-center max-w-4xl mx-auto group">
-        <div className="w-full relative min-h-[220px] md:min-h-[200px] flex flex-col items-center justify-center">
+        <div className="w-full relative min-h-[170px] md:min-h-[200px] flex flex-col items-center justify-center">
           {banners.map((banner, idx) => (
             <div 
               key={banner.id}
