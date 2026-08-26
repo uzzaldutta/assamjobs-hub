@@ -187,7 +187,7 @@ export default function RootLayout({
                     <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2">
                       <Sparkles className="text-indigo-500" size={20} /> Featured Applicant Tools
                     </h3>
-                    <div className="flex overflow-x-auto pb-4 gap-4 snap-x hide-scrollbar">
+                    <div className="flex overflow-x-auto pb-4 gap-4 snap-x">
                       <Link href="/tools/standard-form" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group">
                         <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
@@ -212,6 +212,8 @@ export default function RootLayout({
                         <GraduationCap className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">CGPA to %</span>
                       </Link>
+                      {/* Invisible spacer to prevent last item from cutting off */}
+                      <div className="shrink-0 w-2 snap-end" aria-hidden="true"></div>
                     </div>
                   </div>
                 </main>
