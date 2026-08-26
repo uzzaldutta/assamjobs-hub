@@ -49,6 +49,45 @@ export default function HeroSection() {
   const [banners, setBanners] = useState<Banner[]>(defaultBanners);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
+    setIsDragging(true);
+    if ('touches' in e) {
+      setTouchStart(e.touches[0].clientX);
+    } else {
+      setTouchStart((e as React.MouseEvent).clientX);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
+    if (!isDragging) return;
+    if ('touches' in e) {
+      setTouchEnd(e.touches[0].clientX);
+    } else {
+      setTouchEnd((e as React.MouseEvent).clientX);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    } else if (isRightSwipe) {
+      setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
+    }
+    
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -105,7 +144,16 @@ export default function HeroSection() {
       )}
 
       <div className="relative z-20 flex flex-col items-center text-center max-w-4xl mx-auto group">
-        <div className="w-full relative min-h-[170px] md:min-h-[200px] flex flex-col items-center justify-center">
+        <div 
+          className="w-full relative min-h-[170px] md:min-h-[200px] flex flex-col items-center justify-center cursor-grab active:cursor-grabbing"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleTouchStart}
+          onMouseMove={handleTouchMove}
+          onMouseUp={handleTouchEnd}
+          onMouseLeave={handleTouchEnd}
+        >
           {banners.map((banner, idx) => (
             <div 
               key={banner.id}
