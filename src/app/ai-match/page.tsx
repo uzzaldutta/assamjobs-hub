@@ -93,7 +93,7 @@ export default function AIMatchPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
             <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
               <FileText className="text-indigo-600 dark:text-indigo-400" />
-              Your Resume
+              Your Qualifications & Experience
             </h2>
             
             <div>
@@ -118,7 +118,7 @@ export default function AIMatchPage() {
           <textarea
             value={resumeText}
             onChange={(e) => setResumeText(e.target.value)}
-            placeholder="Or paste your resume text here... (skills, experience, education)"
+            placeholder="Type your qualifications, experience, skills, or paste your resume here..."
             className="w-full h-48 p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none mb-4"
           />
           <button 
