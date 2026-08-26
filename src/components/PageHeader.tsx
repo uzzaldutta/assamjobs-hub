@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, Search } from "lucide-react";
 
 interface PageHeaderProps {
@@ -10,6 +13,7 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ title, subtitle, theme, showSearch, onSearch }: PageHeaderProps) {
+  const router = useRouter();
   
   // Theme dictionaries
   const themes = {
@@ -46,9 +50,9 @@ export default function PageHeader({ title, subtitle, theme, showSearch, onSearc
       <div className="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         
         <div className="flex items-start gap-4">
-          <Link href="/" className="mt-1 p-2 bg-white/50 dark:bg-slate-800/50 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-colors backdrop-blur-sm shrink-0">
+          <button onClick={() => router.back()} className="mt-1 p-2 bg-white/50 dark:bg-slate-800/50 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-colors backdrop-blur-sm shrink-0">
             <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
-          </Link>
+          </button>
           <div>
             <h1 className={`text-2xl md:text-3xl font-black ${selectedTheme.text} uppercase tracking-tight`}>
               {title}
