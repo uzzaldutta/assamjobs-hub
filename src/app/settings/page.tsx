@@ -1,6 +1,6 @@
 "use client";
 
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/LanguageContext";
 import { Moon, Sun, Globe, Bell, Shield, Info, ChevronRight, Lock } from "lucide-react";
