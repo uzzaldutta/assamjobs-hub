@@ -19,7 +19,8 @@ export default function AdminPage() {
   
   // Banner Form State
   const [bannerFormData, setBannerFormData] = useState({
-    headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0
+    headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0,
+    badge_text: "", badge_color: "indigo", secondary_cta_text: "", secondary_cta_link: "", image_url: ""
   });
 
   const fetchBanners = async () => {
@@ -146,7 +147,7 @@ export default function AdminPage() {
       
       setStatus("success");
       setEditingBanner(null);
-      setBannerFormData({ headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0 });
+      setBannerFormData({ headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0, badge_text: "", badge_color: "indigo", secondary_cta_text: "", secondary_cta_link: "", image_url: "" });
       fetchBanners();
       setTimeout(() => setStatus("idle"), 3000);
     } catch (error) {
@@ -292,12 +293,19 @@ export default function AdminPage() {
                 <input required placeholder="Gradient From (e.g. from-blue-600)" value={bannerFormData.gradient_from} onChange={e => setBannerFormData({...bannerFormData, gradient_from: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
                 <input required placeholder="Gradient To (e.g. to-indigo-500)" value={bannerFormData.gradient_to} onChange={e => setBannerFormData({...bannerFormData, gradient_to: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
                 <input type="number" required placeholder="Order Index" value={bannerFormData.order_index} onChange={e => setBannerFormData({...bannerFormData, order_index: parseInt(e.target.value)})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
-                <div className="flex items-center gap-4">
+                
+                <input placeholder="Badge Text (Optional)" value={bannerFormData.badge_text || ""} onChange={e => setBannerFormData({...bannerFormData, badge_text: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input placeholder="Badge Color (e.g. red, emerald, indigo)" value={bannerFormData.badge_color || ""} onChange={e => setBannerFormData({...bannerFormData, badge_color: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input placeholder="Secondary Button Text (Optional)" value={bannerFormData.secondary_cta_text || ""} onChange={e => setBannerFormData({...bannerFormData, secondary_cta_text: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input placeholder="Secondary Button Link (Optional)" value={bannerFormData.secondary_cta_link || ""} onChange={e => setBannerFormData({...bannerFormData, secondary_cta_link: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full" />
+                <input placeholder="Image URL (Optional)" value={bannerFormData.image_url || ""} onChange={e => setBannerFormData({...bannerFormData, image_url: e.target.value})} className="p-3 border rounded-xl dark:bg-slate-950 dark:border-slate-700 w-full md:col-span-2" />
+
+                <div className="flex items-center gap-4 md:col-span-2">
                   <button type="submit" className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl w-full">
                     {status === "loading" ? "Saving..." : (editingBanner ? "Update Banner" : "Create Banner")}
                   </button>
                   {editingBanner && (
-                    <button type="button" onClick={() => { setEditingBanner(null); setBannerFormData({ headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0 }); }} className="text-slate-500 font-bold">Cancel</button>
+                    <button type="button" onClick={() => { setEditingBanner(null); setBannerFormData({ headline: "", subtext: "", cta_text: "", cta_link: "", gradient_from: "from-blue-600", gradient_to: "to-indigo-500", order_index: 0, badge_text: "", badge_color: "indigo", secondary_cta_text: "", secondary_cta_link: "", image_url: "" }); }} className="text-slate-500 font-bold">Cancel</button>
                   )}
                 </div>
               </form>

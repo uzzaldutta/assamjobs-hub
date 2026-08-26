@@ -1,4 +1,6 @@
-"use client";
+import re
+
+content = """"use client";
 
 import Link from "next/link";
 import { Search, ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
@@ -185,3 +187,8 @@ export default function HeroSection() {
     </div>
   );
 }
+"""
+
+with open("src/components/HeroSection.tsx", "w", encoding="utf-8") as f:
+    f.write(content)
+print("Updated HeroSection")
