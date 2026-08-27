@@ -1,10 +1,11 @@
-import PageHeader from "@/components/PageHeader";
+﻿import PageHeader from "@/components/PageHeader";
 import FeedList from "@/components/FeedList";
 import RecentMarquee from "@/components/RecentMarquee";
 import AdSidebar from "@/components/AdSidebar";
 import { CreditCard } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { deduplicateJobs } from "@/lib/dedup";
 
 export const revalidate = 60;
 
@@ -34,15 +35,10 @@ export default async function AdmitCardsPage() {
     console.error("Could not load from Supabase", e);
   }
 
+  // Smart deduplication: org + vacancies + lastDate + publishedDate
+  allAdmitCards = deduplicateJobs(allAdmitCards);
 
-  // Deduplicate array (keeps the first occurrence based on Title + Organization)
-  const seenHashes = new Set();
-  allAdmitCards = allAdmitCards.filter(job => {
-    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
-    if (seenHashes.has(hash)) return false;
-    seenHashes.add(hash);
-    return true;
-  });
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -69,3 +65,4 @@ export default async function AdmitCardsPage() {
     </div>
   );
 }
+

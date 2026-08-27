@@ -1,7 +1,8 @@
-import PageHeader from "@/components/PageHeader";
+﻿import PageHeader from "@/components/PageHeader";
 import FeedList from "@/components/FeedList";
 import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
+import { deduplicateJobs } from "@/lib/dedup";
 
 export const revalidate = 60;
 
@@ -28,14 +29,9 @@ export default async function PrivateJobsPage() {
     console.error("Could not load from Supabase", e);
   }
 
-  // Deduplicate array
-  const seenHashes = new Set();
-  jobs = jobs.filter(job => {
-    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
-    if (seenHashes.has(hash)) return false;
-    seenHashes.add(hash);
-    return true;
-  });
+  // Smart deduplication: org + vacancies + lastDate + publishedDate
+  jobs = deduplicateJobs(jobs);
+
 
   // Filter out non-job spam/promotional posts scraped by accident
   const spamKeywords = ["bio-data maker", "scheme", "merit award", "scholarship", "whatsapp group", "telegram", "join our"];
@@ -64,3 +60,4 @@ export default async function PrivateJobsPage() {
     </div>
   );
 }
+

@@ -8,6 +8,7 @@ import AdSidebar from "@/components/AdSidebar";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { deduplicateJobs } from "@/lib/dedup";
 
 export const revalidate = 60; // Revalidate cache every 60 seconds
 
@@ -49,18 +50,7 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
   // Combine live jobs with mock jobs, ensuring live jobs appear first
   const liveJobIds = new Set(liveJobs.map(j => String(j.id)));
   const filteredMockJobs = mockJobs.filter(j => !liveJobIds.has(String(j.id)));
-  let allJobs = [...liveJobs, ...filteredMockJobs];
-  
-  // Deduplicate array (keeps the first occurrence based on Title + Organization)
-  const seenHashes = new Set();
-  allJobs = allJobs.filter(job => {
-    const hash = `${job.title}_${job.organization}`.toLowerCase().replace(/\s+/g, '');
-    if (seenHashes.has(hash)) {
-      return false;
-    }
-    seenHashes.add(hash);
-    return true;
-  });
+  let allJobs = deduplicateJobs([...liveJobs, ...filteredMockJobs]);
 
   // Filter out non-job spam/promotional posts scraped by accident
   const spamKeywords = ["bio-data maker", "scheme", "merit award", "scholarship", "whatsapp group", "telegram", "join our"];
