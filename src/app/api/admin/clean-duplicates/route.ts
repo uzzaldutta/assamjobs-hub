@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     // 1. Fetch all jobs ordered by scraped_at ascending so we keep the OLDEST (first scraped) entry
     const { data, error } = await supabase
       .from('jobs')
-      .select('id, organization, vacancies, last_date, scraped_at, created_at, title')
+      .select('id, organization, vacancies, last_date, scraped_at, title')
       .order('scraped_at', { ascending: true });
 
     if (error) throw error;
