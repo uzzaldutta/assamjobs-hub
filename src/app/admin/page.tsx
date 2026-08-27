@@ -121,6 +121,26 @@ export default function AdminPage() {
     }
   };
 
+  const handleCleanDuplicates = async () => {
+    if (!confirm("Are you sure you want to run the smart dedup cleaner? This will permanently delete duplicate entries from the database.")) return;
+    
+    try {
+      const res = await fetch("/api/admin/clean-duplicates", {
+        method: "GET"
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        alert(data.message);
+        fetchJobs();
+      } else {
+        alert("Failed to clean duplicates: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("An error occurred while cleaning duplicates.");
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -340,7 +360,10 @@ export default function AdminPage() {
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
               <h3 className="font-bold text-slate-800 dark:text-slate-200">All Database Entries</h3>
-              <button onClick={fetchJobs} className="text-sm text-indigo-600 font-medium hover:underline">Refresh</button>
+              <div className="flex gap-4">
+                <button onClick={handleCleanDuplicates} className="text-sm text-red-600 font-medium hover:underline flex items-center gap-1"><Trash2 size={14}/> Clean Duplicates</button>
+                <button onClick={fetchJobs} className="text-sm text-indigo-600 font-medium hover:underline">Refresh</button>
+              </div>
             </div>
             
             <div className="overflow-x-auto">
