@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, FileText, Menu, X, Building2, ClipboardList, GraduationCap, Wrench, Settings } from "lucide-react";
+import { Home, Briefcase, FileText, Menu, X, Building2, ClipboardList, GraduationCap, Wrench, Settings, BookCheck } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import { useState } from "react";
 
@@ -40,9 +40,9 @@ export default function MobileBottomNav() {
             <span className={`text-[10px] font-bold mt-0.5 ${pathname.includes("/results") ? "text-emerald-600 dark:text-emerald-400" : ""}`}>{t("nav_results")}</span>
           </Link>
 
-          <Link href="/tenders" onClick={() => setActivePopup(null)} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${pathname === "/tenders" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
-            <FileText size={20} className={pathname === "/tenders" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
-            <span className="text-[10px] font-bold">{t("nav_tenders")}</span>
+          <Link href="/mock-tests" onClick={() => setActivePopup(null)} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${pathname.includes("/mock-tests") ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
+            <BookCheck size={20} className={pathname.includes("/mock-tests") ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+            <span className="text-[10px] font-bold">{t("nav_mock")}</span>
           </Link>
 
           <button onClick={() => setActivePopup(activePopup === "more" ? null : "more")} className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 rounded-xl ${activePopup === "more" || pathname === "/settings" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"}`}>
