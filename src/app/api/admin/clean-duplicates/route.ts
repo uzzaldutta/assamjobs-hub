@@ -40,7 +40,7 @@ export async function GET(request: Request) {
       const org = (job.organization || '').toLowerCase().replace(/\s+/g, '');
       const vacancies = (job.vacancies || '').toString().toLowerCase().replace(/\s+/g, '');
       const lastDate = (job.last_date || '').toString().trim();
-      const rawPublished = (job.scraped_at || job.created_at || '').toString();
+      const rawPublished = (job.scraped_at || '').toString();
       const publishedDate = rawPublished ? rawPublished.split('T')[0] : '';
 
       let hash: string;

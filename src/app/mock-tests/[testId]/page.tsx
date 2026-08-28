@@ -67,9 +67,9 @@ export default function DynamicMockTestPage() {
       const finalScore = calculateScore();
       saveResult({
         testId: testId,
+        testName: testMeta?.title || testId,
         score: finalScore,
-        totalQuestions: QUESTIONS.length,
-        timestamp: Date.now()
+        totalQuestions: QUESTIONS.length
       });
       setFinished(true);
     }
