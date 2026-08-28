@@ -37,7 +37,12 @@ export default function FeedList({
     // 3. Qualification filter
     const matchesQualification = qualification === "ALL" || (job.qualification || "").toLowerCase().includes(qualification.toLowerCase());
 
-    // 4. Category filter
+    // 4. Spam / Irrelevant feed filter
+    const titleLower = (job.title || "").toLowerCase();
+    const isSpam = titleLower.includes("jobassam") || titleLower.includes("image combiner tool") || titleLower.includes("calculator tool");
+    if (isSpam) return false;
+
+    // 5. Category filter
     let matchesCategory = true;
     if (filter !== "ALL") {
       const jobType = job.type || job.job_type || "UNKNOWN";
