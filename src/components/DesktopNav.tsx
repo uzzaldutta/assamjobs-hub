@@ -11,7 +11,12 @@ export default function DesktopNav() {
     <nav className="hidden lg:flex items-center gap-6 font-semibold text-sm text-slate-700 dark:text-slate-200">
       
       {/* Home */}
-      <Link href="/" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+      <Link href="/" onClick={(e) => {
+        if (typeof window !== 'undefined' && window.location.pathname === '/') {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }} className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
         <Home size={16} /> {t("nav_home")}
       </Link>
 

@@ -95,7 +95,12 @@ export default function RootLayout({
                 <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center h-16 md:h-20">
                   
                   {/* Logo */}
-                  <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
+                  <Link href="/" onClick={(e) => {
+                    if (typeof window !== 'undefined' && window.location.pathname === '/') {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }} className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
                     <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-10 md:h-14 w-auto object-contain drop-shadow-sm" />
                   </Link>
 

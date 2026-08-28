@@ -11,9 +11,10 @@ export default function MobileBottomNav() {
   const { t } = useLanguage();
   const [activePopup, setActivePopup] = useState<"jobs" | "more" | null>(null);
 
-  const handleHomeClick = () => {
+  const handleHomeClick = (e: React.MouseEvent) => {
     setActivePopup(null);
     if (pathname === "/") {
+      e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
