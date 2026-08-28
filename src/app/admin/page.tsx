@@ -483,6 +483,70 @@ export default function AdminPage() {
                 <AlertCircle size={18} /> Failed to publish. Check console.
               </div>
             )}
+            <div className="md:col-span-2 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                  <Shield size={18} />
+                </div>
+                <h3 className="font-bold text-lg">AI Auto-Fill from URL</h3>
+              </div>
+              <p className="text-sm text-slate-500 mb-4">Paste a link to a job posting. The AI will scrape the page and instantly fill out this form for you.</p>
+              <div className="flex gap-3">
+                <input 
+                  type="url" 
+                  id="autoFillUrl"
+                  placeholder="https://example.com/job-post" 
+                  className="flex-1 p-3 border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 rounded-xl"
+                />
+                <button 
+                  type="button"
+                  id="autoFillBtn"
+                  onClick={async () => {
+                    const urlInput = document.getElementById('autoFillUrl') as HTMLInputElement;
+                    const btn = document.getElementById('autoFillBtn') as HTMLButtonElement;
+                    if (!urlInput.value) return alert("Please enter a URL first.");
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = "Processing...";
+                    
+                    try {
+                      const res = await fetch("/api/admin/fetch-url", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${password}` },
+                        body: JSON.stringify({ url: urlInput.value })
+                      });
+                      
+                      const json = await res.json();
+                      if (res.ok && json.success) {
+                        setFormData({
+                          ...formData,
+                          title: json.data.title || "",
+                          organization: json.data.organization || "",
+                          job_type: json.data.job_type || formData.job_type,
+                          category: json.data.category || formData.category,
+                          vacancies: json.data.vacancies || "",
+                          district: json.data.district || "",
+                          ageLimit: json.data.ageLimit || "",
+                          qualification: json.data.qualification || "",
+                          apply_url: urlInput.value
+                        });
+                        alert("Successfully auto-filled from URL!");
+                      } else {
+                        alert("Failed: " + (json.error || "Unknown error"));
+                      }
+                    } catch (error) {
+                      alert("Network error connecting to AI.");
+                    }
+                    
+                    btn.disabled = false;
+                    btn.innerHTML = "Auto-Fill";
+                  }}
+                  className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition whitespace-nowrap"
+                >
+                  Auto-Fill
+                </button>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1 md:col-span-2">
