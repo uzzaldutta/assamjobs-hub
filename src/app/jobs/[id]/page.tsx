@@ -1,6 +1,7 @@
 import FraudWarningBanner from "@/components/FraudWarningBanner";
 import { Building2, MapPin, Users, Calendar, ArrowLeft, Share2, FileText, CheckCircle2, Sparkles } from "lucide-react";
 import ShareButtons from "@/components/ShareButtons";
+import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
@@ -175,7 +176,11 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-8 mb-4">
+          <AdBanner dataAdSlot="JOB_DETAIL_TOP_SLOT" />
+        </div>
+
+        <div className="mt-4">
           <div className="prose prose-indigo prose-sm sm:prose-base dark:prose-invert max-w-none text-slate-700 dark:text-slate-300
             prose-headings:text-indigo-950 dark:prose-headings:text-indigo-200 
             prose-h2:text-2xl prose-h2:font-extrabold prose-h2:border-b-2 prose-h2:border-indigo-100 dark:prose-h2:border-indigo-900/50 prose-h2:pb-2 prose-h2:mt-10

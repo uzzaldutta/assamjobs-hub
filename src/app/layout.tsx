@@ -14,6 +14,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import DesktopNav from "@/components/DesktopNav";
 import NotificationBell from "@/components/NotificationBell";
 import Script from "next/script";
+import AdBanner from "@/components/AdBanner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -170,6 +171,11 @@ export default function RootLayout({
                   <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
                     <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Get Job Alerts</h4>
                     <SubscribeForm />
+                  </div>
+
+                  {/* Sidebar Ad (Sticky) */}
+                  <div className="sticky top-24 pt-2">
+                    <AdBanner dataAdSlot="SIDEBAR_TALL_SLOT" className="min-h-[600px] w-full" />
                   </div>
                 </aside>
 

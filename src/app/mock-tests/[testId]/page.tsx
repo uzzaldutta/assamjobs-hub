@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useMockTests } from "@/hooks/useMockTests";
 import mockTestData from "@/data/mock-tests.json";
+import AdBanner from "@/components/AdBanner";
 
 export default function DynamicMockTestPage() {
   const params = useParams();
@@ -145,6 +146,8 @@ export default function DynamicMockTestPage() {
               </Link>
             </div>
           </div>
+
+          <AdBanner dataAdSlot="MOCK_TEST_RESULT_SLOT" className="mb-8 min-h-[250px]" />
 
           <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-6">Answer Review</h3>
           <div className="space-y-6">
