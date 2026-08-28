@@ -526,7 +526,7 @@ export default function AdminPage() {
                           category: json.data.category || formData.category,
                           vacancies: json.data.vacancies || "",
                           district: json.data.district || "",
-                          ageLimit: json.data.ageLimit || "",
+                          age_limit: json.data.ageLimit || "",
                           qualification: json.data.qualification || "",
                           apply_url: urlInput.value
                         });
