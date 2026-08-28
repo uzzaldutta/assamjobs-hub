@@ -34,8 +34,7 @@ export async function GET(request: Request) {
             job_type: 'RAILWAY',
             category: 'RAILWAY',
             official_pdf_url: absoluteUrl,
-            scraped_at: new Date().toISOString(),
-            status: 'ACTIVE'
+            scraped_at: new Date().toISOString()
           });
         }
       }

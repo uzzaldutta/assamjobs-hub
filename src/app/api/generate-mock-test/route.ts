@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req: Request) {
   try {
-    const { topic } = await req.json();
+    const { topic, numQuestions = 10 } = await req.json();
 
     if (!topic) {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 });
@@ -15,11 +15,10 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    // Use gemini-1.5-flash for speed and cost efficiency
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const prompt = `You are an expert exam setter for Indian Government jobs (especially Assam State Exams like ADRE, APSC, Assam Police).
-Generate a mock test of exactly 20 multiple choice questions on the following topic: "${topic}".
+Generate a mock test of exactly ${numQuestions} multiple choice questions on the following topic: "${topic}".
 The questions should be challenging, highly relevant to competitive exams, and strictly accurate.
 Format your output EXACTLY as a valid JSON array of objects, with no markdown formatting, no code blocks, and no extra text.
 Do NOT wrap the output in \`\`\`json. Just return the raw JSON array.

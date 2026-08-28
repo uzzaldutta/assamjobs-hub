@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, Loader2, CheckCircle2, XCircle, ArrowRight, BrainCircuit, RefreshCw, Trophy } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
@@ -14,6 +14,8 @@ interface Question {
 
 export default function AIMockTestGenerator() {
   const [topic, setTopic] = useState("");
+  const [numQuestions, setNumQuestions] = useState(10);
+  const [timeLimit, setTimeLimit] = useState(10); // in minutes
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -22,6 +24,23 @@ export default function AIMockTestGenerator() {
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [quizStarted, setQuizStarted] = useState(false);
+
+  // Timer Effect
+  useEffect(() => {
+    if (!quizStarted || showResults || questions.length === 0) return;
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          setShowResults(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [quizStarted, showResults, questions.length]);
 
   const generateTest = async () => {
     if (!topic.trim()) return;
@@ -32,12 +51,13 @@ export default function AIMockTestGenerator() {
     setCurrentQuestionIdx(0);
     setSelectedAnswers({});
     setShowResults(false);
+    setQuizStarted(false);
 
     try {
       const res = await fetch("/api/generate-mock-test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ topic, numQuestions }),
       });
 
       const data = await res.json();
@@ -47,6 +67,8 @@ export default function AIMockTestGenerator() {
       }
 
       setQuestions(data.questions);
+      setTimeLeft(timeLimit * 60);
+      setQuizStarted(true);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -104,21 +126,51 @@ export default function AIMockTestGenerator() {
               Enter an exam name (e.g. "ADRE Grade III") or a specific subject (e.g. "Assam History").
             </p>
 
-            <div className="flex flex-col md:flex-row gap-3 max-w-2xl mx-auto">
+            <div className="flex flex-col gap-4 max-w-2xl mx-auto">
               <input 
                 type="text" 
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., APSC CCE General Studies..."
-                className="flex-1 bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-4 px-6 text-lg font-medium text-slate-800 dark:text-slate-200 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all"
+                className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-4 px-6 text-lg font-medium text-slate-800 dark:text-slate-200 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all"
                 onKeyDown={(e) => { if (e.key === 'Enter') generateTest() }}
               />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-left space-y-1">
+                  <label className="text-xs font-bold text-slate-500 uppercase px-1">Questions</label>
+                  <select 
+                    value={numQuestions}
+                    onChange={(e) => setNumQuestions(Number(e.target.value))}
+                    className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 font-medium outline-none focus:border-indigo-500"
+                  >
+                    <option value={10}>10 Questions</option>
+                    <option value={20}>20 Questions</option>
+                    <option value={30}>30 Questions</option>
+                  </select>
+                </div>
+                <div className="text-left space-y-1">
+                  <label className="text-xs font-bold text-slate-500 uppercase px-1">Time Limit</label>
+                  <select 
+                    value={timeLimit}
+                    onChange={(e) => setTimeLimit(Number(e.target.value))}
+                    className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 font-medium outline-none focus:border-indigo-500"
+                  >
+                    <option value={5}>5 Minutes</option>
+                    <option value={10}>10 Minutes</option>
+                    <option value={15}>15 Minutes</option>
+                    <option value={20}>20 Minutes</option>
+                    <option value={30}>30 Minutes</option>
+                  </select>
+                </div>
+              </div>
+
               <button 
                 onClick={generateTest}
                 disabled={loading || !topic.trim()}
-                className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white font-bold px-8 py-4 rounded-xl transition shadow-md flex items-center justify-center gap-2 whitespace-nowrap"
+                className="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white font-bold px-8 py-4 rounded-xl transition shadow-md flex items-center justify-center gap-2"
               >
-                {loading ? <><Loader2 className="animate-spin" size={20} /> Crafting Test...</> : <><Sparkles size={20} /> Generate</>}
+                {loading ? <><Loader2 className="animate-spin" size={20} /> Crafting Test...</> : <><Sparkles size={20} /> Generate AI Mock Test</>}
               </button>
             </div>
             
@@ -133,9 +185,15 @@ export default function AIMockTestGenerator() {
               <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">
                 Question {currentQuestionIdx + 1} of {questions.length}
               </span>
-              <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 font-bold rounded-lg text-sm">
-                {topic}
-              </span>
+              <div className="flex gap-2">
+                <span className={`px-3 py-1 font-bold rounded-lg text-sm flex items-center gap-1.5 ${timeLeft < 60 ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                </span>
+                <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 font-bold rounded-lg text-sm truncate max-w-[150px]">
+                  {topic}
+                </span>
+              </div>
             </div>
 
             {/* Progress Bar */}

@@ -101,7 +101,7 @@ export default function RootLayout({
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                   }} className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
-                    <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-10 md:h-14 w-auto object-contain drop-shadow-sm" />
+                    <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-16 md:h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-normal dark:invert dark:hue-rotate-180" />
                   </Link>
 
                   {/* Desktop Navigation */}
