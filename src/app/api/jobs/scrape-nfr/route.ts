@@ -25,21 +25,36 @@ export async function GET(request: Request) {
     
     const jobs: any[] = [];
     
+    // Fetch Banned Keywords
+    const { data: bannedData } = await supabase
+      .from('jobs')
+      .select('title')
+      .eq('category', 'BANNED_KEYWORD');
+      
+    const bannedKeywords = bannedData ? bannedData.map(b => b.title.toLowerCase()) : [];
+    
     $('a').each((i, el) => {
       const text = $(el).text().replace(/\s+/g, ' ').trim();
       const href = $(el).attr('href');
       
       if (href && (href.includes('.pdf') || href.includes('uploads') || href.toLowerCase().includes('notice'))) {
         if (text.length > 10 && !jobs.some(j => j.title === text)) {
-          const absoluteUrl = href.startsWith('http') ? href : `https://nfr.indianrailways.gov.in/${href}`;
-          jobs.push({
-            title: text,
-            organization: 'Northeast Frontier Railway (NFR)',
-            job_type: 'RAILWAY',
-            category: 'RAILWAY',
-            official_pdf_url: absoluteUrl,
-            scraped_at: new Date().toISOString()
-          });
+          
+          // Spam check
+          const lowerTitle = text.toLowerCase();
+          const isSpam = bannedKeywords.some(keyword => lowerTitle.includes(keyword));
+          
+          if (!isSpam) {
+            const absoluteUrl = href.startsWith('http') ? href : `https://nfr.indianrailways.gov.in/${href}`;
+            jobs.push({
+              title: text,
+              organization: 'Northeast Frontier Railway (NFR)',
+              job_type: 'RAILWAY',
+              category: 'RAILWAY',
+              official_pdf_url: absoluteUrl,
+              scraped_at: new Date().toISOString()
+            });
+          }
         }
       }
     });

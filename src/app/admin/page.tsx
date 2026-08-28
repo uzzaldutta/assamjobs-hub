@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image } from "lucide-react";
+import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image, X } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -9,8 +9,10 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners" | "sync">("manage");
-
+  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners" | "sync" | "spam">("manage");
+  const [bannedKeywords, setBannedKeywords] = useState<any[]>([]);
+  const [newKeyword, setNewKeyword] = useState("");
+  const [spamStatus, setSpamStatus] = useState("");
 
   // CMS State
   const [banners, setBanners] = useState<any[]>([]);
@@ -138,6 +140,57 @@ export default function AdminPage() {
       }
     } catch (err) {
       alert("An error occurred while cleaning duplicates.");
+    }
+  };
+
+  const fetchBannedKeywords = async () => {
+    try {
+      const res = await fetch("/api/admin/spam-control");
+      const data = await res.json();
+      if (res.ok) setBannedKeywords(data.keywords || []);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) fetchBannedKeywords();
+  }, [isAuthenticated]);
+
+  const handleBlockKeyword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSpamStatus("loading");
+    try {
+      const res = await fetch("/api/admin/spam-control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keyword: newKeyword, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSpamStatus(`Success! Blocked "${newKeyword}" and deleted ${data.deletedCount} spam posts.`);
+        setNewKeyword("");
+        fetchBannedKeywords();
+        fetchJobs();
+      } else {
+        setSpamStatus("Error: " + data.error);
+      }
+    } catch (error) {
+      setSpamStatus("Error connecting to server.");
+    }
+    setTimeout(() => setSpamStatus(""), 5000);
+  };
+
+  const handleDeleteKeyword = async (id: string) => {
+    if (!confirm("Remove this keyword from the blocklist?")) return;
+    try {
+      await fetch(`/api/admin/spam-control?id=${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${password}` }
+      });
+      fetchBannedKeywords();
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -300,6 +353,9 @@ export default function AdminPage() {
           </button>
           <button onClick={() => setActiveTab("sync")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "sync" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
             <Shield size={16} /> Feed Sync
+          </button>
+          <button onClick={() => setActiveTab("spam")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "spam" ? "bg-white dark:bg-slate-700 shadow text-red-600 dark:text-red-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
+            <AlertCircle size={16} /> Spam Control
           </button>
         </div>
 
@@ -542,6 +598,62 @@ export default function AdminPage() {
                 >
                   Sync Adzuna API
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "spam" && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-red-200 dark:border-red-900/50 p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl">
+                  <AlertCircle size={24} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold">Spam Control & Blocklist</h2>
+                  <p className="text-slate-500 text-sm">Add keywords to block scrapers from adding them, and instantly delete existing ones.</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleBlockKeyword} className="flex gap-4 mb-8">
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. JobAssam, combiner tool..."
+                  value={newKeyword}
+                  onChange={(e) => setNewKeyword(e.target.value)}
+                  className="flex-1 p-3 border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 rounded-xl"
+                />
+                <button
+                  type="submit"
+                  disabled={spamStatus === "loading"}
+                  className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition"
+                >
+                  {spamStatus === "loading" ? "Processing..." : "Block & Purge"}
+                </button>
+              </form>
+
+              {spamStatus && spamStatus !== "loading" && (
+                <div className="mb-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-bold">
+                  {spamStatus}
+                </div>
+              )}
+
+              <h3 className="font-bold mb-4">Currently Blocked Keywords</h3>
+              <div className="flex flex-wrap gap-3">
+                {bannedKeywords.length === 0 && <span className="text-slate-500 text-sm">No blocked keywords.</span>}
+                {bannedKeywords.map((kw) => (
+                  <div key={kw.id} className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700">
+                    <span className="font-mono text-sm">{kw.title}</span>
+                    <button
+                      onClick={() => handleDeleteKeyword(kw.id)}
+                      className="text-slate-400 hover:text-red-500 transition ml-2"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

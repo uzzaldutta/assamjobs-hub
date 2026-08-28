@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchAdzunaJobs } from '@/lib/adzuna';
+import { supabase } from '@/lib/supabase';
 
 // To protect this route from arbitrary public execution, 
 // you would typically check for an Authorization header or a secret token here.
@@ -29,21 +30,48 @@ export async function GET(request: Request) {
     // 3. Fetch and map jobs
     const mappedJobs = await fetchAdzunaJobs(appId, appKey);
 
-    // 4. In a production environment, you would upsert these jobs into the database:
-    // e.g., using Prisma:
-    // for (const job of mappedJobs) {
-    //   await prisma.job.upsert({
-    //     where: { hash: job.hash },
-    //     update: {}, // Don't update if it already exists to preserve manual edits
-    //     create: job,
-    //   });
-    // }
+    // Fetch Banned Keywords
+    const { data: bannedData } = await supabase
+      .from('jobs')
+      .select('title')
+      .eq('category', 'BANNED_KEYWORD');
+      
+    const bannedKeywords = bannedData ? bannedData.map(b => b.title.toLowerCase()) : [];
+
+    let inserted = 0;
     
-    // For now, we just return the payload to prove the integration works
+    // Save to Supabase
+    for (const job of mappedJobs) {
+      // Spam Check
+      const lowerTitle = job.title.toLowerCase();
+      const isSpam = bannedKeywords.some(keyword => lowerTitle.includes(keyword));
+      
+      if (!isSpam) {
+        // Basic deduplication
+        const { data: existing } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('title', job.title)
+          .limit(1);
+          
+        if (!existing || existing.length === 0) {
+          await supabase.from('jobs').insert({
+            title: job.title,
+            organization: job.organization,
+            job_type: job.jobType,
+            category: job.category,
+            vacancies: job.vacancies,
+            district: job.district,
+            apply_url: job.applyUrl
+          });
+          inserted++;
+        }
+      }
+    }
+    
     return NextResponse.json({
       success: true,
-      message: `Successfully synchronized ${mappedJobs.length} jobs from Adzuna.`,
-      data: mappedJobs,
+      message: `Successfully synchronized and inserted ${inserted} jobs from Adzuna (filtered spam).`,
     });
   } catch (error) {
     console.error('Job synchronization failed:', error);
