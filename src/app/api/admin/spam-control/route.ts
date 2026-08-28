@@ -20,8 +20,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const { keyword, password } = await request.json();
+    const correctPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
     
-    if (password !== process.env.ADMIN_PASSWORD) {
+    if (password !== correctPassword) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     
@@ -84,8 +85,9 @@ export async function DELETE(request: Request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const password = request.headers.get('Authorization')?.replace('Bearer ', '');
+    const correctPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
 
-    if (password !== process.env.ADMIN_PASSWORD) {
+    if (password !== correctPassword) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
