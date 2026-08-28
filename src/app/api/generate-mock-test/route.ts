@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI, Schema, Type } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 export async function POST(req: Request) {
   try {
@@ -16,29 +16,29 @@ export async function POST(req: Request) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    const questionSchema: Schema = {
-      type: Type.ARRAY,
+    const questionSchema = {
+      type: SchemaType.ARRAY,
       description: "List of multiple choice questions",
       items: {
-        type: Type.OBJECT,
+        type: SchemaType.OBJECT,
         properties: {
           question: {
-            type: Type.STRING,
+            type: SchemaType.STRING,
             description: "The actual question text",
           },
           options: {
-            type: Type.ARRAY,
+            type: SchemaType.ARRAY,
             description: "Exactly 4 plausible options for the multiple choice question",
             items: {
-              type: Type.STRING,
+              type: SchemaType.STRING,
             },
           },
           correctAnswerIndex: {
-            type: Type.INTEGER,
+            type: SchemaType.INTEGER,
             description: "The index of the correct option (0, 1, 2, or 3)",
           },
           explanation: {
-            type: Type.STRING,
+            type: SchemaType.STRING,
             description: "Brief factual explanation of why the correct answer is correct",
           }
         },
