@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: Request) {
   try {
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
 
     if (error) throw error;
 
+    revalidatePath('/');
     return NextResponse.json({ success: true, entry: newEntry }, { status: 200 });
 
   } catch (error: any) {

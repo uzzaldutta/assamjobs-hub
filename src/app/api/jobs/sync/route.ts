@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchAdzunaJobs } from '@/lib/adzuna';
 import { supabase } from '@/lib/supabase';
+import { revalidatePath } from 'next/cache';
 
 // To protect this route from arbitrary public execution, 
 // you would typically check for an Authorization header or a secret token here.
@@ -11,7 +12,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
   
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
   const authHeader = request.headers.get('Authorization')?.replace('Bearer ', '');
   
   if (SYNC_SECRET && token !== SYNC_SECRET && authHeader !== adminPassword) {
@@ -72,6 +73,7 @@ export async function GET(request: Request) {
       }
     }
     
+    revalidatePath('/');
     return NextResponse.json({
       success: true,
       message: `Successfully synchronized and inserted ${inserted} jobs from Adzuna (filtered spam).`,

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import { supabase } from '@/lib/supabase';
+import { revalidatePath } from 'next/cache';
 
 // Security token
 const SYNC_SECRET = process.env.SYNC_SECRET;
@@ -9,7 +10,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
   
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
   const authHeader = request.headers.get('Authorization')?.replace('Bearer ', '');
 
   if (SYNC_SECRET && token !== SYNC_SECRET && authHeader !== adminPassword) {
@@ -84,6 +85,7 @@ export async function GET(request: Request) {
       }
     }
 
+    revalidatePath('/');
     return NextResponse.json({
       success: true,
       message: `Successfully synchronized ${inserted} new Railway jobs from NFR.`,

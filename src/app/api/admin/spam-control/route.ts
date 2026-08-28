@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(request: Request) {
   try {
@@ -70,6 +71,7 @@ export async function POST(request: Request) {
       deletedCount = idsToDelete.length;
     }
 
+    revalidatePath('/');
     return NextResponse.json({ 
       success: true, 
       keyword: inserted,
