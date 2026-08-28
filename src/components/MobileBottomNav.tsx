@@ -24,8 +24,8 @@ export default function MobileBottomNav() {
       <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe z-[60] shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
         <div className="flex justify-around items-center h-16 px-2 relative">
           
-          <Link href="/" onClick={handleHomeClick} className={`flex flex-col items-center justify-center w-full h-full gap-1 rounded-xl ${pathname === "/" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
-            <Home size={20} className={pathname === "/" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+          <Link href="/" className={`flex flex-col items-center justify-center w-full h-full gap-1 rounded-xl ${pathname === "/" && !activePopup ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
+            <Home size={20} className={pathname === "/" && !activePopup ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
             <span className="text-[10px] font-bold">{t("nav_home")}</span>
           </Link>
 

@@ -27,12 +27,9 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "AssamJobs Hub - Latest Govt & Private Jobs in Assam",
-  description: "Get the latest updates on Assam Govt Jobs, ADRE, Assam Police, APSC, Private Jobs, Admit Cards, and Results. Prepare with Free Mock Tests and AI Career Tools.",
-  keywords: ["Assam Jobs", "Assam Govt Jobs", "ADRE Grade 3", "ADRE Grade 4", "Assam Police Recruitment", "APSC", "Assam Career", "Job in Assam", "Assam Tenders", "Mock Tests Assam"],
-  alternates: {
-    canonical: "https://y-ruddy-nine-46.vercel.app",
-  },
+  title: "AssamJobs Hub | Latest Govt & Private Jobs in Assam",
+  description: "Get real-time job alerts, mock tests, syllabuses, and AI career tools for Assam Govt and Private Jobs (ADRE, APSC, Police, Railway).",
+  keywords: ["Assam Jobs", "Govt Jobs Assam", "ADRE", "APSC", "Mock Tests Assam", "Assam Police Jobs", "Private Jobs in Assam"],
   openGraph: {
     title: "AssamJobs Hub | Latest Jobs & Results",
     description: "Daily updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results. Take free mock tests and use AI career tools to boost your preparation.",

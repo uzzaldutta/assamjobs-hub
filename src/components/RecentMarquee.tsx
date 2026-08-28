@@ -47,7 +47,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
 
   const displayJobs = useMemo(() => {
     if (activeTab === "recent") {
-      return jobs.slice(0, 15);
+      return jobs.slice(0, 25);
     } else {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -62,7 +62,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
         return new Date(a.lastDate!).getTime() - new Date(b.lastDate!).getTime();
       });
 
-      return upcoming.slice(0, 15);
+      return upcoming.slice(0, 25);
     }
   }, [jobs, activeTab]);
 
@@ -147,7 +147,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
         {/* We render two identical lists side-by-side to create the seamless scroll effect */}
         {[1, 2].map((listIndex) => (
           <div key={`${activeTab}-${listIndex}`} className="flex gap-4 min-w-max pr-4" aria-hidden={listIndex === 2}>
-            {displayJobs.map((job) => {
+            {displayJobs.map((job, jobIndex) => {
               const expiring = isExpiringSoon(job.lastDate);
               const isNew = !expiring && isNewJob(job.createdAt);
               
@@ -161,6 +161,11 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
               return (
                 <Link key={`${listIndex}-${job.id}`} href={`/jobs/${job.id}`} className={`relative overflow-hidden w-[300px] shrink-0 bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between cursor-pointer border ${borderClass}`}>
                   
+                  {/* Card Numbering Badge */}
+                  <div className="absolute -top-3 -right-3 w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-end justify-start pl-3 pb-2 text-xs font-black text-slate-400 opacity-60 pointer-events-none">
+                    {jobIndex + 1}
+                  </div>
+
                   {/* Flashing Background Layer */}
                   {expiring && <div className="absolute inset-0 bg-red-500/10 dark:bg-red-500/20 animate-pulse pointer-events-none"></div>}
                   {isNew && <div className="absolute inset-0 bg-emerald-500/10 dark:bg-emerald-500/20 animate-pulse pointer-events-none"></div>}
