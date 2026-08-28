@@ -35,10 +35,12 @@ export async function POST(request: Request) {
     const { data: inserted, error: insertError } = await supabase
       .from('jobs')
       .insert({
+        id: `banned_${Date.now()}_${Math.random().toString(36).substring(7)}`,
         title: cleanKeyword,
         category: 'BANNED_KEYWORD',
         organization: 'SYSTEM',
-        job_type: 'SYSTEM',
+        job_type: 'PRIVATE',
+        scraped_at: new Date().toISOString()
       })
       .select()
       .single();
