@@ -1,2422 +1,2222 @@
 {
   "assam-history": [
     {
-      "id": 1,
-      "question": "Which historical event in Assam is associated with phase 1?",
+      "id": "ah-1",
+      "question": "Who was the first Ahom King?",
       "options": [
-        "Treaty of Yandaboo (1821)",
-        "Ahom Kingdom (1221)",
-        "British Annexation (1831)",
-        "Moamoria Rebellion (1761)"
+        "Sukaphaa",
+        "Suhungmung",
+        "Rudra Singha",
+        "Gadadhar Singha"
       ],
-      "answer": 1,
-      "explanation": "This event shaped Assam's history significantly during phase 1."
+      "answer": "Sukaphaa"
     },
     {
-      "id": 2,
-      "question": "Which historical event in Assam is associated with phase 2?",
+      "id": "ah-2",
+      "question": "In which year did the Battle of Saraighat take place?",
       "options": [
-        "Treaty of Yandaboo (1822)",
-        "Ahom Kingdom (1222)",
-        "British Annexation (1832)",
-        "Moamoria Rebellion (1762)"
+        "1671",
+        "1526",
+        "1757",
+        "1826"
       ],
-      "answer": 2,
-      "explanation": "This event shaped Assam's history significantly during phase 2."
+      "answer": "1671"
     },
     {
-      "id": 3,
-      "question": "Which historical event in Assam is associated with phase 3?",
+      "id": "ah-3",
+      "question": "The Treaty of Yandaboo was signed in?",
       "options": [
-        "Treaty of Yandaboo (1823)",
-        "Ahom Kingdom (1223)",
-        "British Annexation (1833)",
-        "Moamoria Rebellion (1763)"
+        "1826",
+        "1836",
+        "1816",
+        "1856"
       ],
-      "answer": 3,
-      "explanation": "This event shaped Assam's history significantly during phase 3."
+      "answer": "1826"
     },
     {
-      "id": 4,
-      "question": "Which historical event in Assam is associated with phase 4?",
+      "id": "ah-4",
+      "question": "Who was the first Chief Minister of Assam?",
       "options": [
-        "Treaty of Yandaboo (1824)",
-        "Ahom Kingdom (1224)",
-        "British Annexation (1834)",
-        "Moamoria Rebellion (1764)"
+        "Gopinath Bordoloi",
+        "Bishnuram Medhi",
+        "Bimala Prasad Chaliha",
+        "Tarun Ram Phukan"
       ],
-      "answer": 0,
-      "explanation": "This event shaped Assam's history significantly during phase 4."
+      "answer": "Gopinath Bordoloi"
     },
     {
-      "id": 5,
-      "question": "Which historical event in Assam is associated with phase 5?",
+      "id": "ah-5",
+      "question": "Which king built the Rang Ghar?",
       "options": [
-        "Treaty of Yandaboo (1825)",
-        "Ahom Kingdom (1225)",
-        "British Annexation (1835)",
-        "Moamoria Rebellion (1765)"
+        "Pramatta Singha",
+        "Rudra Singha",
+        "Siva Singha",
+        "Rajeshwar Singha"
       ],
-      "answer": 1,
-      "explanation": "This event shaped Assam's history significantly during phase 5."
+      "answer": "Pramatta Singha"
     },
     {
-      "id": 6,
-      "question": "Which historical event in Assam is associated with phase 6?",
+      "id": "ah-6",
+      "question": "Who was the first martyr of the 1942 Quit India Movement in Assam?",
       "options": [
-        "Treaty of Yandaboo (1826)",
-        "Ahom Kingdom (1226)",
-        "British Annexation (1836)",
-        "Moamoria Rebellion (1766)"
+        "Kanaklata Barua",
+        "Kushal Konwar",
+        "Maniram Dewan",
+        "Piyoli Phukan"
       ],
-      "answer": 2,
-      "explanation": "This event shaped Assam's history significantly during phase 6."
+      "answer": "Kanaklata Barua"
     },
     {
-      "id": 7,
-      "question": "Which historical event in Assam is associated with phase 7?",
+      "id": "ah-7",
+      "question": "The Phulaguri Dhawa (peasant uprising) took place in the year:",
       "options": [
-        "Treaty of Yandaboo (1827)",
-        "Ahom Kingdom (1227)",
-        "British Annexation (1837)",
-        "Moamoria Rebellion (1767)"
+        "1861",
+        "1894",
+        "1857",
+        "1942"
       ],
-      "answer": 3,
-      "explanation": "This event shaped Assam's history significantly during phase 7."
+      "answer": "1861"
     },
     {
-      "id": 8,
-      "question": "Which historical event in Assam is associated with phase 8?",
+      "id": "ah-8",
+      "question": "Who was the founder of the Varman dynasty in Kamrupa?",
       "options": [
-        "Treaty of Yandaboo (1828)",
-        "Ahom Kingdom (1228)",
-        "British Annexation (1838)",
-        "Moamoria Rebellion (1768)"
+        "Pushyavarman",
+        "Bhaskaravarman",
+        "Bhutivarman",
+        "Kalyanavarman"
       ],
-      "answer": 0,
-      "explanation": "This event shaped Assam's history significantly during phase 8."
+      "answer": "Pushyavarman"
     },
     {
-      "id": 9,
-      "question": "Which historical event in Assam is associated with phase 9?",
+      "id": "ah-9",
+      "question": "Hiuen Tsang visited Assam during the reign of:",
       "options": [
-        "Treaty of Yandaboo (1829)",
-        "Ahom Kingdom (1229)",
-        "British Annexation (1839)",
-        "Moamoria Rebellion (1769)"
+        "Bhaskaravarman",
+        "Narakasura",
+        "Pushyavarman",
+        "Banabhatta"
       ],
-      "answer": 1,
-      "explanation": "This event shaped Assam's history significantly during phase 9."
+      "answer": "Bhaskaravarman"
     },
     {
-      "id": 10,
-      "question": "Which historical event in Assam is associated with phase 10?",
+      "id": "ah-10",
+      "question": "The earliest historical dynasty of Assam is:",
       "options": [
-        "Treaty of Yandaboo (1830)",
-        "Ahom Kingdom (1230)",
-        "British Annexation (1840)",
-        "Moamoria Rebellion (1770)"
+        "Varman Dynasty",
+        "Pala Dynasty",
+        "Mlechchha Dynasty",
+        "Salastambha Dynasty"
       ],
-      "answer": 2,
-      "explanation": "This event shaped Assam's history significantly during phase 10."
+      "answer": "Varman Dynasty"
     },
     {
-      "id": 11,
-      "question": "Which historical event in Assam is associated with phase 11?",
+      "id": "ah-11",
+      "question": "Which Ahom king was also known as Bamuni Konwar?",
       "options": [
-        "Treaty of Yandaboo (1831)",
-        "Ahom Kingdom (1231)",
-        "British Annexation (1841)",
-        "Moamoria Rebellion (1771)"
+        "Sudangphaa",
+        "Suhungmung",
+        "Susenghphaa",
+        "Supimphaa"
       ],
-      "answer": 3,
-      "explanation": "This event shaped Assam's history significantly during phase 11."
+      "answer": "Sudangphaa"
     },
     {
-      "id": 12,
-      "question": "Which historical event in Assam is associated with phase 12?",
+      "id": "ah-12",
+      "question": "The Umananda Temple was built by which Ahom King?",
       "options": [
-        "Treaty of Yandaboo (1832)",
-        "Ahom Kingdom (1232)",
-        "British Annexation (1842)",
-        "Moamoria Rebellion (1772)"
+        "Gadadhar Singha",
+        "Rudra Singha",
+        "Siva Singha",
+        "Pramatta Singha"
       ],
-      "answer": 0,
-      "explanation": "This event shaped Assam's history significantly during phase 12."
+      "answer": "Gadadhar Singha"
     },
     {
-      "id": 13,
-      "question": "Which historical event in Assam is associated with phase 13?",
+      "id": "ah-13",
+      "question": "Patharughat peasants' uprising took place in:",
       "options": [
-        "Treaty of Yandaboo (1833)",
-        "Ahom Kingdom (1233)",
-        "British Annexation (1843)",
-        "Moamoria Rebellion (1773)"
+        "1894",
+        "1861",
+        "1905",
+        "1885"
       ],
-      "answer": 1,
-      "explanation": "This event shaped Assam's history significantly during phase 13."
+      "answer": "1894"
     },
     {
-      "id": 14,
-      "question": "Which historical event in Assam is associated with phase 14?",
+      "id": "ah-14",
+      "question": "Who was known as the 'Lion Man of Assam'?",
       "options": [
-        "Treaty of Yandaboo (1834)",
-        "Ahom Kingdom (1234)",
-        "British Annexation (1844)",
-        "Moamoria Rebellion (1774)"
+        "Radha Govinda Baruah",
+        "Tarun Ram Phukan",
+        "Nabin Chandra Bordoloi",
+        "Lachit Borphukan"
       ],
-      "answer": 2,
-      "explanation": "This event shaped Assam's history significantly during phase 14."
+      "answer": "Radha Govinda Baruah"
     },
     {
-      "id": 15,
-      "question": "Which historical event in Assam is associated with phase 15?",
+      "id": "ah-15",
+      "question": "Srimanta Sankardeva was born in the year:",
       "options": [
-        "Treaty of Yandaboo (1835)",
-        "Ahom Kingdom (1235)",
-        "British Annexation (1845)",
-        "Moamoria Rebellion (1775)"
+        "1449",
+        "1568",
+        "1409",
+        "1509"
       ],
-      "answer": 3,
-      "explanation": "This event shaped Assam's history significantly during phase 15."
+      "answer": "1449"
     },
     {
-      "id": 16,
-      "question": "Which historical event in Assam is associated with phase 16?",
+      "id": "ah-16",
+      "question": "The capital of the Kachari kingdom was at:",
       "options": [
-        "Treaty of Yandaboo (1836)",
-        "Ahom Kingdom (1236)",
-        "British Annexation (1846)",
-        "Moamoria Rebellion (1776)"
+        "Dimapur",
+        "Sadiya",
+        "Khaspur",
+        "Maibang"
       ],
-      "answer": 0,
-      "explanation": "This event shaped Assam's history significantly during phase 16."
+      "answer": "Dimapur"
     },
     {
-      "id": 17,
-      "question": "Which historical event in Assam is associated with phase 17?",
+      "id": "ah-17",
+      "question": "Who led the Moamoria Rebellion initially?",
       "options": [
-        "Treaty of Yandaboo (1837)",
-        "Ahom Kingdom (1237)",
-        "British Annexation (1847)",
-        "Moamoria Rebellion (1777)"
+        "Naharkhora Saikia",
+        "Bhavananda",
+        "Kirtichandra",
+        "Purnananda Burhagohain"
       ],
-      "answer": 1,
-      "explanation": "This event shaped Assam's history significantly during phase 17."
+      "answer": "Naharkhora Saikia"
     },
     {
-      "id": 18,
-      "question": "Which historical event in Assam is associated with phase 18?",
+      "id": "ah-18",
+      "question": "The ancient name of Assam mentioned in Epics is:",
       "options": [
-        "Treaty of Yandaboo (1838)",
-        "Ahom Kingdom (1238)",
-        "British Annexation (1848)",
-        "Moamoria Rebellion (1778)"
+        "Pragjyotishpura",
+        "Kamarupa",
+        "Sonitpur",
+        "Kamatapur"
       ],
-      "answer": 2,
-      "explanation": "This event shaped Assam's history significantly during phase 18."
+      "answer": "Pragjyotishpura"
     },
     {
-      "id": 19,
-      "question": "Which historical event in Assam is associated with phase 19?",
+      "id": "ah-19",
+      "question": "Maniram Dewan was hanged in the year:",
       "options": [
-        "Treaty of Yandaboo (1839)",
-        "Ahom Kingdom (1239)",
-        "British Annexation (1849)",
-        "Moamoria Rebellion (1779)"
+        "1858",
+        "1857",
+        "1861",
+        "1826"
       ],
-      "answer": 3,
-      "explanation": "This event shaped Assam's history significantly during phase 19."
+      "answer": "1858"
     },
     {
-      "id": 20,
-      "question": "Which historical event in Assam is associated with phase 20?",
+      "id": "ah-20",
+      "question": "Who was the last Ahom King?",
       "options": [
-        "Treaty of Yandaboo (1840)",
-        "Ahom Kingdom (1240)",
-        "British Annexation (1850)",
-        "Moamoria Rebellion (1780)"
+        "Purandar Singha",
+        "Jogeshwar Singha",
+        "Chandrakanta Singha",
+        "Kamaleshwar Singha"
       ],
-      "answer": 0,
-      "explanation": "This event shaped Assam's history significantly during phase 20."
+      "answer": "Purandar Singha"
     }
   ],
   "assam-geography": [
     {
-      "id": 1,
-      "question": "What is the significance of geographical feature 1 in Assam?",
+      "id": "ag-1",
+      "question": "What is the total geographical area of Assam?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "78,438 sq km",
+        "83,743 sq km",
+        "70,120 sq km",
+        "80,000 sq km"
       ],
-      "answer": 1,
-      "explanation": "Assam's geography is highly dependent on this feature 1."
+      "answer": "78,438 sq km"
     },
     {
-      "id": 2,
-      "question": "What is the significance of geographical feature 2 in Assam?",
+      "id": "ag-2",
+      "question": "Assam shares its longest international border with:",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Bhutan",
+        "Bangladesh",
+        "Myanmar",
+        "Nepal"
       ],
-      "answer": 2,
-      "explanation": "Assam's geography is highly dependent on this feature 2."
+      "answer": "Bhutan"
     },
     {
-      "id": 3,
-      "question": "What is the significance of geographical feature 3 in Assam?",
+      "id": "ag-3",
+      "question": "Which river is the longest in Assam?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Brahmaputra",
+        "Barak",
+        "Manas",
+        "Subansiri"
       ],
-      "answer": 3,
-      "explanation": "Assam's geography is highly dependent on this feature 3."
+      "answer": "Brahmaputra"
     },
     {
-      "id": 4,
-      "question": "What is the significance of geographical feature 4 in Assam?",
+      "id": "ag-4",
+      "question": "Majuli is situated in which district of Assam?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Majuli",
+        "Jorhat",
+        "Sivasagar",
+        "Golaghat"
       ],
-      "answer": 0,
-      "explanation": "Assam's geography is highly dependent on this feature 4."
+      "answer": "Majuli"
     },
     {
-      "id": 5,
-      "question": "What is the significance of geographical feature 5 in Assam?",
+      "id": "ag-5",
+      "question": "How many National Parks are there in Assam?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "7",
+        "5",
+        "6",
+        "8"
       ],
-      "answer": 1,
-      "explanation": "Assam's geography is highly dependent on this feature 5."
+      "answer": "7"
     },
     {
-      "id": 6,
-      "question": "What is the significance of geographical feature 6 in Assam?",
+      "id": "ag-6",
+      "question": "Which is the highest peak in Assam?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Chenghehishon",
+        "Singhason",
+        "Daffabum",
+        "Namcha Barwa"
       ],
-      "answer": 2,
-      "explanation": "Assam's geography is highly dependent on this feature 6."
+      "answer": "Chenghehishon"
     },
     {
-      "id": 7,
-      "question": "What is the significance of geographical feature 7 in Assam?",
+      "id": "ag-7",
+      "question": "Dibru-Saikhowa is located in which districts?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Dibrugarh and Tinsukia",
+        "Dhemaji and Lakhimpur",
+        "Golaghat and Nagaon",
+        "Sivasagar and Jorhat"
       ],
-      "answer": 3,
-      "explanation": "Assam's geography is highly dependent on this feature 7."
+      "answer": "Dibrugarh and Tinsukia"
     },
     {
-      "id": 8,
-      "question": "What is the significance of geographical feature 8 in Assam?",
+      "id": "ag-8",
+      "question": "Assam falls in which seismic zone?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Zone V",
+        "Zone IV",
+        "Zone III",
+        "Zone II"
       ],
-      "answer": 0,
-      "explanation": "Assam's geography is highly dependent on this feature 8."
+      "answer": "Zone V"
     },
     {
-      "id": 9,
-      "question": "What is the significance of geographical feature 9 in Assam?",
+      "id": "ag-9",
+      "question": "Which forest in Assam is known as the 'Amazon of the East'?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Dehing Patkai",
+        "Kaziranga",
+        "Nameri",
+        "Manas"
       ],
-      "answer": 1,
-      "explanation": "Assam's geography is highly dependent on this feature 9."
+      "answer": "Dehing Patkai"
     },
     {
-      "id": 10,
-      "question": "What is the significance of geographical feature 10 in Assam?",
+      "id": "ag-10",
+      "question": "Which district of Assam has the highest population density?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Kamrup Metropolitan",
+        "Nagaon",
+        "Dhubri",
+        "Barpeta"
       ],
-      "answer": 2,
-      "explanation": "Assam's geography is highly dependent on this feature 10."
+      "answer": "Kamrup Metropolitan"
     },
     {
-      "id": 11,
-      "question": "What is the significance of geographical feature 11 in Assam?",
+      "id": "ag-11",
+      "question": "The climate of Assam is generally classified as:",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Tropical Monsoon",
+        "Tropical Savanna",
+        "Subtropical Humid",
+        "Equatorial"
       ],
-      "answer": 3,
-      "explanation": "Assam's geography is highly dependent on this feature 11."
+      "answer": "Tropical Monsoon"
     },
     {
-      "id": 12,
-      "question": "What is the significance of geographical feature 12 in Assam?",
+      "id": "ag-12",
+      "question": "What is the primary soil type found in the Brahmaputra Valley?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Alluvial Soil",
+        "Red Soil",
+        "Laterite Soil",
+        "Black Soil"
       ],
-      "answer": 0,
-      "explanation": "Assam's geography is highly dependent on this feature 12."
+      "answer": "Alluvial Soil"
     },
     {
-      "id": 13,
-      "question": "What is the significance of geographical feature 13 in Assam?",
+      "id": "ag-13",
+      "question": "Which town is known as the 'Tea City of India'?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Dibrugarh",
+        "Tinsukia",
+        "Jorhat",
+        "Tezpur"
       ],
-      "answer": 1,
-      "explanation": "Assam's geography is highly dependent on this feature 13."
+      "answer": "Dibrugarh"
     },
     {
-      "id": 14,
-      "question": "What is the significance of geographical feature 14 in Assam?",
+      "id": "ag-14",
+      "question": "How many districts are there in Assam currently (as of 2024)?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "35",
+        "33",
+        "34",
+        "31"
       ],
-      "answer": 2,
-      "explanation": "Assam's geography is highly dependent on this feature 14."
+      "answer": "35"
     },
     {
-      "id": 15,
-      "question": "What is the significance of geographical feature 15 in Assam?",
+      "id": "ag-15",
+      "question": "Barak valley consists of how many districts?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "3",
+        "4",
+        "5",
+        "2"
       ],
-      "answer": 3,
-      "explanation": "Assam's geography is highly dependent on this feature 15."
+      "answer": "3"
     },
     {
-      "id": 16,
-      "question": "What is the significance of geographical feature 16 in Assam?",
+      "id": "ag-16",
+      "question": "Which sanctuary is famous for the Golden Langur?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Chakrashila Wildlife Sanctuary",
+        "Garampani",
+        "Pobitora",
+        "Bornadi"
       ],
-      "answer": 0,
-      "explanation": "Assam's geography is highly dependent on this feature 16."
+      "answer": "Chakrashila Wildlife Sanctuary"
     },
     {
-      "id": 17,
-      "question": "What is the significance of geographical feature 17 in Assam?",
+      "id": "ag-17",
+      "question": "In which year was Kaziranga declared a World Heritage Site?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "1985",
+        "1974",
+        "1990",
+        "1980"
       ],
-      "answer": 1,
-      "explanation": "Assam's geography is highly dependent on this feature 17."
+      "answer": "1985"
     },
     {
-      "id": 18,
-      "question": "What is the significance of geographical feature 18 in Assam?",
+      "id": "ag-18",
+      "question": "The proposed Deepor Beel is a:",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Ramsar Site",
+        "National Park",
+        "Tiger Reserve",
+        "Biosphere Reserve"
       ],
-      "answer": 2,
-      "explanation": "Assam's geography is highly dependent on this feature 18."
+      "answer": "Ramsar Site"
     },
     {
-      "id": 19,
-      "question": "What is the significance of geographical feature 19 in Assam?",
+      "id": "ag-19",
+      "question": "Which state does not share a boundary with Assam?",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Sikkim",
+        "Nagaland",
+        "Tripura",
+        "Meghalaya"
       ],
-      "answer": 3,
-      "explanation": "Assam's geography is highly dependent on this feature 19."
+      "answer": "Sikkim"
     },
     {
-      "id": 20,
-      "question": "What is the significance of geographical feature 20 in Assam?",
+      "id": "ag-20",
+      "question": "The origin of the river Brahmaputra is:",
       "options": [
-        "Brahmaputra River Valley",
-        "Kaziranga National Park",
-        "Majuli Island",
-        "Barak Valley"
+        "Chemayungdung Glacier",
+        "Gangotri Glacier",
+        "Mansarovar Lake",
+        "Yamunotri"
       ],
-      "answer": 0,
-      "explanation": "Assam's geography is highly dependent on this feature 20."
+      "answer": "Chemayungdung Glacier"
     }
   ],
   "assam-culture": [
     {
-      "id": 1,
-      "question": "Which Bihu festival is associated with fact 1?",
+      "id": "ac-1",
+      "question": "Who is known as the 'Father of Assamese Prose'?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Bhattadeva",
+        "Sankardeva",
+        "Madhavdeva",
+        "Hem Saraswati"
       ],
-      "answer": 1,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 1 relates to this."
+      "answer": "Bhattadeva"
     },
     {
-      "id": 2,
-      "question": "Which Bihu festival is associated with fact 2?",
+      "id": "ac-2",
+      "question": "Which dance of Assam is recognized as a classical dance of India?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Sattriya",
+        "Bihu",
+        "Bagurumba",
+        "Bortal"
       ],
-      "answer": 2,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 2 relates to this."
+      "answer": "Sattriya"
     },
     {
-      "id": 3,
-      "question": "Which Bihu festival is associated with fact 3?",
+      "id": "ac-3",
+      "question": "Bihu is celebrated how many times in a year?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "3",
+        "2",
+        "4",
+        "1"
       ],
-      "answer": 3,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 3 relates to this."
+      "answer": "3"
     },
     {
-      "id": 4,
-      "question": "Which Bihu festival is associated with fact 4?",
+      "id": "ac-4",
+      "question": "Ali-Aye-Ligang is a festival celebrated by which community?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Mising",
+        "Bodo",
+        "Karbi",
+        "Rabha"
       ],
-      "answer": 0,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 4 relates to this."
+      "answer": "Mising"
     },
     {
-      "id": 5,
-      "question": "Which Bihu festival is associated with fact 5?",
+      "id": "ac-5",
+      "question": "The traditional dress of Assamese women is called:",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Mekhela Sador",
+        "Sari",
+        "Salwar Kameez",
+        "Dokhona"
       ],
-      "answer": 1,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 5 relates to this."
+      "answer": "Mekhela Sador"
     },
     {
-      "id": 6,
-      "question": "Which Bihu festival is associated with fact 6?",
+      "id": "ac-6",
+      "question": "Who composed the state anthem 'O Mur Apunar Desh'?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Lakshminath Bezbaroa",
+        "Bhupen Hazarika",
+        "Jyoti Prasad Agarwala",
+        "Bishnu Prasad Rabha"
       ],
-      "answer": 2,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 6 relates to this."
+      "answer": "Lakshminath Bezbaroa"
     },
     {
-      "id": 7,
-      "question": "Which Bihu festival is associated with fact 7?",
+      "id": "ac-7",
+      "question": "Which of the following is an Assamese traditional musical instrument?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Pepa",
+        "Sitar",
+        "Tabla",
+        "Veena"
       ],
-      "answer": 3,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 7 relates to this."
+      "answer": "Pepa"
     },
     {
-      "id": 8,
-      "question": "Which Bihu festival is associated with fact 8?",
+      "id": "ac-8",
+      "question": "What is 'Gamosa' primarily used for?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Token of respect",
+        "Cooking",
+        "Farming",
+        "Trading"
       ],
-      "answer": 0,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 8 relates to this."
+      "answer": "Token of respect"
     },
     {
-      "id": 9,
-      "question": "Which Bihu festival is associated with fact 9?",
+      "id": "ac-9",
+      "question": "Me-Dam-Me-Phi is celebrated by which community?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Ahom",
+        "Mising",
+        "Bodo",
+        "Dimasa"
       ],
-      "answer": 1,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 9 relates to this."
+      "answer": "Ahom"
     },
     {
-      "id": 10,
-      "question": "Which Bihu festival is associated with fact 10?",
+      "id": "ac-10",
+      "question": "The Ambubachi Mela is associated with which temple?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Kamakhya Temple",
+        "Umananda Temple",
+        "Navagraha Temple",
+        "Sukreswar Temple"
       ],
-      "answer": 2,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 10 relates to this."
+      "answer": "Kamakhya Temple"
     },
     {
-      "id": 11,
-      "question": "Which Bihu festival is associated with fact 11?",
+      "id": "ac-11",
+      "question": "Who was the first Assamese to win the Sahitya Akademi Award?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Jatindranath Duwara",
+        "Birendra Kumar Bhattacharya",
+        "Indira Goswami",
+        "Homen Borgohain"
       ],
-      "answer": 3,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 11 relates to this."
+      "answer": "Jatindranath Duwara"
     },
     {
-      "id": 12,
-      "question": "Which Bihu festival is associated with fact 12?",
+      "id": "ac-12",
+      "question": "What is the traditional bell-metal industry of Assam famous in?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Sarthebari",
+        "Hajo",
+        "Sualkuchi",
+        "Barpeta"
       ],
-      "answer": 0,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 12 relates to this."
+      "answer": "Sarthebari"
     },
     {
-      "id": 13,
-      "question": "Which Bihu festival is associated with fact 13?",
+      "id": "ac-13",
+      "question": "Which place is known as the Manchester of Assam?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Sualkuchi",
+        "Digboi",
+        "Guwahati",
+        "Tezpur"
       ],
-      "answer": 1,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 13 relates to this."
+      "answer": "Sualkuchi"
     },
     {
-      "id": 14,
-      "question": "Which Bihu festival is associated with fact 14?",
+      "id": "ac-14",
+      "question": "Jonbeel Mela is famous for:",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Barter system",
+        "Animal fair",
+        "Handloom exhibition",
+        "Food festival"
       ],
-      "answer": 2,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 14 relates to this."
+      "answer": "Barter system"
     },
     {
-      "id": 15,
-      "question": "Which Bihu festival is associated with fact 15?",
+      "id": "ac-15",
+      "question": "The first Assamese film 'Joymoti' was released in the year?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "1935",
+        "1931",
+        "1940",
+        "1947"
       ],
-      "answer": 3,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 15 relates to this."
+      "answer": "1935"
     },
     {
-      "id": 16,
-      "question": "Which Bihu festival is associated with fact 16?",
+      "id": "ac-16",
+      "question": "Who is known as 'Kalaguru' in Assam?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Bishnu Prasad Rabha",
+        "Jyoti Prasad Agarwala",
+        "Bhupen Hazarika",
+        "Phani Sarma"
       ],
-      "answer": 0,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 16 relates to this."
+      "answer": "Bishnu Prasad Rabha"
     },
     {
-      "id": 17,
-      "question": "Which Bihu festival is associated with fact 17?",
+      "id": "ac-17",
+      "question": "Which Bihu is also known as Kongali Bihu?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Kati Bihu",
+        "Bohag Bihu",
+        "Magh Bihu",
+        "Rongali Bihu"
       ],
-      "answer": 1,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 17 relates to this."
+      "answer": "Kati Bihu"
     },
     {
-      "id": 18,
-      "question": "Which Bihu festival is associated with fact 18?",
+      "id": "ac-18",
+      "question": "The Holy Book of the Ekasarana Dharma is:",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Kirtan Ghosha",
+        "Bhagavad Gita",
+        "Ramayana",
+        "Mahabharata"
       ],
-      "answer": 2,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 18 relates to this."
+      "answer": "Kirtan Ghosha"
     },
     {
-      "id": 19,
-      "question": "Which Bihu festival is associated with fact 19?",
+      "id": "ac-19",
+      "question": "Bathow Puja is the most important religious festival of the:",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Bodos",
+        "Kacharis",
+        "Rabhas",
+        "Tiwas"
       ],
-      "answer": 3,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 19 relates to this."
+      "answer": "Bodos"
     },
     {
-      "id": 20,
-      "question": "Which Bihu festival is associated with fact 20?",
+      "id": "ac-20",
+      "question": "Which instrument is closely associated with Baul singers but also used in Assamese folk?",
       "options": [
-        "Rongali Bihu",
-        "Kongali Bihu",
-        "Bhogali Bihu",
-        "Ambubachi Mela"
+        "Dotara",
+        "Flute",
+        "Dhol",
+        "Khol"
       ],
-      "answer": 0,
-      "explanation": "Culture in Assam is deeply rooted in these festivals. Fact 20 relates to this."
+      "answer": "Dotara"
     }
   ],
   "english-grammar-1": [
     {
-      "id": 1,
-      "question": "Choose the correct synonym for Word1:",
+      "id": "eg1-1",
+      "question": "Choose the correct article: He is ___ honest man.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "an",
+        "a",
+        "the",
+        "no article"
       ],
-      "answer": 1,
-      "explanation": "Word1 means something similar to the correct option."
+      "answer": "an"
     },
     {
-      "id": 2,
-      "question": "Choose the correct synonym for Word2:",
+      "id": "eg1-2",
+      "question": "Identify the correct spelling.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Accommodate",
+        "Acomodate",
+        "Accomodate",
+        "Acommodate"
       ],
-      "answer": 2,
-      "explanation": "Word2 means something similar to the correct option."
+      "answer": "Accommodate"
     },
     {
-      "id": 3,
-      "question": "Choose the correct synonym for Word3:",
+      "id": "eg1-3",
+      "question": "What is the synonym of 'Abundant'?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Plentiful",
+        "Scarce",
+        "Rare",
+        "Limited"
       ],
-      "answer": 3,
-      "explanation": "Word3 means something similar to the correct option."
+      "answer": "Plentiful"
     },
     {
-      "id": 4,
-      "question": "Choose the correct synonym for Word4:",
+      "id": "eg1-4",
+      "question": "Which is a noun?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Happiness",
+        "Happy",
+        "Happily",
+        "Happen"
       ],
-      "answer": 0,
-      "explanation": "Word4 means something similar to the correct option."
+      "answer": "Happiness"
     },
     {
-      "id": 5,
-      "question": "Choose the correct synonym for Word5:",
+      "id": "eg1-5",
+      "question": "Choose the correct preposition: She is good ___ mathematics.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "at",
+        "in",
+        "with",
+        "on"
       ],
-      "answer": 1,
-      "explanation": "Word5 means something similar to the correct option."
+      "answer": "at"
     },
     {
-      "id": 6,
-      "question": "Choose the correct synonym for Word6:",
+      "id": "eg1-6",
+      "question": "Find the antonym of 'Brave'.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Cowardly",
+        "Bold",
+        "Courageous",
+        "Fearless"
       ],
-      "answer": 2,
-      "explanation": "Word6 means something similar to the correct option."
+      "answer": "Cowardly"
     },
     {
-      "id": 7,
-      "question": "Choose the correct synonym for Word7:",
+      "id": "eg1-7",
+      "question": "Select the correct plural form of 'Child'.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Children",
+        "Childs",
+        "Childrens",
+        "Childes"
       ],
-      "answer": 3,
-      "explanation": "Word7 means something similar to the correct option."
+      "answer": "Children"
     },
     {
-      "id": 8,
-      "question": "Choose the correct synonym for Word8:",
+      "id": "eg1-8",
+      "question": "She ___ to the market yesterday.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "went",
+        "goes",
+        "gone",
+        "going"
       ],
-      "answer": 0,
-      "explanation": "Word8 means something similar to the correct option."
+      "answer": "went"
     },
     {
-      "id": 9,
-      "question": "Choose the correct synonym for Word9:",
+      "id": "eg1-9",
+      "question": "What is the meaning of the idiom 'A piece of cake'?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Very easy",
+        "Very hard",
+        "A delicious dessert",
+        "A small amount"
       ],
-      "answer": 1,
-      "explanation": "Word9 means something similar to the correct option."
+      "answer": "Very easy"
     },
     {
-      "id": 10,
-      "question": "Choose the correct synonym for Word10:",
+      "id": "eg1-10",
+      "question": "Choose the correct conjunction: He failed ___ he didn't study.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "because",
+        "although",
+        "but",
+        "so"
       ],
-      "answer": 2,
-      "explanation": "Word10 means something similar to the correct option."
+      "answer": "because"
     },
     {
-      "id": 11,
-      "question": "Choose the correct synonym for Word11:",
+      "id": "eg1-11",
+      "question": "The dog barked ___ at the stranger.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "loudly",
+        "loud",
+        "loudness",
+        "louder"
       ],
-      "answer": 3,
-      "explanation": "Word11 means something similar to the correct option."
+      "answer": "loudly"
     },
     {
-      "id": 12,
-      "question": "Choose the correct synonym for Word12:",
+      "id": "eg1-12",
+      "question": "Neither of the boys ___ done his homework.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "has",
+        "have",
+        "had",
+        "are"
       ],
-      "answer": 0,
-      "explanation": "Word12 means something similar to the correct option."
+      "answer": "has"
     },
     {
-      "id": 13,
-      "question": "Choose the correct synonym for Word13:",
+      "id": "eg1-13",
+      "question": "Find the error: She returned back to her home.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "returned back",
+        "She returned",
+        "to her home",
+        "No error"
       ],
-      "answer": 1,
-      "explanation": "Word13 means something similar to the correct option."
+      "answer": "returned back"
     },
     {
-      "id": 14,
-      "question": "Choose the correct synonym for Word14:",
+      "id": "eg1-14",
+      "question": "What is the comparative degree of 'Good'?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Better",
+        "Best",
+        "Gooder",
+        "More good"
       ],
-      "answer": 2,
-      "explanation": "Word14 means something similar to the correct option."
+      "answer": "Better"
     },
     {
-      "id": 15,
-      "question": "Choose the correct synonym for Word15:",
+      "id": "eg1-15",
+      "question": "Choose the correct passive voice: He ate an apple.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "An apple was eaten by him.",
+        "An apple is eaten by him.",
+        "An apple was ate by him.",
+        "An apple had been eaten by him."
       ],
-      "answer": 3,
-      "explanation": "Word15 means something similar to the correct option."
+      "answer": "An apple was eaten by him."
     },
     {
-      "id": 16,
-      "question": "Choose the correct synonym for Word16:",
+      "id": "eg1-16",
+      "question": "A person who loves books is called a:",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Bibliophile",
+        "Philanthropist",
+        "Optimist",
+        "Pessimist"
       ],
-      "answer": 0,
-      "explanation": "Word16 means something similar to the correct option."
+      "answer": "Bibliophile"
     },
     {
-      "id": 17,
-      "question": "Choose the correct synonym for Word17:",
+      "id": "eg1-17",
+      "question": "Change to indirect speech: He said, 'I am busy.'",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "He said that he was busy.",
+        "He said that I am busy.",
+        "He says he is busy.",
+        "He said that he is busy."
       ],
-      "answer": 1,
-      "explanation": "Word17 means something similar to the correct option."
+      "answer": "He said that he was busy."
     },
     {
-      "id": 18,
-      "question": "Choose the correct synonym for Word18:",
+      "id": "eg1-18",
+      "question": "Which of the following is a pronoun?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "They",
+        "Table",
+        "Run",
+        "Quickly"
       ],
-      "answer": 2,
-      "explanation": "Word18 means something similar to the correct option."
+      "answer": "They"
     },
     {
-      "id": 19,
-      "question": "Choose the correct synonym for Word19:",
+      "id": "eg1-19",
+      "question": "The plural of 'Mouse' is:",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Mice",
+        "Mouses",
+        "Meese",
+        "Mice's"
       ],
-      "answer": 3,
-      "explanation": "Word19 means something similar to the correct option."
+      "answer": "Mice"
     },
     {
-      "id": 20,
-      "question": "Choose the correct synonym for Word20:",
+      "id": "eg1-20",
+      "question": "Complete the sentence: If it rains, we ___ inside.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "will stay",
+        "would stay",
+        "stayed",
+        "stays"
       ],
-      "answer": 0,
-      "explanation": "Word20 means something similar to the correct option."
+      "answer": "will stay"
     }
   ],
   "english-grammar-2": [
     {
-      "id": 1,
-      "question": "Choose the correct synonym for Word1:",
+      "id": "eg2-1",
+      "question": "What is the synonym of 'Candid'?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Frank",
+        "Secretive",
+        "Shy",
+        "Dishonest"
       ],
-      "answer": 1,
-      "explanation": "Word1 means something similar to the correct option."
+      "answer": "Frank"
     },
     {
-      "id": 2,
-      "question": "Choose the correct synonym for Word2:",
+      "id": "eg2-2",
+      "question": "Find the correctly spelled word.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Embarrass",
+        "Embarass",
+        "Embaras",
+        "Embarras"
       ],
-      "answer": 2,
-      "explanation": "Word2 means something similar to the correct option."
+      "answer": "Embarrass"
     },
     {
-      "id": 3,
-      "question": "Choose the correct synonym for Word3:",
+      "id": "eg2-3",
+      "question": "What is the antonym of 'Vague'?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Clear",
+        "Uncertain",
+        "Obscure",
+        "Faint"
       ],
-      "answer": 3,
-      "explanation": "Word3 means something similar to the correct option."
+      "answer": "Clear"
     },
     {
-      "id": 4,
-      "question": "Choose the correct synonym for Word4:",
+      "id": "eg2-4",
+      "question": "A group of lions is called a:",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Pride",
+        "Flock",
+        "Herd",
+        "Swarm"
       ],
-      "answer": 0,
-      "explanation": "Word4 means something similar to the correct option."
+      "answer": "Pride"
     },
     {
-      "id": 5,
-      "question": "Choose the correct synonym for Word5:",
+      "id": "eg2-5",
+      "question": "I have been living here ___ 10 years.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "for",
+        "since",
+        "from",
+        "in"
       ],
-      "answer": 1,
-      "explanation": "Word5 means something similar to the correct option."
+      "answer": "for"
     },
     {
-      "id": 6,
-      "question": "Choose the correct synonym for Word6:",
+      "id": "eg2-6",
+      "question": "Choose the correct alternative: I look forward to ___ you.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "seeing",
+        "see",
+        "seen",
+        "saw"
       ],
-      "answer": 2,
-      "explanation": "Word6 means something similar to the correct option."
+      "answer": "seeing"
     },
     {
-      "id": 7,
-      "question": "Choose the correct synonym for Word7:",
+      "id": "eg2-7",
+      "question": "Identify the adverb in the sentence: The cat moved silently.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "silently",
+        "moved",
+        "cat",
+        "The"
       ],
-      "answer": 3,
-      "explanation": "Word7 means something similar to the correct option."
+      "answer": "silently"
     },
     {
-      "id": 8,
-      "question": "Choose the correct synonym for Word8:",
+      "id": "eg2-8",
+      "question": "Change to active voice: The letter was written by her.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "She wrote the letter.",
+        "She writes the letter.",
+        "She has written the letter.",
+        "She is writing the letter."
       ],
-      "answer": 0,
-      "explanation": "Word8 means something similar to the correct option."
+      "answer": "She wrote the letter."
     },
     {
-      "id": 9,
-      "question": "Choose the correct synonym for Word9:",
+      "id": "eg2-9",
+      "question": "What does the idiom 'Bite the bullet' mean?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Face a difficult situation bravely",
+        "Eat something hard",
+        "To be angry",
+        "To give up"
       ],
-      "answer": 1,
-      "explanation": "Word9 means something similar to the correct option."
+      "answer": "Face a difficult situation bravely"
     },
     {
-      "id": 10,
-      "question": "Choose the correct synonym for Word10:",
+      "id": "eg2-10",
+      "question": "He prefers tea ___ coffee.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "to",
+        "than",
+        "over",
+        "for"
       ],
-      "answer": 2,
-      "explanation": "Word10 means something similar to the correct option."
+      "answer": "to"
     },
     {
-      "id": 11,
-      "question": "Choose the correct synonym for Word11:",
+      "id": "eg2-11",
+      "question": "Which is the correct prefix for 'Happy' to make its opposite?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Un",
+        "Dis",
+        "In",
+        "Mis"
       ],
-      "answer": 3,
-      "explanation": "Word11 means something similar to the correct option."
+      "answer": "Un"
     },
     {
-      "id": 12,
-      "question": "Choose the correct synonym for Word12:",
+      "id": "eg2-12",
+      "question": "Choose the correct tense: The sun ___ in the east.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "rises",
+        "rise",
+        "is rising",
+        "rose"
       ],
-      "answer": 0,
-      "explanation": "Word12 means something similar to the correct option."
+      "answer": "rises"
     },
     {
-      "id": 13,
-      "question": "Choose the correct synonym for Word13:",
+      "id": "eg2-13",
+      "question": "The word 'Alumni' is singular or plural?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Plural",
+        "Singular",
+        "Both",
+        "None"
       ],
-      "answer": 1,
-      "explanation": "Word13 means something similar to the correct option."
+      "answer": "Plural"
     },
     {
-      "id": 14,
-      "question": "Choose the correct synonym for Word14:",
+      "id": "eg2-14",
+      "question": "Fill in the blank: She is married ___ a doctor.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "to",
+        "with",
+        "by",
+        "of"
       ],
-      "answer": 2,
-      "explanation": "Word14 means something similar to the correct option."
+      "answer": "to"
     },
     {
-      "id": 15,
-      "question": "Choose the correct synonym for Word15:",
+      "id": "eg2-15",
+      "question": "What is the past participle of 'Drink'?",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Drunk",
+        "Drank",
+        "Drinks",
+        "Drinking"
       ],
-      "answer": 3,
-      "explanation": "Word15 means something similar to the correct option."
+      "answer": "Drunk"
     },
     {
-      "id": 16,
-      "question": "Choose the correct synonym for Word16:",
+      "id": "eg2-16",
+      "question": "One who knows everything is called:",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Omniscient",
+        "Omnipotent",
+        "Omnipresent",
+        "Optimist"
       ],
-      "answer": 0,
-      "explanation": "Word16 means something similar to the correct option."
+      "answer": "Omniscient"
     },
     {
-      "id": 17,
-      "question": "Choose the correct synonym for Word17:",
+      "id": "eg2-17",
+      "question": "They ___ playing football when it started raining.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "were",
+        "was",
+        "are",
+        "have been"
       ],
-      "answer": 1,
-      "explanation": "Word17 means something similar to the correct option."
+      "answer": "were"
     },
     {
-      "id": 18,
-      "question": "Choose the correct synonym for Word18:",
+      "id": "eg2-18",
+      "question": "I am not used to ___ early.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "waking up",
+        "wake up",
+        "woke up",
+        "woken up"
       ],
-      "answer": 2,
-      "explanation": "Word18 means something similar to the correct option."
+      "answer": "waking up"
     },
     {
-      "id": 19,
-      "question": "Choose the correct synonym for Word19:",
+      "id": "eg2-19",
+      "question": "Find the odd one out.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "Apple",
+        "Orange",
+        "Banana",
+        "Carrot"
       ],
-      "answer": 3,
-      "explanation": "Word19 means something similar to the correct option."
+      "answer": "Carrot"
     },
     {
-      "id": 20,
-      "question": "Choose the correct synonym for Word20:",
+      "id": "eg2-20",
+      "question": "It is time we ___.",
       "options": [
-        "Synonym1",
-        "Synonym2",
-        "Synonym3",
-        "Synonym4"
+        "left",
+        "leave",
+        "leaving",
+        "have left"
       ],
-      "answer": 0,
-      "explanation": "Word20 means something similar to the correct option."
+      "answer": "left"
     }
   ],
   "logical-reasoning-1": [
     {
-      "id": 1,
-      "question": "If A = 1 and B = 2, what is A + B?",
+      "id": "lr1-1",
+      "question": "What comes next in the sequence: 2, 4, 8, 16, ___?",
       "options": [
-        "2",
-        "3",
-        "4",
-        "5"
+        "32",
+        "24",
+        "64",
+        "20"
       ],
-      "answer": 1,
-      "explanation": "1 + 2 = 3."
+      "answer": "32"
     },
     {
-      "id": 2,
-      "question": "If A = 2 and B = 3, what is A + B?",
+      "id": "lr1-2",
+      "question": "If A is the father of B and B is the brother of C, what is A to C?",
       "options": [
-        "4",
-        "5",
-        "6",
-        "7"
+        "Father",
+        "Uncle",
+        "Grandfather",
+        "Brother"
       ],
-      "answer": 1,
-      "explanation": "2 + 3 = 5."
+      "answer": "Father"
     },
     {
-      "id": 3,
-      "question": "If A = 3 and B = 4, what is A + B?",
+      "id": "lr1-3",
+      "question": "Find the odd one out: Car, Bus, Train, Boat.",
       "options": [
-        "6",
-        "7",
-        "8",
-        "9"
+        "Boat",
+        "Train",
+        "Car",
+        "Bus"
       ],
-      "answer": 1,
-      "explanation": "3 + 4 = 7."
+      "answer": "Boat"
     },
     {
-      "id": 4,
-      "question": "If A = 4 and B = 5, what is A + B?",
+      "id": "lr1-4",
+      "question": "CAT is coded as 3120, how is DOG coded?",
       "options": [
-        "8",
-        "9",
-        "10",
-        "11"
+        "4157",
+        "4158",
+        "3157",
+        "4156"
       ],
-      "answer": 1,
-      "explanation": "4 + 5 = 9."
+      "answer": "4157"
     },
     {
-      "id": 5,
-      "question": "If A = 5 and B = 6, what is A + B?",
+      "id": "lr1-5",
+      "question": "A man walks 5km North, then turns right and walks 3km. Which direction is he facing?",
       "options": [
-        "10",
-        "11",
-        "12",
-        "13"
+        "East",
+        "West",
+        "North",
+        "South"
       ],
-      "answer": 1,
-      "explanation": "5 + 6 = 11."
+      "answer": "East"
     },
     {
-      "id": 6,
-      "question": "If A = 6 and B = 7, what is A + B?",
+      "id": "lr1-6",
+      "question": "If 1st Jan is Monday, what day is 8th Jan?",
       "options": [
-        "12",
-        "13",
-        "14",
-        "15"
+        "Monday",
+        "Tuesday",
+        "Sunday",
+        "Wednesday"
       ],
-      "answer": 1,
-      "explanation": "6 + 7 = 13."
+      "answer": "Monday"
     },
     {
-      "id": 7,
-      "question": "If A = 7 and B = 8, what is A + B?",
+      "id": "lr1-7",
+      "question": "Which word does not belong with the others?",
       "options": [
-        "14",
-        "15",
-        "16",
-        "17"
+        "Leopard",
+        "Cougar",
+        "Elephant",
+        "Lion"
       ],
-      "answer": 1,
-      "explanation": "7 + 8 = 15."
+      "answer": "Elephant"
     },
     {
-      "id": 8,
-      "question": "If A = 8 and B = 9, what is A + B?",
-      "options": [
-        "16",
-        "17",
-        "18",
-        "19"
-      ],
-      "answer": 1,
-      "explanation": "8 + 9 = 17."
-    },
-    {
-      "id": 9,
-      "question": "If A = 9 and B = 10, what is A + B?",
-      "options": [
-        "18",
-        "19",
-        "20",
-        "21"
-      ],
-      "answer": 1,
-      "explanation": "9 + 10 = 19."
-    },
-    {
-      "id": 10,
-      "question": "If A = 10 and B = 11, what is A + B?",
+      "id": "lr1-8",
+      "question": "Insert the missing number: 5, 10, 15, __, 25",
       "options": [
         "20",
-        "21",
         "22",
+        "18",
+        "30"
+      ],
+      "answer": "20"
+    },
+    {
+      "id": "lr1-9",
+      "question": "If 'APPLE' is 'EPPLA', then 'GRAPE' is:",
+      "options": [
+        "EPARG",
+        "EPAGR",
+        "EGAPR",
+        "ERPAG"
+      ],
+      "answer": "EPARG"
+    },
+    {
+      "id": "lr1-10",
+      "question": "Some cats are dogs. All dogs are birds. Can we say some cats are birds?",
+      "options": [
+        "Yes",
+        "No",
+        "Maybe",
+        "Cannot say"
+      ],
+      "answer": "Yes"
+    },
+    {
+      "id": "lr1-11",
+      "question": "A clock shows 3:00. What is the angle between the hands?",
+      "options": [
+        "90 degrees",
+        "60 degrees",
+        "45 degrees",
+        "120 degrees"
+      ],
+      "answer": "90 degrees"
+    },
+    {
+      "id": "lr1-12",
+      "question": "Look at this series: 36, 34, 30, 28, 24, ... What number should come next?",
+      "options": [
+        "22",
+        "20",
+        "26",
         "23"
       ],
-      "answer": 1,
-      "explanation": "10 + 11 = 21."
+      "answer": "22"
     },
     {
-      "id": 11,
-      "question": "If A = 11 and B = 12, what is A + B?",
+      "id": "lr1-13",
+      "question": "Pointing to a photograph, a man said, 'She is the daughter of my grandfather's only son.' How is she related to him?",
       "options": [
-        "22",
-        "23",
+        "Sister",
+        "Mother",
+        "Aunt",
+        "Cousin"
+      ],
+      "answer": "Sister"
+    },
+    {
+      "id": "lr1-14",
+      "question": "Odometer is to mileage as compass is to:",
+      "options": [
+        "Direction",
+        "Speed",
+        "Needle",
+        "Hiking"
+      ],
+      "answer": "Direction"
+    },
+    {
+      "id": "lr1-15",
+      "question": "Find the missing letter: A, C, F, J, ___",
+      "options": [
+        "O",
+        "N",
+        "M",
+        "P"
+      ],
+      "answer": "O"
+    },
+    {
+      "id": "lr1-16",
+      "question": "If TODAY is coded as UPEBZ, what is the code for YESTERDAY?",
+      "options": [
+        "ZFSTFSFBZ",
+        "ZFUTFTEBZ",
+        "ZFTUFSFBZ",
+        "ZFUTFUFBZ"
+      ],
+      "answer": "ZFTUFSFBZ"
+    },
+    {
+      "id": "lr1-17",
+      "question": "SCD, TEF, UGH, ___, WKL",
+      "options": [
+        "VIJ",
+        "VJI",
+        "IJV",
+        "IVJ"
+      ],
+      "answer": "VIJ"
+    },
+    {
+      "id": "lr1-18",
+      "question": "Which number is wrong in the series? 1, 4, 9, 16, 24, 36",
+      "options": [
         "24",
-        "25"
-      ],
-      "answer": 1,
-      "explanation": "11 + 12 = 23."
-    },
-    {
-      "id": 12,
-      "question": "If A = 12 and B = 13, what is A + B?",
-      "options": [
-        "24",
-        "25",
-        "26",
-        "27"
-      ],
-      "answer": 1,
-      "explanation": "12 + 13 = 25."
-    },
-    {
-      "id": 13,
-      "question": "If A = 13 and B = 14, what is A + B?",
-      "options": [
-        "26",
-        "27",
-        "28",
-        "29"
-      ],
-      "answer": 1,
-      "explanation": "13 + 14 = 27."
-    },
-    {
-      "id": 14,
-      "question": "If A = 14 and B = 15, what is A + B?",
-      "options": [
-        "28",
-        "29",
-        "30",
-        "31"
-      ],
-      "answer": 1,
-      "explanation": "14 + 15 = 29."
-    },
-    {
-      "id": 15,
-      "question": "If A = 15 and B = 16, what is A + B?",
-      "options": [
-        "30",
-        "31",
-        "32",
-        "33"
-      ],
-      "answer": 1,
-      "explanation": "15 + 16 = 31."
-    },
-    {
-      "id": 16,
-      "question": "If A = 16 and B = 17, what is A + B?",
-      "options": [
-        "32",
-        "33",
-        "34",
-        "35"
-      ],
-      "answer": 1,
-      "explanation": "16 + 17 = 33."
-    },
-    {
-      "id": 17,
-      "question": "If A = 17 and B = 18, what is A + B?",
-      "options": [
-        "34",
-        "35",
+        "16",
         "36",
-        "37"
+        "9"
       ],
-      "answer": 1,
-      "explanation": "17 + 18 = 35."
+      "answer": "24"
     },
     {
-      "id": 18,
-      "question": "If A = 18 and B = 19, what is A + B?",
+      "id": "lr1-19",
+      "question": "If RED is 27, BLUE is?",
       "options": [
-        "36",
-        "37",
-        "38",
+        "40",
+        "42",
+        "45",
         "39"
       ],
-      "answer": 1,
-      "explanation": "18 + 19 = 37."
+      "answer": "40"
     },
     {
-      "id": 19,
-      "question": "If A = 19 and B = 20, what is A + B?",
+      "id": "lr1-20",
+      "question": "A cube has how many edges?",
       "options": [
-        "38",
-        "39",
-        "40",
-        "41"
+        "12",
+        "8",
+        "6",
+        "10"
       ],
-      "answer": 1,
-      "explanation": "19 + 20 = 39."
-    },
-    {
-      "id": 20,
-      "question": "If A = 20 and B = 21, what is A + B?",
-      "options": [
-        "40",
-        "41",
-        "42",
-        "43"
-      ],
-      "answer": 1,
-      "explanation": "20 + 21 = 41."
+      "answer": "12"
     }
   ],
   "logical-reasoning-2": [
     {
-      "id": 1,
-      "question": "If A = 1 and B = 2, what is A + B?",
+      "id": "lr2-1",
+      "question": "Arrange in logical order: 1. Birth, 2. Death, 3. Funeral, 4. Marriage, 5. Education",
       "options": [
-        "2",
-        "3",
-        "4",
-        "5"
+        "1,5,4,2,3",
+        "1,5,4,3,2",
+        "1,4,5,2,3",
+        "1,5,2,4,3"
       ],
-      "answer": 1,
-      "explanation": "1 + 2 = 3."
+      "answer": "1,5,4,2,3"
     },
     {
-      "id": 2,
-      "question": "If A = 2 and B = 3, what is A + B?",
+      "id": "lr2-2",
+      "question": "If all Roses are Flowers, and some Flowers are Red, are all Roses Red?",
       "options": [
-        "4",
-        "5",
-        "6",
-        "7"
+        "Not necessarily",
+        "Yes",
+        "No",
+        "Cannot determine"
       ],
-      "answer": 1,
-      "explanation": "2 + 3 = 5."
+      "answer": "Not necessarily"
     },
     {
-      "id": 3,
-      "question": "If A = 3 and B = 4, what is A + B?",
+      "id": "lr2-3",
+      "question": "Find the missing number in the sequence: 1, 1, 2, 3, 5, 8, ___",
       "options": [
-        "6",
-        "7",
-        "8",
-        "9"
-      ],
-      "answer": 1,
-      "explanation": "3 + 4 = 7."
-    },
-    {
-      "id": 4,
-      "question": "If A = 4 and B = 5, what is A + B?",
-      "options": [
-        "8",
-        "9",
-        "10",
-        "11"
-      ],
-      "answer": 1,
-      "explanation": "4 + 5 = 9."
-    },
-    {
-      "id": 5,
-      "question": "If A = 5 and B = 6, what is A + B?",
-      "options": [
-        "10",
+        "13",
         "11",
         "12",
-        "13"
-      ],
-      "answer": 1,
-      "explanation": "5 + 6 = 11."
-    },
-    {
-      "id": 6,
-      "question": "If A = 6 and B = 7, what is A + B?",
-      "options": [
-        "12",
-        "13",
-        "14",
         "15"
       ],
-      "answer": 1,
-      "explanation": "6 + 7 = 13."
+      "answer": "13"
     },
     {
-      "id": 7,
-      "question": "If A = 7 and B = 8, what is A + B?",
+      "id": "lr2-4",
+      "question": "If 'WHITE' is called 'BLUE', 'BLUE' is called 'RED', 'RED' is called 'YELLOW', what is the color of human blood?",
       "options": [
-        "14",
-        "15",
-        "16",
-        "17"
+        "YELLOW",
+        "RED",
+        "BLUE",
+        "WHITE"
       ],
-      "answer": 1,
-      "explanation": "7 + 8 = 15."
+      "answer": "YELLOW"
     },
     {
-      "id": 8,
-      "question": "If A = 8 and B = 9, what is A + B?",
+      "id": "lr2-5",
+      "question": "Choose the word that is essential part of the word 'Desert'.",
       "options": [
-        "16",
-        "17",
-        "18",
-        "19"
+        "Arid",
+        "Oasis",
+        "Cactus",
+        "Camel"
       ],
-      "answer": 1,
-      "explanation": "8 + 9 = 17."
+      "answer": "Arid"
     },
     {
-      "id": 9,
-      "question": "If A = 9 and B = 10, what is A + B?",
+      "id": "lr2-6",
+      "question": "Which comes next: B2CD, BCD4, B5CD, BC6D, ...",
       "options": [
-        "18",
-        "19",
-        "20",
-        "21"
+        "B2C2D",
+        "BC7D",
+        "B7CD",
+        "BCD7"
       ],
-      "answer": 1,
-      "explanation": "9 + 10 = 19."
+      "answer": "B7CD"
     },
     {
-      "id": 10,
-      "question": "If A = 10 and B = 11, what is A + B?",
+      "id": "lr2-7",
+      "question": "If a month starts on Sunday and has 31 days, how many Sundays are in that month?",
       "options": [
-        "20",
-        "21",
-        "22",
-        "23"
+        "5",
+        "4",
+        "6",
+        "3"
       ],
-      "answer": 1,
-      "explanation": "10 + 11 = 21."
+      "answer": "5"
     },
     {
-      "id": 11,
-      "question": "If A = 11 and B = 12, what is A + B?",
-      "options": [
-        "22",
-        "23",
-        "24",
-        "25"
-      ],
-      "answer": 1,
-      "explanation": "11 + 12 = 23."
-    },
-    {
-      "id": 12,
-      "question": "If A = 12 and B = 13, what is A + B?",
-      "options": [
-        "24",
-        "25",
-        "26",
-        "27"
-      ],
-      "answer": 1,
-      "explanation": "12 + 13 = 25."
-    },
-    {
-      "id": 13,
-      "question": "If A = 13 and B = 14, what is A + B?",
-      "options": [
-        "26",
-        "27",
-        "28",
-        "29"
-      ],
-      "answer": 1,
-      "explanation": "13 + 14 = 27."
-    },
-    {
-      "id": 14,
-      "question": "If A = 14 and B = 15, what is A + B?",
-      "options": [
-        "28",
-        "29",
-        "30",
-        "31"
-      ],
-      "answer": 1,
-      "explanation": "14 + 15 = 29."
-    },
-    {
-      "id": 15,
-      "question": "If A = 15 and B = 16, what is A + B?",
-      "options": [
-        "30",
-        "31",
-        "32",
-        "33"
-      ],
-      "answer": 1,
-      "explanation": "15 + 16 = 31."
-    },
-    {
-      "id": 16,
-      "question": "If A = 16 and B = 17, what is A + B?",
+      "id": "lr2-8",
+      "question": "Rohan ranks 7th from top and 26th from bottom in a class. How many students are there?",
       "options": [
         "32",
         "33",
         "34",
-        "35"
+        "31"
       ],
-      "answer": 1,
-      "explanation": "16 + 17 = 33."
+      "answer": "32"
     },
     {
-      "id": 17,
-      "question": "If A = 17 and B = 18, what is A + B?",
+      "id": "lr2-9",
+      "question": "What is the day of the week on 15th August 1947?",
       "options": [
-        "34",
-        "35",
-        "36",
-        "37"
+        "Friday",
+        "Thursday",
+        "Saturday",
+        "Wednesday"
       ],
-      "answer": 1,
-      "explanation": "17 + 18 = 35."
+      "answer": "Friday"
     },
     {
-      "id": 18,
-      "question": "If A = 18 and B = 19, what is A + B?",
+      "id": "lr2-10",
+      "question": "Find the odd one out: Square, Rectangle, Triangle, Cube.",
       "options": [
-        "36",
+        "Cube",
+        "Square",
+        "Rectangle",
+        "Triangle"
+      ],
+      "answer": "Cube"
+    },
+    {
+      "id": "lr2-11",
+      "question": "If BAD is coded as 7 and HIS is coded as 36, then LOW is?",
+      "options": [
+        "46",
+        "50",
+        "41",
+        "48"
+      ],
+      "answer": "46"
+    },
+    {
+      "id": "lr2-12",
+      "question": "If 3*4=12 and 5*6=30, then 7*8=?",
+      "options": [
+        "56",
+        "48",
+        "60",
+        "64"
+      ],
+      "answer": "56"
+    },
+    {
+      "id": "lr2-13",
+      "question": "What is the next prime number after 31?",
+      "options": [
         "37",
-        "38",
+        "33",
+        "35",
         "39"
       ],
-      "answer": 1,
-      "explanation": "18 + 19 = 37."
+      "answer": "37"
     },
     {
-      "id": 19,
-      "question": "If A = 19 and B = 20, what is A + B?",
+      "id": "lr2-14",
+      "question": "How many degrees are there in a circle?",
       "options": [
-        "38",
-        "39",
-        "40",
-        "41"
+        "360",
+        "180",
+        "90",
+        "270"
       ],
-      "answer": 1,
-      "explanation": "19 + 20 = 39."
+      "answer": "360"
     },
     {
-      "id": 20,
-      "question": "If A = 20 and B = 21, what is A + B?",
+      "id": "lr2-15",
+      "question": "Look at this series: 8, 22, 8, 28, 8, ... What number should come next?",
       "options": [
-        "40",
-        "41",
-        "42",
-        "43"
+        "34",
+        "8",
+        "32",
+        "22"
       ],
-      "answer": 1,
-      "explanation": "20 + 21 = 41."
+      "answer": "34"
+    },
+    {
+      "id": "lr2-16",
+      "question": "Window is to pane as book is to:",
+      "options": [
+        "Page",
+        "Novel",
+        "Cover",
+        "Author"
+      ],
+      "answer": "Page"
+    },
+    {
+      "id": "lr2-17",
+      "question": "If A+B means A is the brother of B, A-B means A is the sister of B, and A*B means A is the father of B. Which of the following means that C is the son of M?",
+      "options": [
+        "M*N-C+F",
+        "F-C+N*M",
+        "N+M-F*C",
+        "M*C-F"
+      ],
+      "answer": "M*N-C+F"
+    },
+    {
+      "id": "lr2-18",
+      "question": "Five girls are sitting in a row facing north. A is to the right of B. E is to the left of B but to the right of C. If A is to the left of D, who is sitting in the middle?",
+      "options": [
+        "B",
+        "A",
+        "E",
+        "C"
+      ],
+      "answer": "B"
+    },
+    {
+      "id": "lr2-19",
+      "question": "Which word cannot be formed from the letters of 'KNOWLEDGE'?",
+      "options": [
+        "KNOWN",
+        "GOD",
+        "GOLD",
+        "EDGE"
+      ],
+      "answer": "KNOWN"
+    },
+    {
+      "id": "lr2-20",
+      "question": "A doctor gives you 3 pills telling you to take one every half hour. How long would the pills last?",
+      "options": [
+        "1 hour",
+        "1.5 hours",
+        "2 hours",
+        "30 mins"
+      ],
+      "answer": "1 hour"
     }
   ],
   "indian-polity": [
     {
-      "id": 1,
-      "question": "Which article of the Indian Constitution relates to provision 1?",
+      "id": "ip-1",
+      "question": "Who is the 'Father of the Indian Constitution'?",
       "options": [
-        "Article 11",
-        "Article 21",
-        "Article 31",
-        "Article 41"
+        "B.R. Ambedkar",
+        "Mahatma Gandhi",
+        "Jawaharlal Nehru",
+        "Sardar Patel"
       ],
-      "answer": 1,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "B.R. Ambedkar"
     },
     {
-      "id": 2,
-      "question": "Which article of the Indian Constitution relates to provision 2?",
+      "id": "ip-2",
+      "question": "How many articles were there originally in the Constitution of India?",
       "options": [
-        "Article 12",
-        "Article 22",
-        "Article 32",
-        "Article 42"
+        "395",
+        "448",
+        "370",
+        "415"
       ],
-      "answer": 2,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "395"
     },
     {
-      "id": 3,
-      "question": "Which article of the Indian Constitution relates to provision 3?",
-      "options": [
-        "Article 13",
-        "Article 23",
-        "Article 33",
-        "Article 43"
-      ],
-      "answer": 3,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 4,
-      "question": "Which article of the Indian Constitution relates to provision 4?",
+      "id": "ip-3",
+      "question": "Which Article is related to the Right to Equality?",
       "options": [
         "Article 14",
-        "Article 24",
-        "Article 34",
-        "Article 44"
-      ],
-      "answer": 0,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 5,
-      "question": "Which article of the Indian Constitution relates to provision 5?",
-      "options": [
-        "Article 15",
-        "Article 25",
-        "Article 35",
-        "Article 45"
-      ],
-      "answer": 1,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 6,
-      "question": "Which article of the Indian Constitution relates to provision 6?",
-      "options": [
-        "Article 16",
-        "Article 26",
-        "Article 36",
-        "Article 46"
-      ],
-      "answer": 2,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 7,
-      "question": "Which article of the Indian Constitution relates to provision 7?",
-      "options": [
-        "Article 17",
-        "Article 27",
-        "Article 37",
-        "Article 47"
-      ],
-      "answer": 3,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 8,
-      "question": "Which article of the Indian Constitution relates to provision 8?",
-      "options": [
-        "Article 18",
-        "Article 28",
-        "Article 38",
-        "Article 48"
-      ],
-      "answer": 0,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 9,
-      "question": "Which article of the Indian Constitution relates to provision 9?",
-      "options": [
         "Article 19",
-        "Article 29",
-        "Article 39",
-        "Article 49"
-      ],
-      "answer": 1,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 10,
-      "question": "Which article of the Indian Constitution relates to provision 10?",
-      "options": [
-        "Article 20",
-        "Article 30",
-        "Article 40",
-        "Article 50"
-      ],
-      "answer": 2,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
-    },
-    {
-      "id": 11,
-      "question": "Which article of the Indian Constitution relates to provision 11?",
-      "options": [
         "Article 21",
-        "Article 31",
-        "Article 41",
-        "Article 51"
+        "Article 32"
       ],
-      "answer": 3,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Article 14"
     },
     {
-      "id": 12,
-      "question": "Which article of the Indian Constitution relates to provision 12?",
+      "id": "ip-4",
+      "question": "Who administers the oath of office to the President of India?",
       "options": [
-        "Article 22",
-        "Article 32",
-        "Article 42",
-        "Article 52"
+        "Chief Justice of India",
+        "Prime Minister",
+        "Vice President",
+        "Lok Sabha Speaker"
       ],
-      "answer": 0,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Chief Justice of India"
     },
     {
-      "id": 13,
-      "question": "Which article of the Indian Constitution relates to provision 13?",
+      "id": "ip-5",
+      "question": "The minimum age required to become a member of the Lok Sabha is:",
       "options": [
-        "Article 23",
-        "Article 33",
-        "Article 43",
-        "Article 53"
+        "25 years",
+        "30 years",
+        "35 years",
+        "21 years"
       ],
-      "answer": 1,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "25 years"
     },
     {
-      "id": 14,
-      "question": "Which article of the Indian Constitution relates to provision 14?",
+      "id": "ip-6",
+      "question": "The Rajya Sabha can have a maximum of how many members?",
       "options": [
-        "Article 24",
-        "Article 34",
-        "Article 44",
-        "Article 54"
+        "250",
+        "245",
+        "552",
+        "238"
       ],
-      "answer": 2,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "250"
     },
     {
-      "id": 15,
-      "question": "Which article of the Indian Constitution relates to provision 15?",
+      "id": "ip-7",
+      "question": "Which part of the Constitution deals with Fundamental Rights?",
       "options": [
-        "Article 25",
-        "Article 35",
-        "Article 45",
-        "Article 55"
+        "Part III",
+        "Part IV",
+        "Part II",
+        "Part V"
       ],
-      "answer": 3,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Part III"
     },
     {
-      "id": 16,
-      "question": "Which article of the Indian Constitution relates to provision 16?",
+      "id": "ip-8",
+      "question": "The concept of Directive Principles of State Policy was borrowed from:",
       "options": [
-        "Article 26",
-        "Article 36",
-        "Article 46",
-        "Article 56"
+        "Ireland",
+        "USA",
+        "UK",
+        "USSR"
       ],
-      "answer": 0,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Ireland"
     },
     {
-      "id": 17,
-      "question": "Which article of the Indian Constitution relates to provision 17?",
+      "id": "ip-9",
+      "question": "Who is the ex-officio Chairman of the Rajya Sabha?",
       "options": [
-        "Article 27",
-        "Article 37",
-        "Article 47",
-        "Article 57"
+        "Vice President",
+        "President",
+        "Prime Minister",
+        "Chief Justice"
       ],
-      "answer": 1,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Vice President"
     },
     {
-      "id": 18,
-      "question": "Which article of the Indian Constitution relates to provision 18?",
+      "id": "ip-10",
+      "question": "Under which Article can the President declare a National Emergency?",
       "options": [
-        "Article 28",
-        "Article 38",
-        "Article 48",
-        "Article 58"
+        "Article 352",
+        "Article 356",
+        "Article 360",
+        "Article 370"
       ],
-      "answer": 2,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Article 352"
     },
     {
-      "id": 19,
-      "question": "Which article of the Indian Constitution relates to provision 19?",
+      "id": "ip-11",
+      "question": "Panchayati Raj was first introduced in which state?",
       "options": [
-        "Article 29",
-        "Article 39",
-        "Article 49",
-        "Article 59"
+        "Rajasthan",
+        "Andhra Pradesh",
+        "Gujarat",
+        "Assam"
       ],
-      "answer": 3,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Rajasthan"
     },
     {
-      "id": 20,
-      "question": "Which article of the Indian Constitution relates to provision 20?",
+      "id": "ip-12",
+      "question": "Which schedule of the Constitution contains the list of recognized languages?",
       "options": [
-        "Article 30",
-        "Article 40",
-        "Article 50",
-        "Article 60"
+        "Eighth Schedule",
+        "Ninth Schedule",
+        "Seventh Schedule",
+        "Tenth Schedule"
       ],
-      "answer": 0,
-      "explanation": "Indian polity frequently references these articles for fundamental rights/duties."
+      "answer": "Eighth Schedule"
+    },
+    {
+      "id": "ip-13",
+      "question": "The Right to Property was removed from Fundamental Rights by which Amendment?",
+      "options": [
+        "44th Amendment",
+        "42nd Amendment",
+        "86th Amendment",
+        "73rd Amendment"
+      ],
+      "answer": "44th Amendment"
+    },
+    {
+      "id": "ip-14",
+      "question": "What is the retirement age for a Supreme Court Judge in India?",
+      "options": [
+        "65 years",
+        "62 years",
+        "60 years",
+        "70 years"
+      ],
+      "answer": "65 years"
+    },
+    {
+      "id": "ip-15",
+      "question": "Who appoints the Chief Election Commissioner of India?",
+      "options": [
+        "President",
+        "Prime Minister",
+        "Chief Justice",
+        "Parliament"
+      ],
+      "answer": "President"
+    },
+    {
+      "id": "ip-16",
+      "question": "The idea of a Constituent Assembly for India was put forward for the first time by:",
+      "options": [
+        "M.N. Roy",
+        "Mahatma Gandhi",
+        "J.L. Nehru",
+        "B.R. Ambedkar"
+      ],
+      "answer": "M.N. Roy"
+    },
+    {
+      "id": "ip-17",
+      "question": "Which writ is issued by a higher court when a lower court has considered a case going beyond its jurisdiction?",
+      "options": [
+        "Prohibition",
+        "Mandamus",
+        "Habeas Corpus",
+        "Quo Warranto"
+      ],
+      "answer": "Prohibition"
+    },
+    {
+      "id": "ip-18",
+      "question": "The term 'Secular' was added to the Preamble by which Amendment?",
+      "options": [
+        "42nd Amendment",
+        "44th Amendment",
+        "76th Amendment",
+        "86th Amendment"
+      ],
+      "answer": "42nd Amendment"
+    },
+    {
+      "id": "ip-19",
+      "question": "Who presides over the joint sitting of both Houses of Parliament?",
+      "options": [
+        "Speaker of Lok Sabha",
+        "President",
+        "Vice President",
+        "Prime Minister"
+      ],
+      "answer": "Speaker of Lok Sabha"
+    },
+    {
+      "id": "ip-20",
+      "question": "How many times has Financial Emergency been declared in India so far?",
+      "options": [
+        "Never",
+        "Once",
+        "Twice",
+        "Thrice"
+      ],
+      "answer": "Never"
     }
   ],
   "general-science": [
     {
-      "id": 1,
-      "question": "What is the atomic number of element 1 (hypothetical)?",
+      "id": "gs-1",
+      "question": "What is the chemical symbol for Gold?",
       "options": [
-        "1",
-        "11",
-        "21",
-        "31"
+        "Au",
+        "Ag",
+        "Pb",
+        "Fe"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 1 has atomic number 1."
+      "answer": "Au"
     },
     {
-      "id": 2,
-      "question": "What is the atomic number of element 2 (hypothetical)?",
+      "id": "gs-2",
+      "question": "Which is the most abundant gas in the Earth's atmosphere?",
       "options": [
-        "2",
-        "12",
-        "22",
-        "32"
+        "Nitrogen",
+        "Oxygen",
+        "Carbon Dioxide",
+        "Hydrogen"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 2 has atomic number 2."
+      "answer": "Nitrogen"
     },
     {
-      "id": 3,
-      "question": "What is the atomic number of element 3 (hypothetical)?",
+      "id": "gs-3",
+      "question": "The SI unit of force is:",
       "options": [
-        "3",
-        "13",
-        "23",
-        "33"
+        "Newton",
+        "Joule",
+        "Pascal",
+        "Watt"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 3 has atomic number 3."
+      "answer": "Newton"
     },
     {
-      "id": 4,
-      "question": "What is the atomic number of element 4 (hypothetical)?",
+      "id": "gs-4",
+      "question": "What is the powerhouse of the cell?",
       "options": [
-        "4",
-        "14",
-        "24",
-        "34"
+        "Mitochondria",
+        "Nucleus",
+        "Ribosome",
+        "Endoplasmic Reticulum"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 4 has atomic number 4."
+      "answer": "Mitochondria"
     },
     {
-      "id": 5,
-      "question": "What is the atomic number of element 5 (hypothetical)?",
+      "id": "gs-5",
+      "question": "Deficiency of Vitamin C causes:",
       "options": [
-        "5",
-        "15",
-        "25",
-        "35"
+        "Scurvy",
+        "Rickets",
+        "Beriberi",
+        "Night Blindness"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 5 has atomic number 5."
+      "answer": "Scurvy"
     },
     {
-      "id": 6,
-      "question": "What is the atomic number of element 6 (hypothetical)?",
+      "id": "gs-6",
+      "question": "Light Year is a unit of:",
       "options": [
-        "6",
-        "16",
-        "26",
-        "36"
+        "Distance",
+        "Time",
+        "Speed",
+        "Intensity"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 6 has atomic number 6."
+      "answer": "Distance"
     },
     {
-      "id": 7,
-      "question": "What is the atomic number of element 7 (hypothetical)?",
+      "id": "gs-7",
+      "question": "The process by which plants make their food is called:",
       "options": [
-        "7",
-        "17",
-        "27",
-        "37"
+        "Photosynthesis",
+        "Respiration",
+        "Transpiration",
+        "Fermentation"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 7 has atomic number 7."
+      "answer": "Photosynthesis"
     },
     {
-      "id": 8,
-      "question": "What is the atomic number of element 8 (hypothetical)?",
+      "id": "gs-8",
+      "question": "Which blood group is known as the Universal Donor?",
       "options": [
-        "8",
-        "18",
-        "28",
-        "38"
+        "O negative",
+        "AB positive",
+        "A positive",
+        "B negative"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 8 has atomic number 8."
+      "answer": "O negative"
     },
     {
-      "id": 9,
-      "question": "What is the atomic number of element 9 (hypothetical)?",
+      "id": "gs-9",
+      "question": "The hardest naturally occurring substance on Earth is:",
       "options": [
-        "9",
-        "19",
-        "29",
-        "39"
+        "Diamond",
+        "Graphene",
+        "Quartz",
+        "Topaz"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 9 has atomic number 9."
+      "answer": "Diamond"
     },
     {
-      "id": 10,
-      "question": "What is the atomic number of element 10 (hypothetical)?",
+      "id": "gs-10",
+      "question": "What is the normal resting heart rate for adults?",
       "options": [
-        "10",
-        "20",
-        "30",
-        "40"
+        "60-100 bpm",
+        "40-60 bpm",
+        "100-120 bpm",
+        "120-140 bpm"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 10 has atomic number 10."
+      "answer": "60-100 bpm"
     },
     {
-      "id": 11,
-      "question": "What is the atomic number of element 11 (hypothetical)?",
+      "id": "gs-11",
+      "question": "Water boils at what temperature in Fahrenheit?",
       "options": [
-        "11",
-        "21",
-        "31",
-        "41"
-      ],
-      "answer": 0,
-      "explanation": "Science fact: Element 11 has atomic number 11."
-    },
-    {
-      "id": 12,
-      "question": "What is the atomic number of element 12 (hypothetical)?",
-      "options": [
-        "12",
-        "22",
+        "212",
+        "100",
         "32",
-        "42"
+        "0"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 12 has atomic number 12."
+      "answer": "212"
     },
     {
-      "id": 13,
-      "question": "What is the atomic number of element 13 (hypothetical)?",
+      "id": "gs-12",
+      "question": "What is the study of fossils called?",
       "options": [
-        "13",
-        "23",
-        "33",
-        "43"
+        "Paleontology",
+        "Archeology",
+        "Anthropology",
+        "Biology"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 13 has atomic number 13."
+      "answer": "Paleontology"
     },
     {
-      "id": 14,
-      "question": "What is the atomic number of element 14 (hypothetical)?",
+      "id": "gs-13",
+      "question": "Which planet is known as the Red Planet?",
       "options": [
-        "14",
-        "24",
-        "34",
-        "44"
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Venus"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 14 has atomic number 14."
+      "answer": "Mars"
     },
     {
-      "id": 15,
-      "question": "What is the atomic number of element 15 (hypothetical)?",
+      "id": "gs-14",
+      "question": "What does DNA stand for?",
       "options": [
-        "15",
-        "25",
-        "35",
-        "45"
+        "Deoxyribonucleic Acid",
+        "Deoxyribogenetic Acid",
+        "Diribonucleic Acid",
+        "Di-nuclear Acid"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 15 has atomic number 15."
+      "answer": "Deoxyribonucleic Acid"
     },
     {
-      "id": 16,
-      "question": "What is the atomic number of element 16 (hypothetical)?",
+      "id": "gs-15",
+      "question": "The filament of a light bulb is made of:",
       "options": [
-        "16",
-        "26",
-        "36",
-        "46"
+        "Tungsten",
+        "Copper",
+        "Aluminum",
+        "Iron"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 16 has atomic number 16."
+      "answer": "Tungsten"
     },
     {
-      "id": 17,
-      "question": "What is the atomic number of element 17 (hypothetical)?",
+      "id": "gs-16",
+      "question": "Which part of the eye controls the amount of light entering it?",
       "options": [
-        "17",
-        "27",
-        "37",
-        "47"
+        "Pupil",
+        "Retina",
+        "Cornea",
+        "Lens"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 17 has atomic number 17."
+      "answer": "Pupil"
     },
     {
-      "id": 18,
-      "question": "What is the atomic number of element 18 (hypothetical)?",
+      "id": "gs-17",
+      "question": "The Earth's ozone layer protects us from:",
       "options": [
-        "18",
-        "28",
-        "38",
-        "48"
+        "Ultraviolet radiation",
+        "Infrared radiation",
+        "Microwaves",
+        "X-rays"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 18 has atomic number 18."
+      "answer": "Ultraviolet radiation"
     },
     {
-      "id": 19,
-      "question": "What is the atomic number of element 19 (hypothetical)?",
+      "id": "gs-18",
+      "question": "Which element is liquid at room temperature?",
       "options": [
-        "19",
-        "29",
-        "39",
-        "49"
+        "Mercury",
+        "Gold",
+        "Silver",
+        "Iron"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 19 has atomic number 19."
+      "answer": "Mercury"
     },
     {
-      "id": 20,
-      "question": "What is the atomic number of element 20 (hypothetical)?",
+      "id": "gs-19",
+      "question": "Acid rain is primarily caused by emissions of:",
       "options": [
-        "20",
-        "30",
-        "40",
-        "50"
+        "Sulfur dioxide and Nitrogen oxides",
+        "Carbon monoxide",
+        "Ozone",
+        "Methane"
       ],
-      "answer": 0,
-      "explanation": "Science fact: Element 20 has atomic number 20."
+      "answer": "Sulfur dioxide and Nitrogen oxides"
+    },
+    {
+      "id": "gs-20",
+      "question": "How many bones are there in the adult human body?",
+      "options": [
+        "206",
+        "205",
+        "208",
+        "210"
+      ],
+      "answer": "206"
     }
   ],
   "current-affairs": [
     {
-      "id": 1,
-      "question": "Who won the award 1 in recent current affairs?",
+      "id": "ca-1",
+      "question": "Who won the ICC Men's Cricket World Cup 2023?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Australia",
+        "India",
+        "England",
+        "New Zealand"
       ],
-      "answer": 1,
-      "explanation": "Current affairs test knowledge of recent events, such as award 1."
+      "answer": "Australia"
     },
     {
-      "id": 2,
-      "question": "Who won the award 2 in recent current affairs?",
+      "id": "ca-2",
+      "question": "Which country hosted the G20 Summit in 2023?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "India",
+        "Indonesia",
+        "Brazil",
+        "Japan"
       ],
-      "answer": 2,
-      "explanation": "Current affairs test knowledge of recent events, such as award 2."
+      "answer": "India"
     },
     {
-      "id": 3,
-      "question": "Who won the award 3 in recent current affairs?",
+      "id": "ca-3",
+      "question": "Who is the current President of India?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Droupadi Murmu",
+        "Ram Nath Kovind",
+        "Pranab Mukherjee",
+        "Venkaiah Naidu"
       ],
-      "answer": 3,
-      "explanation": "Current affairs test knowledge of recent events, such as award 3."
+      "answer": "Droupadi Murmu"
     },
     {
-      "id": 4,
-      "question": "Who won the award 4 in recent current affairs?",
+      "id": "ca-4",
+      "question": "Who recently became the Chief Minister of Assam in 2021?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Himanta Biswa Sarma",
+        "Sarbananda Sonowal",
+        "Tarun Gogoi",
+        "Prafulla Kumar Mahanta"
       ],
-      "answer": 0,
-      "explanation": "Current affairs test knowledge of recent events, such as award 4."
+      "answer": "Himanta Biswa Sarma"
     },
     {
-      "id": 5,
-      "question": "Who won the award 5 in recent current affairs?",
+      "id": "ca-5",
+      "question": "Chandrayaan-3 successfully landed on the Moon in which year?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "2023",
+        "2022",
+        "2024",
+        "2021"
       ],
-      "answer": 1,
-      "explanation": "Current affairs test knowledge of recent events, such as award 5."
+      "answer": "2023"
     },
     {
-      "id": 6,
-      "question": "Who won the award 6 in recent current affairs?",
+      "id": "ca-6",
+      "question": "Which Indian state became the first to pass the Uniform Civil Code bill in 2024?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Uttarakhand",
+        "Gujarat",
+        "Assam",
+        "Goa"
       ],
-      "answer": 2,
-      "explanation": "Current affairs test knowledge of recent events, such as award 6."
+      "answer": "Uttarakhand"
     },
     {
-      "id": 7,
-      "question": "Who won the award 7 in recent current affairs?",
+      "id": "ca-7",
+      "question": "The 2024 Summer Olympics is scheduled to be held in:",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Paris",
+        "Tokyo",
+        "Los Angeles",
+        "London"
       ],
-      "answer": 3,
-      "explanation": "Current affairs test knowledge of recent events, such as award 7."
+      "answer": "Paris"
     },
     {
-      "id": 8,
-      "question": "Who won the award 8 in recent current affairs?",
+      "id": "ca-8",
+      "question": "Who was awarded the Nobel Peace Prize in 2023?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Narges Mohammadi",
+        "Ales Bialiatski",
+        "Maria Ressa",
+        "Abiy Ahmed"
       ],
-      "answer": 0,
-      "explanation": "Current affairs test knowledge of recent events, such as award 8."
+      "answer": "Narges Mohammadi"
     },
     {
-      "id": 9,
-      "question": "Who won the award 9 in recent current affairs?",
+      "id": "ca-9",
+      "question": "Which movie won the Best Picture award at the Oscars 2024?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Oppenheimer",
+        "Barbie",
+        "Poor Things",
+        "Killers of the Flower Moon"
       ],
-      "answer": 1,
-      "explanation": "Current affairs test knowledge of recent events, such as award 9."
+      "answer": "Oppenheimer"
     },
     {
-      "id": 10,
-      "question": "Who won the award 10 in recent current affairs?",
+      "id": "ca-10",
+      "question": "Which country recently joined NATO as its 32nd member?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Sweden",
+        "Finland",
+        "Ukraine",
+        "Georgia"
       ],
-      "answer": 2,
-      "explanation": "Current affairs test knowledge of recent events, such as award 10."
+      "answer": "Sweden"
     },
     {
-      "id": 11,
-      "question": "Who won the award 11 in recent current affairs?",
+      "id": "ca-11",
+      "question": "The newly inaugurated Parliament building of India is named:",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Sansad Bhavan",
+        "Bharat Bhavan",
+        "Vidhan Bhavan",
+        "Lok Bhavan"
       ],
-      "answer": 3,
-      "explanation": "Current affairs test knowledge of recent events, such as award 11."
+      "answer": "Sansad Bhavan"
     },
     {
-      "id": 12,
-      "question": "Who won the award 12 in recent current affairs?",
+      "id": "ca-12",
+      "question": "Who is the current Chief Justice of India (as of early 2024)?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "D.Y. Chandrachud",
+        "N.V. Ramana",
+        "U.U. Lalit",
+        "S.A. Bobde"
       ],
-      "answer": 0,
-      "explanation": "Current affairs test knowledge of recent events, such as award 12."
+      "answer": "D.Y. Chandrachud"
     },
     {
-      "id": 13,
-      "question": "Who won the award 13 in recent current affairs?",
+      "id": "ca-13",
+      "question": "Which Indian city holds the title of the cleanest city for the 7th consecutive time?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Indore",
+        "Surat",
+        "Bhopal",
+        "Mysuru"
       ],
-      "answer": 1,
-      "explanation": "Current affairs test knowledge of recent events, such as award 13."
+      "answer": "Indore"
     },
     {
-      "id": 14,
-      "question": "Who won the award 14 in recent current affairs?",
+      "id": "ca-14",
+      "question": "The ISRO mission to study the Sun is named:",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Aditya-L1",
+        "Surya-1",
+        "Bhaskar",
+        "Gaganyaan"
       ],
-      "answer": 2,
-      "explanation": "Current affairs test knowledge of recent events, such as award 14."
+      "answer": "Aditya-L1"
     },
     {
-      "id": 15,
-      "question": "Who won the award 15 in recent current affairs?",
+      "id": "ca-15",
+      "question": "Who won the Australian Open 2024 Men's Singles title?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Jannik Sinner",
+        "Novak Djokovic",
+        "Daniil Medvedev",
+        "Carlos Alcaraz"
       ],
-      "answer": 3,
-      "explanation": "Current affairs test knowledge of recent events, such as award 15."
+      "answer": "Jannik Sinner"
     },
     {
-      "id": 16,
-      "question": "Who won the award 16 in recent current affairs?",
+      "id": "ca-16",
+      "question": "Which AI model was recently released by Google to compete with GPT-4?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Gemini",
+        "Bard",
+        "PaLM",
+        "Claude"
       ],
-      "answer": 0,
-      "explanation": "Current affairs test knowledge of recent events, such as award 16."
+      "answer": "Gemini"
     },
     {
-      "id": 17,
-      "question": "Who won the award 17 in recent current affairs?",
+      "id": "ca-17",
+      "question": "Assam's highest civilian award 'Asom Baibhav' for 2023 was given to?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Ranjan Gogoi",
+        "Ratan Tata",
+        "Lovlina Borgohain",
+        "Tapan Saikia"
       ],
-      "answer": 1,
-      "explanation": "Current affairs test knowledge of recent events, such as award 17."
+      "answer": "Ranjan Gogoi"
     },
     {
-      "id": 18,
-      "question": "Who won the award 18 in recent current affairs?",
+      "id": "ca-18",
+      "question": "The new criminal code 'Bhartiya Nyaya Sanhita' replaces which act?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Indian Penal Code",
+        "Criminal Procedure Code",
+        "Indian Evidence Act",
+        "MCOCA"
       ],
-      "answer": 2,
-      "explanation": "Current affairs test knowledge of recent events, such as award 18."
+      "answer": "Indian Penal Code"
     },
     {
-      "id": 19,
-      "question": "Who won the award 19 in recent current affairs?",
+      "id": "ca-19",
+      "question": "BRICS recently invited how many new member countries in 2023?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "6",
+        "4",
+        "5",
+        "7"
       ],
-      "answer": 3,
-      "explanation": "Current affairs test knowledge of recent events, such as award 19."
+      "answer": "6"
     },
     {
-      "id": 20,
-      "question": "Who won the award 20 in recent current affairs?",
+      "id": "ca-20",
+      "question": "Which country won the FIFA Women's World Cup 2023?",
       "options": [
-        "Person A",
-        "Person B",
-        "Person C",
-        "Person D"
+        "Spain",
+        "England",
+        "USA",
+        "Germany"
       ],
-      "answer": 0,
-      "explanation": "Current affairs test knowledge of recent events, such as award 20."
+      "answer": "Spain"
     }
   ]
 }
