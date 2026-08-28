@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       model: "gemini-1.5-flash",
       generationConfig: {
         responseMimeType: "application/json",
-        responseSchema: questionSchema,
+        responseSchema: questionSchema as any,
       }
     });
 
