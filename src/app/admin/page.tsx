@@ -564,7 +564,9 @@ export default function AdminPage() {
                     btn.disabled = true;
                     btn.innerHTML = "Syncing...";
                     try {
-                      const res = await fetch("/api/jobs/scrape-nfr");
+                      const res = await fetch("/api/jobs/scrape-nfr", {
+                        headers: { "Authorization": `Bearer ${password}` }
+                      });
                       const data = await res.json();
                       alert(data.message || "Scrape triggered");
                     } catch(err) {
@@ -584,8 +586,9 @@ export default function AdminPage() {
                     btn.disabled = true;
                     btn.innerHTML = "Syncing...";
                     try {
-                      // Passing the secret assuming it's required by the API, or just triggering it
-                      const res = await fetch("/api/jobs/sync");
+                      const res = await fetch("/api/jobs/sync", {
+                        headers: { "Authorization": `Bearer ${password}` }
+                      });
                       const data = await res.json();
                       alert(data.message || data.error || "Sync complete");
                     } catch(err) {

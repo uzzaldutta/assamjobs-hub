@@ -9,7 +9,10 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
   
-  if (SYNC_SECRET && token !== SYNC_SECRET) {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const authHeader = request.headers.get('Authorization')?.replace('Bearer ', '');
+
+  if (SYNC_SECRET && token !== SYNC_SECRET && authHeader !== adminPassword) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
