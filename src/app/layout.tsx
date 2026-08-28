@@ -106,7 +106,7 @@ export default function RootLayout({
                   </div>
                   
                   {/* Tools & Toggles (Desktop & Mobile) */}
-                  <div className="flex items-center gap-4 shrink-0">
+                  <div className="flex items-center gap-2 md:gap-4 shrink-0">
                     <button className="hidden lg:flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 w-10 h-10 rounded-full transition-colors">
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
@@ -183,37 +183,68 @@ export default function RootLayout({
                   {children}
                   
                   {/* Global Bottom Tools Section */}
-                  <div className="mt-12 mb-8 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+                  <div className="mt-12 mb-8 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
                     <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2">
                       <Sparkles className="text-indigo-500" size={20} /> Featured Applicant Tools
                     </h3>
-                    <div className="flex overflow-x-auto pb-4 gap-4 snap-x">
-                      <Link href="/tools/standard-form" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group">
-                        <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
-                      </Link>
-                      <Link href="/tools/salary-calculator" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-emerald-500 transition text-center group">
-                        <CreditCard className="mx-auto mb-2 text-emerald-500 group-hover:scale-110 transition" size={24} />
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Salary Calculator</span>
-                      </Link>
-                      <Link href="/tools/typing-test" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-teal-500 transition text-center group">
-                        <Award className="mx-auto mb-2 text-teal-500 group-hover:scale-110 transition" size={24} />
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Typing Test</span>
-                      </Link>
-                      <Link href="/tools/pdf-merger" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-rose-500 transition text-center group">
-                        <Bookmark className="mx-auto mb-2 text-rose-500 group-hover:scale-110 transition" size={24} />
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">PDF Merger</span>
-                      </Link>
-                      <Link href="/tools/age-calculator" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-blue-500 transition text-center group">
-                        <Calendar className="mx-auto mb-2 text-blue-500 group-hover:scale-110 transition" size={24} />
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Age Calculator</span>
-                      </Link>
-                      <Link href="/tools/cgpa-converter" className="snap-start shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group">
-                        <GraduationCap className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">CGPA to %</span>
-                      </Link>
-                      {/* Invisible spacer to prevent last item from cutting off */}
-                      <div className="shrink-0 w-2 snap-end" aria-hidden="true"></div>
+                    
+                    {/* Scrolling Marquee Container */}
+                    <div className="flex w-max animate-marquee gap-4">
+                      {/* Original Set */}
+                      <div className="flex gap-4">
+                        <Link href="/tools/standard-form" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group">
+                          <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
+                        </Link>
+                        <Link href="/tools/salary-calculator" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-emerald-500 transition text-center group">
+                          <CreditCard className="mx-auto mb-2 text-emerald-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Salary Calculator</span>
+                        </Link>
+                        <Link href="/tools/typing-test" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-teal-500 transition text-center group">
+                          <Award className="mx-auto mb-2 text-teal-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Typing Test</span>
+                        </Link>
+                        <Link href="/tools/pdf-merger" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-rose-500 transition text-center group">
+                          <Bookmark className="mx-auto mb-2 text-rose-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">PDF Merger</span>
+                        </Link>
+                        <Link href="/tools/age-calculator" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-blue-500 transition text-center group">
+                          <Calendar className="mx-auto mb-2 text-blue-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Age Calculator</span>
+                        </Link>
+                        <Link href="/tools/cgpa-converter" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group">
+                          <GraduationCap className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">CGPA to %</span>
+                        </Link>
+                      </div>
+
+                      {/* Duplicated Set for Infinite Scroll */}
+                      <div className="flex gap-4">
+                        <Link href="/tools/standard-form" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group" aria-hidden="true" tabIndex={-1}>
+                          <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
+                        </Link>
+                        <Link href="/tools/salary-calculator" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-emerald-500 transition text-center group" aria-hidden="true" tabIndex={-1}>
+                          <CreditCard className="mx-auto mb-2 text-emerald-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Salary Calculator</span>
+                        </Link>
+                        <Link href="/tools/typing-test" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-teal-500 transition text-center group" aria-hidden="true" tabIndex={-1}>
+                          <Award className="mx-auto mb-2 text-teal-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Typing Test</span>
+                        </Link>
+                        <Link href="/tools/pdf-merger" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-rose-500 transition text-center group" aria-hidden="true" tabIndex={-1}>
+                          <Bookmark className="mx-auto mb-2 text-rose-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">PDF Merger</span>
+                        </Link>
+                        <Link href="/tools/age-calculator" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-blue-500 transition text-center group" aria-hidden="true" tabIndex={-1}>
+                          <Calendar className="mx-auto mb-2 text-blue-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Age Calculator</span>
+                        </Link>
+                        <Link href="/tools/cgpa-converter" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group" aria-hidden="true" tabIndex={-1}>
+                          <GraduationCap className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">CGPA to %</span>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </main>

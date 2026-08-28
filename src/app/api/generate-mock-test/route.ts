@@ -15,21 +15,30 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      generationConfig: {
+        responseMimeType: "application/json"
+      }
+    });
 
-    const prompt = `You are an expert exam setter for Indian Government jobs (especially Assam State Exams like ADRE, APSC, Assam Police).
-Generate a mock test of exactly ${numQuestions} multiple choice questions on the following topic: "${topic}".
-The questions should be challenging, highly relevant to competitive exams, and strictly accurate.
-Format your output EXACTLY as a valid JSON array of objects, with no markdown formatting, no code blocks, and no extra text.
-Do NOT wrap the output in \`\`\`json. Just return the raw JSON array.
+    const prompt = `You are an expert exam setter for Indian Government competitive exams (especially Assam State Exams like ADRE, APSC, Assam Police).
+Generate a high-quality, professional mock test of exactly ${numQuestions} multiple choice questions on the topic: "${topic}".
 
-The JSON schema must exactly match this format for every object in the array:
+STRICT INSTRUCTIONS:
+- The questions must be standard level, highly relevant to the topic, and strictly accurate.
+- Each question must have exactly 4 plausible options.
+- Only one option can be correct.
+- Provide a brief, factual explanation for the correct answer.
+- DO NOT wrap the output in markdown (e.g., no \`\`\`json). Just output the raw JSON array.
+
+The output MUST perfectly match this JSON array schema:
 [
   {
-    "question": "string",
+    "question": "string (the actual question)",
     "options": ["string", "string", "string", "string"],
-    "correctAnswerIndex": number, // strictly 0 to 3
-    "explanation": "string" // brief explanation of why the answer is correct
+    "correctAnswerIndex": number (strictly 0, 1, 2, or 3),
+    "explanation": "string"
   }
 ]
 `;
