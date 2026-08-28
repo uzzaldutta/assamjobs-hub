@@ -490,8 +490,10 @@ export default function AdminPage() {
                 </div>
                 <h3 className="font-bold text-lg">AI Auto-Fill from URL</h3>
               </div>
-              <p className="text-sm text-slate-500 mb-4">Paste a link to a job posting. The AI will scrape the page and instantly fill out this form for you.</p>
-              <div className="flex gap-3">
+              <p className="text-sm text-slate-500 mb-4">Paste a link to a job posting, or paste the raw text if the website blocks scrapers. The AI will instantly fill out this form for you.</p>
+              
+              {/* URL Input */}
+              <div className="flex gap-3 mb-3">
                 <input 
                   type="url" 
                   id="autoFillUrl"
@@ -539,11 +541,66 @@ export default function AdminPage() {
                     }
                     
                     btn.disabled = false;
-                    btn.innerHTML = "Auto-Fill";
+                    btn.innerHTML = "Auto-Fill URL";
                   }}
                   className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition whitespace-nowrap"
                 >
-                  Auto-Fill
+                  Auto-Fill URL
+                </button>
+              </div>
+
+              {/* Raw Text Input */}
+              <div className="flex gap-3">
+                <textarea 
+                  id="autoFillText"
+                  placeholder="Or paste the website's raw text here if the URL is blocked..." 
+                  className="flex-1 p-3 border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 rounded-xl h-14 resize-y"
+                />
+                <button 
+                  type="button"
+                  id="autoFillTextBtn"
+                  onClick={async () => {
+                    const textInput = document.getElementById('autoFillText') as HTMLTextAreaElement;
+                    const btn = document.getElementById('autoFillTextBtn') as HTMLButtonElement;
+                    if (!textInput.value) return alert("Please paste some text first.");
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = "Processing...";
+                    
+                    try {
+                      const res = await fetch("/api/admin/fetch-url", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${password}` },
+                        body: JSON.stringify({ text: textInput.value })
+                      });
+                      
+                      const json = await res.json();
+                      if (res.ok && json.success) {
+                        setFormData({
+                          ...formData,
+                          title: json.data.title || "",
+                          organization: json.data.organization || "",
+                          job_type: json.data.job_type || formData.job_type,
+                          category: json.data.category || formData.category,
+                          vacancies: json.data.vacancies || "",
+                          district: json.data.district || "",
+                          age_limit: json.data.ageLimit || "",
+                          qualification: json.data.qualification || "",
+                        });
+                        alert("Successfully auto-filled from Text!");
+                      } else {
+                        alert("Failed: " + (json.error || "Unknown error"));
+                      }
+                    } catch (error) {
+                      alert("Network error connecting to AI.");
+                    }
+                    
+                    btn.disabled = false;
+                    btn.innerHTML = "Auto-Fill Text";
+                  }}
+                  className="px-6 py-3 bg-indigo-100 dark:bg-indigo-900/30 hover:bg-indigo-200 dark:hover:bg-indigo-800/40 text-indigo-700 dark:text-indigo-400 font-bold rounded-xl transition whitespace-nowrap border border-indigo-200 dark:border-indigo-800"
+                >
+                  Auto-Fill Text
                 </button>
               </div>
             </div>

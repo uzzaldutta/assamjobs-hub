@@ -13,29 +13,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { url } = await req.json();
+    const { url, text } = await req.json();
 
-    if (!url || !url.startsWith('http')) {
-      return NextResponse.json({ error: "Valid URL required" }, { status: 400 });
+    if (!url && !text) {
+      return NextResponse.json({ error: "Valid URL or raw text required" }, { status: 400 });
     }
 
-    // 1. Fetch website HTML
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    let rawText = "";
+
+    if (text) {
+      rawText = text.replace(/\s+/g, ' ').trim().substring(0, 15000);
+    } else {
+      // 1. Fetch website HTML
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch URL: ${response.statusText}`);
       }
-    });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.statusText}`);
+      const html = await response.text();
+      const $ = cheerio.load(html);
+      
+      // Extract raw text
+      $('script, style, noscript, iframe, img, svg').remove();
+      rawText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 15000); // Limit to 15k chars for Gemini
     }
-
-    const html = await response.text();
-    const $ = cheerio.load(html);
-    
-    // Extract raw text
-    $('script, style, noscript, iframe, img, svg').remove();
-    const rawText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 15000); // Limit to 15k chars for Gemini
 
     if (!process.env.GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is not configured.");
