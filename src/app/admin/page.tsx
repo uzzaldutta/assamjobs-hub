@@ -9,7 +9,7 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners">("manage");
+  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners" | "sync">("manage");
 
 
   // CMS State
@@ -288,7 +288,7 @@ export default function AdminPage() {
         </div>
 
         {/* CMS Tabs */}
-        <div className="flex gap-2 mb-6 bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-xl">
+        <div className="flex gap-2 mb-6 bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-2xl flex-wrap">
           <button onClick={() => setActiveTab("manage")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "manage" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
             <List size={16} /> Manage Feeds
           </button>
@@ -297,6 +297,9 @@ export default function AdminPage() {
           </button>
           <button onClick={() => setActiveTab("banners")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "banners" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
             <Image size={16} /> Banners
+          </button>
+          <button onClick={() => setActiveTab("sync")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "sync" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
+            <Shield size={16} /> Feed Sync
           </button>
         </div>
 
@@ -489,6 +492,59 @@ export default function AdminPage() {
               <PlusCircle size={20} /> {status === "loading" ? "Publishing..." : "Publish Post"}
             </button>
           </form>
+        )}
+
+        {activeTab === "sync" && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 text-center max-w-2xl mx-auto">
+              <Shield className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h2 className="text-2xl font-bold mb-2">Manual Feed Sync</h2>
+              <p className="text-slate-500 mb-8">Trigger background scrapers and API synchronizations to instantly pull in new jobs.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button 
+                  onClick={async (e) => {
+                    const btn = e.currentTarget;
+                    btn.disabled = true;
+                    btn.innerHTML = "Syncing...";
+                    try {
+                      const res = await fetch("/api/jobs/scrape-nfr");
+                      const data = await res.json();
+                      alert(data.message || "Scrape triggered");
+                    } catch(err) {
+                      alert("Error triggering scrape");
+                    }
+                    btn.disabled = false;
+                    btn.innerHTML = "Run NFR Scraper";
+                  }}
+                  className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold py-4 px-6 rounded-xl transition"
+                >
+                  Run NFR Scraper
+                </button>
+                
+                <button 
+                  onClick={async (e) => {
+                    const btn = e.currentTarget;
+                    btn.disabled = true;
+                    btn.innerHTML = "Syncing...";
+                    try {
+                      // Passing the secret assuming it's required by the API, or just triggering it
+                      const res = await fetch("/api/jobs/sync");
+                      const data = await res.json();
+                      alert(data.message || data.error || "Sync complete");
+                    } catch(err) {
+                      alert("Error triggering sync");
+                    }
+                    btn.disabled = false;
+                    btn.innerHTML = "Sync Adzuna API";
+                  }}
+                  className="bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-800/40 text-indigo-700 dark:text-indigo-400 font-bold py-4 px-6 rounded-xl transition border border-indigo-200 dark:border-indigo-800"
+                >
+                  Sync Adzuna API
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
