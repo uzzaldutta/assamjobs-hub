@@ -56,7 +56,6 @@ export async function POST(req: Request) {
 
     const prompt = `You are an expert exam setter for Indian Government competitive exams (especially Assam State Exams like ADRE, APSC, Assam Police).
 Generate a high-quality, professional mock test of exactly ${numQuestions} multiple choice questions on the topic: "${topic}".`;
-`;
 
     const result = await model.generateContent(prompt);
     let text = result.response.text();
