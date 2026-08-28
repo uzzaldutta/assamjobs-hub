@@ -142,7 +142,7 @@ export default function AIMockTestGenerator() {
                   <select 
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 font-medium outline-none focus:border-indigo-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 font-medium outline-none focus:border-indigo-500"
                   >
                     <option value={10}>10 Questions</option>
                     <option value={20}>20 Questions</option>
@@ -154,7 +154,7 @@ export default function AIMockTestGenerator() {
                   <select 
                     value={timeLimit}
                     onChange={(e) => setTimeLimit(Number(e.target.value))}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 font-medium outline-none focus:border-indigo-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 border-2 border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 font-medium outline-none focus:border-indigo-500"
                   >
                     <option value={5}>5 Minutes</option>
                     <option value={10}>10 Minutes</option>

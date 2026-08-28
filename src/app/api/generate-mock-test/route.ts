@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, Schema, Type } from "@google/generative-ai";
 
 export async function POST(req: Request) {
   try {
@@ -15,46 +15,58 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
+    
+    const questionSchema: Schema = {
+      type: Type.ARRAY,
+      description: "List of multiple choice questions",
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          question: {
+            type: Type.STRING,
+            description: "The actual question text",
+          },
+          options: {
+            type: Type.ARRAY,
+            description: "Exactly 4 plausible options for the multiple choice question",
+            items: {
+              type: Type.STRING,
+            },
+          },
+          correctAnswerIndex: {
+            type: Type.INTEGER,
+            description: "The index of the correct option (0, 1, 2, or 3)",
+          },
+          explanation: {
+            type: Type.STRING,
+            description: "Brief factual explanation of why the correct answer is correct",
+          }
+        },
+        required: ["question", "options", "correctAnswerIndex", "explanation"],
+      }
+    };
+
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash",
       generationConfig: {
-        responseMimeType: "application/json"
+        responseMimeType: "application/json",
+        responseSchema: questionSchema,
       }
     });
 
     const prompt = `You are an expert exam setter for Indian Government competitive exams (especially Assam State Exams like ADRE, APSC, Assam Police).
-Generate a high-quality, professional mock test of exactly ${numQuestions} multiple choice questions on the topic: "${topic}".
-
-STRICT INSTRUCTIONS:
-- The questions must be standard level, highly relevant to the topic, and strictly accurate.
-- Each question must have exactly 4 plausible options.
-- Only one option can be correct.
-- Provide a brief, factual explanation for the correct answer.
-- DO NOT wrap the output in markdown (e.g., no \`\`\`json). Just output the raw JSON array.
-
-The output MUST perfectly match this JSON array schema:
-[
-  {
-    "question": "string (the actual question)",
-    "options": ["string", "string", "string", "string"],
-    "correctAnswerIndex": number (strictly 0, 1, 2, or 3),
-    "explanation": "string"
-  }
-]
+Generate a high-quality, professional mock test of exactly ${numQuestions} multiple choice questions on the topic: "${topic}".`;
 `;
 
     const result = await model.generateContent(prompt);
     let text = result.response.text();
-    
-    // Fallback cleanup in case Gemini returns markdown blocks despite instructions
-    text = text.replace(/```json/g, "").replace(/```/g, "").trim();
     
     const questions = JSON.parse(text);
 
     return NextResponse.json({ questions });
 
   } catch (error: any) {
-    console.error("Mock Test Generation Error:", error);
+    console.error("Mock Test Generation Error:", error.message || error);
     return NextResponse.json({ error: "Failed to generate mock test. Please try again." }, { status: 500 });
   }
 }
