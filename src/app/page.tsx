@@ -12,15 +12,6 @@ import { deduplicateJobs } from "@/lib/dedup";
 
 export const revalidate = 60; // Revalidate cache every 60 seconds
 
-// Mock Data matching the Prisma Schema format
-const mockJobs = [
-  { id: "1", title: "Junior Assistant & Grade IV", organization: "Directorate of Secondary Education, Assam", type: "GOVERNMENT", category: "ASSAM_STATE", vacancies: "1,240", district: "All Assam", lastDate: "2026-09-15" },
-  { id: "2", title: "Customer Support Executive", organization: "TechMahindra Guwahati", type: "PRIVATE", category: "LOCAL_PRIVATE", vacancies: "50", district: "Kamrup (M)", lastDate: "2026-08-30" },
-  { id: "3", title: "ADRE Grade III Final Result Declared", organization: "State Level Recruitment Commission", type: "EXAM_UPDATE", category: "ASSAM_STATE", vacancies: "12,000", district: "All Assam", lastDate: "2026-08-20" },
-  { id: "3a", title: "SSC CGL 2026 Notification", organization: "Staff Selection Commission", type: "EXAM_UPDATE", category: "CENTRAL_GOVT", vacancies: "7,500+", district: "All India (Assam Centers)", lastDate: "2026-09-01" },
-  { id: "4", title: "Data Entry Operator", organization: "National Health Mission (NHM), Assam", type: "GOVERNMENT", category: "ASSAM_STATE", vacancies: "120", district: "Dibrugarh", lastDate: "2026-09-05" }
-];
-
 export default async function Home(props: { searchParams?: Promise<{ search?: string }> }) {
   const searchParams = await props.searchParams;
   const searchQuery = searchParams?.search;
@@ -31,6 +22,7 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
     const { data, error } = await supabase
       .from('jobs')
       .select('*')
+      .neq('category', 'BANNED_KEYWORD')
       .order('scraped_at', { ascending: false });
       
       if (data) {
@@ -47,14 +39,9 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
     console.error("Could not load from Supabase", e);
   }
 
-  // Combine live jobs with mock jobs, ensuring live jobs appear first
-  const liveJobIds = new Set(liveJobs.map(j => String(j.id)));
-  const filteredMockJobs = mockJobs.filter(j => !liveJobIds.has(String(j.id)));
-  let allJobs = deduplicateJobs([...liveJobs, ...filteredMockJobs]);
-
   // Filter out non-job spam/promotional posts scraped by accident
   const spamKeywords = ["bio-data maker", "scheme", "merit award", "scholarship", "whatsapp group", "telegram", "join our"];
-  allJobs = allJobs.filter(job => {
+  let allJobs = liveJobs.filter(job => {
     if (!job.title) return false;
     const lowerTitle = job.title.toLowerCase();
     return !spamKeywords.some(keyword => lowerTitle.includes(keyword));
