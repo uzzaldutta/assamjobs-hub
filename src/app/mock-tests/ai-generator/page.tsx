@@ -66,12 +66,14 @@ export default function AIMockTestGenerator() {
         throw new Error(data.error || "Failed to generate test");
       }
 
-      setQuestions(data.questions);
-      setTimeLeft(timeLimit * 60);
-      setQuizStarted(true);
+      // Redirect to the newly generated and saved mock test!
+      if (data.testId) {
+        window.location.href = `/mock-tests/${data.testId}`;
+      } else {
+        throw new Error("Missing test ID from server.");
+      }
     } catch (err: any) {
       setError(err.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -111,11 +113,18 @@ export default function AIMockTestGenerator() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
       <PageHeader 
         title="✨ AI Mock Test Generator"
-        subtitle="Type any exam name or subject, and our AI will generate a challenging 20-question mock test instantly."
+        subtitle="Type any exam name or subject, and our AI will generate a challenging mock test instantly."
         theme="purple"
       />
 
-      <div className="container mx-auto px-4 md:px-6 -mt-8 relative z-10 max-w-4xl">
+      <div className="flex justify-center -mt-16 mb-8 relative z-20">
+        <Link href="/mock-tests/library" className="bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-400 font-bold py-2 px-6 rounded-full shadow-sm hover:shadow-md transition flex items-center gap-2">
+          <BrainCircuit size={18} />
+          Browse Saved Mock Tests
+        </Link>
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-4xl">
         
         {/* State 1: Input Topic */}
         {questions.length === 0 && (

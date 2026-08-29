@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useMockTests } from "@/hooks/useMockTests";
 import mockTestData from "@/data/mock-tests.json";
 import AdBanner from "@/components/AdBanner";
+import { supabase } from "@/lib/supabase";
 
 export default function DynamicMockTestPage() {
   const params = useParams();
@@ -21,19 +22,52 @@ export default function DynamicMockTestPage() {
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (testId && mockTestData && typeof mockTestData === 'object') {
-      const data = (mockTestData as any)[testId];
-      if (data) {
-        setQuestions(data);
-        setTimeLeft(data.length * 60); // 1 min per question default
-        setTestMeta({ title: testId.replace(/-/g, ' ').toUpperCase(), duration: data.length });
+    const fetchTest = async () => {
+      setLoading(true);
+      if (testId && mockTestData && typeof mockTestData === 'object' && (mockTestData as any)[testId]) {
+        const data = (mockTestData as any)[testId];
+        // Remap from schema output to standard format
+        const formattedData = data.map((q: any) => ({
+          ...q,
+          answer: q.answer !== undefined ? q.answer : q.correctAnswerIndex
+        }));
+        setQuestions(formattedData);
+        setTimeLeft(formattedData.length * 60);
+        setTestMeta({ title: testId.replace(/-/g, ' ').toUpperCase(), duration: formattedData.length });
+        setLoading(false);
       } else {
-        router.push("/mock-tests"); // fallback
+        // Fetch from Supabase
+        const { data, error } = await supabase
+          .from('jobs')
+          .select('title, vacancies, unique_description')
+          .eq('id', testId)
+          .single();
+          
+        if (data && data.unique_description) {
+          try {
+            const parsedQs = typeof data.unique_description === 'string' 
+              ? JSON.parse(data.unique_description) 
+              : data.unique_description;
+            // AI returns correctAnswerIndex, normalize to 'answer'
+            const formattedQs = parsedQs.map((q: any) => ({
+              ...q,
+              answer: q.correctAnswerIndex !== undefined ? q.correctAnswerIndex : q.answer
+            }));
+            setQuestions(formattedQs);
+            setTimeLeft(formattedQs.length * 60);
+            setTestMeta({ title: data.title, duration: formattedQs.length });
+          } catch(e) {
+            console.error(e);
+          }
+        }
+        setLoading(false);
       }
-    }
-  }, [testId, router]);
+    };
+    fetchTest();
+  }, [testId]);
 
   useEffect(() => {
     if (!started || finished || QUESTIONS.length === 0) return;
