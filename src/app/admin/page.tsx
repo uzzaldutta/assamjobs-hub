@@ -149,6 +149,22 @@ export default function AdminPage() {
     }
   };
 
+  const handleCleanupOld = async () => {
+    try {
+      const res = await fetch(`/api/admin/cleanup-old?token=${password}`);
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        alert(data.message);
+        fetchJobs();
+      } else {
+        alert("Failed to clean old jobs: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("An error occurred while cleaning old jobs.");
+    }
+  };
+
   const fetchBannedKeywords = async () => {
     try {
       const res = await fetch("/api/admin/spam-control");
@@ -426,6 +442,7 @@ export default function AdminPage() {
             <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
               <h3 className="font-bold text-slate-800 dark:text-slate-200">All Database Entries</h3>
               <div className="flex gap-4">
+                <button onClick={handleCleanupOld} className="text-sm text-amber-600 font-medium hover:underline flex items-center gap-1"><Trash2 size={14}/> Clean Old Jobs</button>
                 <button onClick={handleCleanDuplicates} className="text-sm text-red-600 font-medium hover:underline flex items-center gap-1"><Trash2 size={14}/> Clean Duplicates</button>
                 <button onClick={fetchJobs} className="text-sm text-indigo-600 font-medium hover:underline">Refresh</button>
               </div>
