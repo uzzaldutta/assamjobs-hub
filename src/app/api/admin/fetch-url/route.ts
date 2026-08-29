@@ -80,16 +80,20 @@ export async function POST(req: Request) {
     };
 
     const prompt = `
+      You are an expert data extractor and professional Assamese translator for a premier Jobs Portal.
       Analyze the following scraped job posting text and extract the key details required by the schema.
       If a field is not explicitly mentioned, provide a reasonable default (e.g. "Not Specified").
       For 'job_type' and 'category', classify the job accurately based on the organization and context.
 
-      CRITICAL INSTRUCTION FOR DESCRIPTIONS:
-      The 'unique_description' field MUST contain a highly detailed, professional HTML layout. 
-      Use <h3> or <h4> for section headings. 
-      Whenever there is structured data (e.g., Important Dates, Vacancy Breakdowns, Application Fees, Selection Process), you MUST format it as an HTML <table> with proper <thead>, <tr>, <th>, and <td> tags. 
-      Use <ul> and <li> for standard lists like eligibility criteria.
-      The 'unique_description_assamese' must be a direct Assamese language translation of the exact same HTML layout.
+      CRITICAL INSTRUCTIONS FOR DESCRIPTIONS:
+      1. Your 'unique_description' field MUST contain a highly detailed, professional, and visually stunning HTML layout.
+      2. Use <h3> or <h4> tags for clear section headings. 
+      3. CRITICAL: Whenever there is structured data (e.g., Important Dates, Vacancy Breakdowns, Application Fees, Selection Process, Salary/Pay Scale), you MUST strictly format it as an HTML <table> with proper <thead>, <tbody>, <tr>, <th>, and <td> tags. 
+      4. Ensure all tables have the class name "table-auto w-full mb-4 border-collapse border border-slate-300 dark:border-slate-700".
+      5. Use <ul> and <li> for standard lists like eligibility criteria or educational qualifications.
+      6. The 'unique_description_assamese' MUST be a direct, professional Assamese language translation of the exact same HTML layout. Do not drop any tables or formatting.
+
+      Extract exact salary information if available. Do not output any Markdown wrapping like \`\`\`html.
 
       Website Text:
       ${rawText}

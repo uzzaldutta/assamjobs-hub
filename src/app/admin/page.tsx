@@ -711,7 +711,7 @@ export default function AdminPage() {
               <h2 className="text-2xl font-bold mb-2">Manual Feed Sync</h2>
               <p className="text-slate-500 mb-8">Trigger background scrapers and API synchronizations to instantly pull in new jobs.</p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <button 
                   onClick={async (e) => {
                     const btn = e.currentTarget;
@@ -732,28 +732,6 @@ export default function AdminPage() {
                   className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold py-4 px-6 rounded-xl transition"
                 >
                   Run NFR Scraper
-                </button>
-                
-                <button 
-                  onClick={async (e) => {
-                    const btn = e.currentTarget;
-                    btn.disabled = true;
-                    btn.innerHTML = "Syncing...";
-                    try {
-                      const res = await fetch("/api/jobs/sync", {
-                        headers: { "Authorization": `Bearer ${password}` }
-                      });
-                      const data = await res.json();
-                      alert(data.message || data.error || "Sync complete");
-                    } catch(err) {
-                      alert("Error triggering sync");
-                    }
-                    btn.disabled = false;
-                    btn.innerHTML = "Sync Adzuna API";
-                  }}
-                  className="bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-800/40 text-indigo-700 dark:text-indigo-400 font-bold py-4 px-6 rounded-xl transition border border-indigo-200 dark:border-indigo-800"
-                >
-                  Sync Adzuna API
                 </button>
               </div>
             </div>
