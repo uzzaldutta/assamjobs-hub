@@ -49,6 +49,7 @@ function mapAdzunaToPrisma(data: AdzunaJobPayload) {
       qualification: [], // Adzuna doesn't explicitly provide this in standard response
       district: job.location?.display_name || "Assam",
       ageLimit: "Not Specified",
+      lastDate: "TBD",
       officialPdfUrl: null,
       applyUrl: job.redirect_url,
       status: "PUBLISHED", // Private jobs can go live immediately
