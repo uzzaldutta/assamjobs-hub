@@ -58,7 +58,10 @@ export async function GET(request: Request) {
           .eq('title', job.title)
           .limit(1);
           
-        if (!existing || existing.length === 0) {
+        const hasVacancies = job.vacancies && job.vacancies.trim() !== '' && job.vacancies.toLowerCase() !== 'not specified';
+        const hasLastDate = job.lastDate && job.lastDate.trim() !== '' && job.lastDate.toLowerCase() !== 'tbd';
+
+        if ((hasVacancies || hasLastDate) && (!existing || existing.length === 0)) {
           await supabase.from('jobs').insert({
             title: job.title,
             organization: job.organization,

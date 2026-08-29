@@ -13,6 +13,7 @@ export default async function PrivateJobsPage() {
     const { data } = await supabase
       .from('jobs')
       .select('*')
+      .neq('category', 'BANNED_KEYWORD')
       .eq('job_type', 'PRIVATE')
       .order('scraped_at', { ascending: false });
       

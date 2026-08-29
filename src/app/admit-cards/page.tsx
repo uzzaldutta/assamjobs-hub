@@ -16,6 +16,7 @@ export default async function AdmitCardsPage() {
     const { data } = await supabase
       .from('jobs')
       .select('*')
+      .neq('category', 'BANNED_KEYWORD')
       .eq('job_type', 'EXAM_UPDATE')
       .order('scraped_at', { ascending: false });
       

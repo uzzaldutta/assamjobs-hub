@@ -13,6 +13,7 @@ export default async function GovtJobsPage() {
     const { data } = await supabase
       .from('jobs')
       .select('*')
+      .neq('category', 'BANNED_KEYWORD')
       .eq('job_type', 'GOVERNMENT')
       .order('scraped_at', { ascending: false });
       

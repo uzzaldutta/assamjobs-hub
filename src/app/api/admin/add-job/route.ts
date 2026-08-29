@@ -13,6 +13,17 @@ export async function POST(req: Request) {
 
     const data = await req.json();
 
+    // Strict System: Require 'vacancies' and 'last_date'
+    const hasVacancies = data.vacancies && data.vacancies.trim() !== '' && data.vacancies.toLowerCase() !== 'not specified';
+    const hasLastDate = data.last_date && data.last_date.trim() !== '' && data.last_date.toLowerCase() !== 'tbd';
+
+    if (!hasVacancies && !hasLastDate) {
+      return NextResponse.json({ 
+        success: false, 
+        error: "Strict Mode Active: You must provide a Number of Posts (Vacancies) OR a Last Date of Submission to add this feed." 
+      }, { status: 400 });
+    }
+
     const newEntry = {
       id: `manual_${Date.now()}`,
       scraped_at: new Date().toISOString(),

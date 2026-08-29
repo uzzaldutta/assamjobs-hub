@@ -13,6 +13,7 @@ export default async function StudyMaterialsPage() {
     const { data } = await supabase
       .from('jobs')
       .select('*')
+      .neq('category', 'BANNED_KEYWORD')
       .eq('job_type', 'STUDY_MATERIAL')
       .order('scraped_at', { ascending: false });
       
