@@ -95,13 +95,30 @@ export async function POST(req: Request) {
       ${rawText}
     `;
 
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: schema as any,
-      },
-    });
+    const modelsToTry = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-pro-latest"];
+    let result = null;
+    let lastError = null;
+
+    for (const modelName of modelsToTry) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        result = await model.generateContent({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: schema as any,
+          },
+        });
+        break; // Success! Break out of the loop
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`Model ${modelName} failed, trying next... Error: ${err.message}`);
+      }
+    }
+
+    if (!result) {
+      throw new Error(`All Gemini models failed. Last error: ${lastError?.message}`);
+    }
 
     const aiData = JSON.parse(result.response.text());
 

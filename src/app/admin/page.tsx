@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image, X } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
+import "react-quill/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -667,7 +671,13 @@ export default function AdminPage() {
                   <span>Markdown Description (English)</span>
                   <span className="text-xs text-indigo-500">Supports Markdown</span>
                 </label>
-                <textarea required rows={12} name="unique_description" value={formData.unique_description} onChange={handleChange} className="w-full p-4 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 font-mono text-sm"></textarea>
+                <ReactQuill 
+                  theme="snow"
+                  value={formData.unique_description} 
+                  onChange={(val) => setFormData({ ...formData, unique_description: val })}
+                  className="bg-slate-50 dark:bg-slate-950 rounded-lg overflow-hidden"
+                  style={{ height: '300px', marginBottom: '40px' }}
+                />
               </div>
             </div>
 
