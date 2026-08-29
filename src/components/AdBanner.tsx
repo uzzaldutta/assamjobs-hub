@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 interface AdBannerProps {
@@ -17,10 +17,12 @@ export default function AdBanner({
   className = ""
 }: AdBannerProps) {
   const pathname = usePathname();
+  const pushed = useRef(false);
 
   useEffect(() => {
+    if (pushed.current) return;
     try {
-      // Allow Google AdSense to push the ad for this specific slot once mounted
+      pushed.current = true;
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
