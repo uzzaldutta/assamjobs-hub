@@ -67,14 +67,29 @@ export async function POST(req: Request) {
         district: { type: SchemaType.STRING, description: "The location/district of the job, e.g. 'Guwahati', 'All Assam'" },
         ageLimit: { type: SchemaType.STRING, description: "Age limits or requirements, e.g. '18-40 Years'" },
         qualification: { type: SchemaType.STRING, description: "Comma separated qualifications, e.g. 'Graduation, 10th Pass'" },
+        unique_description: {
+          type: SchemaType.STRING,
+          description: "A comprehensive HTML-formatted description of the job. You MUST use HTML tags like <h3> for headings, <ul><li> for lists, and beautifully formatted HTML <table> structures to display things like Important Dates, Vacancy details, Application Fees, etc."
+        },
+        unique_description_assamese: {
+          type: SchemaType.STRING,
+          description: "A professional Assamese translation of the unique_description, also using HTML tags and HTML tables."
+        }
       },
-      required: ["title", "organization", "job_type", "category", "vacancies", "district", "ageLimit", "qualification"]
+      required: ["title", "organization", "job_type", "category", "vacancies", "district", "ageLimit", "qualification", "unique_description", "unique_description_assamese"]
     };
 
     const prompt = `
       Analyze the following scraped job posting text and extract the key details required by the schema.
       If a field is not explicitly mentioned, provide a reasonable default (e.g. "Not Specified").
       For 'job_type' and 'category', classify the job accurately based on the organization and context.
+
+      CRITICAL INSTRUCTION FOR DESCRIPTIONS:
+      The 'unique_description' field MUST contain a highly detailed, professional HTML layout. 
+      Use <h3> or <h4> for section headings. 
+      Whenever there is structured data (e.g., Important Dates, Vacancy Breakdowns, Application Fees, Selection Process), you MUST format it as an HTML <table> with proper <thead>, <tr>, <th>, and <td> tags. 
+      Use <ul> and <li> for standard lists like eligibility criteria.
+      The 'unique_description_assamese' must be a direct Assamese language translation of the exact same HTML layout.
 
       Website Text:
       ${rawText}

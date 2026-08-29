@@ -532,6 +532,8 @@ export default function AdminPage() {
                           district: json.data.district || "",
                           age_limit: json.data.ageLimit || "",
                           qualification: json.data.qualification || "",
+                          unique_description: json.data.unique_description || formData.unique_description,
+                          unique_description_assamese: json.data.unique_description_assamese || formData.unique_description_assamese,
                           apply_url: urlInput.value
                         });
                         alert("Successfully auto-filled from URL!");
@@ -588,6 +590,8 @@ export default function AdminPage() {
                           district: json.data.district || "",
                           age_limit: json.data.ageLimit || "",
                           qualification: json.data.qualification || "",
+                          unique_description: json.data.unique_description || formData.unique_description,
+                          unique_description_assamese: json.data.unique_description_assamese || formData.unique_description_assamese,
                         });
                         alert("Successfully auto-filled from Text!");
                       } else {

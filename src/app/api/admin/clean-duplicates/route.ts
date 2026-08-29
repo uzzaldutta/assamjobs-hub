@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { revalidatePath } from 'next/cache';
 
 const SYNC_SECRET = process.env.SYNC_SECRET;
 
@@ -15,8 +16,10 @@ const SYNC_SECRET = process.env.SYNC_SECRET;
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
+  const authHeader = request.headers.get('Authorization')?.replace('Bearer ', '');
+  const adminPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
 
-  if (SYNC_SECRET && token !== SYNC_SECRET) {
+  if (SYNC_SECRET && token !== SYNC_SECRET && token !== adminPassword && authHeader !== adminPassword) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -88,6 +91,7 @@ export async function GET(request: Request) {
       }
     }
 
+    revalidatePath('/');
     return NextResponse.json({
       success: true,
       message: `Cleanup complete! Removed ${deletedCount} duplicate entries.`,
