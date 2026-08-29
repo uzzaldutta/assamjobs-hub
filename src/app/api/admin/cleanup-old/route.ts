@@ -1,4 +1,4 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
 
@@ -91,7 +91,7 @@ export async function GET(request: Request) {
     revalidatePath('/');
     return NextResponse.json({
       success: true,
-      message: \Cleanup complete! Permanently removed \ very old feeds to save space.\,
+      message: `Cleanup complete! Permanently removed ${deletedCount} very old feeds to save space.`,
       deleted: deletedCount,
     });
 
