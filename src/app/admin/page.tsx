@@ -68,6 +68,7 @@ export default function AdminPage() {
         localStorage.setItem("adminToken", token);
         fetchJobs();
         fetchBanners();
+        fetchBannedKeywords();
       } else {
         localStorage.removeItem("adminToken");
       }
@@ -89,6 +90,7 @@ export default function AdminPage() {
       const { data, error } = await supabase
         .from('jobs')
         .select('*')
+        .neq('category', 'BANNED_KEYWORD')
         .order('scraped_at', { ascending: false });
       
       if (error) throw error;
