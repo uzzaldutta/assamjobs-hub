@@ -14,8 +14,10 @@ export async function POST(req: Request) {
     const data = await req.json();
 
     // Strict System: Require 'vacancies' and 'last_date'
-    const hasVacancies = data.vacancies && data.vacancies.trim() !== '' && data.vacancies.toLowerCase() !== 'not specified';
-    const hasLastDate = data.last_date && data.last_date.trim() !== '' && data.last_date.toLowerCase() !== 'tbd';
+    const v = data.vacancies ? data.vacancies.toLowerCase().trim() : '';
+    const d = data.last_date ? data.last_date.toLowerCase().trim() : '';
+    const hasVacancies = v !== '' && v !== 'not specified' && !v.includes('multiple') && !v.includes('various');
+    const hasLastDate = d !== '' && d !== 'tbd' && d !== 'null';
 
     if (!hasVacancies && !hasLastDate) {
       return NextResponse.json({ 

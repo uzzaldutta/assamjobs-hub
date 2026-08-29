@@ -51,15 +51,16 @@ export async function GET(request: Request) {
       const isSpam = bannedKeywords.some(keyword => lowerTitle.includes(keyword));
       
       if (!isSpam) {
-        // Basic deduplication
         const { data: existing } = await supabase
           .from('jobs')
           .select('id')
           .eq('title', job.title)
           .limit(1);
-          
-        const hasVacancies = job.vacancies && job.vacancies.trim() !== '' && job.vacancies.toLowerCase() !== 'not specified';
-        const hasLastDate = job.lastDate && job.lastDate.trim() !== '' && job.lastDate.toLowerCase() !== 'tbd';
+
+        const v = job.vacancies ? job.vacancies.toLowerCase().trim() : '';
+        const d = job.lastDate ? job.lastDate.toLowerCase().trim() : '';
+        const hasVacancies = v !== '' && v !== 'not specified' && !v.includes('multiple') && !v.includes('various');
+        const hasLastDate = d !== '' && d !== 'tbd' && d !== 'null';
 
         if ((hasVacancies || hasLastDate) && (!existing || existing.length === 0)) {
           await supabase.from('jobs').insert({
