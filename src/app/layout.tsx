@@ -142,7 +142,7 @@ export default function RootLayout({
                         </Link>
                       </li>
                       <li>
-                        <Link href="/tools/interview-coach" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-amber-600 dark:text-amber-400">
+                        <Link href="/tools/interview-prep" className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 -ml-1.5 rounded-lg transition text-amber-600 dark:text-amber-400">
                           <Mic size={16} /> AI Interview Coach
                         </Link>
                       </li>
@@ -281,7 +281,7 @@ export default function RootLayout({
                             <Calendar className="mx-auto mb-2 text-cyan-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Study Planner</span>
                           </Link>
-                          <Link href="/tools/interview-coach" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group flex flex-col items-center justify-center">
+                          <Link href="/tools/interview-prep" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group flex flex-col items-center justify-center">
                             <Mic className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Interview Coach</span>
                           </Link>
@@ -305,7 +305,7 @@ export default function RootLayout({
                             <Calendar className="mx-auto mb-2 text-cyan-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Study Planner</span>
                           </Link>
-                          <Link href="/tools/interview-coach" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
+                          <Link href="/tools/interview-prep" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
                             <Mic className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Interview Coach</span>
                           </Link>

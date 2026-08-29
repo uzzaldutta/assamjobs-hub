@@ -5,7 +5,7 @@ export default function Footer() {
   const quickLinks = [
     { name: "AI Career Advisor", href: "/tools/career-advisor", icon: Compass, color: "text-fuchsia-500" },
     { name: "AI Study Planner", href: "/tools/study-planner", icon: Calendar, color: "text-cyan-500" },
-    { name: "AI Interview Coach", href: "/tools/interview-coach", icon: Mic, color: "text-amber-500" },
+    { name: "AI Interview Coach", href: "/tools/interview-prep", icon: Mic, color: "text-amber-500" },
     { name: "SEBA/AHSEC Marks Calculator", href: "/tools/marks-calculator", icon: Calculator, color: "text-slate-600 dark:text-slate-400" },
     { name: "Standard Form Generator", href: "/tools/standard-form", icon: FileText, color: "text-slate-600 dark:text-slate-400" },
     { name: "Typing Speed Tester", href: "/tools/typing-test", icon: Keyboard, color: "text-slate-600 dark:text-slate-400" },

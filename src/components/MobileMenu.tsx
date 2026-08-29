@@ -63,7 +63,7 @@ export default function MobileMenu() {
                   <Link onClick={() => setIsOpen(false)} href="/tools/study-planner" className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-semibold text-sm text-cyan-600 dark:text-cyan-400">
                     <Calendar size={18} /> AI Study Planner
                   </Link>
-                  <Link onClick={() => setIsOpen(false)} href="/tools/interview-coach" className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-semibold text-sm text-amber-600 dark:text-amber-400">
+                  <Link onClick={() => setIsOpen(false)} href="/tools/interview-prep" className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-semibold text-sm text-amber-600 dark:text-amber-400">
                     <Mic size={18} /> AI Interview Coach
                   </Link>
                   <Link onClick={() => setIsOpen(false)} href="/tools/marks-calculator" className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">
