@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     const prompt = `You are an expert exam setter for Indian Government competitive exams (especially Assam State Exams like ADRE, APSC, Assam Police).
 Generate a high-quality, professional mock test of exactly ${numQuestions} multiple choice questions on the topic: "${topic}". Make sure the questions are standard and very relevant.`;
 
-    const modelsToTry = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-pro-latest"];
+    const modelsToTry = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-flash-latest"];
     let text = null;
     let lastError = null;
 

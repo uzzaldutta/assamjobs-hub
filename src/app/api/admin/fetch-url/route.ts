@@ -99,7 +99,7 @@ export async function POST(req: Request) {
       ${rawText}
     `;
 
-    const modelsToTry = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-pro-latest"];
+    const modelsToTry = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-flash-latest"];
     let result = null;
     let lastError = null;
 
