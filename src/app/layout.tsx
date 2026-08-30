@@ -104,9 +104,9 @@ export default function RootLayout({
                   
                   {/* Tools & Toggles (Desktop & Mobile) */}
                   <div className="flex items-center gap-2 md:gap-4 shrink-0">
-                    <button className="hidden lg:flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 w-10 h-10 rounded-full transition-colors">
+                    <Link href="/search" className="flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 w-10 h-10 rounded-full transition-colors" aria-label="Search">
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </button>
+                    </Link>
                     <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden lg:block mx-1"></div>
                     <LanguageToggle />
                     <ThemeToggle />
