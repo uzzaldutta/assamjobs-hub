@@ -1,12 +1,13 @@
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
-import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard } from "lucide-react";
+import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield } from "lucide-react";
 
 const toolsData = [
   {
     category: "AI Career Tools",
     description: "Smart tools powered by AI to accelerate your career",
     items: [
+      { name: "Am I Eligible?", icon: <Shield className="text-emerald-500" size={24} />, link: "/tools/eligibility-checker", color: "bg-emerald-50 dark:bg-emerald-900/30", border: "border-emerald-200 dark:border-emerald-800" },
       { name: "Career Advisor", icon: <Compass className="text-blue-500" size={24} />, link: "/tools/career-advisor", color: "bg-blue-50 dark:bg-blue-900/30", border: "border-blue-200 dark:border-blue-800" },
       { name: "Study Planner", icon: <Calendar className="text-indigo-500" size={24} />, link: "/tools/study-planner", color: "bg-indigo-50 dark:bg-indigo-900/30", border: "border-indigo-200 dark:border-indigo-800" },
       { name: "Interview Coach", icon: <Mic className="text-purple-500" size={24} />, link: "/tools/interview-prep", color: "bg-purple-50 dark:bg-purple-900/30", border: "border-purple-200 dark:border-purple-800" },

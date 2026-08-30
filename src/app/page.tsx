@@ -1,5 +1,6 @@
 import FilterBar from "@/components/FilterBar";
 import FeedList from "@/components/FeedList";
+import RecentlyViewed from "@/components/RecentlyViewed";
 import SubscribeForm from "@/components/SubscribeForm";
 import JobCard from "@/components/JobCard";
 import RecentMarquee from "@/components/RecentMarquee";
@@ -172,7 +173,9 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* MAIN CONTENT (70%) */}
               <div className="lg:col-span-8 flex flex-col">
-                <FeedList initialJobs={allJobs} />
+                <RecentlyViewed />
+        
+        <FeedList initialJobs={allJobs} />
               </div>
 
               {/* SIDEBAR (30%) - FOR ADS AND PROMOS */}
