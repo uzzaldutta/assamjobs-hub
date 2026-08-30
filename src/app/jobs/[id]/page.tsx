@@ -6,6 +6,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
 import AdminEditButton from "@/components/AdminEditButton";
+import JobCard from "@/components/JobCard";
 
 export default async function JobDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -56,6 +57,27 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
       </div>
     );
   }
+
+  let relatedJobs: any[] = [];
+  try {
+    const { data } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('category', job.category)
+      .neq('id', job.id)
+      .order('scraped_at', { ascending: false })
+      .limit(4);
+      
+    if (data) {
+      relatedJobs = data.map((j: any) => ({
+        ...j,
+        type: j.job_type,
+        lastDate: j.last_date,
+        createdAt: new Date(j.scraped_at || j.created_at || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+      }));
+    }
+  } catch(e) {}
+
 
   const isPrivate = job.type === "PRIVATE" || job.job_type === "PRIVATE";
   const isGovt = job.type === "GOVERNMENT" || job.job_type === "GOVERNMENT";
@@ -218,6 +240,18 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
           <p className="text-slate-500 text-sm mb-4">Share this job opportunity with someone who might be looking for a job.</p>
           <ShareButtons title={job.title} />
         </div>
+
+        {relatedJobs.length > 0 && (
+          <div className="mt-12 border-t border-slate-200 dark:border-slate-800 pt-8 mb-12">
+            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-6">Similar Jobs You Might Like</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {relatedJobs.map((relatedJob: any) => (
+                <JobCard key={relatedJob.id} job={relatedJob} />
+              ))}
+            </div>
+          </div>
+        )}
+
 
         <div className="mt-12 mb-12 flex justify-center">
           <Link href={`/cover-letter/${job.id}?title=${encodeURIComponent(job.title)}&org=${encodeURIComponent(job.organization)}`} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
