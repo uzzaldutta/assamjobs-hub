@@ -294,7 +294,8 @@ export default function AdminPage() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Failed to add job");
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed to add job");
 
       setStatus("success");
       setFormData({

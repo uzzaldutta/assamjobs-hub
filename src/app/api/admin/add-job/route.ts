@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const hasVacancies = v !== '' && v !== 'not specified' && !v.includes('multiple') && !v.includes('various');
     const hasLastDate = d !== '' && d !== 'tbd' && d !== 'null';
 
-    if (!hasVacancies && !hasLastDate) {
+    if (!hasVacancies && !hasLastDate && data.category !== 'STUDY_MATERIAL' && data.category !== 'PREVIOUS_PAPERS') {
       return NextResponse.json({ 
         success: false, 
         error: "Strict Mode Active: You must provide a Number of Posts (Vacancies) OR a Last Date of Submission to add this feed." 
