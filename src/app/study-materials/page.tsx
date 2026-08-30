@@ -55,6 +55,20 @@ export default async function StudyMaterialsLibrary() {
       <div className="max-w-7xl mx-auto px-4 mt-8 relative z-10">
         
         {/* Section 1: AI Materials */}
+        <form action="/study-materials" method="GET" className="mb-8 relative max-w-2xl mx-auto">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </div>
+          <input 
+            type="text" 
+            name="q" 
+            defaultValue={query} 
+            placeholder="Search study materials by exam or topic..." 
+            className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+          <button type="submit" className="absolute right-2 top-1.5 bottom-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-bold text-sm">Search</button>
+        </form>
+
         <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
           <BookOpen className="text-blue-500" /> AI Generated Guides
         </h3>
