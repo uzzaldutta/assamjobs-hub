@@ -24,6 +24,8 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
       .from('jobs')
       .select('*')
       .neq('category', 'BANNED_KEYWORD')
+        .neq('category', 'STUDY_MATERIAL')
+        .neq('category', 'PREVIOUS_PAPERS')
       .order('scraped_at', { ascending: false });
       
       if (data) {

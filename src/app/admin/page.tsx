@@ -503,7 +503,8 @@ export default function AdminPage() {
                 <AlertCircle size={18} /> Failed to publish. Check console.
               </div>
             )}
-            <div className="md:col-span-2 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+            {formData.category !== "STUDY_MATERIAL" && formData.category !== "PREVIOUS_PAPERS" && (
+<div className="md:col-span-2 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-3">
                 <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
                   <Shield size={18} />
@@ -631,6 +632,7 @@ export default function AdminPage() {
                 </button>
               </div>
             </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1 md:col-span-2">
@@ -669,18 +671,24 @@ export default function AdminPage() {
                   </select>
                 )}
               </div>
+              {formData.category !== "STUDY_MATERIAL" && formData.category !== "PREVIOUS_PAPERS" && (
               <div className="space-y-1">
                 <label className="text-sm font-semibold">Vacancies (Optional)</label>
                 <input type="text" name="vacancies" value={formData.vacancies} onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950" />
               </div>
+            )}
+              {formData.category !== "STUDY_MATERIAL" && formData.category !== "PREVIOUS_PAPERS" && (
               <div className="space-y-1">
                 <label className="text-sm font-semibold">Last Date (Optional)</label>
                 <input type="date" name="last_date" value={formData.last_date} onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950" />
               </div>
+            )}
+              {formData.category !== "STUDY_MATERIAL" && formData.category !== "PREVIOUS_PAPERS" && (
               <div className="space-y-1">
                 <label className="text-sm font-semibold">Apply URL (Optional)</label>
                 <input type="url" name="apply_url" value={formData.apply_url} onChange={handleChange} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950" />
               </div>
+            )}
               <div className="space-y-1">
                 <label className="text-sm font-semibold">Upload PDF (Overrides URL below)</label>
                 <input type="file" accept=".pdf" onChange={(e) => setPdfFile(e.target.files?.[0] || null)} className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-900/30 dark:file:text-indigo-400" />
