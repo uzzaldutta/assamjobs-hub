@@ -57,7 +57,7 @@ export default async function StudyMaterialsLibrary({ searchParams }: { searchPa
         theme="blue"
       />
 
-      <div className="flex justify-center -mt-16 mb-8 relative z-20">
+      <div className="flex justify-center mt-4 mb-8 relative z-20">
         <Link href="/study-materials/ai-generator" className="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400 font-bold py-2 px-6 rounded-full shadow-sm hover:shadow-md transition flex items-center gap-2">
           <BookOpen size={18} />
           Generate AI Study Guide
@@ -81,7 +81,11 @@ export default async function StudyMaterialsLibrary({ searchParams }: { searchPa
           <button type="submit" className="absolute right-2 top-1.5 bottom-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-bold text-sm">Search</button>
         </form>
 
-        <div className="mb-8 overflow-x-auto pb-2 scrollbar-hide">
+        <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}} />
+      <div className="mb-8 overflow-x-auto pb-2 hide-scrollbar">
           <div className="flex gap-2 w-max">
             <Link href="/study-materials" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ALL' ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>All Subjects</Link>
             <Link href="/study-materials?subject=HISTORY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'HISTORY' ? 'bg-amber-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>History</Link>
@@ -95,13 +99,13 @@ export default async function StudyMaterialsLibrary({ searchParams }: { searchPa
         </div>
         
         <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
-          <BookOpen className="text-blue-500" /> AI Generated Guides
+          <BookOpen className="text-blue-500" /> Interactive Study Library
         </h3>
         
         {!aiMaterials || aiMaterials.length === 0 ? (
           <div className="text-center py-10 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 mb-12">
             <BookOpen size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
-            <p className="text-slate-500 mb-4">No AI study materials generated yet.</p>
+            <p className="text-slate-500 mb-4">No interactive study books found. Use the Admin Panel to add some!</p>
             <Link href="/study-materials/ai-generator" className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold px-6 py-2 rounded-xl hover:bg-blue-700 transition">
               Generate Now
             </Link>
