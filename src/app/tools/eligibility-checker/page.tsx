@@ -1,4 +1,5 @@
-﻿import Link from 'next/link';
+'use client';
+import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 import { CheckCircle2, AlertCircle, Briefcase, GraduationCap, User, Shield } from 'lucide-react';
 import React, { useState } from 'react';
