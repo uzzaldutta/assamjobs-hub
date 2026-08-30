@@ -43,7 +43,7 @@ export default function EligibilityCheckerClient() {
       <PageHeader 
         title="Am I Eligible?" 
         subtitle="Enter your details below to instantly find all government and private jobs you are currently eligible to apply for."
-        theme="emerald"
+        theme="green"
       />
 
       <div className="max-w-6xl mx-auto px-4 mt-8 relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -120,6 +120,9 @@ export default function EligibilityCheckerClient() {
               <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-300 mb-2">Check Your Eligibility</h3>
               <p className="text-emerald-600 dark:text-emerald-500 max-w-sm">
                 Enter your age and qualification on the left. Our system will scan all active jobs and match you with the ones you are legally eligible to apply for.
+              </p>
+              <p className="text-emerald-700/70 dark:text-emerald-400/70 max-w-sm text-xs mt-4 font-medium italic">
+                Note: This tool helps you understand whether you may meet the stated requirements. Please clearly refer to the official notification for the final criteria.
               </p>
             </div>
           ) : results.length === 0 ? (

@@ -1,6 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
-import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield } from "lucide-react";
+import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield, Camera } from "lucide-react";
 
 const toolsData = [
   {
@@ -30,6 +30,7 @@ const toolsData = [
       { name: "Salary Calculator", icon: <Calculator className="text-teal-500" size={24} />, link: "/tools/salary-calculator", color: "bg-teal-50 dark:bg-teal-900/30", border: "border-teal-200 dark:border-teal-800" },
       { name: "CGPA to Percentage", icon: <GraduationCap className="text-orange-500" size={24} />, link: "/tools/cgpa-converter", color: "bg-orange-50 dark:bg-orange-900/30", border: "border-orange-200 dark:border-orange-800" },
       { name: "Marks Calculator", icon: <BarChart className="text-fuchsia-500" size={24} />, link: "/tools/marks-calculator", color: "bg-fuchsia-50 dark:bg-fuchsia-900/30", border: "border-fuchsia-200 dark:border-fuchsia-800" },
+      { name: "Passport Photo Maker", icon: <Camera className="text-pink-500" size={24} />, link: "/tools/photo-maker", color: "bg-pink-50 dark:bg-pink-900/30", border: "border-pink-200 dark:border-pink-800" },
       { name: "Typing Test", icon: <Keyboard className="text-cyan-500" size={24} />, link: "/tools/typing-test", color: "bg-cyan-50 dark:bg-cyan-900/30", border: "border-cyan-200 dark:border-cyan-800" },
     ]
   }

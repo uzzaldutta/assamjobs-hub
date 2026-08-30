@@ -1,16 +1,12 @@
-"use server";
+﻿"use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 export async function generateInterviewQuestions(jobTitle: string) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    
     if (!apiKey) {
-      return { 
-        success: false, 
-        error: "GEMINI_API_KEY is not set in Vercel environment variables." 
-      };
+      return { success: false, error: "GEMINI_API_KEY is not set." };
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
@@ -18,24 +14,40 @@ export async function generateInterviewQuestions(jobTitle: string) {
 
     const prompt = `You are an expert career coach in India (specifically Assam). 
     I am preparing for an interview for the position of: "${jobTitle}".
-    Please provide exactly 5 highly relevant interview questions I am likely to be asked, and a brief 1-sentence tip on how to answer each one.
-    Format your response as a strict JSON array of objects, like this:
-    [
-      { "question": "...", "tip": "..." },
-      ...
-    ]
-    Do NOT include markdown formatting like \`\`\`json. Return ONLY the raw JSON array.`;
+    
+    Please generate 7 highly likely interview questions for this specific role. Include:
+    - 2 Behavioral/HR questions
+    - 3 Technical/Role-specific questions
+    - 2 State/Local GK questions relevant to Assam or the organization.
+    
+    For each question, provide:
+    1. The question itself
+    2. A brief 1-sentence tip on how to answer it
+    3. A realistic sample answer (2-3 sentences max) that would impress the panel.`;
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    const schema = {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          category: { type: SchemaType.STRING, description: "E.g., Behavioral, Technical, Assam GK" },
+          question: { type: SchemaType.STRING },
+          tip: { type: SchemaType.STRING },
+          sampleAnswer: { type: SchemaType.STRING }
+        },
+        required: ["category", "question", "tip", "sampleAnswer"]
+      }
+    };
+
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: schema as any,
+      },
+    });
     
-    // Clean up any potential markdown wrappers
-    let cleanJson = responseText.trim();
-    if (cleanJson.startsWith("```json")) cleanJson = cleanJson.replace("```json", "");
-    if (cleanJson.startsWith("```")) cleanJson = cleanJson.replace("```", "");
-    if (cleanJson.endsWith("```")) cleanJson = cleanJson.replace(/```$/, "");
-    
-    const parsedData = JSON.parse(cleanJson);
+    const parsedData = JSON.parse(result.response.text());
     
     return { success: true, data: parsedData };
   } catch (error: any) {

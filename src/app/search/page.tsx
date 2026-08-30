@@ -35,7 +35,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       <PageHeader 
         title="Search Results" 
         subtitle={query ? `Showing results for "${query}"` : "Enter a search term to find jobs, exams, and materials."}
-        theme="violet"
+        theme="purple"
       />
 
       <div className="max-w-4xl mx-auto px-4 mt-8 relative z-10">

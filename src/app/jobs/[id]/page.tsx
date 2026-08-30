@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import AdminEditButton from "@/components/AdminEditButton";
 import JobCard from "@/components/JobCard";
 import RecentlyViewed from "@/components/RecentlyViewed";
+import DocumentChecklist from "@/components/DocumentChecklist";
 
 export default async function JobDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -255,6 +256,8 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
 
 
         <RecentlyViewed currentJob={job} />
+
+        <DocumentChecklist />
 
         <div className="mt-12 mb-12 flex justify-center">
           <Link href={`/cover-letter/${job.id}?title=${encodeURIComponent(job.title)}&org=${encodeURIComponent(job.organization)}`} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
