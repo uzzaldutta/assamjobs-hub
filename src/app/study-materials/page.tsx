@@ -7,13 +7,25 @@ import RecentMarquee from "@/components/RecentMarquee";
 
 export const revalidate = 60; // ISR cache
 
-export default async function StudyMaterialsLibrary() {
+export default async function StudyMaterialsLibrary({ searchParams }: { searchParams: Promise<{ q?: string, subject?: string }> }) {
+  const { q, subject } = await searchParams;
+  const query = q ? q.toLowerCase() : "";
+  const activeSubject = subject || "ALL";
   // 1. Fetch AI Generated Study Materials
-  const { data: aiMaterials } = await supabase
+  let { data: aiMaterials } = await supabase
     .from('jobs')
-    .select('id, title, created_at')
+    .select('id, title, created_at, job_type')
     .eq('category', 'STUDY_MATERIAL')
     .order('created_at', { ascending: false });
+  if (aiMaterials) {
+    if (query) {
+      aiMaterials = aiMaterials.filter((m: any) => (m.title || "").toLowerCase().includes(query));
+    }
+    if (activeSubject !== "ALL") {
+      aiMaterials = aiMaterials.filter((m: any) => m.job_type === activeSubject);
+    }
+  }
+
 
   // 2. Fetch Manual PDFs (Old System)
   let manualPdfs: any[] = [];
@@ -69,6 +81,19 @@ export default async function StudyMaterialsLibrary() {
           <button type="submit" className="absolute right-2 top-1.5 bottom-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-bold text-sm">Search</button>
         </form>
 
+        <div className="mb-8 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 w-max">
+            <Link href="/study-materials" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ALL' ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>All Subjects</Link>
+            <Link href="/study-materials?subject=HISTORY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'HISTORY' ? 'bg-amber-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>History</Link>
+            <Link href="/study-materials?subject=POLITY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'POLITY' ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Polity & Governance</Link>
+            <Link href="/study-materials?subject=ECONOMICS" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ECONOMICS' ? 'bg-green-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Economics</Link>
+            <Link href="/study-materials?subject=GEOGRAPHY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'GEOGRAPHY' ? 'bg-teal-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Geography</Link>
+            <Link href="/study-materials?subject=GENERAL_SCIENCE" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'GENERAL_SCIENCE' ? 'bg-cyan-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>General Science</Link>
+            <Link href="/study-materials?subject=ASSAM_GK" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ASSAM_GK' ? 'bg-red-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Assam GK</Link>
+            <Link href="/study-materials?subject=MATH_REASONING" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'MATH_REASONING' ? 'bg-violet-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Math & Reasoning</Link>
+          </div>
+        </div>
+        
         <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
           <BookOpen className="text-blue-500" /> AI Generated Guides
         </h3>
@@ -88,6 +113,9 @@ export default async function StudyMaterialsLibrary() {
                 <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-4">
                   <FileText size={24} />
                 </div>
+                <span className="inline-block px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider rounded-md mb-3">
+                  {mat.job_type?.replace('_', ' ') || 'STUDY GUIDE'}
+                </span>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 line-clamp-2">
                   {mat.title}
                 </h3>
