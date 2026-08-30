@@ -555,7 +555,8 @@ export default function AdminPage() {
                           qualification: json.data.qualification || "",
                           unique_description: json.data.unique_description || formData.unique_description,
                           unique_description_assamese: json.data.unique_description_assamese || formData.unique_description_assamese,
-                          apply_url: urlInput.value
+                          apply_url: json.data.apply_url || urlInput.value,
+                          official_pdf_url: json.data.official_pdf_url || formData.official_pdf_url
                         });
                         alert("Successfully auto-filled from URL!");
                       } else {
@@ -613,6 +614,8 @@ export default function AdminPage() {
                           qualification: json.data.qualification || "",
                           unique_description: json.data.unique_description || formData.unique_description,
                           unique_description_assamese: json.data.unique_description_assamese || formData.unique_description_assamese,
+                          apply_url: json.data.apply_url || formData.apply_url,
+                          official_pdf_url: json.data.official_pdf_url || formData.official_pdf_url
                         });
                         alert("Successfully auto-filled from Text!");
                       } else {

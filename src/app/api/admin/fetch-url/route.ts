@@ -74,9 +74,11 @@ export async function POST(req: Request) {
         unique_description_assamese: {
           type: SchemaType.STRING,
           description: "A professional Assamese translation of the unique_description, also using HTML tags and HTML tables."
-        }
+        },
+        apply_url: { type: SchemaType.STRING, description: "The official Apply Online URL found in the text, if any. Return empty string if not found." },
+        official_pdf_url: { type: SchemaType.STRING, description: "The official Advertisement/Notification PDF link found in the text, if any. Return empty string if not found." }
       },
-      required: ["title", "organization", "job_type", "category", "vacancies", "district", "ageLimit", "qualification", "unique_description", "unique_description_assamese"]
+      required: ["title", "organization", "job_type", "category", "vacancies", "district", "ageLimit", "qualification", "unique_description", "unique_description_assamese", "apply_url", "official_pdf_url"]
     };
 
     const prompt = `
@@ -86,14 +88,15 @@ export async function POST(req: Request) {
       For 'job_type' and 'category', classify the job accurately based on the organization and context.
 
       CRITICAL INSTRUCTIONS FOR DESCRIPTIONS:
-      1. Your 'unique_description' field MUST contain a highly detailed, professional, and visually stunning HTML layout.
+      1. Make the 'unique_description' EXTREMELY COMPREHENSIVE. Extract absolutely everything: Age limits, age relaxations, educational qualifications, selection process, syllabus, application fee, how to apply steps, salary details. Leave nothing out. Make it read like a complete article.
       2. Use <h3> or <h4> tags for clear section headings. 
       3. CRITICAL: Whenever there is structured data (e.g., Important Dates, Vacancy Breakdowns, Application Fees, Selection Process, Salary/Pay Scale), you MUST strictly format it as an HTML <table> with proper <thead>, <tbody>, <tr>, <th>, and <td> tags. 
       4. Ensure all tables have the class name "table-auto w-full mb-4 border-collapse border border-slate-300 dark:border-slate-700".
       5. Use <ul> and <li> for standard lists like eligibility criteria or educational qualifications.
-      6. The 'unique_description_assamese' MUST be a direct, professional Assamese language translation of the exact same HTML layout. Do not drop any tables or formatting.
+      6. Extract the Official Advertisement PDF link and Apply Online link from the text and put them into the apply_url and official_pdf_url schema fields.
+      7. The 'unique_description_assamese' MUST be a direct, professional Assamese language translation of the exact same HTML layout. Do not drop any tables or formatting.
 
-      Extract exact salary information if available. Do not output any Markdown wrapping like \`\`\`html.
+      Do not output any Markdown wrapping like \`\`\`html.
 
       Website Text:
       ${rawText}
