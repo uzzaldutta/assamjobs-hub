@@ -28,7 +28,7 @@ CRITICAL INSTRUCTIONS:
 5. Do NOT output any markdown code block wrappers like \`\`\`html. Return pure HTML.
 `;
 
-    const modelsToTry = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-flash-latest"];
+    const modelsToTry = ["gemini-3.6-flash", "gemini-3.1-pro"];
     let text = null;
     let lastError = null;
 
