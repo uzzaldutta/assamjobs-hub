@@ -6,11 +6,12 @@ import { ArrowLeft } from 'lucide-react';
 
 export const revalidate = 60;
 
-export default async function StudyMaterialView({ params }: { params: { materialId: string } }) {
+export default async function StudyMaterialView({ params }: { params: Promise<{ materialId: string }> }) {
+  const resolvedParams = await params;
   const { data, error } = await supabase
     .from('jobs')
     .select('title, unique_description, official_pdf_url, scraped_at')
-    .eq('id', params.materialId)
+    .eq('id', resolvedParams.materialId)
     .single();
 
   if (!data) return notFound();
