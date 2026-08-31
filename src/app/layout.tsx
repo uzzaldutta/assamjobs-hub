@@ -187,7 +187,7 @@ export default function RootLayout({
                         <Sparkles className="text-indigo-500" size={20} /> Featured Applicant Tools
                       </h3>
                       
-                      {/* Scrollable Container */}
+                      {/* Scrolling Container */}
                       <div className="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar" style={{ WebkitOverflowScrolling: "touch" }}>
                           <Link href="/tools/standard-form" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group">
                             <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
@@ -221,7 +221,7 @@ export default function RootLayout({
                             <CreditCard className="mx-auto mb-2 text-orange-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Fee Calculator</span>
                           </Link>
-                        </div>
+                      </div>
                     </div>
 
                     {/* AI Powered Tools Section */}
@@ -230,7 +230,7 @@ export default function RootLayout({
                         <BrainCircuit className="text-fuchsia-500" size={20} /> AI Powered Career Tools
                       </h3>
                       
-                      {/* Scrollable Container */}
+                      {/* Scrolling Container */}
                       <div className="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar" style={{ WebkitOverflowScrolling: "touch" }}>
                           <Link href="/tools/career-advisor" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-fuchsia-500 transition text-center group flex flex-col items-center justify-center">
                             <Compass className="mx-auto mb-2 text-fuchsia-500 group-hover:scale-110 transition" size={24} />
@@ -252,31 +252,6 @@ export default function RootLayout({
                             <FileText className="mx-auto mb-2 text-pink-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Cover Letter</span>
                           </Link>
-                        </div>
-
-                        {/* Duplicated Set for Infinite Scroll */}
-                        <div className="flex gap-4">
-                          <Link href="/tools/career-advisor" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-fuchsia-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
-                            <Compass className="mx-auto mb-2 text-fuchsia-500 group-hover:scale-110 transition" size={24} />
-                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Career Advisor</span>
-                          </Link>
-                          <Link href="/tools/study-planner" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-cyan-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
-                            <Calendar className="mx-auto mb-2 text-cyan-500 group-hover:scale-110 transition" size={24} />
-                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Study Planner</span>
-                          </Link>
-                          <Link href="/tools/interview-prep" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
-                            <Mic className="mx-auto mb-2 text-amber-500 group-hover:scale-110 transition" size={24} />
-                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Interview Coach</span>
-                          </Link>
-                          <Link href="/mock-tests/ai-generator" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
-                            <BrainCircuit className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
-                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Mock Test</span>
-                          </Link>
-                          <Link href="/cover-letter" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-pink-500 transition text-center group flex flex-col items-center justify-center" aria-hidden="true" tabIndex={-1}>
-                            <FileText className="mx-auto mb-2 text-pink-500 group-hover:scale-110 transition" size={24} />
-                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Cover Letter</span>
-                          </Link>
-                        </div>
                       </div>
                     </div>
                   </div>
