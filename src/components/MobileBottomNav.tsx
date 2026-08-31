@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, Briefcase, FileText, Menu, X, Building2, ClipboardList, GraduationCap, Wrench, Settings, BookCheck } from "lucide-react";
-import { useLanguage } from "./LanguageContext";
-import { useState } from "react";
+import { Calendar, usePathname } from "next/navigation";
+import { Calendar, Home, Briefcase, FileText, Menu, X, Building2, ClipboardList, GraduationCap, Wrench, Settings, BookCheck } from "lucide-react";
+import { Calendar, useLanguage } from "./LanguageContext";
+import { Calendar, useState } from "react";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();

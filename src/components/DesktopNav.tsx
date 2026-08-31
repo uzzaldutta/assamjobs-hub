@@ -8,7 +8,7 @@ export default function DesktopNav() {
   const { t } = useLanguage();
   
   return (
-    <nav className="hidden lg:flex items-center gap-6 font-semibold text-sm text-slate-700 dark:text-slate-200">
+    <nav className="hidden lg:flex items-center gap-2 lg:gap-3 font-semibold text-sm text-slate-700 dark:text-slate-200">
       
       {/* Home */}
       <Link href="/" onClick={(e) => {
@@ -16,13 +16,13 @@ export default function DesktopNav() {
           e.preventDefault();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      }} className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+      }} className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
         <Home size={16} /> {t("nav_home")}
       </Link>
 
       {/* Jobs Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+        <button className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
           <Briefcase size={16} /> {t("nav_jobs")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
@@ -34,7 +34,7 @@ export default function DesktopNav() {
 
       {/* Exams Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+        <button className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
           <GraduationCap size={16} /> {t("nav_exams")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
@@ -47,7 +47,7 @@ export default function DesktopNav() {
 
       {/* Preparation Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+        <button className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
           <BookOpen size={16} /> Preparation <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
@@ -59,13 +59,13 @@ export default function DesktopNav() {
       </div>
 
       {/* Tenders */}
-      <Link href="/tenders" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+      <Link href="/tenders" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
         <FileText size={16} /> {t("nav_tenders")}
       </Link>
 
       {/* Tools Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+        <button className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
           <Wrench size={16} /> {t("nav_tools")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
@@ -78,7 +78,7 @@ export default function DesktopNav() {
       </div>
 
       {/* Calendar */}
-      <Link href="/calendar" className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 py-4 transition-colors">
+      <Link href="/calendar" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
         <CalendarDays size={16} /> {t("nav_calendar")}
       </Link>
 
