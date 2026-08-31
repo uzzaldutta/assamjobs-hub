@@ -17,8 +17,10 @@ export default function TendersDashboard({ initialTenders }: { initialTenders: a
   const filtered = initialTenders.filter(tender => {
     const matchesDistrict = district === "ALL" || tender.district === district;
     const matchesDept = department === "ALL" || tender.organization === department;
+    const shortId = "AJH-" + (tender.id || "").slice(-6).toUpperCase();
     const matchesSearch = (tender.title || "").toLowerCase().includes(search.toLowerCase()) || 
-                          (tender.organization || "").toLowerCase().includes(search.toLowerCase());
+                          (tender.organization || "").toLowerCase().includes(search.toLowerCase()) ||
+                          shortId.toLowerCase().includes(search.toLowerCase());
     return matchesDistrict && matchesDept && matchesSearch;
   });
 

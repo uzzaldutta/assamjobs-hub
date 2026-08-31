@@ -27,9 +27,11 @@ export default function FeedList({
 
   let filteredJobs = initialJobs.filter((job) => {
     // 1. Search filter
-    const matchesSearch = 
-      (job.title || "").toLowerCase().includes(search.toLowerCase()) || 
-      (job.organization || "").toLowerCase().includes(search.toLowerCase());
+    const shortId = "AJH-" + (job.id || "").slice(-6).toUpperCase();
+      const matchesSearch = 
+        (job.title || "").toLowerCase().includes(search.toLowerCase()) || 
+        (job.organization || "").toLowerCase().includes(search.toLowerCase()) ||
+        shortId.toLowerCase().includes(search.toLowerCase());
     
     // 2. District filter
     const matchesDistrict = district === "ALL" || (job.district || "").toLowerCase().includes(district.toLowerCase());
