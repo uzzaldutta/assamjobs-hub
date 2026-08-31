@@ -25,7 +25,7 @@ const translations = {
     nav_study: "Study",
     nav_admissions: "Admissions",
     nav_mock_tests: "Mock Tests",
-    nav_calendar: "Calendar",
+    nav_calendar: "Job Calendar",
     nav_jobs: "Jobs",
     nav_exams: "Exams",
     nav_more: "More",
