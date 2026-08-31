@@ -461,7 +461,8 @@ export default function AdminPage() {
                 <table className="w-full text-left border-collapse text-sm">
                   <thead>
                     <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/20">
-                      <th className="p-4 font-semibold">Title</th>
+                      <th className="p-4 font-semibold">Feed ID</th>
+                        <th className="p-4 font-semibold">Title</th>
                       <th className="p-4 font-semibold">Type</th>
                       <th className="p-4 font-semibold">Date Added</th>
                       <th className="p-4 font-semibold text-right">Actions</th>
@@ -470,7 +471,10 @@ export default function AdminPage() {
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
                     {jobs.map((job) => (
                       <tr key={job.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                        <td className="p-4 font-medium text-slate-800 dark:text-slate-200 max-w-xs truncate" title={job.title}>
+                        <td className="p-4 font-mono text-xs text-slate-500 max-w-[120px] truncate" title={job.id}>
+                            {job.id}
+                          </td>
+                          <td className="p-4 font-medium text-slate-800 dark:text-slate-200 max-w-xs truncate" title={job.title}>
                           {job.title}
                           <div className="text-xs text-slate-400 font-normal truncate mt-0.5">{job.organization}</div>
                         </td>

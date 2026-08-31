@@ -66,9 +66,14 @@ export default function JobCard({ job }: JobCardProps) {
 
       {/* Footer */}
       <div className="relative z-10 mt-auto pt-3 md:pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between pointer-events-none">
-        <span className="text-[10px] md:text-[11px] text-slate-400 font-medium">
+        <div className="flex flex-col gap-0.5">
+            <span className="text-[10px] md:text-[11px] text-slate-400 font-medium">
           Posted: {job.createdAt}
         </span>
+            <span className="text-[9px] md:text-[10px] text-slate-400/80 font-mono" title="Feed ID">
+              ID: {job.id}
+            </span>
+          </div>
         <span className="flex items-center gap-1 text-xs md:text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 transition-colors">
           View Details <ArrowRight size={14} />
         </span>
