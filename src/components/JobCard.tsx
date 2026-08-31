@@ -71,7 +71,7 @@ export default function JobCard({ job }: JobCardProps) {
           Posted: {job.createdAt}
         </span>
             <span className="text-[9px] md:text-[10px] text-slate-400/80 font-mono" title="Feed ID">
-              ID: {job.id}
+              ID: AJH-{job.id.slice(-6).toUpperCase()}
             </span>
           </div>
         <span className="flex items-center gap-1 text-xs md:text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 transition-colors">

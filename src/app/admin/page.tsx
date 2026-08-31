@@ -471,8 +471,8 @@ export default function AdminPage() {
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
                     {jobs.map((job) => (
                       <tr key={job.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                        <td className="p-4 font-mono text-xs text-slate-500 max-w-[120px] truncate" title={job.id}>
-                            {job.id}
+                        <td className="p-4 font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 max-w-[120px] truncate" title={job.id}>
+                            AJH-{job.id.slice(-6).toUpperCase()}
                           </td>
                           <td className="p-4 font-medium text-slate-800 dark:text-slate-200 max-w-xs truncate" title={job.title}>
                           {job.title}
@@ -481,9 +481,9 @@ export default function AdminPage() {
                         <td className="p-4">
                           <span className="text-[10px] font-bold uppercase px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">{job.job_type}</span>
                         </td>
-                        <td className="p-4 text-slate-500">
-                          {new Date(job.scraped_at).toLocaleDateString()}
-                        </td>
+                        <td className="p-4 text-slate-500 text-xs">
+                            {new Date(job.scraped_at).toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                          </td>
                         <td className="p-4 flex gap-2 justify-end">
                           <Link href={`/admin/edit/${job.id}`} className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition" title="Edit Post">
                             <Edit size={16} />
