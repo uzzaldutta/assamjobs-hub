@@ -25,10 +25,11 @@ export default async function StudyMaterialView({ params }: { params: Promise<{ 
       />
 
       <div className="max-w-4xl mx-auto px-4 -mt-8 relative z-10">
-        <div className="mb-6">
+        <div className="mb-6 flex justify-between items-center">
           <Link href="/study-materials" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
             <ArrowLeft size={16} /> Back to Library
           </Link>
+          <div className="ml-auto inline-flex items-center text-xs font-mono font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">ID: AJH-{resolvedParams.materialId.slice(-6).toUpperCase()}</div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-lg border border-slate-200 dark:border-slate-800 p-8 md:p-12 prose dark:prose-invert prose-indigo max-w-none prose-table:w-full prose-th:bg-slate-50 dark:prose-th:bg-slate-800 prose-td:p-3 prose-th:p-3 prose-table:border-collapse prose-tr:border-b prose-tr:border-slate-200 dark:prose-tr:border-slate-700">
