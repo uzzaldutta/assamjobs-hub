@@ -14,9 +14,9 @@ export default async function StudyMaterialsLibrary({ searchParams }: { searchPa
   // 1. Fetch AI Generated Study Materials
   let { data: aiMaterials } = await supabase
     .from('jobs')
-    .select('id, title, created_at, job_type')
+    .select('id, title, scraped_at, job_type')
     .eq('category', 'STUDY_MATERIAL')
-    .order('created_at', { ascending: false });
+    .order('scraped_at', { ascending: false });
   if (aiMaterials) {
     if (query) {
       aiMaterials = aiMaterials.filter((m: any) => (m.title || "").toLowerCase().includes(query));

@@ -9,7 +9,7 @@ export const revalidate = 60;
 export default async function StudyMaterialView({ params }: { params: { materialId: string } }) {
   const { data, error } = await supabase
     .from('jobs')
-    .select('title, unique_description, official_pdf_url, created_at')
+    .select('title, unique_description, official_pdf_url, scraped_at')
     .eq('id', params.materialId)
     .single();
 
