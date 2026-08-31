@@ -215,6 +215,7 @@ export default function MockTestsIndex() {
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
                   {test.title}
                 </h3>
+                  <div className="text-[10px] text-slate-400 font-mono mb-4" title="Feed ID">ID: AJH-{test.id.slice(-6).toUpperCase()}</div>
                 
                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm font-medium">
                   <div className="flex items-center gap-1.5"><BookOpen size={16} /> {test.questions} Qs</div>
