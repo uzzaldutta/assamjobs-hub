@@ -6,9 +6,9 @@ export async function GET(request: Request) {
   try {
     const { data, error } = await supabase
       .from('jobs')
-      .select('id, title, created_at')
+      .select('id, title, scraped_at')
       .eq('category', 'BANNED_KEYWORD')
-      .order('created_at', { ascending: false });
+      .order('scraped_at', { ascending: false });
 
     if (error) throw error;
     
