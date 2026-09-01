@@ -45,6 +45,12 @@ export default function DesktopNav() {
 
 
 
+      
+      {/* Global Search */}
+      <Link href="/search" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
+        <Search size={16} /> Search
+      </Link>
+
       {/* Preparation Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">

@@ -1,4 +1,8 @@
+﻿import os
 
+os.makedirs("src/app/search", exist_ok=True)
+
+page_code = """
 import { supabase } from "@/lib/supabase";
 import SearchClient from "./SearchClient";
 import DiscoveryLanding from "./DiscoveryLanding";
@@ -46,3 +50,7 @@ export default async function SearchPage({
     </div>
   );
 }
+"""
+
+with open("src/app/search/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code)
