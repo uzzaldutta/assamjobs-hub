@@ -164,9 +164,9 @@ export default function ExamDashboardClient({ exam, subjects, chapters, topics }
                                                   <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-500 flex-shrink-0"></div>
                                                   <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 truncate">{topic.title}</span>
                                                 </div>
-                                                <button className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 group-hover:text-indigo-600 bg-slate-100 dark:bg-slate-900 px-2 py-1.5 rounded-md transition-colors">
-                                                  <Lock size={12} /> Practice
-                                                </button>
+                                                <Link href={`/practice/${topic.id}`} className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 hover:text-white hover:bg-indigo-600 dark:hover:bg-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-md transition-all">
+                                                  <PlayCircle size={14} /> Practice
+                                                </Link>
                                               </div>
                                             ))}
                                           </div>
