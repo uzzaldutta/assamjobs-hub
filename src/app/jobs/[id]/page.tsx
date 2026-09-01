@@ -118,8 +118,35 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
   const isPrivate = job.type === "PRIVATE" || job.job_type === "PRIVATE";
   const isGovt = job.type === "GOVERNMENT" || job.job_type === "GOVERNMENT";
 
+
+  const jobPostingSchema = {
+    "@context": "https://schema.org/",
+    "@type": "JobPosting",
+    "title": job.title,
+    "description": job.description || job.title,
+    "datePosted": job.scraped_at || job.created_at || new Date().toISOString(),
+    "validThrough": job.last_date ? new Date(job.last_date).toISOString() : undefined,
+    "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : "OTHER",
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": job.organization || "AssamJobs Hub Verified Employer",
+      "sameAs": "https://assamjobshub.in"
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": job.location || "Assam",
+        "addressRegion": "AS",
+        "addressCountry": "IN"
+      }
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 pb-24">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingSchema) }} />
+      <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 pb-24">
       {/* Top Nav */}
       <div className="sticky top-[60px] md:top-[80px] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
@@ -363,5 +390,6 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
         </div>
       </div>
     </div>
+    </>
   );
 }

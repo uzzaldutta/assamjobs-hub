@@ -25,3 +25,12 @@ export interface SearchResultItem {
   metadata: SearchResultMetadata;
   relevanceScore: number;
 }
+
+export interface PaginatedSearchResult {
+  results: SearchResultItem[];
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}

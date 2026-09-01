@@ -2,266 +2,238 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Search, MapPin, GraduationCap, Briefcase, Calendar, ChevronRight, Bookmark, BookmarkCheck, FileText, CheckCircle2, ArrowRight } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { SearchResultItem } from "@/lib/search/searchTypes";
+import { Search, Briefcase, FileText, Target, BookOpen, Clock, Users, ArrowRight } from "lucide-react";
+import { PaginatedSearchResult, SearchResultItem } from "@/lib/search/searchTypes";
 
-
-export default function SearchClient({ initialQuery, initialType, results }: { initialQuery: string, initialType: string, results: SearchResultItem[] }) {
+export default function SearchClient({ initialQuery, initialType, paginatedData }: { initialQuery: string; initialType: string; paginatedData: PaginatedSearchResult }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
   const [query, setQuery] = useState(initialQuery);
-  const [activeType, setActiveType] = useState(initialType);
-  const [savedJobs, setSavedJobs] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem("ajh_saved_jobs") || "{}");
-      setSavedJobs(saved);
-    } catch(e) {}
-  }, []);
+  const results = paginatedData.results;
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return router.push("/search");
+    if (!query.trim()) return;
     
-    // Save to recent searches
-    try {
-      const recent = JSON.parse(localStorage.getItem("ajh_recent_searches") || "[]");
-      const updated = [query.trim(), ...recent.filter((q:string) => q.toLowerCase() !== query.trim().toLowerCase())].slice(0, 5);
-      localStorage.setItem("ajh_recent_searches", JSON.stringify(updated));
-    } catch(e) {}
-
     const params = new URLSearchParams(searchParams.toString());
     params.set("q", query.trim());
+    params.set("page", "1");
     router.push(`/search?${params.toString()}`);
   };
 
   const setTypeFilter = (type: string) => {
-    setActiveType(type);
     const params = new URLSearchParams(searchParams.toString());
-    if (type === "ALL") params.delete("type");
+    if (!type) params.delete("type");
     else params.set("type", type);
+    params.set("page", "1");
+    router.push(`/search?${params.toString()}`);
+  };
+  
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
     router.push(`/search?${params.toString()}`);
   };
 
-  const toggleSave = (id: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const newSaved = { ...savedJobs, [id]: !savedJobs[id] };
-    setSavedJobs(newSaved);
-    localStorage.setItem("ajh_saved_jobs", JSON.stringify(newSaved));
+  const jobs = results.filter((r: SearchResultItem) => r.type === "JOB");
+  const exams = results.filter((r: SearchResultItem) => r.type === "EXAM");
+  const topics = results.filter((r: SearchResultItem) => r.type === "TOPIC");
+  const tests = results.filter((r: SearchResultItem) => r.type === "MOCK_TEST");
+
+  // Render logic...
+  const renderItem = (item: SearchResultItem) => {
+    if (item.type === "JOB") {
+      return (
+        <Link key={item.id} href={`/jobs/${item.id}`} className="block p-4 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-indigo-500 hover:shadow-md transition bg-white dark:bg-slate-900">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+              <Briefcase size={20} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-slate-900 dark:text-white truncate">{item.title}</h3>
+              <p className="text-sm text-slate-500 truncate">{item.subtitle}</p>
+              {item.metadata?.location && <p className="text-xs text-slate-400 mt-1">{item.metadata.location}</p>}
+            </div>
+          </div>
+        </Link>
+      );
+    }
+    if (item.type === "EXAM") {
+      return (
+        <Link key={item.id} href={`/exams/${item.metadata?.slug || item.id}`} className="block p-4 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-indigo-500 hover:shadow-md transition bg-white dark:bg-slate-900">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+              <FileText size={20} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-slate-900 dark:text-white truncate">{item.title}</h3>
+              <p className="text-sm text-slate-500 truncate">{item.metadata?.description || item.subtitle}</p>
+            </div>
+          </div>
+        </Link>
+      );
+    }
+    if (item.type === "TOPIC") {
+      return (
+        <Link key={item.id} href={`/practice/${item.id}`} className="block p-4 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-indigo-500 hover:shadow-md transition bg-white dark:bg-slate-900">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+              <BookOpen size={20} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-slate-900 dark:text-white truncate">{item.title}</h3>
+              <p className="text-sm text-slate-500 truncate">{item.subtitle}</p>
+            </div>
+          </div>
+        </Link>
+      );
+    }
+    if (item.type === "MOCK_TEST") {
+      return (
+        <Link key={item.id} href={`/mock-test/${item.id}`} className="block p-4 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-indigo-500 hover:shadow-md transition bg-white dark:bg-slate-900">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
+              <Target size={20} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-slate-900 dark:text-white truncate">{item.title}</h3>
+              <p className="text-sm text-slate-500 truncate">{item.subtitle}</p>
+              <div className="flex items-center gap-3 mt-2 text-xs text-slate-400">
+                <span className="flex items-center gap-1"><Clock size={12}/> {item.metadata?.duration_minutes}m</span>
+                <span className="flex items-center gap-1"><FileText size={12}/> {item.metadata?.total_marks} Marks</span>
+              </div>
+            </div>
+          </div>
+        </Link>
+      );
+    }
+    return null;
   };
 
-  // Grouping logic
-  const jobs = results.filter(r => r.type === "JOB");
-  const exams = results.filter(r => r.type === "EXAM");
-  const topics = results.filter(r => r.type === "TOPIC");
-  
-  // Apply tab filter
-  const displayedResults = activeType === "ALL" ? results : results.filter(r => r.type === activeType);
-
-  const renderJobCard = (item: SearchResultItem) => (
-    <Link href={`/job/${item.id}`} key={item.id} className="block group">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-5 transition-all shadow-sm hover:shadow-md relative">
-        <button 
-          onClick={(e) => toggleSave(item.id, e)}
-          className="absolute top-5 right-5 text-slate-400 hover:text-indigo-600 transition-colors"
-        >
-          {savedJobs[item.id] ? <BookmarkCheck size={22} className="text-indigo-600 fill-indigo-100 dark:fill-indigo-900" /> : <Bookmark size={22} />}
-        </button>
-        
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white pr-8 leading-tight mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{item.title}</h3>
-        <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 font-medium">{item.subtitle}</p>
-        
-        <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400 mb-5">
-          {item.metadata.location && <div className="flex items-center gap-1.5"><MapPin size={14}/> {item.metadata.location}</div>}
-          {item.metadata.qualification && <div className="flex items-center gap-1.5"><GraduationCap size={14}/> {item.metadata.qualification}</div>}
-          {item.metadata.job_type && <div className="flex items-center gap-1.5"><Briefcase size={14}/> {item.metadata.job_type}</div>}
-          {item.metadata.last_date && <div className="flex items-center gap-1.5 font-medium text-orange-600 dark:text-orange-400"><Calendar size={14}/> Apply by {new Date(item.metadata.last_date).toLocaleDateString()}</div>}
-        </div>
-        
-        <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
-           <span className="text-xs font-bold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded">GOVERNMENT JOB</span>
-           <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-             View Details <ChevronRight size={16}/>
-           </span>
-        </div>
-      </div>
-    </Link>
-  );
-
-  const renderExamCard = (item: SearchResultItem) => (
-    <div key={item.id} className="bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl p-5 relative group overflow-hidden">
-      <div className="absolute top-0 right-0 p-4 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform">
-        <FileText size={100} />
-      </div>
-      <h3 className="text-xl font-black text-indigo-900 dark:text-indigo-100 mb-2 relative z-10">{item.title}</h3>
-      <p className="text-indigo-700/80 dark:text-indigo-300/80 text-sm mb-6 relative z-10 line-clamp-2">{item.metadata.description}</p>
-      
-      <Link href={`/exam/${item.metadata.slug}`} className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl transition-colors relative z-10 shadow-sm">
-        View Syllabus & Prepare <ArrowRight size={16}/>
-      </Link>
-    </div>
-  );
-
-  const renderTopicCard = (item: SearchResultItem) => (
-    <Link href={`/practice/${item.id}`} key={item.id} className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-500 group transition-all">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center font-bold">
-          <CheckCircle2 size={20} />
-        </div>
-        <div>
-          <h4 className="font-bold text-slate-800 dark:text-white group-hover:text-emerald-600 transition-colors">{item.title}</h4>
-          <p className="text-xs text-slate-500">{item.subtitle}</p>
-        </div>
-      </div>
-      <span className="text-xs font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">Practice</span>
-    </Link>
-  );
-
   return (
-    <div className="flex flex-col gap-6">
-      {/* Search Header */}
-      <div className="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm sticky top-16 z-40">
-        <form onSubmit={handleSearch} className="relative flex items-center mb-4">
-          <Search className="absolute left-4 text-slate-400" size={20} />
-          <input 
-            type="text" 
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <form onSubmit={handleSearch} className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search size={20} className="text-slate-400" />
+          </div>
+          <input
+            type="text"
             value={query}
-            onChange={e => setQuery(e.target.value)}
-            className="w-full pl-12 pr-24 py-3.5 bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500 rounded-xl font-medium text-slate-900 dark:text-white outline-none transition-all"
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search jobs, exams, practice topics, mock tests..."
+            className="block w-full pl-12 pr-4 py-4 border-2 border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all sm:text-lg font-medium shadow-sm"
           />
-          <button type="submit" className="absolute right-2 px-4 py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold rounded-lg text-sm hover:bg-slate-800 transition-colors">
-            Update
+          <button type="submit" className="absolute right-2 top-2 bottom-2 bg-indigo-600 text-white px-6 font-bold rounded-xl hover:bg-indigo-700 transition">
+            Search
           </button>
         </form>
-
-        {/* Tabs */}
-        <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-1 border-b border-slate-100 dark:border-slate-800">
-          <button onClick={() => setTypeFilter('ALL')} className={`whitespace-nowrap px-4 py-2 text-sm font-bold border-b-2 transition-colors ${activeType === 'ALL' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'}`}>
-            All ({results.length})
-          </button>
-          {jobs.length > 0 && (
-            <button onClick={() => setTypeFilter('JOB')} className={`whitespace-nowrap px-4 py-2 text-sm font-bold border-b-2 transition-colors ${activeType === 'JOB' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'}`}>
-              Jobs ({jobs.length})
-            </button>
-          )}
-          {exams.length > 0 && (
-            <button onClick={() => setTypeFilter('EXAM')} className={`whitespace-nowrap px-4 py-2 text-sm font-bold border-b-2 transition-colors ${activeType === 'EXAM' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'}`}>
-              Exams ({exams.length})
-            </button>
-          )}
-          {topics.length > 0 && (
-            <button onClick={() => setTypeFilter('TOPIC')} className={`whitespace-nowrap px-4 py-2 text-sm font-bold border-b-2 transition-colors ${activeType === 'TOPIC' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'}`}>
-              Practice Topics ({topics.length})
-            </button>
-          )}
-        </div>
       </div>
 
-      {results.length === 0 ? (
+      <div className="flex overflow-x-auto gap-2 pb-4 mb-4 hide-scrollbar">
+        {[
+          { id: "", label: "All Results" },
+          { id: "JOB", label: "Jobs" },
+          { id: "EXAM", label: "Exams" },
+          { id: "TOPIC", label: "Practice Topics" },
+          { id: "MOCK_TEST", label: "Mock Tests" }
+        ].map(filter => (
+          <button
+            key={filter.id}
+            onClick={() => setTypeFilter(filter.id)}
+            className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${initialType === filter.id ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
+
+      {!initialQuery ? (
         <div className="text-center py-20 px-4">
-          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
-            <Search size={32} />
+          <Search size={64} className="mx-auto text-slate-200 dark:text-slate-800 mb-6" />
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Search AssamJobs Hub</h2>
+          <p className="text-slate-500 max-w-md mx-auto">Enter a keyword above to find government jobs, private sector openings, exam syllabuses, practice questions, and full mock tests.</p>
+        </div>
+      ) : results.length === 0 ? (
+        <div className="text-center py-20 px-4">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Search size={32} className="text-slate-400" />
           </div>
-          <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-2">No exact matches</h2>
-          <p className="text-slate-500 mb-8 max-w-md mx-auto">We couldn't find anything exactly matching "{initialQuery}". Check for typos or try broader terms.</p>
-          <div className="flex justify-center gap-2">
-            <button onClick={() => { setQuery("Assam Police"); handleSearch({preventDefault:()=> {}} as any); }} className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-bold">Try "Assam Police"</button>
-            <button onClick={() => { setQuery("ADRE"); handleSearch({preventDefault:()=> {}} as any); }} className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-bold">Try "ADRE"</button>
-          </div>
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">No results found</h2>
+          <p className="text-slate-500">We couldn't find anything matching "{initialQuery}". Try using different keywords.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          
-          {/* Main Results Area */}
-          <div className="lg:col-span-3 space-y-8">
-            
-            {/* CROSS-CONTENT DISCOVERY VIEW (Only when ALL is selected) */}
-            {activeType === "ALL" ? (
-              <>
-                {/* 1. Best Match / Job */}
-                {jobs.length > 0 && (
-                  <div>
-                    <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                       Opportunity
-                    </h2>
-                    <div className="space-y-4">
-                      {jobs.slice(0, 3).map(renderJobCard)}
-                    </div>
-                  </div>
-                )}
-                
-                {/* 2. Prepare For This */}
-                {(exams.length > 0 || topics.length > 0) && (
-                  <div className="mt-8 pt-8 border-t-2 border-dashed border-slate-200 dark:border-slate-800">
-                     <h2 className="text-sm font-black uppercase tracking-widest text-indigo-500 mb-4 flex items-center gap-2">
-                       Prepare for this
-                     </h2>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                       {exams.slice(0, 2).map(renderExamCard)}
-                     </div>
-                     <div className="space-y-3">
-                       {topics.slice(0, 4).map(renderTopicCard)}
-                     </div>
-                  </div>
-                )}
-
-                {/* 3. Related Jobs */}
-                {jobs.length > 3 && (
-                  <div className="mt-8 pt-8 border-t-2 border-dashed border-slate-200 dark:border-slate-800">
-                     <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">
-                       More Related Jobs
-                     </h2>
-                     <div className="space-y-4">
-                       {jobs.slice(3, 8).map(renderJobCard)}
-                     </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              // FLAT LIST VIEW (When a specific tab is selected)
-              <div className="space-y-4">
-                {displayedResults.map(item => {
-                  if (item.type === "JOB") return renderJobCard(item);
-                  if (item.type === "EXAM") return renderExamCard(item);
-                  if (item.type === "TOPIC") return renderTopicCard(item);
-                  return null;
-                })}
+        <div className="space-y-8">
+          {(!initialType || initialType === "EXAM") && exams.length > 0 && (
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <FileText className="text-emerald-500" /> Exams & Syllabus
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {exams.map(renderItem)}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Desktop Filter Sidebar (Placeholder for full filter logic) */}
-          <div className="hidden lg:block space-y-6">
-             <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm sticky top-40">
-                <h3 className="font-black text-slate-800 dark:text-white mb-4">Filter Results</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Job Type</label>
-                    <select className="w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300">
-                      <option>Any Type</option>
-                      <option>Government</option>
-                      <option>Private</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Qualification</label>
-                    <select className="w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300">
-                      <option>Any</option>
-                      <option>10th Pass</option>
-                      <option>12th Pass</option>
-                      <option>Graduate</option>
-                    </select>
-                  </div>
-                </div>
-                <button className="w-full mt-6 py-2 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 rounded-lg font-bold text-sm hover:bg-indigo-100 transition-colors">Apply Filters</button>
-             </div>
-          </div>
+          {(!initialType || initialType === "MOCK_TEST") && tests.length > 0 && (
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <Target className="text-purple-500" /> Mock Tests
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tests.map(renderItem)}
+              </div>
+            </div>
+          )}
+
+          {(!initialType || initialType === "TOPIC") && topics.length > 0 && (
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <BookOpen className="text-indigo-500" /> Practice Topics
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {topics.map(renderItem)}
+              </div>
+            </div>
+          )}
+
+          {(!initialType || initialType === "JOB") && jobs.length > 0 && (
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <Briefcase className="text-blue-500" /> Job Openings
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {jobs.map(renderItem)}
+              </div>
+            </div>
+          )}
           
+          {paginatedData.totalCount > 0 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+              <div className="text-sm font-medium text-slate-500">
+                Showing <span className="font-bold text-slate-900 dark:text-white">{((paginatedData.currentPage - 1) * paginatedData.pageSize) + 1}</span> to <span className="font-bold text-slate-900 dark:text-white">{Math.min(paginatedData.currentPage * paginatedData.pageSize, paginatedData.totalCount)}</span> of <span className="font-bold text-slate-900 dark:text-white">{paginatedData.totalCount}</span> results
+              </div>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => handlePageChange(paginatedData.currentPage - 1)}
+                  disabled={!paginatedData.hasPrevious}
+                  className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-bold disabled:opacity-50 hover:bg-slate-50 transition-colors"
+                >
+                  Previous
+                </button>
+                <button 
+                  onClick={() => handlePageChange(paginatedData.currentPage + 1)}
+                  disabled={!paginatedData.hasNext}
+                  className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-bold disabled:opacity-50 hover:bg-slate-50 transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

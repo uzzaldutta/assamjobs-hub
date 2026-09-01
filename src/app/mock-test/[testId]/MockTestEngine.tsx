@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from "react";
 import { startMockTestSession, submitMockTest } from "@/lib/mock-test/actions";
 import { Clock, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Bookmark, X, Loader2, ArrowRight, Target, BarChart3, Activity } from "lucide-react";
 import Link from "next/link";
+import { StorageService } from "@/lib/storage";
+
 
 type ViewState = "LANDING" | "ACTIVE" | "SUBMITTING" | "RESULT" | "REVIEW";
 
@@ -32,28 +34,30 @@ export default function MockTestEngine({ testId, initialMetadata }: { testId: st
 
   const storageKey = `mock_active_${testId}`;
 
+  
   // 1. Initial Load & Recovery
   useEffect(() => {
-    try {
-      const active = localStorage.getItem(storageKey);
-      if (active) {
-        const parsed = JSON.parse(active);
-        // If expired locally, auto-submit. Otherwise resume.
-        if (Date.now() < parsed.expiresAt) {
-          setSession({ token: parsed.sessionToken, expiresAt: parsed.expiresAt });
-          setQuestions(parsed.questions);
-          setAnswers(parsed.answers || {});
-          setMarkedForReview(parsed.marked || {});
-          setVisited(parsed.visited || {});
-          setCurrentIndex(parsed.currentIndex || 0);
-          setView("ACTIVE");
-        } else {
-          // Expired. Auto submit it.
-          executeSubmission(parsed.sessionToken, parsed.answers || {});
+    const init = async () => {
+      try {
+        const active = await StorageService.get<any>(storageKey);
+        if (active) {
+          if (Date.now() < active.expiresAt) {
+            setSession({ token: active.sessionToken, expiresAt: active.expiresAt });
+            setQuestions(active.questions);
+            setAnswers(active.answers || {});
+            setMarkedForReview(active.marked || {});
+            setVisited(active.visited || {});
+            setCurrentIndex(active.currentIndex || 0);
+            setView("ACTIVE");
+          } else {
+            executeSubmission(active.sessionToken, active.answers || {});
+          }
         }
-      }
-    } catch (e) {}
+      } catch (e) {}
+    };
+    init();
   }, []);
+
 
   // 2. Timer Logic
   useEffect(() => {
@@ -74,10 +78,11 @@ export default function MockTestEngine({ testId, initialMetadata }: { testId: st
     return () => clearInterval(timer);
   }, [view, session, answers]);
 
+  
   // Sync state to local storage when active
   useEffect(() => {
     if (view === "ACTIVE" && session) {
-      localStorage.setItem(storageKey, JSON.stringify({
+      StorageService.set(storageKey, {
         sessionToken: session.token,
         expiresAt: session.expiresAt,
         questions,
@@ -85,9 +90,10 @@ export default function MockTestEngine({ testId, initialMetadata }: { testId: st
         marked: markedForReview,
         visited,
         currentIndex
-      }));
+      });
     }
   }, [view, answers, markedForReview, visited, currentIndex]);
+
 
   const handleStart = async () => {
     setView("SUBMITTING");
@@ -110,7 +116,7 @@ export default function MockTestEngine({ testId, initialMetadata }: { testId: st
     try {
       const report = await submitMockTest(token, finalAnswers);
       setResultData(report);
-      localStorage.removeItem(storageKey); // Clear active session
+      StorageService.remove(storageKey); // Clear active session
       setView("RESULT");
     } catch (e: any) {
       alert("Submission failed. Answers saved locally. Check network.");

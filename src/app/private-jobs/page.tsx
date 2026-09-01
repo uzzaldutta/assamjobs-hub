@@ -15,7 +15,7 @@ export default async function PrivateJobsPage() {
       .select('*')
       .neq('category', 'BANNED_KEYWORD')
       .eq('job_type', 'PRIVATE')
-      .order('scraped_at', { ascending: false });
+      .order('scraped_at', { ascending: false }).limit(40);
       
     if (data) {
       jobs = data.map(job => ({

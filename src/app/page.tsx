@@ -26,7 +26,7 @@ export default async function Home(props: { searchParams?: Promise<{ search?: st
       .neq('category', 'BANNED_KEYWORD')
         .neq('category', 'STUDY_MATERIAL')
         .neq('category', 'PREVIOUS_PAPERS')
-      .order('scraped_at', { ascending: false });
+      .order('scraped_at', { ascending: false }).limit(40);
       
       if (data) {
       // Map cloud database fields to frontend props
