@@ -1,12 +1,14 @@
-﻿import re
+﻿import os
 
-with open("src/app/practice/[topicId]/PracticeEngineClient.tsx", "r", encoding="utf-8") as f:
+with open("src/lib/mock-test/actions.ts", "r", encoding="utf-8") as f:
     content = f.read()
 
-content = content.replace('setError(err.message || "Failed to start session.");', 'setError(String(err.message || "Failed to start session."));')
-content = content.replace('setError("Failed to restart.");', 'setError("Failed to restart.");') # Ensure this one is fine
-# Wait, let's just make sure all err.message are cast to string or handled properly
-content = content.replace('err.message', 'String(err.message)')
-# Or I could just change the error interface
-with open("src/app/practice/[topicId]/PracticeEngineClient.tsx", "w", encoding="utf-8") as f:
+content = content.replace('q.prep_questions.id', '(q.prep_questions as any).id')
+content = content.replace('q.prep_questions.question_text', '(q.prep_questions as any).question_text')
+content = content.replace('q.prep_questions.options', '(q.prep_questions as any).options')
+
+# in submitMockTest
+content = content.replace('const q = row.prep_questions;', 'const q = row.prep_questions as any;')
+
+with open("src/lib/mock-test/actions.ts", "w", encoding="utf-8") as f:
     f.write(content)
