@@ -1,4 +1,6 @@
+﻿import os
 
+page_code = """
 import SearchClient from "./SearchClient";
 import DiscoveryLanding from "./DiscoveryLanding";
 import { executeGlobalSearch } from "@/lib/search/globalSearch";
@@ -35,3 +37,7 @@ export default async function SearchPage({
     </div>
   );
 }
+"""
+
+with open("src/app/search/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code)

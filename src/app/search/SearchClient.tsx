@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, MapPin, GraduationCap, Briefcase, Calendar, ChevronRight, Bookmark, BookmarkCheck, FileText, CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { SearchResultItem } from "@/lib/search/searchTypes";
 
-export default function SearchClient({ initialQuery, initialType, results }: { initialQuery: string, initialType: string, results: any[] }) {
+
+export default function SearchClient({ initialQuery, initialType, results }: { initialQuery: string, initialType: string, results: SearchResultItem[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -54,21 +56,21 @@ export default function SearchClient({ initialQuery, initialType, results }: { i
   };
 
   // Grouping logic
-  const jobs = results.filter(r => r.item_type === "JOB");
-  const exams = results.filter(r => r.item_type === "EXAM");
-  const topics = results.filter(r => r.item_type === "TOPIC");
+  const jobs = results.filter(r => r.type === "JOB");
+  const exams = results.filter(r => r.type === "EXAM");
+  const topics = results.filter(r => r.type === "TOPIC");
   
   // Apply tab filter
-  const displayedResults = activeType === "ALL" ? results : results.filter(r => r.item_type === activeType);
+  const displayedResults = activeType === "ALL" ? results : results.filter(r => r.type === activeType);
 
-  const renderJobCard = (item: any) => (
-    <Link href={`/job/${item.item_id}`} key={item.item_id} className="block group">
+  const renderJobCard = (item: SearchResultItem) => (
+    <Link href={`/job/${item.id}`} key={item.id} className="block group">
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-5 transition-all shadow-sm hover:shadow-md relative">
         <button 
-          onClick={(e) => toggleSave(item.item_id, e)}
+          onClick={(e) => toggleSave(item.id, e)}
           className="absolute top-5 right-5 text-slate-400 hover:text-indigo-600 transition-colors"
         >
-          {savedJobs[item.item_id] ? <BookmarkCheck size={22} className="text-indigo-600 fill-indigo-100 dark:fill-indigo-900" /> : <Bookmark size={22} />}
+          {savedJobs[item.id] ? <BookmarkCheck size={22} className="text-indigo-600 fill-indigo-100 dark:fill-indigo-900" /> : <Bookmark size={22} />}
         </button>
         
         <h3 className="text-lg font-bold text-slate-900 dark:text-white pr-8 leading-tight mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{item.title}</h3>
@@ -91,8 +93,8 @@ export default function SearchClient({ initialQuery, initialType, results }: { i
     </Link>
   );
 
-  const renderExamCard = (item: any) => (
-    <div key={item.item_id} className="bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl p-5 relative group overflow-hidden">
+  const renderExamCard = (item: SearchResultItem) => (
+    <div key={item.id} className="bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl p-5 relative group overflow-hidden">
       <div className="absolute top-0 right-0 p-4 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform">
         <FileText size={100} />
       </div>
@@ -105,8 +107,8 @@ export default function SearchClient({ initialQuery, initialType, results }: { i
     </div>
   );
 
-  const renderTopicCard = (item: any) => (
-    <Link href={`/practice/${item.item_id}`} key={item.item_id} className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-500 group transition-all">
+  const renderTopicCard = (item: SearchResultItem) => (
+    <Link href={`/practice/${item.id}`} key={item.id} className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-500 group transition-all">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center font-bold">
           <CheckCircle2 size={20} />
@@ -224,9 +226,9 @@ export default function SearchClient({ initialQuery, initialType, results }: { i
               // FLAT LIST VIEW (When a specific tab is selected)
               <div className="space-y-4">
                 {displayedResults.map(item => {
-                  if (item.item_type === "JOB") return renderJobCard(item);
-                  if (item.item_type === "EXAM") return renderExamCard(item);
-                  if (item.item_type === "TOPIC") return renderTopicCard(item);
+                  if (item.type === "JOB") return renderJobCard(item);
+                  if (item.type === "EXAM") return renderExamCard(item);
+                  if (item.type === "TOPIC") return renderTopicCard(item);
                   return null;
                 })}
               </div>
