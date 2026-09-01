@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { BookOpen, Layers, Target, FileQuestion, Plus, Trash2, Activity, Save, X, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { adminInsert, adminDelete, adminUpdate } from "@/app/admin/actions";
 
 type PrepTab = "exams" | "syllabus" | "questions" | "tests";
 
@@ -50,7 +51,8 @@ export default function PrepDashboard() {
 
   const addSubject = async () => {
     if (!newSubjectTitle || !selectedExamId) return;
-    const { data, error } = await supabase.from("prep_subjects").insert([{ exam_id: selectedExamId, title: newSubjectTitle }]).select();
+    let error = null, data = null;
+    try { data = await adminInsert("prep_subjects", { exam_id: selectedExamId, title: newSubjectTitle }); } catch(e:any) { error = e; }
     if (!error && data) {
       setSubjects([...subjects, data[0]]);
       setNewSubjectTitle("");
@@ -59,7 +61,8 @@ export default function PrepDashboard() {
 
   const addChapter = async (subjectId: string) => {
     if (!newChapterTitle) return;
-    const { data, error } = await supabase.from("prep_chapters").insert([{ subject_id: subjectId, title: newChapterTitle }]).select();
+    let error = null, data = null;
+    try { data = await adminInsert("prep_chapters", { subject_id: subjectId, title: newChapterTitle }); } catch(e:any) { error = e; }
     if (!error && data) {
       setChapters([...chapters, data[0]]);
       setNewChapterTitle("");
@@ -69,7 +72,8 @@ export default function PrepDashboard() {
 
   const addTopic = async (chapterId: string) => {
     if (!newTopicTitle) return;
-    const { data, error } = await supabase.from("prep_topics").insert([{ chapter_id: chapterId, title: newTopicTitle }]).select();
+    let error = null, data = null;
+    try { data = await adminInsert("prep_topics", { chapter_id: chapterId, title: newTopicTitle }); } catch(e:any) { error = e; }
     if (!error && data) {
       setTopics([...topics, data[0]]);
       setNewTopicTitle("");
@@ -79,7 +83,7 @@ export default function PrepDashboard() {
 
   const deleteItem = async (table: string, id: string) => {
     if(!confirm("Delete this item and all its contents?")) return;
-    await supabase.from(table).delete().eq("id", id);
+    await adminDelete(table, "id", id);
     if(selectedExamId) fetchSyllabus(selectedExamId);
   };
 
@@ -124,7 +128,9 @@ export default function PrepDashboard() {
                           newQ.correct === "B" ? newQ.optB : 
                           newQ.correct === "C" ? newQ.optC : newQ.optD;
 
-    const { error } = await supabase.from("prep_questions").insert([{
+    let error = null;
+    try {
+      await adminInsert("prep_questions", {
       exam_id: qExamId,
       subject_id: qSubjectId,
       chapter_id: qChapterId || null,
@@ -134,7 +140,8 @@ export default function PrepDashboard() {
       correct_answer: correctString,
       explanation: newQ.explanation,
       difficulty: newQ.difficulty
-    }]);
+    });
+    } catch(e:any) { error = e; }
 
     if (!error) {
       setNewQ({ text: "", optA: "", optB: "", optC: "", optD: "", correct: "A", explanation: "", difficulty: "MEDIUM" });
@@ -172,7 +179,9 @@ export default function PrepDashboard() {
 
   const saveMockTest = async () => {
     if (!tExamId || !newTest.title) return alert("Exam and Title required.");
-    const { error } = await supabase.from("prep_mock_tests").insert([{
+    let error = null;
+    try {
+      await adminInsert("prep_mock_tests", {
       exam_id: tExamId,
       title: newTest.title,
       duration_minutes: newTest.duration,
@@ -180,7 +189,8 @@ export default function PrepDashboard() {
       negative_marking: newTest.negativeMarking,
       instructions: newTest.instructions,
       status: "DRAFT"
-    }]);
+    });
+    } catch(e:any) { error = e; }
 
     if (!error) {
       setIsDraftingTest(false);
@@ -208,17 +218,18 @@ export default function PrepDashboard() {
     const newSet = new Set(testQuestionIds);
     if (newSet.has(questionId)) {
       newSet.delete(questionId);
-      await supabase.from("prep_mock_test_questions").delete().match({ test_id: managingTestId, question_id: questionId });
+      // We can use a custom server action or just delete by question_id assuming it's unique in this test context
+      await adminDelete("prep_mock_test_questions", "question_id", questionId);
     } else {
       newSet.add(questionId);
-      await supabase.from("prep_mock_test_questions").insert([{ test_id: managingTestId, question_id: questionId, order_index: newSet.size }]);
+      await adminInsert("prep_mock_test_questions", { test_id: managingTestId, question_id: questionId, order_index: newSet.size });
     }
     setTestQuestionIds(newSet);
   };
 
   const publishTest = async (testId: string, currentStatus: string) => {
     const newStatus = currentStatus === "PUBLISHED" ? "DRAFT" : "PUBLISHED";
-    await supabase.from("prep_mock_tests").update({ status: newStatus }).eq("id", testId);
+    await adminUpdate("prep_mock_tests", { status: newStatus }, "id", testId);
     fetchMockTests(tExamId);
   };
 
@@ -257,11 +268,14 @@ export default function PrepDashboard() {
     if (!newExam.title || !newExam.slug) return alert("Title and slug are required");
     setIsSaving(true);
     
-    const { error } = await supabase.from("prep_exams").insert([{
+    let error = null;
+    try {
+      await adminInsert("prep_exams", {
       title: newExam.title,
       slug: newExam.slug,
       description: newExam.description
-    }]);
+    });
+    } catch(e: any) { error = e; }
 
     if (error) {
       alert("Failed to save exam: " + error.message);
@@ -275,7 +289,10 @@ export default function PrepDashboard() {
 
   const deleteExam = async (id: string) => {
     if (!confirm("Are you sure? This will delete all subjects, topics, and tests linked to this exam!")) return;
-    const { error } = await supabase.from("prep_exams").delete().eq("id", id);
+    let error = null;
+    try {
+      await adminDelete("prep_exams", "id", id);
+    } catch(e: any) { error = e; }
     if (error) {
       alert("Error deleting: " + error.message);
     } else {
