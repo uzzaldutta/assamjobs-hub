@@ -145,6 +145,83 @@ export default function PrepDashboard() {
     }
   };
 
+
+  // Mock Tests State
+  const [tExamId, setTExamId] = useState<string>("");
+  const [mockTests, setMockTests] = useState<any[]>([]);
+  const [isDraftingTest, setIsDraftingTest] = useState(false);
+  const [newTest, setNewTest] = useState({
+    title: "", duration: 120, totalMarks: 100, negativeMarking: 0.25, instructions: ""
+  });
+  
+  // Managing questions inside a test
+  const [managingTestId, setManagingTestId] = useState<string | null>(null);
+  const [availableQuestions, setAvailableQuestions] = useState<any[]>([]);
+  const [testQuestionIds, setTestQuestionIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (activeTab === "tests" && tExamId) {
+      fetchMockTests(tExamId);
+    }
+  }, [tExamId, activeTab]);
+
+  const fetchMockTests = async (examId: string) => {
+    const { data } = await supabase.from("prep_mock_tests").select("*").eq("exam_id", examId).order("created_at", { ascending: false });
+    if (data) setMockTests(data);
+  };
+
+  const saveMockTest = async () => {
+    if (!tExamId || !newTest.title) return alert("Exam and Title required.");
+    const { error } = await supabase.from("prep_mock_tests").insert([{
+      exam_id: tExamId,
+      title: newTest.title,
+      duration_minutes: newTest.duration,
+      total_marks: newTest.totalMarks,
+      negative_marking: newTest.negativeMarking,
+      instructions: newTest.instructions,
+      status: "DRAFT"
+    }]);
+
+    if (!error) {
+      setIsDraftingTest(false);
+      setNewTest({ title: "", duration: 120, totalMarks: 100, negativeMarking: 0.25, instructions: "" });
+      fetchMockTests(tExamId);
+    } else {
+      alert("Error: " + error.message);
+    }
+  };
+
+  const openTestManager = async (testId: string) => {
+    setManagingTestId(testId);
+    // Fetch all questions for this exam
+    const { data: qData } = await supabase.from("prep_questions").select("id, question_text, prep_topics(title)").eq("exam_id", tExamId);
+    if (qData) setAvailableQuestions(qData);
+    
+    // Fetch currently mapped questions
+    const { data: mappedData } = await supabase.from("prep_mock_test_questions").select("question_id").eq("test_id", testId);
+    if (mappedData) {
+      setTestQuestionIds(new Set(mappedData.map(m => m.question_id)));
+    }
+  };
+
+  const toggleTestQuestion = async (questionId: string) => {
+    const newSet = new Set(testQuestionIds);
+    if (newSet.has(questionId)) {
+      newSet.delete(questionId);
+      await supabase.from("prep_mock_test_questions").delete().match({ test_id: managingTestId, question_id: questionId });
+    } else {
+      newSet.add(questionId);
+      await supabase.from("prep_mock_test_questions").insert([{ test_id: managingTestId, question_id: questionId, order_index: newSet.size }]);
+    }
+    setTestQuestionIds(newSet);
+  };
+
+  const publishTest = async (testId: string, currentStatus: string) => {
+    const newStatus = currentStatus === "PUBLISHED" ? "DRAFT" : "PUBLISHED";
+    await supabase.from("prep_mock_tests").update({ status: newStatus }).eq("id", testId);
+    fetchMockTests(tExamId);
+  };
+
   // Exams State
   const [exams, setExams] = useState<Exam[]>([]);
   const [isLoadingExams, setIsLoadingExams] = useState(false);
