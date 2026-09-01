@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image, X } from "lucide-react";
+import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image, X, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import PrepDashboard from "@/components/admin/PrepDashboard";
 
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners" | "sync" | "spam">("manage");
+  const [activeTab, setActiveTab] = useState<"manage" | "create" | "banners" | "sync" | "spam" | "prep">("manage");
   const [bannedKeywords, setBannedKeywords] = useState<any[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [spamStatus, setSpamStatus] = useState("");
@@ -383,6 +384,9 @@ export default function AdminPage() {
           <button onClick={() => setActiveTab("spam")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "spam" ? "bg-white dark:bg-slate-700 shadow text-red-600 dark:text-red-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
             <AlertCircle size={16} /> Spam Control
           </button>
+            <button onClick={() => setActiveTab("prep")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "prep" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
+              <BookOpen size={16} /> Exam Builder
+            </button>
         </div>
 
         
@@ -441,7 +445,12 @@ export default function AdminPage() {
         )}
 
 
-        {activeTab === "manage" && (
+        
+          {activeTab === "prep" && (
+            <PrepDashboard />
+          )}
+
+          {activeTab === "manage" && (
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
               <h3 className="font-bold text-slate-800 dark:text-slate-200">All Database Entries</h3>
