@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 
 import { executeGlobalSearch } from "@/lib/search/globalSearch";
 import SearchClient from "./SearchClient";
