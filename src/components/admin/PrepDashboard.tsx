@@ -120,35 +120,40 @@ export default function PrepDashboard() {
   };
 
   const saveQuestion = async () => {
-    if (!qExamId || !qSubjectId || !qTopicId) return alert("Please select Exam, Subject, and Topic.");
-    if (!newQ.text || !newQ.optA || !newQ.optB) return alert("Question and at least 2 options are required.");
-
-    const optionsArray = [newQ.optA, newQ.optB, newQ.optC, newQ.optD].filter(Boolean);
-    const correctString = newQ.correct === "A" ? newQ.optA : 
-                          newQ.correct === "B" ? newQ.optB : 
-                          newQ.correct === "C" ? newQ.optC : newQ.optD;
+    if (!newQ.text || !newQ.optA || !newQ.optB || !newQ.optC || !newQ.optD) {
+      return alert("All options are required.");
+    }
+    
+    // As per security patch, save A/B/C/D directly
+    const correctAnswerFormat = newQ.correct;
 
     let error = null;
     try {
       await adminInsert("prep_questions", {
-      exam_id: qExamId,
-      subject_id: qSubjectId,
-      chapter_id: qChapterId || null,
-      topic_id: qTopicId,
-      question_text: newQ.text,
-      options: optionsArray,
-      correct_answer: correctString,
-      explanation: newQ.explanation,
-      difficulty: newQ.difficulty
-    });
+        exam_id: qExamId,
+        subject_id: qSubjectId,
+        chapter_id: qChapterId,
+        topic_id: qTopicId,
+        question_text: newQ.text,
+        options: {
+          A: newQ.optA,
+          B: newQ.optB,
+          C: newQ.optC,
+          D: newQ.optD
+        },
+        correct_answer: correctAnswerFormat,
+        explanation: newQ.explanation,
+        difficulty: newQ.difficulty,
+        status: "PUBLISHED"
+      });
     } catch(e:any) { error = e; }
 
     if (!error) {
       setNewQ({ text: "", optA: "", optB: "", optC: "", optD: "", correct: "A", explanation: "", difficulty: "MEDIUM" });
-      setIsAddingQuestion(false);
+      
       fetchQuestions(qTopicId);
     } else {
-      alert("Error saving question: " + error.message);
+      alert("Error: " + error.message);
     }
   };
 
@@ -304,7 +309,7 @@ export default function PrepDashboard() {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Dashboard Header */}
-      <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-8 text-white shadow-xl overflow-hidden relative">
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 rounded-3xl p-8 text-white shadow-xl overflow-hidden relative">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
           <BookOpen size={120} />
         </div>

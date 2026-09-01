@@ -5,6 +5,7 @@ import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import PrepDashboard from "@/components/admin/PrepDashboard";
+import { adminLogin } from "./actions";
 
 
 export default function AdminPage() {
@@ -60,18 +61,16 @@ export default function AdminPage() {
   const verifyToken = async (token: string) => {
     setIsLoggingIn(true);
     try {
-      const res = await fetch("/api/admin/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: token }),
-      });
-      if (res.ok) {
+      // Use the secure server action to set the HTTP-only cookie
+      const res = await adminLogin(token);
+      if (res.success) {
         setIsAuthenticated(true);
-        localStorage.setItem("adminToken", token);
+        localStorage.setItem("adminToken", token); // keeping this for legacy routes if any
         fetchJobs();
         fetchBanners();
         fetchBannedKeywords();
       } else {
+        alert("Invalid password");
         localStorage.removeItem("adminToken");
       }
     } catch(err) {

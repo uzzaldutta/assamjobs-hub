@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronRight, ChevronLeft, BookOpen, Activity, FileText, Lock, PlayCircle, Layers } from "lucide-react";
 import Link from "next/link";
+import { useExamHistory } from "@/hooks/useExamHistory";
 
 interface ExamDashboardClientProps {
   exam: any;
@@ -19,15 +20,12 @@ export default function ExamDashboardClient({ exam, subjects, chapters, topics }
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
 
-  // Local-First Memory: Save to recently viewed
+  const { addExam } = useExamHistory();
   useEffect(() => {
-    try {
-      const recent = JSON.parse(localStorage.getItem("recentExams") || "[]");
-      const filtered = recent.filter((e: any) => e.id !== exam.id);
-      filtered.unshift({ id: exam.id, title: exam.title, slug: exam.slug, viewedAt: new Date().toISOString() });
-      localStorage.setItem("recentExams", JSON.stringify(filtered.slice(0, 5)));
-    } catch (e) {}
-  }, [exam]);
+    if (exam) {
+      addExam({ id: exam.id, title: exam.title, slug: exam.slug });
+    }
+  }, [exam]); // intentionally omitting addExam to avoid loop, or just trust stable ref
 
   const toggleSubject = (id: string) => {
     setExpandedSubject(expandedSubject === id ? null : id);
@@ -50,7 +48,7 @@ export default function ExamDashboardClient({ exam, subjects, chapters, topics }
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-black tracking-wider uppercase mb-4 border border-indigo-100 dark:border-indigo-800">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-full text-xs font-black tracking-wider uppercase mb-4 border border-slate-200 dark:border-slate-700">
                 Official Syllabus
               </div>
               <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white leading-tight mb-3">
@@ -114,7 +112,7 @@ export default function ExamDashboardClient({ exam, subjects, chapters, topics }
                       className="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none"
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black transition-colors ${isExpanded ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}>
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black transition-colors ${isExpanded ? "bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}>
                           {sIdx + 1}
                         </div>
                         <div>

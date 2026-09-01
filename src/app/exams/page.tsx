@@ -21,7 +21,7 @@ export default async function ExamsDirectoryPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
       <PageHeader 
         title="Prepare for Success"
-        subtitle="Discover structured syllabus, practice questions, and mock tests for top competitive exams."
+        subtitle="Discover structured syllabus, practice questions, and mock tests for top competitive exams." theme="blue"
       />
       
       <main className="container mx-auto px-4 mt-8 max-w-6xl">
