@@ -1,36 +1,49 @@
-﻿with open('src/app/page.tsx', 'r', encoding='utf-8') as f:
-    content = f.read()
+﻿import os
 
-# 1. Update grid classes
-old_grid = 'className="grid grid-cols-4 lg:grid-cols-8 gap-3"'
-new_grid = 'className="grid grid-cols-4 md:grid-cols-5 gap-3"'
-content = content.replace(old_grid, new_grid)
+pageCode = """import { supabase } from "@/lib/supabase";
+import { notFound } from "next/navigation";
+import PracticeEngineClient from "./PracticeEngineClient";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 
-# 2. Add the two new icons before Railway
-old_railway = """                {/* Railway */}
-                <Link href="/railway-jobs" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-amber-300 transition-all text-center group active:scale-95">"""
+export async function generateMetadata({ params }: { params: { topicId: string } }) {
+  const { data: topic } = await supabase.from("prep_topics").select("title").eq("id", params.topicId).single();
+  if (!topic) return { title: "Practice | AssamJobs Hub" };
+  return { title: `${topic.title} Practice | AssamJobs Hub` };
+}
 
-new_links = """                {/* Study Materials */}
-                <Link href="/study-materials" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-red-300 transition-all text-center group active:scale-95">
-                  <div className="w-12 h-12 md:w-14 md:h-14 mx-auto bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                  </div>
-                  <h3 className="font-bold text-slate-800 dark:text-white text-xs md:text-sm leading-tight">Study Books</h3>
-                </Link>
+export default async function PracticePage({ params }: { params: { topicId: string } }) {
+  const { data: topic } = await supabase
+    .from("prep_topics")
+    .select("*, prep_chapters(title, prep_subjects(title, prep_exams(title, slug)))")
+    .eq("id", params.topicId)
+    .single();
 
-                {/* Question Papers */}
-                <Link href="/previous-papers" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-teal-300 transition-all text-center group active:scale-95">
-                  <div className="w-12 h-12 md:w-14 md:h-14 mx-auto bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="M9 15h6"/></svg>
-                  </div>
-                  <h3 className="font-bold text-slate-800 dark:text-white text-xs md:text-sm leading-tight">Prev Papers</h3>
-                </Link>
+  if (!topic) notFound();
 
-                {/* Railway */}
-                <Link href="/railway-jobs" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-amber-300 transition-all text-center group active:scale-95">"""
+  const examSlug = topic.prep_chapters?.prep_subjects?.prep_exams?.slug;
 
-content = content.replace(old_railway, new_links)
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-3xl">
+          <Link href={examSlug ? `/exam/${examSlug}` : "/exams"} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400">
+            <ChevronLeft size={24} />
+          </Link>
+          <div className="text-center flex-1 truncate px-4">
+            <h1 className="text-sm font-black text-slate-800 dark:text-white truncate uppercase tracking-wider">{topic.title}</h1>
+            <p className="text-xs text-slate-500 truncate">{topic.prep_chapters?.title}</p>
+          </div>
+          <div className="w-10"></div>
+        </div>
+      </header>
 
-with open('src/app/page.tsx', 'w', encoding='utf-8') as f:
-    f.write(content)
-print("Updated page.tsx")
+      <main className="container mx-auto px-4 py-6 max-w-3xl">
+        <PracticeEngineClient topic={topic} />
+      </main>
+    </div>
+  );
+}"""
+
+with open("src/app/practice/[topicId]/page.tsx", "w", encoding="utf-8") as f:
+    f.write(pageCode)

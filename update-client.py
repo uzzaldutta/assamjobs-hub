@@ -1,4 +1,4 @@
-
+﻿client_page = """
 "use client";
 
 import { useState, useEffect } from "react";
@@ -70,7 +70,7 @@ export default function PracticeEngineClient({ topic }: { topic: any }) {
         setSession(newSession);
         localStorage.setItem(storageKey, JSON.stringify(newSession));
       } catch (err: any) {
-        setError(String(String(err.message) || "Failed to start session."));
+        setError(err.message || "Failed to start session.");
       }
     }
     init();
@@ -393,3 +393,7 @@ export default function PracticeEngineClient({ topic }: { topic: any }) {
     </div>
   );
 }
+"""
+
+with open("src/app/practice/[topicId]/PracticeEngineClient.tsx", "w", encoding="utf-8") as f:
+    f.write(client_page)
