@@ -83,6 +83,68 @@ export default function PrepDashboard() {
     if(selectedExamId) fetchSyllabus(selectedExamId);
   };
 
+
+  // Questions State
+  const [qExamId, setQExamId] = useState<string>("");
+  const [qSubjectId, setQSubjectId] = useState<string>("");
+  const [qChapterId, setQChapterId] = useState<string>("");
+  const [qTopicId, setQTopicId] = useState<string>("");
+  
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [isAddingQuestion, setIsAddingQuestion] = useState(false);
+  const [newQ, setNewQ] = useState({
+    text: "", optA: "", optB: "", optC: "", optD: "", correct: "A", explanation: "", difficulty: "MEDIUM"
+  });
+
+  // Fetch questions when a topic is selected
+  useEffect(() => {
+    if (activeTab === "questions" && qTopicId) {
+      fetchQuestions(qTopicId);
+    }
+  }, [qTopicId, activeTab]);
+
+  // We need to load syllabus dropdowns for the question bank too
+  useEffect(() => {
+    if (activeTab === "questions" && qExamId) {
+      fetchSyllabus(qExamId); // Reusing the syllabus fetcher so dropdowns populate!
+    }
+  }, [qExamId, activeTab]);
+
+  const fetchQuestions = async (topicId: string) => {
+    const { data } = await supabase.from("prep_questions").select("*").eq("topic_id", topicId).order("created_at", { ascending: false });
+    if (data) setQuestions(data);
+  };
+
+  const saveQuestion = async () => {
+    if (!qExamId || !qSubjectId || !qTopicId) return alert("Please select Exam, Subject, and Topic.");
+    if (!newQ.text || !newQ.optA || !newQ.optB) return alert("Question and at least 2 options are required.");
+
+    const optionsArray = [newQ.optA, newQ.optB, newQ.optC, newQ.optD].filter(Boolean);
+    const correctString = newQ.correct === "A" ? newQ.optA : 
+                          newQ.correct === "B" ? newQ.optB : 
+                          newQ.correct === "C" ? newQ.optC : newQ.optD;
+
+    const { error } = await supabase.from("prep_questions").insert([{
+      exam_id: qExamId,
+      subject_id: qSubjectId,
+      chapter_id: qChapterId || null,
+      topic_id: qTopicId,
+      question_text: newQ.text,
+      options: optionsArray,
+      correct_answer: correctString,
+      explanation: newQ.explanation,
+      difficulty: newQ.difficulty
+    }]);
+
+    if (!error) {
+      setNewQ({ text: "", optA: "", optB: "", optC: "", optD: "", correct: "A", explanation: "", difficulty: "MEDIUM" });
+      setIsAddingQuestion(false);
+      fetchQuestions(qTopicId);
+    } else {
+      alert("Error saving question: " + error.message);
+    }
+  };
+
   // Exams State
   const [exams, setExams] = useState<Exam[]>([]);
   const [isLoadingExams, setIsLoadingExams] = useState(false);
