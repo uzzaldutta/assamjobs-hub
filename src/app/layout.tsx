@@ -27,31 +27,24 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "AssamJobs Hub | Latest Govt & Private Jobs in Assam",
-  description: "Get real-time job alerts, mock tests, syllabuses, and AI career tools for Assam Govt and Private Jobs (ADRE, APSC, Police, Railway).",
-  keywords: ["Assam Jobs", "Govt Jobs Assam", "ADRE", "APSC", "Mock Tests Assam", "Assam Police Jobs", "Private Jobs in Assam"],
+  title: {
+    template: '%s | AssamJobs Hub',
+    default: 'AssamJobs Hub - Government & Private Jobs in Assam',
+  },
+  description: 'Find the latest Government and Private Jobs in Assam, mock tests, previous year papers, and study materials for ADRE, APSC, and Assam Police.',
   openGraph: {
-    title: "AssamJobs Hub | Latest Jobs & Results",
-    description: "Daily updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results. Take free mock tests and use AI career tools to boost your preparation.",
-    url: "https://y-ruddy-nine-46.vercel.app",
-    siteName: "AssamJobs Hub",
-    images: [
-      {
-        url: "https://y-ruddy-nine-46.vercel.app/logo.jpg",
-        width: 1200,
-        height: 630,
-        alt: "AssamJobs Hub",
-      },
-    ],
-    locale: "en_IN",
-    type: "website",
+    title: 'AssamJobs Hub',
+    description: 'The Ultimate Platform for Assam Govt Jobs and Mock Tests',
+    url: 'https://assamjobs-hub.vercel.app',
+    siteName: 'AssamJobs Hub',
+    locale: 'en_IN',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "AssamJobs Hub | Latest Jobs & Results",
-    description: "Daily updates on Assam Govt Jobs, Private Jobs, Admit Cards, and Results.",
-    images: ["https://y-ruddy-nine-46.vercel.app/logo.jpg"],
-  }
+    card: 'summary_large_image',
+    title: 'AssamJobs Hub - Jobs & Mock Tests',
+    description: 'Find the latest Government and Private Jobs in Assam, plus free Mock Tests.',
+  },
 };
 
 export default function RootLayout({
