@@ -5,8 +5,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { generateQuestionsAction } from "./actions";
+import { extractMaterialTextAction } from "./pdfActions";
 import { saveQuestionAction } from "../actions";
-import { Sparkles, FileText, CheckCircle, AlertTriangle, X, Play, Loader2, ArrowRight, ArrowLeft, RefreshCw, ShieldAlert } from "lucide-react";
+import { Sparkles, FileText, CheckCircle, AlertTriangle, X, Play, Loader2, ArrowRight, RefreshCw, ShieldAlert, Book } from "lucide-react";
 
 export default function GeneratorClient() {
   const router = useRouter();
@@ -15,7 +16,17 @@ export default function GeneratorClient() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   
+  // Modes: 'PASTE' or 'MATERIAL'
+  const [sourceMode, setSourceMode] = useState<'PASTE' | 'MATERIAL'>('PASTE');
   const [sourceText, setSourceText] = useState("");
+  
+  // Material Pipeline State
+  const [materials, setMaterials] = useState<any[]>([]);
+  const [selectedMaterialId, setSelectedMaterialId] = useState("");
+  const [extractedChunks, setExtractedChunks] = useState<string[]>([]);
+  const [selectedChunks, setSelectedChunks] = useState<Set<number>>(new Set());
+  const [pdfExtractionProgress, setPdfExtractionProgress] = useState("");
+
   const [count, setCount] = useState(5);
   
   const [hierarchy, setHierarchy] = useState<{ exams: any[]; subjects: any[]; chapters: any[]; topics: any[] }>({ exams: [], subjects: [], chapters: [], topics: [] });
@@ -78,6 +89,10 @@ export default function GeneratorClient() {
     supabase.from("prep_exams").select("id, title").then(({ data }) => {
       if (data) setHierarchy(prev => ({ ...prev, exams: data }));
     });
+    // Fetch latest materials for selection
+    supabase.from("prep_materials").select("id, title, type").order("created_at", { ascending: false }).limit(100).then(({ data }) => {
+      if (data) setMaterials(data);
+    });
   }, []);
 
   useEffect(() => {
@@ -108,8 +123,44 @@ export default function GeneratorClient() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleExtractPDF = async () => {
+    if (!selectedMaterialId) return;
+    setLoading(true);
+    setErrorMsg("");
+    setPdfExtractionProgress("Downloading and extracting text...");
+    try {
+      const res = await extractMaterialTextAction(selectedMaterialId);
+      setExtractedChunks(res.chunks);
+      setSelectedChunks(new Set(res.chunks.map((_, i) => i))); // select all by default
+      
+      // Auto-fill metadata if available
+      const nextForm = { ...formData };
+      if (res.metadata.exam_id) nextForm.exam_id = res.metadata.exam_id;
+      if (res.metadata.subject_id) nextForm.subject_id = res.metadata.subject_id;
+      if (res.metadata.topic_id) nextForm.topic_id = res.metadata.topic_id;
+      nextForm.source = res.materialTitle;
+      setFormData(nextForm);
+      
+    } catch (e: any) {
+      setErrorMsg(e.message);
+    } finally {
+      setLoading(false);
+      setPdfExtractionProgress("");
+    }
+  };
+
   const handleGenerate = async () => {
-    if (formData.sourceGrounded && !sourceText.trim()) {
+    let finalSourceText = sourceText;
+    
+    if (sourceMode === 'MATERIAL') {
+      if (selectedChunks.size === 0) {
+        setErrorMsg("Please select at least one text chunk to generate from.");
+        return;
+      }
+      finalSourceText = Array.from(selectedChunks).map(i => extractedChunks[i]).join("\n\n");
+    }
+
+    if (formData.sourceGrounded && !finalSourceText.trim()) {
       setErrorMsg("Please provide source text for Source Grounded mode.");
       return;
     }
@@ -126,7 +177,7 @@ export default function GeneratorClient() {
       const subjectTitle = hierarchy.subjects.find((e: any) => e.id === formData.subject_id)?.title || "";
       const topicTitle = hierarchy.topics.find((e: any) => e.id === formData.topic_id)?.title || "";
       
-      const res = await generateQuestionsAction(sourceText, count, {
+      const res = await generateQuestionsAction(finalSourceText, count, {
         exam: examTitle,
         subject: subjectTitle,
         topic: topicTitle,
@@ -199,11 +250,16 @@ export default function GeneratorClient() {
     if (!currentQ) return;
     setLoading(true);
     try {
+      let finalSourceText = sourceText;
+      if (sourceMode === 'MATERIAL') {
+        finalSourceText = Array.from(selectedChunks).map(i => extractedChunks[i]).join("\n\n");
+      }
+
       const examTitle = hierarchy.exams.find((e: any) => e.id === formData.exam_id)?.title || "";
       const subjectTitle = hierarchy.subjects.find((e: any) => e.id === formData.subject_id)?.title || "";
       const topicTitle = hierarchy.topics.find((e: any) => e.id === formData.topic_id)?.title || "";
       
-      const res = await generateQuestionsAction(sourceText, 1, {
+      const res = await generateQuestionsAction(finalSourceText, 1, {
         exam: examTitle,
         subject: subjectTitle,
         topic: topicTitle,
@@ -238,26 +294,11 @@ export default function GeneratorClient() {
     if (isEditing) return;
 
     switch (e.key.toLowerCase()) {
-      case 'a':
-        e.preventDefault();
-        approveCurrent();
-        break;
-      case 'x':
-        e.preventDefault();
-        rejectCurrent();
-        break;
-      case 'r':
-        e.preventDefault();
-        regenerateCurrent();
-        break;
-      case 'n':
-        e.preventDefault();
-        if (currentIndex < generatedQuestions.length - 1) setCurrentIndex(currentIndex + 1);
-        break;
-      case 'p':
-        e.preventDefault();
-        if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
-        break;
+      case 'a': e.preventDefault(); approveCurrent(); break;
+      case 'x': e.preventDefault(); rejectCurrent(); break;
+      case 'r': e.preventDefault(); regenerateCurrent(); break;
+      case 'n': e.preventDefault(); if (currentIndex < generatedQuestions.length - 1) setCurrentIndex(currentIndex + 1); break;
+      case 'p': e.preventDefault(); if (currentIndex > 0) setCurrentIndex(currentIndex - 1); break;
     }
   }, [step, currentQ, loading, currentIndex, generatedQuestions.length]);
 
@@ -265,6 +306,13 @@ export default function GeneratorClient() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
+
+  const toggleChunk = (idx: number) => {
+    const next = new Set(selectedChunks);
+    if (next.has(idx)) next.delete(idx);
+    else next.add(idx);
+    setSelectedChunks(next);
+  };
 
   return (
     <div className="max-w-[1400px] mx-auto space-y-6 pb-24">
@@ -287,45 +335,107 @@ export default function GeneratorClient() {
 
       {step === 1 && (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4 flex flex-col">
-            <h3 className="font-bold border-b pb-2 flex items-center justify-between">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col min-h-[500px]">
+            <h3 className="font-bold border-b pb-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <span className="flex items-center gap-2"><FileText size={18} className="text-indigo-600"/> 1. Source Context</span>
+              <div className="flex bg-slate-100 p-1 rounded-lg">
+                <button 
+                  onClick={() => setSourceMode('PASTE')}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-md ${sourceMode === 'PASTE' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-500'}`}
+                >Paste Text</button>
+                <button 
+                  onClick={() => setSourceMode('MATERIAL')}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-md flex items-center gap-1 ${sourceMode === 'MATERIAL' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-500'}`}
+                ><Book size={14}/> PDF / Material</button>
+              </div>
+            </h3>
+            
+            <div className="flex-1 mt-4 flex flex-col">
+              {sourceMode === 'PASTE' ? (
+                <textarea 
+                  value={sourceText} 
+                  onChange={e => setSourceText(e.target.value)} 
+                  className="flex-1 w-full p-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 resize-none"
+                  placeholder="Paste inspiration text, PYQs, or syllabus topics here..."
+                />
+              ) : (
+                <div className="flex-1 flex flex-col space-y-4">
+                  <div className="flex gap-2">
+                    <select 
+                      value={selectedMaterialId} 
+                      onChange={e => setSelectedMaterialId(e.target.value)}
+                      className="flex-1 p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+                    >
+                      <option value="">Select a PDF/Book from Library...</option>
+                      {materials.map(m => (
+                        <option key={m.id} value={m.id}>[{m.type}] {m.title}</option>
+                      ))}
+                    </select>
+                    <button 
+                      onClick={handleExtractPDF}
+                      disabled={!selectedMaterialId || loading}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-bold text-sm disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {loading && pdfExtractionProgress ? <Loader2 size={16} className="animate-spin" /> : 'Extract'}
+                    </button>
+                  </div>
+                  
+                  {pdfExtractionProgress && <p className="text-xs font-bold text-indigo-600 animate-pulse">{pdfExtractionProgress}</p>}
+                  
+                  {extractedChunks.length > 0 && (
+                    <div className="flex-1 border border-slate-200 rounded-lg overflow-hidden flex flex-col bg-slate-50">
+                      <div className="p-2 border-b border-slate-200 bg-slate-100 flex justify-between items-center text-xs font-bold text-slate-600">
+                        <span>{extractedChunks.length} Text Chunks Extracted</span>
+                        <span className="text-indigo-600">{selectedChunks.size} Selected</span>
+                      </div>
+                      <div className="flex-1 overflow-y-auto p-2 space-y-2 max-h-[300px]">
+                        {extractedChunks.map((chunk, idx) => (
+                          <div 
+                            key={idx} 
+                            onClick={() => toggleChunk(idx)}
+                            className={`p-3 rounded border text-xs cursor-pointer transition ${selectedChunks.has(idx) ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-slate-200 hover:border-indigo-300'}`}
+                          >
+                            <div className="flex items-start gap-2">
+                              <input type="checkbox" checked={selectedChunks.has(idx)} readOnly className="mt-0.5 rounded text-indigo-600" />
+                              <div className="line-clamp-3 leading-relaxed text-slate-700">{chunk}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col">
+            <h3 className="font-bold border-b pb-4 flex items-center justify-between">
+              <span>2. Target Metadata</span>
               <label className="flex items-center gap-2 text-sm text-slate-600">
                 <input type="checkbox" checked={formData.sourceGrounded} onChange={e => handleChange("sourceGrounded", e.target.checked)} className="rounded text-indigo-600 focus:ring-indigo-500" />
                 Source Grounded
               </label>
             </h3>
             
-            <div className="flex-1">
-              <textarea 
-                value={sourceText} 
-                onChange={e => setSourceText(e.target.value)} 
-                className="w-full h-full min-h-[300px] p-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500"
-                placeholder={formData.sourceGrounded ? "Paste the exact study material, PDF text, or notes here. The AI will strictly generate facts from this text..." : "Paste inspiration text, PYQs, or syllabus topics here..."}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Batch Size</label>
-                <select value={count} onChange={e => setCount(parseInt(e.target.value))} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold">
+                <select value={count} onChange={e => setCount(parseInt(e.target.value))} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold text-indigo-700">
                   {[5, 10, 15, 20, 25].map(n => <option key={n} value={n}>{n} Questions</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Language</label>
-                <select value={formData.language} onChange={e => handleChange("language", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold">
+                <select value={formData.language} onChange={e => handleChange("language", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold text-indigo-700">
                   <option value="English">English</option>
                   <option value="Assamese">Assamese</option>
                   <option value="Hindi">Hindi</option>
                 </select>
               </div>
-            </div>
-          </div>
+              
+              <div className="col-span-2 pt-2 border-t border-slate-100"></div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-            <h3 className="font-bold border-b pb-2">2. Target Metadata</h3>
-            
-            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Exam</label>
                 <select value={formData.exam_id} onChange={e => handleChange("exam_id", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm">
@@ -363,18 +473,18 @@ export default function GeneratorClient() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Tags</label>
-                <input type="text" value={formData.tags} onChange={e => handleChange("tags", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm" />
+                <label className="block text-xs font-bold text-slate-500 mb-1">Source / Reference</label>
+                <input type="text" value={formData.source} onChange={e => handleChange("source", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm" />
               </div>
             </div>
 
-            <div className="pt-6 text-right mt-auto border-t border-slate-100">
+            <div className="pt-6 mt-auto">
               <button 
                 onClick={handleGenerate} 
                 disabled={loading}
                 className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl transition shadow-lg shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? <><Loader2 size={18} className="animate-spin" /> Analyzing and Generating...</> : <><Play size={18} /> Generate {count} Questions</>}
+                {loading && !pdfExtractionProgress ? <><Loader2 size={18} className="animate-spin" /> Generating AI Questions...</> : <><Play size={18} /> Generate {count} Questions</>}
               </button>
             </div>
           </div>
@@ -384,7 +494,6 @@ export default function GeneratorClient() {
       {step === 3 && currentQ && (
         <div className="h-[calc(100vh-100px)] flex flex-col bg-slate-100 dark:bg-slate-900 rounded-xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800">
           
-          {/* Review Header */}
           <div className="h-16 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 shrink-0">
             <div className="flex items-center gap-4">
               <div className="font-black text-lg">Question {currentIndex + 1} of {generatedQuestions.length}</div>
@@ -399,10 +508,8 @@ export default function GeneratorClient() {
             </div>
           </div>
 
-          {/* Split Pane */}
           <div className="flex-1 flex overflow-hidden">
             
-            {/* Editor Pane */}
             <div className="flex-1 overflow-y-auto p-6 bg-white">
               <div className="max-w-3xl mx-auto space-y-6">
                 <div>
@@ -449,11 +556,9 @@ export default function GeneratorClient() {
               </div>
             </div>
 
-            {/* Quality Pane */}
             <div className="w-80 bg-slate-50 border-l border-slate-200 overflow-y-auto flex flex-col">
               <div className="p-6 space-y-6 flex-1">
                 
-                {/* AI Score */}
                 <div className="text-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
                   <div className="text-xs font-black text-slate-400 uppercase tracking-wider">AI Quality Score</div>
                   <div className={`text-4xl font-black mt-2 ${currentQ.quality_score >= 85 ? 'text-emerald-600' : currentQ.quality_score >= 70 ? 'text-amber-500' : 'text-red-500'}`}>
@@ -461,7 +566,6 @@ export default function GeneratorClient() {
                   </div>
                 </div>
 
-                {/* Warnings */}
                 {currentQ.quality_warnings && currentQ.quality_warnings.length > 0 && (
                   <div className="space-y-2">
                     <div className="text-xs font-black text-slate-400 uppercase tracking-wider">AI Warnings</div>
@@ -474,7 +578,6 @@ export default function GeneratorClient() {
                   </div>
                 )}
 
-                {/* Duplicates */}
                 <div className="space-y-2">
                   <div className="text-xs font-black text-slate-400 uppercase tracking-wider">Duplicate Check</div>
                   {currentQ.duplicateRisk !== 'LOW' ? (
@@ -495,7 +598,6 @@ export default function GeneratorClient() {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="p-4 bg-white border-t border-slate-200 space-y-2">
                 <button 
                   onClick={regenerateCurrent} 
