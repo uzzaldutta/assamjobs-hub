@@ -9,6 +9,8 @@ export async function generateMCQsWithGemini(
     subject: string;
     topic: string;
     difficulty: string;
+    language: string;
+    sourceGrounded: boolean;
   }
 ) {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -17,9 +19,17 @@ export async function generateMCQsWithGemini(
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+  const groundingInstruction = metadata.sourceGrounded 
+    ? "STRICT SOURCE GROUNDING ENABLED: You MUST generate questions ONLY using facts present in the provided context. Do NOT invent facts. If the context does not contain enough information to generate the requested number of questions, output fewer questions."
+    : "Use the provided context as inspiration, but you may use your general knowledge of competitive exams to create comprehensive questions.";
+
   const systemPrompt = `You are an expert competitive exam question generator for Assam Government exams, SSC, Banking, and Railways.
-Generate EXACTLY ${count} multiple-choice questions based on the following context.
-Ensure the difficulty is ${metadata.difficulty}.
+Generate ${count} multiple-choice questions based on the context.
+Ensure the difficulty is strictly ${metadata.difficulty}.
+Language: Generate the questions in ${metadata.language}.
+
+${groundingInstruction}
+
 Context: ${promptContext}
 Exam: ${metadata.exam || "General"}
 Subject: ${metadata.subject || "General"}
@@ -34,15 +44,16 @@ Each object in the array MUST strictly follow this schema:
   "optionC": "Third option text",
   "optionD": "Fourth option text",
   "correct_answer": "A" | "B" | "C" | "D",
-  "explanation": "Detailed step-by-step explanation of why the answer is correct."
+  "explanation": "Detailed step-by-step explanation. For math, show steps. For facts, explain why.",
+  "quality_score": number, // 0 to 100 based on clarity, options uniqueness, and explanation quality
+  "quality_warnings": ["Warning 1", "Warning 2"] // Array of strings if any issues (e.g., 'Weak distractor', 'Ambiguous wording'), else empty array
 }
-No other fields. Ensure correct_answer is exactly one of the letters A, B, C, or D.`;
+No other fields. Ensure correct_answer is exactly one of the letters A, B, C, or D. Ensure no duplicate options.`;
 
   const result = await model.generateContent(systemPrompt);
   const text = result.response.text();
   
   try {
-    // Clean up potential markdown formatting if the model ignored instructions
     let cleaned = text.trim();
     if (cleaned.startsWith("```json")) cleaned = cleaned.replace(/^```json/, "");
     if (cleaned.startsWith("```")) cleaned = cleaned.replace(/^```/, "");

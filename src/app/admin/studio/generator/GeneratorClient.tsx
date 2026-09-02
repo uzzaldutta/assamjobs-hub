@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { generateQuestionsAction } from "./actions";
 import { saveQuestionAction } from "../actions";
-import { Sparkles, FileText, CheckCircle, AlertTriangle, X, Play, Loader2, ArrowRight } from "lucide-react";
+import { Sparkles, FileText, CheckCircle, AlertTriangle, X, Play, Loader2, ArrowRight, ArrowLeft, RefreshCw, ShieldAlert } from "lucide-react";
 
 export default function GeneratorClient() {
   const router = useRouter();
@@ -26,12 +26,53 @@ export default function GeneratorClient() {
     chapter_id: "",
     topic_id: "",
     difficulty_level: "MEDIUM",
+    language: "English",
+    sourceGrounded: true,
     source: "AI Generated",
     year: new Date().getFullYear().toString(),
     tags: "ai-generated"
   });
 
   const [generatedQuestions, setGeneratedQuestions] = useState<any[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [stats, setStats] = useState({ approved: 0, rejected: 0 });
+
+  // Load from local storage
+  useEffect(() => {
+    const saved = localStorage.getItem("ai_review_session");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.questions && parsed.questions.length > 0) {
+          if (confirm("You have an unfinished review session. Do you want to resume?")) {
+            setGeneratedQuestions(parsed.questions);
+            setCurrentIndex(parsed.currentIndex || 0);
+            setFormData(parsed.formData);
+            setStats(parsed.stats);
+            setStep(3);
+          } else {
+            localStorage.removeItem("ai_review_session");
+          }
+        }
+      } catch (e) {
+        localStorage.removeItem("ai_review_session");
+      }
+    }
+  }, []);
+
+  // Save to local storage
+  useEffect(() => {
+    if (step === 3 && generatedQuestions.length > 0) {
+      localStorage.setItem("ai_review_session", JSON.stringify({
+        questions: generatedQuestions,
+        currentIndex,
+        formData,
+        stats
+      }));
+    } else if (step === 1) {
+      localStorage.removeItem("ai_review_session");
+    }
+  }, [generatedQuestions, currentIndex, step, formData, stats]);
 
   useEffect(() => {
     supabase.from("prep_exams").select("id, title").then(({ data }) => {
@@ -63,13 +104,13 @@ export default function GeneratorClient() {
     }
   }, [formData.chapter_id]);
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleGenerate = async () => {
-    if (!sourceText.trim()) {
-      setErrorMsg("Please provide source text.");
+    if (formData.sourceGrounded && !sourceText.trim()) {
+      setErrorMsg("Please provide source text for Source Grounded mode.");
       return;
     }
     if (!formData.topic_id) {
@@ -89,11 +130,15 @@ export default function GeneratorClient() {
         exam: examTitle,
         subject: subjectTitle,
         topic: topicTitle,
-        difficulty: formData.difficulty_level
+        difficulty: formData.difficulty_level,
+        language: formData.language,
+        sourceGrounded: formData.sourceGrounded
       });
       
       setGeneratedQuestions(res);
-      setStep(3); // Go to review
+      setCurrentIndex(0);
+      setStats({ approved: 0, rejected: 0 });
+      setStep(3);
     } catch (e: any) {
       console.error(e);
       setErrorMsg(e.message || "Failed to generate questions.");
@@ -102,20 +147,30 @@ export default function GeneratorClient() {
     }
   };
 
-  const removeQuestion = (id: string) => {
-    setGeneratedQuestions(prev => prev.filter(q => q.id !== id));
+  const currentQ = generatedQuestions[currentIndex];
+
+  const advanceQueue = () => {
+    if (generatedQuestions.length <= 1) {
+      setGeneratedQuestions([]);
+      setStep(1);
+    } else {
+      const nextQs = generatedQuestions.filter((_, i) => i !== currentIndex);
+      setGeneratedQuestions(nextQs);
+      if (currentIndex >= nextQs.length) setCurrentIndex(nextQs.length - 1);
+    }
   };
 
-  const approveQuestion = async (q: any) => {
+  const approveCurrent = async () => {
+    if (!currentQ) return;
     try {
       const payload = {
-        question_text: q.question_text,
-        optionA: q.optionA,
-        optionB: q.optionB,
-        optionC: q.optionC,
-        optionD: q.optionD,
-        correct_answer: q.correct_answer,
-        explanation: q.explanation,
+        question_text: currentQ.question_text,
+        optionA: currentQ.optionA,
+        optionB: currentQ.optionB,
+        optionC: currentQ.optionC,
+        optionD: currentQ.optionD,
+        correct_answer: currentQ.correct_answer,
+        explanation: currentQ.explanation,
         exam_id: formData.exam_id || null,
         subject_id: formData.subject_id || null,
         chapter_id: formData.chapter_id || null,
@@ -124,39 +179,105 @@ export default function GeneratorClient() {
         source: formData.source,
         year: parseInt(formData.year),
         tags: formData.tags.split(",").map(t => t.trim()),
-        status: "DRAFT" // Always enforce DRAFT on first approval
+        status: "DRAFT"
       };
-      
       await saveQuestionAction(payload);
-      removeQuestion(q.id);
+      setStats(s => ({ ...s, approved: s.approved + 1 }));
+      advanceQueue();
     } catch (e) {
-      alert("Failed to save question to database.");
+      alert("Failed to save question");
     }
   };
 
-  const handleInlineEdit = (id: string, field: string, value: string) => {
-    setGeneratedQuestions(prev => prev.map(q => q.id === id ? { ...q, [field]: value } : q));
+  const rejectCurrent = () => {
+    if (!currentQ) return;
+    setStats(s => ({ ...s, rejected: s.rejected + 1 }));
+    advanceQueue();
   };
 
-  return (
-    <div className="max-w-6xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <Sparkles className="text-indigo-600" /> AI Question Factory
-          </h1>
-          <p className="text-slate-500 mt-1 text-sm">Generate structured MCQs from source material.</p>
-        </div>
-      </div>
+  const regenerateCurrent = async () => {
+    if (!currentQ) return;
+    setLoading(true);
+    try {
+      const examTitle = hierarchy.exams.find((e: any) => e.id === formData.exam_id)?.title || "";
+      const subjectTitle = hierarchy.subjects.find((e: any) => e.id === formData.subject_id)?.title || "";
+      const topicTitle = hierarchy.topics.find((e: any) => e.id === formData.topic_id)?.title || "";
+      
+      const res = await generateQuestionsAction(sourceText, 1, {
+        exam: examTitle,
+        subject: subjectTitle,
+        topic: topicTitle,
+        difficulty: formData.difficulty_level,
+        language: formData.language,
+        sourceGrounded: formData.sourceGrounded
+      });
+      
+      if (res.length > 0) {
+        const nextQs = [...generatedQuestions];
+        nextQs[currentIndex] = res[0];
+        setGeneratedQuestions(nextQs);
+      }
+    } catch (e: any) {
+      alert("Failed to regenerate: " + e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      {/* Progress Steps */}
-      <div className="flex items-center gap-2 text-sm font-bold">
-        <div className={`px-4 py-2 rounded-lg ${step === 1 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400'}`}>1. Source & Metadata</div>
-        <ArrowRight size={16} className="text-slate-300" />
-        <div className={`px-4 py-2 rounded-lg ${step === 2 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400'}`}>2. Generating</div>
-        <ArrowRight size={16} className="text-slate-300" />
-        <div className={`px-4 py-2 rounded-lg ${step === 3 ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400'}`}>3. Review & Approve</div>
-      </div>
+  const handleInlineEdit = (field: string, value: string) => {
+    if (!currentQ) return;
+    const nextQs = [...generatedQuestions];
+    nextQs[currentIndex] = { ...currentQ, [field]: value };
+    setGeneratedQuestions(nextQs);
+  };
+
+  // Keyboard Shortcuts
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (step !== 3 || !currentQ || loading) return;
+    const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement).tagName);
+    if (isEditing) return;
+
+    switch (e.key.toLowerCase()) {
+      case 'a':
+        e.preventDefault();
+        approveCurrent();
+        break;
+      case 'x':
+        e.preventDefault();
+        rejectCurrent();
+        break;
+      case 'r':
+        e.preventDefault();
+        regenerateCurrent();
+        break;
+      case 'n':
+        e.preventDefault();
+        if (currentIndex < generatedQuestions.length - 1) setCurrentIndex(currentIndex + 1);
+        break;
+      case 'p':
+        e.preventDefault();
+        if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+        break;
+    }
+  }, [step, currentQ, loading, currentIndex, generatedQuestions.length]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  return (
+    <div className="max-w-[1400px] mx-auto space-y-6 pb-24">
+      {step !== 3 && (
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <Sparkles className="text-indigo-600" /> AI Content Factory
+            </h1>
+            <p className="text-slate-500 mt-1 text-sm">Professional competitive exam question generation.</p>
+          </div>
+        </div>
+      )}
 
       {errorMsg && (
         <div className="bg-red-50 text-red-700 p-4 rounded-xl border border-red-200 flex items-center gap-2 font-bold">
@@ -165,27 +286,37 @@ export default function GeneratorClient() {
       )}
 
       {step === 1 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-            <h3 className="font-bold border-b pb-2 flex items-center gap-2"><FileText size={18} className="text-indigo-600"/> 1. Source Context</h3>
-            <div>
-              <label className="block text-xs font-bold text-slate-500 mb-1">Paste Source Text / Notes / Document Content</label>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4 flex flex-col">
+            <h3 className="font-bold border-b pb-2 flex items-center justify-between">
+              <span className="flex items-center gap-2"><FileText size={18} className="text-indigo-600"/> 1. Source Context</span>
+              <label className="flex items-center gap-2 text-sm text-slate-600">
+                <input type="checkbox" checked={formData.sourceGrounded} onChange={e => handleChange("sourceGrounded", e.target.checked)} className="rounded text-indigo-600 focus:ring-indigo-500" />
+                Source Grounded
+              </label>
+            </h3>
+            
+            <div className="flex-1">
               <textarea 
                 value={sourceText} 
                 onChange={e => setSourceText(e.target.value)} 
-                className="w-full h-64 p-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500"
-                placeholder="Paste the study material here. The AI will strictly extract facts from this text to generate questions..."
+                className="w-full h-full min-h-[300px] p-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500"
+                placeholder={formData.sourceGrounded ? "Paste the exact study material, PDF text, or notes here. The AI will strictly generate facts from this text..." : "Paste inspiration text, PYQs, or syllabus topics here..."}
               />
             </div>
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <label className="block text-xs font-bold text-slate-500 mb-1">Number of Questions</label>
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Batch Size</label>
                 <select value={count} onChange={e => setCount(parseInt(e.target.value))} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold">
-                  <option value={5}>5 Questions</option>
-                  <option value={10}>10 Questions</option>
-                  <option value={15}>15 Questions</option>
-                  <option value={20}>20 Questions</option>
-                  <option value={25}>25 Questions (Max Batch)</option>
+                  {[5, 10, 15, 20, 25].map(n => <option key={n} value={n}>{n} Questions</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Language</label>
+                <select value={formData.language} onChange={e => handleChange("language", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold">
+                  <option value="English">English</option>
+                  <option value="Assamese">Assamese</option>
+                  <option value="Hindi">Hindi</option>
                 </select>
               </div>
             </div>
@@ -225,7 +356,7 @@ export default function GeneratorClient() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Difficulty</label>
-                <select value={formData.difficulty_level} onChange={e => handleChange("difficulty_level", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm">
+                <select value={formData.difficulty_level} onChange={e => handleChange("difficulty_level", e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm font-bold">
                   <option value="EASY">EASY</option>
                   <option value="MEDIUM">MEDIUM</option>
                   <option value="HARD">HARD</option>
@@ -237,112 +368,157 @@ export default function GeneratorClient() {
               </div>
             </div>
 
-            <div className="pt-6 text-right">
+            <div className="pt-6 text-right mt-auto border-t border-slate-100">
               <button 
                 onClick={handleGenerate} 
                 disabled={loading}
-                className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl transition shadow-lg shadow-indigo-600/20 disabled:opacity-50 flex items-center gap-2 ml-auto"
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl transition shadow-lg shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? <><Loader2 size={18} className="animate-spin" /> Generating AI Questions...</> : <><Play size={18} /> Generate Batch</>}
+                {loading ? <><Loader2 size={18} className="animate-spin" /> Analyzing and Generating...</> : <><Play size={18} /> Generate {count} Questions</>}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {step === 3 && (
-        <div className="space-y-6">
-          <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl flex items-center justify-between">
-            <div className="font-bold text-indigo-900">
-              Generated {generatedQuestions.length} questions. Please review them below. Approved questions will be saved as DRAFT in the Question Bank.
+      {step === 3 && currentQ && (
+        <div className="h-[calc(100vh-100px)] flex flex-col bg-slate-100 dark:bg-slate-900 rounded-xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800">
+          
+          {/* Review Header */}
+          <div className="h-16 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 shrink-0">
+            <div className="flex items-center gap-4">
+              <div className="font-black text-lg">Question {currentIndex + 1} of {generatedQuestions.length}</div>
+              <div className="text-sm font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">
+                Approved: <span className="text-emerald-600">{stats.approved}</span> • Rejected: <span className="text-red-500">{stats.rejected}</span>
+              </div>
             </div>
-            <button onClick={() => setStep(1)} className="px-4 py-2 bg-white text-indigo-600 font-bold rounded-lg border hover:bg-indigo-50 text-sm">Generate More</button>
+            <div className="flex items-center gap-2">
+              <button disabled={currentIndex === 0} onClick={() => setCurrentIndex(i => i - 1)} className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded font-bold text-sm disabled:opacity-30 transition">Prev (P)</button>
+              <button disabled={currentIndex === generatedQuestions.length - 1} onClick={() => setCurrentIndex(i => i + 1)} className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded font-bold text-sm disabled:opacity-30 transition">Next (N)</button>
+              <button onClick={() => setStep(1)} className="ml-4 px-3 py-1.5 text-slate-500 hover:text-slate-800 font-bold text-sm">Exit Review</button>
+            </div>
           </div>
 
-          {generatedQuestions.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 font-bold bg-white rounded-2xl border border-slate-200">
-              <CheckCircle size={48} className="mx-auto mb-4 text-emerald-400" />
-              All questions in this batch have been processed.
-            </div>
-          ) : (
-            generatedQuestions.map((q, index) => (
-              <div key={q.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row">
-                
-                {/* Editor Column */}
-                <div className="flex-1 p-6 border-b md:border-b-0 md:border-r border-slate-200 space-y-4">
-                  <div className="flex items-center justify-between">
-                     <span className="text-xs font-black uppercase text-slate-400">AI Generated Question #{index + 1}</span>
-                     {q.duplicateRisk === 'HIGH' && <span className="bg-red-100 text-red-700 text-[10px] font-black px-2 py-1 rounded">HIGH DUPLICATE RISK</span>}
-                     {q.duplicateRisk === 'POSSIBLE' && <span className="bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-1 rounded">POSSIBLE DUPLICATE</span>}
-                  </div>
-                  
+          {/* Split Pane */}
+          <div className="flex-1 flex overflow-hidden">
+            
+            {/* Editor Pane */}
+            <div className="flex-1 overflow-y-auto p-6 bg-white">
+              <div className="max-w-3xl mx-auto space-y-6">
+                <div>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider mb-2 block">Question Text</label>
                   <textarea 
-                    value={q.question_text} 
-                    onChange={e => handleInlineEdit(q.id, 'question_text', e.target.value)}
-                    className="w-full text-lg font-bold text-slate-900 p-2 border border-transparent hover:border-slate-200 focus:border-indigo-500 rounded-lg outline-none transition-colors bg-transparent"
-                    rows={2}
+                    value={currentQ.question_text} 
+                    onChange={e => handleInlineEdit('question_text', e.target.value)}
+                    className="w-full text-xl font-bold text-slate-900 p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50"
+                    rows={3}
                   />
-
-                  <div className="space-y-2 pl-4">
-                    {['A', 'B', 'C', 'D'].map(opt => {
-                      const isCorrect = q.correct_answer === opt;
-                      return (
-                        <div key={opt} className={`flex items-center gap-3 p-2 rounded-lg border ${isCorrect ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-100'}`}>
-                          <button 
-                            onClick={() => handleInlineEdit(q.id, 'correct_answer', opt)}
-                            className={`w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-500 hover:bg-slate-300'}`}
-                          >
-                            {opt}
-                          </button>
-                          <input 
-                            type="text" 
-                            value={q[`option${opt}`]} 
-                            onChange={e => handleInlineEdit(q.id, `option${opt}`, e.target.value)}
-                            className="flex-1 bg-transparent border-none text-sm font-medium outline-none p-1"
-                          />
-                        </div>
-                      )
-                    })}
-                  </div>
-
-                  <div className="pt-2">
-                    <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1 block">Explanation</span>
-                    <textarea 
-                      value={q.explanation} 
-                      onChange={e => handleInlineEdit(q.id, 'explanation', e.target.value)}
-                      className="w-full text-sm text-indigo-900 p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 min-h-[60px]"
-                    />
-                  </div>
                 </div>
 
-                {/* Actions Column */}
-                <div className="w-full md:w-64 bg-slate-50 p-6 flex flex-col justify-between">
-                  <div className="space-y-4">
-                    {q.duplicateWarning && (
-                       <div className="bg-amber-100 border border-amber-200 p-3 rounded-lg text-xs text-amber-900">
-                         <strong>Duplicate Warning:</strong>
-                         <p className="mt-1 line-clamp-3 italic">"{q.duplicateWarning}"</p>
-                       </div>
-                    )}
-                    
-                    <div className="text-xs text-slate-500 space-y-1">
-                      <div><strong>Difficulty:</strong> {formData.difficulty_level}</div>
-                      <div><strong>Topic:</strong> Assigned</div>
-                    </div>
-                  </div>
+                <div className="space-y-3">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">Options & Correct Answer</label>
+                  {['A', 'B', 'C', 'D'].map(opt => {
+                    const isCorrect = currentQ.correct_answer === opt;
+                    return (
+                      <div key={opt} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition ${isCorrect ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-white hover:border-slate-200'}`}>
+                        <button 
+                          onClick={() => handleInlineEdit('correct_answer', opt)}
+                          className={`w-8 h-8 rounded-full font-black text-sm flex items-center justify-center shrink-0 transition ${isCorrect ? 'bg-emerald-500 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-300'}`}
+                        >
+                          {opt}
+                        </button>
+                        <input 
+                          type="text" 
+                          value={currentQ[`option${opt}`]} 
+                          onChange={e => handleInlineEdit(`option${opt}`, e.target.value)}
+                          className="flex-1 bg-transparent border-none text-base font-medium outline-none p-1"
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
 
-                  <div className="space-y-2 mt-6">
-                    <button onClick={() => approveQuestion(q)} className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-sm transition flex items-center justify-center gap-2">
-                      <CheckCircle size={16} /> Approve & Save
-                    </button>
-                    <button onClick={() => removeQuestion(q.id)} className="w-full py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold rounded-lg text-sm transition flex items-center justify-center gap-2">
-                      <X size={16} /> Reject & Discard
-                    </button>
-                  </div>
+                <div>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider mb-2 block">Explanation</label>
+                  <textarea 
+                    value={currentQ.explanation} 
+                    onChange={e => handleInlineEdit('explanation', e.target.value)}
+                    className="w-full text-sm font-medium text-indigo-900 p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 min-h-[120px]"
+                  />
                 </div>
               </div>
-            ))
-          )}
+            </div>
+
+            {/* Quality Pane */}
+            <div className="w-80 bg-slate-50 border-l border-slate-200 overflow-y-auto flex flex-col">
+              <div className="p-6 space-y-6 flex-1">
+                
+                {/* AI Score */}
+                <div className="text-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+                  <div className="text-xs font-black text-slate-400 uppercase tracking-wider">AI Quality Score</div>
+                  <div className={`text-4xl font-black mt-2 ${currentQ.quality_score >= 85 ? 'text-emerald-600' : currentQ.quality_score >= 70 ? 'text-amber-500' : 'text-red-500'}`}>
+                    {currentQ.quality_score || '-'}/100
+                  </div>
+                </div>
+
+                {/* Warnings */}
+                {currentQ.quality_warnings && currentQ.quality_warnings.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="text-xs font-black text-slate-400 uppercase tracking-wider">AI Warnings</div>
+                    {currentQ.quality_warnings.map((w: string, i: number) => (
+                      <div key={i} className="flex items-start gap-2 text-xs font-bold text-amber-700 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+                        <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                        <span>{w}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Duplicates */}
+                <div className="space-y-2">
+                  <div className="text-xs font-black text-slate-400 uppercase tracking-wider">Duplicate Check</div>
+                  {currentQ.duplicateRisk !== 'LOW' ? (
+                    <div className={`p-3 rounded-lg border text-sm font-bold ${currentQ.duplicateRisk === 'HIGH' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-amber-50 border-amber-200 text-amber-800'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <ShieldAlert size={16} /> 
+                        {currentQ.duplicateRisk === 'HIGH' ? 'High Risk' : 'Possible Match'} ({currentQ.duplicateScore}%)
+                      </div>
+                      <p className="text-xs font-medium opacity-80 leading-relaxed italic line-clamp-4">
+                        "{currentQ.duplicateWarning}"
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs font-bold text-emerald-700 bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
+                      <CheckCircle size={14} /> Unique Question
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="p-4 bg-white border-t border-slate-200 space-y-2">
+                <button 
+                  onClick={regenerateCurrent} 
+                  disabled={loading}
+                  className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-sm transition flex items-center justify-center gap-2"
+                >
+                  {loading ? <Loader2 size={16} className="animate-spin" /> : <><RefreshCw size={16} /> Regenerate (R)</>}
+                </button>
+                <button 
+                  onClick={approveCurrent} 
+                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black shadow-lg shadow-emerald-600/20 rounded-lg text-sm transition flex items-center justify-center gap-2"
+                >
+                  <CheckCircle size={18} /> Approve & Save (A)
+                </button>
+                <button 
+                  onClick={rejectCurrent} 
+                  className="w-full py-2.5 bg-white border-2 border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-slate-600 font-bold rounded-lg text-sm transition flex items-center justify-center gap-2"
+                >
+                  <X size={16} /> Reject (X)
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

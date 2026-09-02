@@ -21,39 +21,43 @@ export async function generateQuestionsAction(
     subject: string;
     topic: string;
     difficulty: string;
+    language: string;
+    sourceGrounded: boolean;
   }
 ) {
   await verifyAdmin();
   
   if (count > 25) throw new Error("Maximum batch size is 25 to ensure quality and prevent timeouts.");
-  if (!sourceText.trim()) throw new Error("Source context cannot be empty.");
+  if (metadata.sourceGrounded && !sourceText.trim()) throw new Error("Source context cannot be empty in Source Grounded mode.");
 
-  const generatedData = await generateMCQsWithGemini(sourceText, count, metadata);
+  // For very large batches, we could chunk it, but we are capping at 25 for now.
+  const generatedData = await generateMCQsWithGemini(sourceText || "General Knowledge", count, metadata);
   
-  // Validate and attach duplicate warnings
   const validatedQuestions = [];
   
   for (const q of generatedData) {
     let duplicateWarning = null;
+    let duplicateScore = 0;
     let duplicateRisk = "LOW";
     
     // Check duplicates via RPC
     const { data: dupData } = await supabase.rpc("find_question_duplicates", {
       p_question_text: q.question_text,
-      p_similarity_threshold: 0.6
+      p_similarity_threshold: 0.5
     });
 
     if (dupData && dupData.length > 0) {
       duplicateWarning = dupData[0].question_text;
-      const score = dupData[0].similarity_score;
-      duplicateRisk = score > 0.85 ? "HIGH" : "POSSIBLE";
+      duplicateScore = dupData[0].similarity_score;
+      duplicateRisk = duplicateScore > 0.85 ? "HIGH" : "POSSIBLE";
     }
 
     validatedQuestions.push({
       ...q,
       duplicateWarning,
+      duplicateScore: duplicateScore ? Math.round(duplicateScore * 100) : 0,
       duplicateRisk,
-      id: "temp_" + Math.random().toString(36).substr(2, 9), // temp ID for UI
+      id: "temp_" + Math.random().toString(36).substr(2, 9), 
     });
   }
 
