@@ -112,7 +112,7 @@ export default function FeedList({
           
           {/* Bottom Row: AI Match & Dropdowns */}
           <div className="flex flex-col md:flex-row gap-2 justify-end w-full">
-            <Link href="/ai-match" className="flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-sm text-sm shrink-0 group w-full md:w-auto">
+            <Link href="/ai-match" className="flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-sm text-base shrink-0 group w-full md:w-auto">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
               <span>AI Match</span>
             </Link>
@@ -121,7 +121,7 @@ export default function FeedList({
             <select
               value={district}
               onChange={(e) => handleFilterChange(setDistrict, e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-2.5 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-2.5 text-xs md:text-base focus:ring-2 focus:ring-indigo-500 shadow-sm"
             >
               <option value="ALL">All Assam (All Districts)</option>
               <option value="Bajali">Bajali</option>
@@ -165,7 +165,7 @@ export default function FeedList({
             <select
               value={qualification}
               onChange={(e) => handleFilterChange(setQualification, e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-2.5 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 shadow-sm"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-2.5 text-xs md:text-base focus:ring-2 focus:ring-indigo-500 shadow-sm"
             >
               <option value="ALL">All Qualifications</option>
               <option value="10th">10th Pass</option>
@@ -181,7 +181,7 @@ export default function FeedList({
             <select
               value={sortBy}
               onChange={(e) => handleFilterChange(setSortBy, e.target.value)}
-              className="w-full col-span-2 md:col-span-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-xl px-3 py-2.5 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 font-bold shadow-sm"
+              className="w-full col-span-2 md:col-span-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-xl px-3 py-2.5 text-xs md:text-base focus:ring-2 focus:ring-indigo-500 font-bold shadow-sm"
             >
               <option value="newest">Newest First</option>
               <option value="closing_soon">Closing Soon</option>
@@ -196,35 +196,35 @@ export default function FeedList({
           <div className="flex flex-wrap gap-2 pb-2">
             <button 
               onClick={() => handleFilterChange(setFilter, "ALL")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "ALL" ? "bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-medium whitespace-nowrap transition ${filter === "ALL" ? "bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <Activity size={14} /> All Updates
             </button>
             
             <button 
               onClick={() => handleFilterChange(setFilter, "GOVT")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "GOVT" ? "bg-emerald-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-medium whitespace-nowrap transition ${filter === "GOVT" ? "bg-emerald-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <Briefcase size={14} /> Govt Jobs
             </button>
             
             <button 
               onClick={() => handleFilterChange(setFilter, "PRIVATE")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "PRIVATE" ? "bg-blue-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-medium whitespace-nowrap transition ${filter === "PRIVATE" ? "bg-blue-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <Building2 size={14} /> Private Jobs
             </button>
 
             <button 
               onClick={() => handleFilterChange(setFilter, "EXAM")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${filter === "EXAM" ? "bg-violet-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-medium whitespace-nowrap transition ${filter === "EXAM" ? "bg-violet-600 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"}`}
             >
               <GraduationCap size={14} /> Exams & Results
             </button>
             
             <button 
               onClick={() => handleFilterChange(setFilter, "TENDER")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${ filter === "TENDER" ? "bg-gradient-to-r from-orange-600 to-amber-500 text-white shadow-lg ring-4 ring-orange-500/30 scale-105 border-transparent" : "bg-gradient-to-r from-orange-400 to-amber-400 text-white shadow-md hover:scale-105 border-transparent" }`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-medium whitespace-nowrap transition ${ filter === "TENDER" ? "bg-gradient-to-r from-orange-600 to-amber-500 text-white shadow-lg ring-4 ring-orange-500/30 scale-105 border-transparent" : "bg-gradient-to-r from-orange-400 to-amber-400 text-white shadow-md hover:scale-105 border-transparent" }`}
             >
               <FileText size={14} /> Tenders
             </button>
@@ -251,7 +251,7 @@ export default function FeedList({
               <div className="pt-6 pb-2 text-center col-span-full">
                 <button 
                   onClick={() => setVisibleCount(prev => prev + 15)}
-                  className="px-8 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold text-sm rounded-xl border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition shadow-sm inline-flex items-center gap-2"
+                  className="px-8 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold text-base rounded-xl border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition shadow-sm inline-flex items-center gap-2"
                 >
                   <Activity size={16} />
                   Load More Updates ({filteredJobs.length - visibleCount} remaining)
@@ -263,8 +263,8 @@ export default function FeedList({
           <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
             <Filter className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-3" />
             <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">No updates found</h3>
-            <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">Try adjusting your search or filters.</p>
-            <button onClick={() => {handleFilterChange(setSearch, ""); handleFilterChange(setFilter, "ALL");}} className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+            <p className="text-slate-500 dark:text-slate-400 mt-1 text-base">Try adjusting your search or filters.</p>
+            <button onClick={() => {handleFilterChange(setSearch, ""); handleFilterChange(setFilter, "ALL");}} className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium text-base">
               Clear all filters
             </button>
           </div>
