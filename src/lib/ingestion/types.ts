@@ -16,7 +16,9 @@ export type IngestionStatus =
   | 'DISCOVERED' 
   | 'PROCESSING' 
   | 'VALIDATED' 
-  | 'DUPLICATE_RISK' 
+  | 'DUPLICATE_RISK'
+  | 'CHANGE_DETECTED'
+  | 'VERIFICATION_PENDING' 
   | 'READY_FOR_REVIEW' 
   | 'APPROVED' 
   | 'REJECTED' 
@@ -60,6 +62,9 @@ export interface IngestionSource {
   source_type: string;
   adapter_name: string;
   is_active: boolean;
+  tier: number;
+  is_official: boolean;
+  feed_type: string;
 }
 
 export interface QueueItem {
@@ -78,4 +83,5 @@ export interface QueueItem {
   duplicate_of?: string;
   validation_errors: any[];
   validation_warnings: any[];
+  change_diff?: any[];
 }

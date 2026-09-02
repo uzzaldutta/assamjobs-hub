@@ -1,4 +1,4 @@
-
+﻿code = """
 import { supabase } from "@/lib/supabase";
 
 export async function approveQueueItemAction(queueId: string) {
@@ -78,3 +78,6 @@ export async function rejectQueueItemAction(queueId: string) {
   await supabase.from('ingestion_queue').update({ status: 'REJECTED', rejected_at: new Date().toISOString() }).eq('id', queueId);
   return { success: true };
 }
+"""
+with open("src/app/admin/studio/ingestion/actions.ts", "w", encoding="utf-8") as f:
+    f.write(code)

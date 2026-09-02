@@ -1,4 +1,4 @@
-
+﻿code = """
 # Production Ingestion Engine Implementation Plan
 
 ## Goal Description
@@ -57,3 +57,6 @@ Add a specialized "Diff Viewer" component for items marked `CHANGE_DETECTED`. It
 1. Run the `AssamCareerAdapter` -> verify items land in Queue as `NEW` (VERIFICATION_PENDING).
 2. Run the `APSCAdapter` for the same job -> verify it detects the overlap, marks it `CHANGE_DETECTED` or Canonical, and sets `VERIFIED`.
 3. Approve the update -> verify the public `jobs` table lists multiple `discovered_sources` but only ONE actual public card.
+"""
+with open("implementation_plan.md", "w", encoding="utf-8") as f:
+    f.write(code)
