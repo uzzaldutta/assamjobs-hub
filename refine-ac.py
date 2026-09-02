@@ -1,4 +1,4 @@
-
+﻿code = """
 import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource } from "../types";
@@ -59,9 +59,9 @@ export class AssamCareerAdapter implements SourceAdapter {
     const bodyText = $('.post-body').text();
     
     // Deep Extraction
-    const orgMatch = bodyText.match(/Name of organization:\s*([^\n]+)/i) || bodyText.match(/Organization:\s*([^\n]+)/i);
-    const dateMatch = bodyText.match(/Last Date:\s*([^\n]+)/i);
-    const vacancyMatch = bodyText.match(/No of posts:\s*(\d+)/i) || bodyText.match(/Total Vacancy:\s*(\d+)/i);
+    const orgMatch = bodyText.match(/Name of organization:\s*([^\\n]+)/i) || bodyText.match(/Organization:\s*([^\\n]+)/i);
+    const dateMatch = bodyText.match(/Last Date:\s*([^\\n]+)/i);
+    const vacancyMatch = bodyText.match(/No of posts:\s*(\\d+)/i) || bodyText.match(/Total Vacancy:\s*(\\d+)/i);
     
     // Link Extraction Logic
     let applyUrl = '';
@@ -116,3 +116,6 @@ export class AssamCareerAdapter implements SourceAdapter {
     return { isValid: errors.length === 0, errors, warnings };
   }
 }
+"""
+with open("src/lib/ingestion/adapters/AssamCareerAdapter.ts", "w", encoding="utf-8") as f:
+    f.write(code)

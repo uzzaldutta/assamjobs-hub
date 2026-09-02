@@ -1,4 +1,4 @@
-
+﻿code = """
 export type ContentType = 'JOB' | 'PRIVATE_JOB' | 'TENDER' | 'ADMISSION' | 'RESULT';
 
 export interface RawContent {
@@ -61,3 +61,6 @@ export interface QueueItem {
   validation_warnings: string[];
   created_at: string;
 }
+"""
+with open("src/lib/ingestion/types.ts", "w", encoding="utf-8") as f:
+    f.write(code)
