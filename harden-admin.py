@@ -1,4 +1,4 @@
-
+﻿code = """
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { Activity, RefreshCw, Database, AlertCircle, CheckCircle, XCircle } from "lucide-react";
@@ -102,3 +102,6 @@ export default async function IngestionDashboard() {
     </div>
   );
 }
+"""
+with open("src/app/admin/studio/ingestion/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

@@ -1,4 +1,4 @@
-
+﻿code = """
 import { supabase } from "@/lib/supabase";
 import crypto from "crypto";
 import { NormalizedPayload, QueueItem, IngestionSource } from "./types";
@@ -235,3 +235,6 @@ export class IngestionPipeline {
     }
   }
 }
+"""
+with open("src/lib/ingestion/pipeline.ts", "w", encoding="utf-8") as f:
+    f.write(code)

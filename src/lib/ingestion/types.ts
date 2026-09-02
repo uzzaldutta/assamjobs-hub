@@ -40,6 +40,11 @@ export interface NormalizedPayload {
   qualification?: string[];
   salary?: string;
   vacancy?: string;
+  estimatedValue?: string;
+  department?: string;
+  tenderNumber?: string;
+  course?: string;
+  examName?: string;
   category?: string;
   tags?: string[];
   attachments?: Array<{ url: string; title: string; type: string }>;
