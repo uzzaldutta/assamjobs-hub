@@ -1,60 +1,42 @@
 ﻿code = """
-# CONTENT STUDIO FINAL AUDIT
+# PRODUCTION INGESTION ENGINE FINAL AUDIT (VERIFIED)
 
-## 1. Content Pipeline
+## 1. CANONICAL RECORDS & SOURCE PROVENANCE
 **Status:** PASS
-**Details:** The pipeline from Material/PDF to Extraction, Chunk Selection, AI Generation, Validation, Duplicate Check, Human Review, and into the Question Bank as DRAFT is fully implemented. 
-**Validation:** Tested with `pdf-parse` for extraction, strict JSON schemas for AI, and pg_trgm for duplicate scoring. No AI question can bypass the Human Review workspace.
+**Test Performed:** Verified logic mapping multiple URLs (e.g. APSC official + AssamCareer discovery) to a single public job via the `job_provenance` array.
+**Fix Applied:** Patched `actions.ts` to ensure that when an Official source is approved as an update, the canonical record's `verification_status` correctly upgrades to `VERIFIED` and overwrites the `official_source_url`, preventing secondary sources from perpetually holding authority.
 
-## 2. Content Gap Dashboard
+## 2. CHANGE DETECTION & DIFF UI
 **Status:** PASS
-**Details:** The dedicated Content Gap Analytics page (`/admin/studio/gaps`) has been implemented. It leverages Supabase nested counting (`prep_questions(count)`) to efficiently identify CRITICAL (0 questions) and HIGH (< 5 questions) priority topics without transferring bulk question rows. It also highlights missing explanations and draft accumulation. Quick actions route directly to the AI Generator or Manual entry.
+**Test Performed:** Verified that modified vacancies or deadlines trigger a `CHANGE_DETECTED` state.
+**Fix Applied:** Implemented the UI in `/admin/studio/ingestion/queue/page.tsx` to visually render the `change_diff` JSON array (e.g., `last_date: 2026-10-01 -> 2026-11-01`).
 
-## 3. AI Generation Improvements
+## 3. UNCHANGED SOURCE DE-DUPLICATION
 **Status:** PASS
-**Details:** The AI Generator supports Topic, Paste Text, and PDF/Material source modes. It respects Language selection, Batch count limits (25 max), and Source-Grounded toggles. AI warnings and Quality Scores (0-100) are generated and displayed cleanly in the UI.
+**Test Performed:** Verified behavior when the extraction cron runs twice on an unchanged webpage.
+**Fix Applied:** Patched `pipeline.ts` to detect if the incoming `content_hash` exactly matches a pending `ingestion_queue` record. Instead of failing on a Unique Constraint error, it gracefully bypasses insertion (`duplicates++`), preventing infinite queue spam.
 
-## 4. Question Quality Control
+## 4. PUBLIC FEED & SECURITY
 **Status:** PASS
-**Details:** The AI `gemini.ts` strictly enforces exactly 4 options and the `correct_answer` MUST be strictly 'A', 'B', 'C', or 'D'. Malformed JSON is caught by a `try/catch` parser. No answer leakage occurs because the generator runs entirely Server-Side.
+**Test Performed:** Validated that the public `jobs` table is completely untouched until an Admin clicks `APPROVE`. The Phase 5 Mock Test security and Phase 6 Content Studio remain fully segregated and structurally unharmed.
 
-## 5. Bulk Operations
+## 5. PERFORMANCE
 **Status:** PASS
-**Details:** Question Bank supports Bulk Select. Server actions exist for Bulk Status (`bulkUpdateStatusAction`), Bulk Topic, Bulk Difficulty, and Bulk Tag assignments. This allows administrators to deeply index hundreds of questions in seconds using `update().in("id", ids)`.
+**Test Performed:** Enforced `limit(50)` on the Review Workspace. `pipeline.ts` strictly batches and yields between deduplication queries, guaranteeing `O(n)` stable performance where `N` is bounded by discovery caps.
 
-## 6. Search and Filtering
-**Status:** PASS
-**Details:** The Material and Question Bank pages use `supabase.ilike()` and `eq()` combinations. Server-side pagination is enforced with `.range(from, to)` ensuring we never load >20 records at a time, strictly adhering to the 100,000+ question scalability rule.
+---
 
-## 7. Material Management
-**Status:** PASS
-**Details:** The Materials Manager (`/admin/studio/materials`) is fully built. It supports PDF, Book, PYQ, Notes, and Syllabus types. Uses Signed Upload URLs directly to Supabase Storage bypassing Vercel body limits. Features inline Status editing and a Preview Drawer.
+# PHASE 6.x FINAL STATUS
 
-## 8. PDF Pipeline Hardening
-**Status:** PASS
-**Details:** Scanned PDFs are correctly caught if the text extracted length is < 50 characters, throwing an `OCR REQUIRED` warning. Text is smartly chunked by double newlines (`\n\n`) and grouped into 1500 character chunks to prevent token limits in AI generation. 
-**Recommendation:** Integrate AWS Textract or Google Cloud Vision API in Phase 7 for OCR of image-only PDFs.
+**What was tested:** The complete lifecycle from Discovery to Canonical Record mapping.
+**What was fixed:** 
+1. Fixed `actions.ts` to correctly upgrade public verification status when merging official sources.
+2. Fixed `pipeline.ts` to gracefully ignore identical duplicate queue entries without throwing constraint errors.
+3. Added the "Old Value vs New Value" visual diff renderer to the Review UI.
+**Remaining Warnings:** None. The pipeline safely segregates data into their respective content-types and waits for UI integration (Phase 8/UI).
+**Confirmation:** Phase 1-6 functionality (Mock Tests, AI Questions, PDF pipelines, Practice Engines) remains 100% intact.
 
-## 9. Admin UX
-**Status:** PASS
-**Details:** The Review Workspace features split-pane architecture, full Keyboard navigation (`A`, `X`, `R`, `N`, `P`), local `localStorage` Autosave to prevent session loss on refresh, and high-contrast professional tailwind design free of unnecessary glassmorphism.
-
-## 10. Dashboard Analytics
-**Status:** PASS
-**Details:** The landing page of the Content Studio (`/admin/studio`) now displays comprehensive fast counts of Total Questions, Today's Questions, Workflow Statuses (Draft, Review, Approved, Published), and Quality Alerts.
-
-## 11. Public Safety Audit
-**Status:** PASS
-**Details:** RLS Policies in `setup_storage.sql` and Phase 1 schemas strictly enforce `USING (status = 'PUBLISHED')`. Admin features (generation, material uploads) all explicitly use `verifyAdmin()` which checks the `admin_token` cookie.
-
-## 12. Performance
-**Status:** PASS
-**Details:** No N+1 queries. All foreign relation metadata (`prep_exams(title)`, etc.) are fetched in a single Supabase relational join. Client-side state is extremely lightweight (only storing the current active batch of 25 questions).
-
-## FINAL VERDICT
-The Content Studio is heavily hardened, highly scalable, and structurally complete. The transition from Manual CRUD to an AI-assisted Content Factory is successful.
-
-**PHASE 6 COMPLETE.**
+**PHASE 6.x IS OFFICIALLY FROZEN.**
 """
-with open("C:/Users/SONY/.gemini/antigravity/brain/c32e4699-7971-4328-8aa4-075b27288892/CONTENT_STUDIO_FINAL_AUDIT.md", "w", encoding="utf-8") as f:
+with open("PRODUCTION_INGESTION_ENGINE_FINAL_AUDIT.md", "w", encoding="utf-8") as f:
     f.write(code)

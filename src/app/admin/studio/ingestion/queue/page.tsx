@@ -91,6 +91,22 @@ export default async function ReviewQueuePage() {
                 </div>
               </div>
 
+
+              {item.status === 'CHANGE_DETECTED' && item.change_diff && item.change_diff.length > 0 && (
+                <div className="mt-4 border border-amber-200 bg-amber-50 rounded-xl p-4">
+                  <h4 className="text-sm font-bold text-amber-800 flex items-center gap-2 mb-3"><AlertTriangle size={16}/> Changes Detected vs Canonical Record</h4>
+                  <div className="space-y-2">
+                    {item.change_diff.map((diff: any, idx: number) => (
+                      <div key={idx} className="grid grid-cols-3 gap-2 text-sm bg-white p-2 rounded border border-amber-100">
+                        <div className="font-bold text-slate-700 capitalize">{diff.field.replace('_', ' ')}</div>
+                        <div className="text-red-600 line-through truncate" title={diff.old_value}>{diff.old_value || 'None'}</div>
+                        <div className="text-emerald-600 font-bold truncate" title={diff.new_value}>{diff.new_value || 'None'}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center gap-4 text-sm font-medium">
                 {item.source_url && (
                   <a href={item.source_url} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline flex items-center gap-1">

@@ -28,13 +28,25 @@ export async function approveQueueItemAction(queueId: string) {
        });
 
        // Apply diffs to actual job if it was a CHANGE_DETECTED
+       
+       const updates: any = {};
+       
+       // Upgrade verification if merging an official source
+       if (sourceMeta?.is_official) {
+         updates.verification_status = 'VERIFIED';
+         updates.official_source_url = payload.sourceUrl;
+       }
+
        if (item.change_diff && item.change_diff.length > 0) {
-         const updates: any = {};
          item.change_diff.forEach((diff: any) => {
            updates[diff.field] = diff.new_value;
          });
+       }
+       
+       if (Object.keys(updates).length > 0) {
          await supabase.from('jobs').update(updates).eq('id', targetId);
        }
+
     }
   } else {
     // INSERT NEW CANONICAL RECORD

@@ -22,8 +22,20 @@ export class IngestionPipeline {
     return score;
   }
 
-  static async detectDuplicates(payload: NormalizedPayload): Promise<{ score: number, duplicateOf?: string, risk: string, existingRecord?: any }> {
-    // 1. Exact URL Match in Jobs
+  static async detectDuplicates(payload: NormalizedPayload): Promise<{ score: number, duplicateOf?: string, risk: string, existingRecord?: any, inQueue?: boolean }> {
+    // 1. Check if hash exists in queue
+    const hash = this.generateHash(payload);
+    const { data: exactQueue } = await supabase
+      .from('ingestion_queue')
+      .select('id, content_hash')
+      .eq('content_hash', hash)
+      .limit(1);
+
+    if (exactQueue && exactQueue.length > 0) {
+      return { score: 1.0, duplicateOf: exactQueue[0].id, risk: 'EXACT', inQueue: true };
+    }
+
+    // 2. Exact URL Match in Jobs
     const { data: exactJobs } = await supabase
       .from('jobs')
       .select('id, apply_link, title, vacancies, last_date')
@@ -114,6 +126,11 @@ export class IngestionPipeline {
           itemsValidated++;
 
           const dupCheck = await this.detectDuplicates(normalized);
+          
+          if (dupCheck.inQueue) {
+             duplicates++;
+             continue; // Silently skip if already in the queue unchanged
+          }
           const qualityScore = this.calculateQualityScore(normalized);
           const hash = this.generateHash(normalized);
           
