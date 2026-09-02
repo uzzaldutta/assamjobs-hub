@@ -1,4 +1,4 @@
-﻿code = """
+
 # Ingestion Engine Implementation Plan
 
 ## Goal Description
@@ -104,6 +104,3 @@ Add links to the "Ingestion Engine" and "Review Queue".
 3. Verify that new records land in the Review Queue instead of immediately polluting the public Job Feed.
 4. Verify Quality Scores calculate correctly (e.g. missing dates drops the score).
 5. Approve a job and verify it successfully routes to the public `jobs` table.
-"""
-with open("implementation_plan.md", "w", encoding="utf-8") as f:
-    f.write(code)
