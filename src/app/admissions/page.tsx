@@ -1,55 +1,95 @@
-import FeedList from "@/components/FeedList";
-import RecentMarquee from "@/components/RecentMarquee";
+
+import PageHeader from "@/components/PageHeader";
 import AdSidebar from "@/components/AdSidebar";
-import { GraduationCap } from "lucide-react";
-import Link from "next/link";
+import AdmissionCard from "@/components/feeds/AdmissionCard";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import { GraduationCap } from "lucide-react";
 
 export const revalidate = 60;
 
-export default async function AdmissionsPage() {
-  let allAdmissions: any[] = [];
-  
-  try {
-    const { data } = await supabase
-      .from('jobs')
-      .select('*')
-      .neq('category', 'BANNED_KEYWORD')
-      .eq('job_type', 'ADMISSION')
-      .order('scraped_at', { ascending: false });
-      
-    if (data) {
-      allAdmissions = data.map(job => ({
-        ...job,
-        type: job.job_type,
-        lastDate: job.last_date,
-        officialUrl: job.official_pdf_url || job.apply_url,
-        createdAt: new Date(job.scraped_at || job.created_at || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-      }));
-    }
-  } catch(e) {
-    console.error("Could not load from Supabase", e);
+export default async function AdmissionsPage({
+  searchParams,
+}: {
+  searchParams: { page?: string, search?: string }
+}) {
+  const page = parseInt(searchParams.page || "1");
+  const limit = 20;
+  const offset = (page - 1) * limit;
+  const search = searchParams.search || "";
+
+  let query = supabase
+    .from('admissions')
+    .select('*', { count: 'exact' })
+    .eq('status', 'PUBLISHED')
+    .order('application_deadline', { ascending: true });
+
+  if (search) {
+    query = query.ilike('title', `%${search}%`);
   }
 
-  return (
-    <div className="flex flex-col min-h-screen">
-      <div className="bg-indigo-600 dark:bg-indigo-900 px-4 pt-6 pb-8 md:pb-6 rounded-b-[2rem] md:rounded-2xl shadow-lg relative z-0 md:mt-4 max-w-7xl mx-auto w-full">
-        <h2 className="text-2xl font-bold text-white mb-1">Admissions</h2>
-        <p className="text-indigo-100 text-sm mb-2">Latest admission notifications for top colleges, universities, and institutes</p>
-      </div>
+  const { data: admissions, count } = await query.range(offset, offset + limit - 1);
+  const totalCount = count || 0;
+  const hasNext = (offset + limit) < totalCount;
+  const hasPrevious = page > 1;
 
-      <div className="px-4 md:px-0 relative z-10 grid grid-cols-1 mt-2">
-        <RecentMarquee jobs={allAdmissions} title="Recent Admissions" />
-        <div className="px-4 py-8 max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8 flex flex-col">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-slate-800 dark:text-slate-100">All-India & Assam Admissions</h3>
+  return (
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
+      <PageHeader 
+        title="Admissions" 
+        subtitle="Latest university and college admission notifications in Assam"
+        theme="purple"
+      />
+      
+      <div className="px-4 py-8 max-w-7xl mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8 flex flex-col space-y-6">
+            
+            <form className="flex gap-2">
+              <input 
+                type="text" 
+                name="search" 
+                defaultValue={search} 
+                placeholder="Search admissions by institution or course..." 
+                className="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm font-medium"
+              />
+              <button type="submit" className="px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-sm transition">
+                Search
+              </button>
+            </form>
+
+            {!admissions || admissions.length === 0 ? (
+              <div className="text-center py-20 bg-white border border-slate-200 rounded-2xl">
+                <GraduationCap size={48} className="mx-auto text-slate-300 mb-4" />
+                <h2 className="text-xl font-bold text-slate-800">No open admissions</h2>
+                <p className="text-slate-500 mt-2">Try adjusting your search criteria.</p>
               </div>
-              <FeedList initialJobs={allAdmissions} defaultFilter="ADMISSION" hideFilters={true} />
+            ) : (
+              <div className="space-y-4">
+                {admissions.map((adm: any) => (
+                  <AdmissionCard key={adm.id} admission={adm} />
+                ))}
+              </div>
+            )}
+
+            <div className="flex justify-between items-center mt-8">
+              {hasPrevious ? (
+                 <Link href={`/admissions?page=${page - 1}${search ? `&search=${search}` : ''}`} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
+                    &larr; Previous
+                 </Link>
+              ) : <div/>}
+              
+              <span className="text-sm font-medium text-slate-500">Page {page} of {Math.max(1, Math.ceil(totalCount / limit))}</span>
+              
+              {hasNext ? (
+                 <Link href={`/admissions?page=${page + 1}${search ? `&search=${search}` : ''}`} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
+                    Next &rarr;
+                 </Link>
+              ) : <div/>}
             </div>
-            <AdSidebar />
+
           </div>
+          <AdSidebar />
         </div>
       </div>
     </div>
