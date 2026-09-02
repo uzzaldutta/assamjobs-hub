@@ -1,55 +1,10 @@
+﻿import re
 
-import { supabase } from "@/lib/supabase";
+with open("src/app/admin/studio/ingestion/actions.ts", "r", encoding="utf-8") as f:
+    content = f.read()
 
-export async function approveQueueItemAction(queueId: string) {
-  const { data: item, error: fetchErr } = await supabase
-    .from('ingestion_queue')
-    .select('*, ingestion_sources(source_name, tier, is_official)')
-    .eq('id', queueId)
-    .single();
-
-  if (fetchErr || !item) throw new Error("Item not found");
-  const payload = item.normalized_payload;
-  const sourceMeta = item.ingestion_sources;
-
-  if (item.status === 'CHANGE_DETECTED' || item.duplicate_of) {
-    // MERGE OR UPDATE EXISTING
-    const targetId = item.duplicate_of;
-    if (targetId) {
-       // Update job provenance
-       await supabase.from('job_provenance').insert({
-         canonical_id: targetId,
-         content_type: item.content_type,
-         source_name: sourceMeta?.source_name || payload.source,
-         source_url: payload.sourceUrl,
-         source_tier: sourceMeta?.tier || 2,
-         is_official: sourceMeta?.is_official || false,
-         content_hash: item.content_hash
-       });
-
-       // Apply diffs to actual job if it was a CHANGE_DETECTED
-       
-       const updates: any = {};
-       
-       // Upgrade verification if merging an official source
-       if (sourceMeta?.is_official) {
-         updates.verification_status = 'VERIFIED';
-         updates.official_source_url = payload.sourceUrl;
-       }
-
-       if (item.change_diff && item.change_diff.length > 0) {
-         item.change_diff.forEach((diff: any) => {
-           updates[diff.field] = diff.new_value;
-         });
-       }
-       
-       if (Object.keys(updates).length > 0) {
-         await supabase.from('jobs').update(updates).eq('id', targetId);
-       }
-
-    }
-  } else {
-    
+# Replace the INSERT NEW CANONICAL RECORD block
+new_routing = """
     // INSERT NEW CANONICAL RECORD
     let newRecordId: string;
     
@@ -130,15 +85,13 @@ export async function approveQueueItemAction(queueId: string) {
       is_official: sourceMeta?.is_official || false,
       content_hash: item.content_hash
     });
+"""
 
-  }
+content = re.sub(
+    r'//\s*INSERT NEW CANONICAL RECORD[\s\S]*?await\s*supabase\.from\(\'job_provenance\'\)\.insert\(\{[\s\S]*?\}\);',
+    new_routing,
+    content
+)
 
-  // Mark queue item as APPROVED
-  await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
-  return { success: true };
-}
-
-export async function rejectQueueItemAction(queueId: string) {
-  await supabase.from('ingestion_queue').update({ status: 'REJECTED', rejected_at: new Date().toISOString() }).eq('id', queueId);
-  return { success: true };
-}
+with open("src/app/admin/studio/ingestion/actions.ts", "w", encoding="utf-8") as f:
+    f.write(content)

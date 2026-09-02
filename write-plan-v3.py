@@ -1,4 +1,4 @@
-
+﻿code = """
 # Feed Ecosystem Expansion & Hardening Implementation Plan
 
 ## 1. CURRENT STATE
@@ -50,3 +50,6 @@ Create the following highly-indexed tables with RLS enabled:
 3. Build the feed-specific `Card` UI components.
 4. Rewrite the Feed Pages (`/tenders`, etc.) to use server-side pagination and the new tables.
 5. Update `actions.ts` to route approved Ingestion items to the correct tables.
+"""
+with open("implementation_plan.md", "w", encoding="utf-8") as f:
+    f.write(code)
