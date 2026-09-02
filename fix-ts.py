@@ -1,14 +1,23 @@
-﻿import os
-
-with open("src/lib/mock-test/actions.ts", "r", encoding="utf-8") as f:
+﻿with open("src/app/admin/studio/actions.ts", "r", encoding="utf-8") as f:
     content = f.read()
 
-content = content.replace('q.prep_questions.id', '(q.prep_questions as any).id')
-content = content.replace('q.prep_questions.question_text', '(q.prep_questions as any).question_text')
-content = content.replace('q.prep_questions.options', '(q.prep_questions as any).options')
+content = content.replace(
+    'const token = cookies().get("admin_token")?.value;',
+    'const cookieStore = await cookies();\n  const token = cookieStore.get("admin_token")?.value;'
+)
+content = content.replace('function verifyAdmin()', 'async function verifyAdmin()')
+content = content.replace('verifyAdmin();', 'await verifyAdmin();')
 
-# in submitMockTest
-content = content.replace('const q = row.prep_questions;', 'const q = row.prep_questions as any;')
+with open("src/app/admin/studio/actions.ts", "w", encoding="utf-8") as f:
+    f.write(content)
 
-with open("src/lib/mock-test/actions.ts", "w", encoding="utf-8") as f:
+with open("src/app/admin/studio/questions/new/QuestionEditorClient.tsx", "r", encoding="utf-8") as f:
+    content = f.read()
+
+content = content.replace(
+    'const [hierarchy, setHierarchy] = useState({ exams: [], subjects: [], chapters: [], topics: [] });',
+    'const [hierarchy, setHierarchy] = useState<{ exams: any[]; subjects: any[]; chapters: any[]; topics: any[] }>({ exams: [], subjects: [], chapters: [], topics: [] });'
+)
+
+with open("src/app/admin/studio/questions/new/QuestionEditorClient.tsx", "w", encoding="utf-8") as f:
     f.write(content)

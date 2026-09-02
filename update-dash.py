@@ -1,4 +1,4 @@
-
+﻿code = """
 import { supabase } from "@/lib/supabase";
 import StudioDashboardClient from "./StudioDashboardClient";
 
@@ -57,3 +57,6 @@ export default async function StudioDashboard() {
 
   return <StudioDashboardClient stats={stats} />;
 }
+"""
+with open("src/app/admin/studio/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)
