@@ -208,10 +208,17 @@ export class IngestionPipeline {
       const rawItems = await adapter.discover();
       itemsDiscovered = rawItems.length;
       
-      // Structure change check
-      if (itemsDiscovered === 0 && lastRun && lastRun.items_discovered > 10) {
-         throw new Error("STRUCTURE_CHANGED: Unusual extraction drop detected. Previous run yielded records but current yielded 0.");
+      
+      // Structure change and drop check
+      if (lastRun && lastRun.items_discovered > 10) {
+         if (itemsDiscovered === 0) {
+             throw new Error("STRUCTURE_CHANGED: Unusual extraction drop detected. Previous run yielded records but current yielded 0.");
+         }
+         if (itemsDiscovered < (lastRun.items_discovered * 0.3)) {
+             throw new Error("EXTRACTION_DROP_WARNING: Extraction suddenly dropped by over 70%.");
+         }
       }
+
 
       for (const raw of rawItems) {
         try {
