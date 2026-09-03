@@ -1,121 +1,10 @@
+﻿import re
 
-import { supabase } from "@/lib/supabase";
-import crypto from "crypto";
-import { NormalizedPayload, QueueItem, IngestionSource } from "./types";
-import { SourceAdapter } from "./BaseAdapter";
+with open("src/lib/ingestion/pipeline.ts", "r", encoding="utf-8") as f:
+    content = f.read()
 
-export class IngestionPipeline {
-  
-  static generateHash(payload: NormalizedPayload): string {
-    const hashString = `${payload.sourceUrl}-${payload.title}-${payload.organization || ''}`;
-    return crypto.createHash('sha256').update(hashString).digest('hex');
-  }
-
-  
-  static calculateQualityScore(payload: NormalizedPayload): number {
-    let score = 0;
-    if (payload.title && payload.title.length > 5) score += 20;
-    if (payload.organization && payload.organization !== 'Unknown') score += 20;
-    if (payload.sourceUrl && this.isValidUrl(payload.sourceUrl)) score += 10;
-    if (payload.applyUrl && this.isValidUrl(payload.applyUrl)) score += 10;
-    if (payload.notificationUrl && this.isValidUrl(payload.notificationUrl)) score += 10;
-    if (payload.applicationEnd) score += 15;
-    if (payload.qualification && payload.qualification.length > 0) score += 10;
-    if (payload.description || payload.attachments?.length) score += 5;
-    return score;
-  }
-
-  
-  static isValidUrl(urlString: string | undefined): boolean {
-    if (!urlString) return false;
-    try {
-      const url = new URL(urlString);
-      return url.protocol === 'http:' || url.protocol === 'https:';
-    } catch {
-      return false;
-    }
-  }
-
-  static async detectDuplicates(payload: NormalizedPayload): Promise<{ score: number, duplicateOf?: string, risk: string, existingRecord?: any, inQueue?: boolean }> {
-    const hash = this.generateHash(payload);
-    const { data: exactQueue } = await supabase
-      .from('ingestion_queue')
-      .select('id, content_hash')
-      .eq('content_hash', hash)
-      .limit(1);
-
-    if (exactQueue && exactQueue.length > 0) {
-      return { score: 1.0, duplicateOf: exactQueue[0].id, risk: 'EXACT', inQueue: true };
-    }
-
-    // Dynamic table routing for canonical check
-    let targetTable = 'jobs';
-    let urlCol = 'apply_url';
-    
-    if (payload.contentType === 'TENDER') { targetTable = 'tenders'; urlCol = 'official_source_url'; }
-    else if (payload.contentType === 'ADMISSION') { targetTable = 'admissions'; urlCol = 'application_link'; }
-    else if (payload.contentType === 'RESULT') { targetTable = 'results'; urlCol = 'result_url'; }
-
-    const { data: exactCanonical } = await supabase
-      .from(targetTable)
-      .select('*')
-      .eq(urlCol, payload.sourceUrl)
-      .limit(1);
-
-    if (exactCanonical && exactCanonical.length > 0) {
-      return { score: 1.0, duplicateOf: exactCanonical[0].id, risk: 'EXACT', existingRecord: exactCanonical[0] };
-    }
-
-    // Fuzzy Check fallback if no exact URL (for Jobs)
-    if (payload.contentType === 'JOB' || payload.contentType === 'PRIVATE_JOB') {
-      try {
-        const { data: fuzzy } = await supabase.rpc('check_job_duplicates', {
-          p_title: payload.title,
-          p_organization: payload.organization || '',
-          p_apply_url: payload.sourceUrl || ''
-        });
-
-        if (fuzzy && fuzzy.length > 0) {
-          const topMatch = fuzzy[0];
-          const { data: existing } = await supabase.from('jobs').select('*').eq('id', topMatch.id).single();
-          if (topMatch.similarity_score > 0.8 || topMatch.match_type === 'EXACT_URL') {
-             return { score: topMatch.similarity_score, duplicateOf: topMatch.id, risk: 'HIGH', existingRecord: existing };
-          }
-          if (topMatch.similarity_score > 0.6) {
-             return { score: topMatch.similarity_score, duplicateOf: topMatch.id, risk: 'POSSIBLE', existingRecord: existing };
-          }
-        }
-      } catch (err) {
-        // RPC might not exist or fail, graceful degradation
-      }
-    }
-
-    return { score: 0, risk: 'NONE' };
-  }
-
-  static calculateChangeDiff(existing: any, incoming: NormalizedPayload): any[] {
-    const changes = [];
-    
-    // Abstract date mapping logic
-    let existingDate = existing.last_date || existing.closing_date || existing.application_deadline || existing.result_date;
-    const oldDate = existingDate ? new Date(existingDate).toISOString().split('T')[0] : null;
-    const newDate = incoming.applicationEnd ? new Date(incoming.applicationEnd).toISOString().split('T')[0] : null;
-    if (incoming.applicationEnd && oldDate !== newDate) {
-      changes.push({ field: 'deadline_date', old_value: existingDate || 'N/A', new_value: incoming.applicationEnd });
-    }
-
-    if (incoming.vacancy && existing.vacancies && existing.vacancies !== incoming.vacancy) {
-      changes.push({ field: 'vacancies', old_value: existing.vacancies, new_value: incoming.vacancy });
-    }
-    
-    if (incoming.estimatedValue && existing.estimated_value && existing.estimated_value !== incoming.estimatedValue) {
-      changes.push({ field: 'estimated_value', old_value: existing.estimated_value, new_value: incoming.estimatedValue });
-    }
-
-    return changes;
-  }
-
-  
+# Replace processSource
+replacement = """
   static async processSource(adapter: SourceAdapter): Promise<void> {
     const source = adapter.sourceConfig;
     
@@ -283,5 +172,13 @@ export class IngestionPipeline {
       }
     }
   }
+"""
 
-}
+content = re.sub(
+    r'static async processSource\(adapter: SourceAdapter\): Promise<void> \{[\s\S]*\}\s*\}',
+    replacement + "\n}",
+    content
+)
+
+with open("src/lib/ingestion/pipeline.ts", "w", encoding="utf-8") as f:
+    f.write(content)
