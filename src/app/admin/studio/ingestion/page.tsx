@@ -1,28 +1,49 @@
 
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { Activity, RefreshCw, Database, AlertCircle, CheckCircle, XCircle, Clock, Search, ShieldAlert, FileSearch } from "lucide-react";
+import { Activity, RefreshCw, Database, AlertCircle, CheckCircle, XCircle, Clock, Search, ShieldAlert, FileSearch, Filter } from "lucide-react";
 
 export const revalidate = 0;
 
-export default async function FeedMonitoringDashboard() {
+export default async function FeedMonitoringDashboard({ searchParams }: { searchParams: { filter?: string, date?: string } }) {
+  const filter = searchParams.filter || 'ALL';
+  const targetDate = searchParams.date || new Date().toISOString().split('T')[0];
+
   const { data: sources } = await supabase.from('ingestion_sources').select('*').order('tier', { ascending: true });
-  
-  const { data: dailyStats } = await supabase.from('ingestion_daily_summaries').select('*').order('run_date', { ascending: false }).limit(7);
+  const { data: dailyStats } = await supabase.from('ingestion_daily_summaries').select('*').order('run_date', { ascending: false }).limit(30);
 
   const { count: queueCount } = await supabase.from('ingestion_queue').select('*', { count: 'exact', head: true })
     .in('status', ['NEW', 'VERIFICATION_PENDING', 'DUPLICATE_RISK', 'LOW_QUALITY', 'CHANGE_DETECTED', 'POSSIBLE_MATCH']);
 
-  const todayStat = dailyStats?.[0] || null;
+  const todayStat = dailyStats?.find(d => d.run_date === targetDate) || dailyStats?.[0] || null;
+
+  // Enhance sources with STALE status if last_successful_run > 48h ago
+  const STALE_THRESHOLD = 48 * 60 * 60 * 1000;
+  const now = Date.now();
+  
+  const enhancedSources = (sources || []).map(s => {
+      let isStale = false;
+      if (s.is_active && s.current_health === 'HEALTHY' && s.last_successful_run) {
+          const diff = now - new Date(s.last_successful_run).getTime();
+          if (diff > STALE_THRESHOLD) isStale = true;
+      }
+      return { ...s, computed_health: isStale ? 'STALE' : s.current_health };
+  });
+
+  const alerts = enhancedSources.filter(s => s.computed_health === 'FAILING' || s.computed_health === 'WARNING' || s.computed_health === 'STALE' || s.computed_health === 'OFFLINE');
+
+  // Filter sources for table
+  const filteredSources = enhancedSources.filter(s => {
+      if (filter === 'ALL') return true;
+      return s.computed_health === filter;
+  });
 
   // Calculate Coverage
   const coverage = ['JOB', 'TENDER', 'ADMISSION', 'RESULT', 'ADMIT_CARD', 'SCHOLARSHIP'].map(feedType => {
-      const feedSources = sources?.filter(s => s.feed_type === feedType || s.feed_type === 'MULTIPLE') || [];
+      const feedSources = enhancedSources.filter(s => s.feed_type === feedType || s.feed_type === 'MULTIPLE');
       const activeSources = feedSources.filter(s => s.is_active);
       return { feedType, total: feedSources.length, active: activeSources.length };
   });
-
-  const alerts = sources?.filter(s => s.current_health === 'FAILING' || s.current_health === 'WARNING' || s.current_health === 'OFFLINE') || [];
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-24 px-4 sm:px-6">
@@ -44,7 +65,7 @@ export default async function FeedMonitoringDashboard() {
            <div className="space-y-2">
              {alerts.map(a => (
                <div key={a.id} className="text-sm text-red-700 flex items-center justify-between">
-                 <div><strong className="mr-2">{a.source_name}:</strong> {a.current_health} - {a.last_error || 'Unknown failure'}</div>
+                 <div><strong className="mr-2">{a.source_name}:</strong> {a.computed_health} - {a.computed_health === 'STALE' ? 'No recent successful extraction' : (a.last_error || 'Unknown failure')}</div>
                  <Link href={`/admin/studio/ingestion/sources/${a.id}`} className="text-xs font-bold underline">Investigate</Link>
                </div>
              ))}
@@ -52,9 +73,21 @@ export default async function FeedMonitoringDashboard() {
         </div>
       )}
 
-      {/* TODAY'S OVERVIEW */}
+      {/* DAILY OVERVIEW */}
       <div>
-        <h2 className="text-sm font-black text-slate-400 uppercase tracking-wider mb-3">Today's Overview {todayStat ? `(${todayStat.run_date})` : ''}</h2>
+        <div className="flex items-center justify-between mb-3">
+           <h2 className="text-sm font-black text-slate-400 uppercase tracking-wider">Daily Run Overview</h2>
+           <form className="flex items-center gap-2">
+              <input type="hidden" name="filter" value={filter} />
+              <select name="date" className="text-xs border-slate-200 rounded p-1 text-slate-600" defaultValue={targetDate} onChange={(e) => e.target.form?.submit()}>
+                 {dailyStats?.map(d => (
+                    <option key={d.run_date} value={d.run_date}>{d.run_date}</option>
+                 ))}
+                 {!dailyStats?.length && <option value={targetDate}>{targetDate}</option>}
+              </select>
+              <button type="submit" className="text-[10px] bg-slate-100 px-2 py-1 rounded font-bold text-slate-600">Load</button>
+           </form>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
           <div className="bg-white p-4 border border-slate-200 rounded-xl shadow-sm">
              <div className="text-slate-500 text-[10px] font-bold uppercase mb-1">Sources</div>
@@ -99,7 +132,21 @@ export default async function FeedMonitoringDashboard() {
 
       {/* SOURCE HEALTH MATRIX */}
       <div>
-        <h2 className="text-sm font-black text-slate-400 uppercase tracking-wider mb-3">Source Health Matrix</h2>
+        <div className="flex items-center justify-between mb-3">
+           <h2 className="text-sm font-black text-slate-400 uppercase tracking-wider">Source Health Matrix</h2>
+           <form className="flex items-center gap-2">
+              <input type="hidden" name="date" value={targetDate} />
+              <select name="filter" className="text-xs border-slate-200 rounded p-1 text-slate-600" defaultValue={filter} onChange={(e) => e.target.form?.submit()}>
+                 <option value="ALL">All Status</option>
+                 <option value="HEALTHY">Healthy</option>
+                 <option value="WARNING">Warning</option>
+                 <option value="FAILING">Failing</option>
+                 <option value="STALE">Stale</option>
+                 <option value="OFFLINE">Offline</option>
+              </select>
+              <button type="submit" className="text-[10px] bg-slate-100 px-2 py-1 rounded font-bold text-slate-600">Filter</button>
+           </form>
+        </div>
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 border-b border-slate-100 text-[10px] uppercase font-black text-slate-500 tracking-wider">
@@ -113,12 +160,13 @@ export default async function FeedMonitoringDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {sources?.map(source => {
+              {filteredSources?.map(source => {
                 let healthColor = 'bg-slate-100 text-slate-600';
-                if (source.current_health === 'HEALTHY') healthColor = 'bg-emerald-100 text-emerald-700';
-                if (source.current_health === 'WARNING') healthColor = 'bg-amber-100 text-amber-700';
-                if (source.current_health === 'FAILING') healthColor = 'bg-red-100 text-red-700';
-                if (source.current_health === 'OFFLINE') healthColor = 'bg-slate-800 text-white';
+                if (source.computed_health === 'HEALTHY') healthColor = 'bg-emerald-100 text-emerald-700';
+                if (source.computed_health === 'WARNING') healthColor = 'bg-amber-100 text-amber-700';
+                if (source.computed_health === 'FAILING') healthColor = 'bg-red-100 text-red-700';
+                if (source.computed_health === 'STALE') healthColor = 'bg-purple-100 text-purple-700';
+                if (source.computed_health === 'OFFLINE') healthColor = 'bg-slate-800 text-white';
 
                 return (
                   <tr key={source.id} className="hover:bg-slate-50 transition">
@@ -141,7 +189,7 @@ export default async function FeedMonitoringDashboard() {
                     </td>
                     <td className="px-5 py-3">
                       <span className={`px-2 py-1 rounded text-[9px] font-black tracking-widest ${healthColor}`}>
-                        {source.current_health}
+                        {source.computed_health}
                       </span>
                     </td>
                     <td className="px-5 py-3">
@@ -163,6 +211,9 @@ export default async function FeedMonitoringDashboard() {
               })}
             </tbody>
           </table>
+          {filteredSources.length === 0 && (
+             <div className="p-8 text-center text-slate-500 text-sm">No sources match this filter.</div>
+          )}
         </div>
       </div>
     </div>
