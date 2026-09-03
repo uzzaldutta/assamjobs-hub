@@ -32,13 +32,13 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
 
   const now = new Date().toISOString();
   if (status === "ACTIVE") {
-    queryBuilder = queryBuilder.gte('application_end', now);
+    queryBuilder = queryBuilder.gte('application_deadline', now);
   } else if (status === "CLOSED") {
-    queryBuilder = queryBuilder.lt('application_end', now);
+    queryBuilder = queryBuilder.lt('application_deadline', now);
   }
 
   if (sort === "deadline") {
-    queryBuilder = queryBuilder.order('application_end', { ascending: true, nullsFirst: false });
+    queryBuilder = queryBuilder.order('application_deadline', { ascending: true, nullsFirst: false });
   } else {
     queryBuilder = queryBuilder.order('created_at', { ascending: false });
   }
@@ -137,4 +137,5 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
     </div>
   );
 }
+
 

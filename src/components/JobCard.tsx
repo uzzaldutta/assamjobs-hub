@@ -18,8 +18,8 @@ export default function JobCard({ job }: JobCardProps) {
 
   // Determine Deadline State
   let deadlineState = "ACTIVE";
-  if (job.application_end) {
-    const end = new Date(job.application_end);
+  if (job.last_date) {
+    const end = new Date(job.last_date);
     const now = new Date();
     const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
     if (daysLeft < 0) deadlineState = "CLOSED";
@@ -94,7 +94,7 @@ export default function JobCard({ job }: JobCardProps) {
         {dateIcon} 
         <span>
           {deadlineState === "CLOSED" ? "Closed on " : "Last Date: "}
-          {job.application_end ? new Date(job.application_end).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
+          {job.last_date ? new Date(job.last_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
         </span>
       </div>
 
@@ -113,3 +113,4 @@ export default function JobCard({ job }: JobCardProps) {
     </div>
   );
 }
+

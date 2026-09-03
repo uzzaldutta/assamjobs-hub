@@ -21,7 +21,7 @@ export default async function Home() {
     .select('*')
     .eq('status', 'PUBLISHED')
     .eq('job_type', 'GOVERNMENT')
-    .order('created_at', { ascending: false })
+    .order('scraped_at', { ascending: false })
     .limit(6);
 
   // Fetch Latest Private Jobs
@@ -30,7 +30,7 @@ export default async function Home() {
     .select('*')
     .eq('status', 'PUBLISHED')
     .eq('job_type', 'PRIVATE')
-    .order('created_at', { ascending: false })
+    .order('scraped_at', { ascending: false })
     .limit(3);
 
   // Fetch Closing Soon Jobs (Any type)
@@ -38,9 +38,9 @@ export default async function Home() {
     .from('jobs')
     .select('*')
     .eq('status', 'PUBLISHED')
-    .gte('application_end', new Date().toISOString())
-    .lte('application_end', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString())
-    .order('application_end', { ascending: true })
+    .gte('last_date', new Date().toISOString())
+    .lte('last_date', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString())
+    .order('last_date', { ascending: true })
     .limit(6);
 
   // Fetch Latest Updates (Results, Admit Cards, Admissions)
@@ -243,3 +243,4 @@ export default async function Home() {
     </div>
   );
 }
+

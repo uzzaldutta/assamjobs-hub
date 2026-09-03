@@ -51,19 +51,19 @@ export default async function JobsPage(props: { searchParams?: Promise<{ [key: s
   const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
   if (status === "ACTIVE") {
-    queryBuilder = queryBuilder.gte('application_end', now);
+    queryBuilder = queryBuilder.gte('last_date', now);
   } else if (status === "CLOSING_SOON") {
-    queryBuilder = queryBuilder.gte('application_end', now).lte('application_end', nextWeek);
+    queryBuilder = queryBuilder.gte('last_date', now).lte('last_date', nextWeek);
   } else if (status === "CLOSED") {
-    queryBuilder = queryBuilder.lt('application_end', now);
+    queryBuilder = queryBuilder.lt('last_date', now);
   }
 
   // SORTING LOGIC
   if (sort === "deadline") {
     // Only sort by deadline if it's active/closing soon so we see closest first
-    queryBuilder = queryBuilder.order('application_end', { ascending: true, nullsFirst: false });
+    queryBuilder = queryBuilder.order('last_date', { ascending: true, nullsFirst: false });
   } else {
-    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+    queryBuilder = queryBuilder.order('scraped_at', { ascending: false });
   }
 
   queryBuilder = queryBuilder.range(from, to);
@@ -142,3 +142,4 @@ export default async function JobsPage(props: { searchParams?: Promise<{ [key: s
     </div>
   );
 }
+
