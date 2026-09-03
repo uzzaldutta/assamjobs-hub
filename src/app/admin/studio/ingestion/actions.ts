@@ -1,51 +1,41 @@
 
 import { supabase } from "@/lib/supabase";
 
-export async function approveQueueItemAction(queueId: string) {
-  const { data: item, error: fetchErr } = await supabase
-    .from('ingestion_queue')
-    .select('*, ingestion_sources(source_name, tier, is_official)')
-    .eq('id', queueId)
-    .single();
+export async function approveQueueItemAction(queueId: string, payload: any, action: 'NEW' | 'UPDATE' = 'NEW') {
+  // 1. Fetch queue item
+  const { data: item } = await supabase.from('ingestion_queue').select('*').eq('id', queueId).single();
+  if (!item) throw new Error("Queue item not found");
 
-  if (fetchErr || !item) throw new Error("Item not found");
-  const payload = item.normalized_payload;
-  const sourceMeta = item.ingestion_sources;
+  const { data: sourceMeta } = await supabase.from('ingestion_sources').select('*').eq('id', item.source_id).single();
 
-  if (item.status === 'CHANGE_DETECTED' || item.duplicate_of) {
-    // MERGE OR UPDATE EXISTING
+  if (action === 'UPDATE' && item.duplicate_of) {
+    // UPDATE EXISTING RECORD (Canonical Merge)
     const targetId = item.duplicate_of;
-    if (targetId) {
-       // Update job provenance
-       await supabase.from('job_provenance').insert({
-         canonical_id: targetId,
-         content_type: item.content_type,
-         source_name: sourceMeta?.source_name || payload.source,
-         source_url: payload.sourceUrl,
-         source_tier: sourceMeta?.tier || 2,
-         is_official: sourceMeta?.is_official || false,
-         content_hash: item.content_hash
-       });
+    let updates: any = {};
+    
+    if (sourceMeta?.is_official) {
+      updates.verification_status = 'VERIFIED';
+      updates.official_source_url = payload.sourceUrl;
+    }
 
-       // Apply diffs to actual job if it was a CHANGE_DETECTED
-       const updates: any = {};
-       
-       // Upgrade verification if merging an official source
-       if (sourceMeta?.is_official) {
-         updates.verification_status = 'VERIFIED';
-         updates.official_source_url = payload.sourceUrl;
-       }
-
-              if (item.change_diff && item.change_diff.length > 0) {
-         item.change_diff.forEach((diff: any) => {
-           // Field-Level Source Authority: Do NOT overwrite good existing data with nulls or empty values
-           const isInvalidNew = diff.new_value === null || diff.new_value === undefined || diff.new_value === 'Unknown' || diff.new_value === '';
-           if (!isInvalidNew) {
-              updates[diff.field] = diff.new_value;
-           }
-         });
-       }
-
+    if (item.change_diff && item.change_diff.length > 0) {
+      item.change_diff.forEach((diff: any) => {
+         const isInvalidNew = diff.new_value === null || diff.new_value === undefined || diff.new_value === 'Unknown' || diff.new_value === '';
+         if (!isInvalidNew) {
+            updates[diff.field] = diff.new_value;
+         }
+      });
+    }
+    
+    if (Object.keys(updates).length > 0) {
+      let targetTable = 'jobs';
+      if (item.content_type === 'TENDER') targetTable = 'tenders';
+      if (item.content_type === 'ADMISSION') targetTable = 'admissions';
+      if (item.content_type === 'RESULT') targetTable = 'results';
+      if (item.content_type === 'ADMIT_CARD') targetTable = 'admit_cards';
+      if (item.content_type === 'SCHOLARSHIP') targetTable = 'scholarships';
+      await supabase.from(targetTable).update(updates).eq('id', targetId);
+    }
   } else {
     // INSERT NEW CANONICAL RECORD
     let newRecordId: string;
@@ -102,30 +92,29 @@ export async function approveQueueItemAction(queueId: string) {
         title: payload.title,
         organization: payload.organization || 'Unknown',
         exam_name: payload.examName,
-        result_date: payload.applicationEnd,
-        result_url: payload.applyUrl || payload.sourceUrl,
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null,
-        status: 'PUBLISHED',
-        verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING'
-      }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newRes.id;
-    }
-    else if (item.content_type === 'ADMIT_CARD') {
-      const { data: newAc, error: insertErr } = await supabase.from('admit_cards').insert({
-        title: payload.title,
-        organization: payload.organization || 'Unknown',
-        exam_name: payload.examName || null,
-        exam_date: payload.examDate || null,
-        release_date: payload.releaseDate || null,
-        download_url: payload.applyUrl || payload.sourceUrl,
-        notification_url: payload.notificationUrl || null,
+        result_date: payload.resultDate || null,
+        result_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
         official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newAc.id;
+      newRecordId = newRes.id;
+    }
+    else if (item.content_type === 'ADMIT_CARD') {
+      const { data: newAdc, error: insertErr } = await supabase.from('admit_cards').insert({
+        title: payload.title,
+        organization: payload.organization || 'Unknown',
+        exam_name: payload.examName,
+        exam_date: payload.examDate || payload.applicationEnd || null,
+        release_date: payload.releaseDate || null,
+        download_url: payload.applyUrl || payload.sourceUrl,
+        status: 'PUBLISHED',
+        verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+      }).select('id').single();
+      if (insertErr) throw new Error(insertErr.message);
+      newRecordId = newAdc.id;
     }
     else if (item.content_type === 'SCHOLARSHIP') {
       const { data: newSch, error: insertErr } = await supabase.from('scholarships').insert({
@@ -170,13 +159,8 @@ export async function rejectQueueItemAction(queueId: string) {
   return { success: true };
 }
 
-
 export async function retrySourceAction(sourceId: string, adapterName: string) {
-  // We cannot directly invoke the Pipeline from the browser/actions if it imports server-only modules 
-  // without careful setup, but for the sake of the Admin UI action we can dispatch an API call or logic here.
-  // We'll simulate the call. In a real environment, this triggers a queue or Edge function.
   try {
-     // A secure approach is calling an internal API route that executes the pipeline securely
      const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/run-ingestion`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -98,7 +98,7 @@ export class IngestionPipeline {
 
     // Dynamic table routing for canonical check
     let targetTable = 'jobs';
-    let applyCol = 'apply_url';
+    let applyCol: string | null = 'apply_url';
     let officialCol = 'official_source_url';
     
     if (payload.contentType === 'TENDER') { targetTable = 'tenders'; applyCol = null; }
