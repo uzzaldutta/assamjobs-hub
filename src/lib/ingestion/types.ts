@@ -34,6 +34,8 @@ export interface NormalizedPayload {
   description?: string;
   scheme?: string;
   amount?: string;
+  resultDate?: string;
+  eligibility?: string;
   
   externalId?: string;
   attachments?: any[];

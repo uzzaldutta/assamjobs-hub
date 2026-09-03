@@ -12,17 +12,63 @@ export class IngestionPipeline {
   }
 
   
-  static calculateQualityScore(payload: NormalizedPayload): number {
+    static calculateQualityScore(payload: NormalizedPayload): number {
     let score = 0;
-    if (payload.title && payload.title.length > 5) score += 20;
-    if (payload.organization && payload.organization !== 'Unknown') score += 20;
+    const type = payload.contentType;
+    
+    // Universal basics (20 points max)
+    if (payload.title && payload.title.length > 5) score += 10;
     if (payload.sourceUrl && this.isValidUrl(payload.sourceUrl)) score += 10;
-    if (payload.applyUrl && this.isValidUrl(payload.applyUrl)) score += 10;
-    if (payload.notificationUrl && this.isValidUrl(payload.notificationUrl)) score += 10;
-    if (payload.applicationEnd) score += 15;
-    if (payload.qualification && payload.qualification.length > 0) score += 10;
-    if (payload.description || payload.attachments?.length) score += 5;
-    return score;
+
+    // Feed specific scoring (80 points max)
+    switch (type) {
+      case 'JOB':
+        if (payload.organization && payload.organization !== 'Unknown') score += 20;
+        if (payload.applicationEnd) score += 20;
+        if (payload.applyUrl && this.isValidUrl(payload.applyUrl)) score += 20;
+        if (payload.qualification && payload.qualification.length > 0) score += 10;
+        if (payload.vacancy) score += 10;
+        break;
+      case 'TENDER':
+        if (payload.tenderNumber) score += 20;
+        if (payload.organization || payload.department) score += 20;
+        if (payload.applicationEnd) score += 20; // Closing date
+        if (payload.notificationUrl && this.isValidUrl(payload.notificationUrl)) score += 20;
+        break;
+      case 'ADMISSION':
+        if (payload.organization) score += 20; // Institution
+        if (payload.course) score += 20;
+        if (payload.applicationEnd) score += 20;
+        if (payload.applyUrl && this.isValidUrl(payload.applyUrl)) score += 20;
+        break;
+      case 'RESULT':
+        if (payload.examName || payload.title) score += 20;
+        if (payload.organization) score += 20;
+        if (payload.resultDate || payload.applicationEnd) score += 20;
+        if (payload.applyUrl || payload.notificationUrl) score += 20;
+        break;
+      case 'ADMIT_CARD':
+        if (payload.examName || payload.title) score += 20;
+        if (payload.examDate || payload.applicationEnd) score += 20;
+        if (payload.releaseDate) score += 20;
+        if (payload.applyUrl || payload.notificationUrl) score += 20;
+        break;
+      case 'SCHOLARSHIP':
+        if (payload.scheme || payload.title) score += 20;
+        if (payload.eligibility) score += 20;
+        if (payload.applicationEnd) score += 20;
+        if (payload.applyUrl && this.isValidUrl(payload.applyUrl)) score += 20;
+        break;
+      default:
+        // Generic fallback
+        if (payload.organization) score += 20;
+        if (payload.applicationEnd) score += 20;
+        if (payload.applyUrl) score += 20;
+        if (payload.notificationUrl) score += 20;
+    }
+    
+    // Cap at 100
+    return Math.min(score, 100);
   }
 
   
@@ -164,6 +210,7 @@ export class IngestionPipeline {
           const normalized = await adapter.normalize(extracted);
           const validation = adapter.validate(normalized);
           
+          
           let finalStatus = 'NEW';
           if (source.tier > 1 && !source.is_official) finalStatus = 'VERIFICATION_PENDING';
           
@@ -172,6 +219,27 @@ export class IngestionPipeline {
             itemsMissingLink++;
             finalStatus = 'LOW_QUALITY';
           } else if (!this.isValidUrl(normalized.sourceUrl)) {
+            validation.errors.push('INVALID_LINK');
+            itemsInvalidLink++;
+            finalStatus = 'LOW_QUALITY';
+          }
+
+          // Feed-specific link requirements
+          if (normalized.contentType === 'JOB' && !normalized.applyUrl) {
+            if (normalized.notificationUrl) {
+              validation.warnings.push('MISSING_APPLY_LINK_BUT_HAS_PDF');
+            } else {
+              validation.warnings.push('MISSING_APPLY_LINK');
+              if (finalStatus !== 'LOW_QUALITY') {
+                  finalStatus = 'LOW_QUALITY';
+                  itemsMissingLink++;
+              }
+            }
+          }
+          if (normalized.contentType === 'TENDER' && !normalized.notificationUrl) {
+              validation.warnings.push('MISSING_DOCUMENT_LINK');
+          }
+ else if (!this.isValidUrl(normalized.sourceUrl)) {
             validation.errors.push('INVALID_LINK');
             itemsInvalidLink++;
             finalStatus = 'LOW_QUALITY';
