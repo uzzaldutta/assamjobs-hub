@@ -1,4 +1,4 @@
-
+﻿code = """
 import PageHeader from "@/components/PageHeader";
 import AdSidebar from "@/components/AdSidebar";
 import AdmitCard from "@/components/feeds/AdmitCard";
@@ -28,7 +28,7 @@ export default async function AdmitCardsPage(props: { searchParams?: Promise<{ [
   if (org) queryBuilder = queryBuilder.ilike('organization', `%${org}%`);
 
   if (sort === "exam_date") {
-    queryBuilder = queryBuilder.order('exam_date', { ascending: false, nullsFirst: false });
+    queryBuilder = queryBuilder.order('exam_date', { ascending: false, nullsLast: true });
   } else {
     queryBuilder = queryBuilder.order('created_at', { ascending: false });
   }
@@ -112,4 +112,6 @@ export default async function AdmitCardsPage(props: { searchParams?: Promise<{ [
     </div>
   );
 }
-
+"""
+with open("src/app/admit-cards/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

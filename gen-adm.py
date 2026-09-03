@@ -1,4 +1,4 @@
-
+﻿code = """
 import PageHeader from "@/components/PageHeader";
 import AdSidebar from "@/components/AdSidebar";
 import AdmissionCard from "@/components/feeds/AdmissionCard";
@@ -49,7 +49,7 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
 
   return (
     <div className="flex flex-col min-h-screen">
-      <PageHeader title="Admissions" subtitle="Latest college and university admission notifications in Assam." theme="green" />
+      <PageHeader title="Admissions" subtitle="Latest college and university admission notifications in Assam." theme="emerald" />
       
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
         
@@ -137,4 +137,6 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
     </div>
   );
 }
-
+"""
+with open("src/app/admissions/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

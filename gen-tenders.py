@@ -1,4 +1,4 @@
-
+﻿code = """
 import PageHeader from "@/components/PageHeader";
 import AdSidebar from "@/components/AdSidebar";
 import TenderCard from "@/components/feeds/TenderCard";
@@ -136,3 +136,6 @@ export default async function TendersPage(props: { searchParams?: Promise<{ [key
     </div>
   );
 }
+"""
+with open("src/app/tenders/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

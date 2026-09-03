@@ -2,17 +2,23 @@
 import PageHeader from "@/components/PageHeader";
 import JobCard from "@/components/JobCard";
 import AdSidebar from "@/components/AdSidebar";
+import JobsFilterPanel from "./JobsFilterPanel";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Search, Briefcase, Building2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, Briefcase, Building2, SlidersHorizontal } from "lucide-react";
 
 export const revalidate = 60;
 
-export default async function JobsPage(props: { searchParams?: Promise<{ page?: string, type?: string, q?: string }> }) {
+export default async function JobsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1", 10);
   const typeFilter = searchParams?.type || "ALL";
   const query = searchParams?.q || "";
+  const district = searchParams?.district || "";
+  const qualification = searchParams?.qualification || "";
+  const organization = searchParams?.organization || "";
+  const status = searchParams?.status || "ALL"; // ACTIVE, CLOSING_SOON, CLOSED
+  const sort = searchParams?.sort || "newest"; // newest, deadline
   
   const limit = 20;
   const from = (page - 1) * limit;
@@ -21,20 +27,48 @@ export default async function JobsPage(props: { searchParams?: Promise<{ page?: 
   let queryBuilder = supabase
     .from('jobs')
     .select('*', { count: 'exact' })
-    .eq('status', 'PUBLISHED')
-    .order('created_at', { ascending: false })
-    .range(from, to);
+    .eq('status', 'PUBLISHED');
 
+  // FILTERS
   if (typeFilter !== "ALL") {
     queryBuilder = queryBuilder.eq('job_type', typeFilter);
   }
-
   if (query) {
-    // Basic ilike search for now, could be switched to RPC
     queryBuilder = queryBuilder.or(`title.ilike.%${query}%,organization.ilike.%${query}%`);
   }
+  if (district) {
+    queryBuilder = queryBuilder.ilike('district', `%${district}%`);
+  }
+  if (qualification) {
+    queryBuilder = queryBuilder.ilike('qualification', `%${qualification}%`);
+  }
+  if (organization) {
+    queryBuilder = queryBuilder.ilike('organization', `%${organization}%`);
+  }
 
-  const { data: jobs, count } = await queryBuilder;
+  // STATUS LOGIC (ACTIVE / CLOSING SOON / CLOSED)
+  const now = new Date().toISOString();
+  const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  if (status === "ACTIVE") {
+    queryBuilder = queryBuilder.gte('application_end', now);
+  } else if (status === "CLOSING_SOON") {
+    queryBuilder = queryBuilder.gte('application_end', now).lte('application_end', nextWeek);
+  } else if (status === "CLOSED") {
+    queryBuilder = queryBuilder.lt('application_end', now);
+  }
+
+  // SORTING LOGIC
+  if (sort === "deadline") {
+    // Only sort by deadline if it's active/closing soon so we see closest first
+    queryBuilder = queryBuilder.order('application_end', { ascending: true, nullsFirst: false });
+  } else {
+    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+  }
+
+  queryBuilder = queryBuilder.range(from, to);
+
+  const { data: jobs, count, error } = await queryBuilder;
   const totalCount = count || 0;
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -44,38 +78,27 @@ export default async function JobsPage(props: { searchParams?: Promise<{ page?: 
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
         
+        {/* Advanced Filters (Sidebar / Mobile Drawer) */}
+        <div className="w-full lg:w-72 shrink-0">
+           <JobsFilterPanel 
+              currentFilters={{
+                 q: query,
+                 type: typeFilter,
+                 district,
+                 qualification,
+                 organization,
+                 status,
+                 sort
+              }}
+              totalCount={totalCount}
+           />
+           <div className="hidden lg:block mt-6">
+             <AdSidebar />
+           </div>
+        </div>
+
         {/* Main Content Area */}
         <div className="flex-1">
-           {/* Controls: Search and Filters */}
-           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
-              
-              {/* Type Tabs */}
-              <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-full sm:w-auto">
-                 <Link href={`/jobs?type=ALL&q=${query}`} className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${typeFilter === 'ALL' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>
-                    All Jobs
-                 </Link>
-                 <Link href={`/jobs?type=GOVERNMENT&q=${query}`} className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${typeFilter === 'GOVERNMENT' ? 'bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>
-                    <Briefcase size={16}/> Govt
-                 </Link>
-                 <Link href={`/jobs?type=PRIVATE&q=${query}`} className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${typeFilter === 'PRIVATE' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>
-                    <Building2 size={16}/> Private
-                 </Link>
-              </div>
-
-              {/* Form Search (Server Side) */}
-              <form action="/jobs" className="relative w-full sm:w-72">
-                 <input type="hidden" name="type" value={typeFilter} />
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                 <input 
-                    type="text" 
-                    name="q" 
-                    defaultValue={query}
-                    placeholder="Search jobs, organizations..." 
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all dark:text-white"
-                 />
-              </form>
-           </div>
-
            {/* Results List */}
            <div className="space-y-4">
               {jobs?.map(job => (
@@ -86,7 +109,10 @@ export default async function JobsPage(props: { searchParams?: Promise<{ page?: 
                 <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                   <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No jobs found</h3>
-                  <p className="text-slate-500 dark:text-slate-400">Try adjusting your filters or search terms.</p>
+                  <p className="text-slate-500 dark:text-slate-400 mb-6">Try adjusting your filters or search terms.</p>
+                  <Link href="/jobs" className="px-6 py-2.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 transition-colors">
+                    Clear All Filters
+                  </Link>
                 </div>
               )}
            </div>
@@ -95,7 +121,7 @@ export default async function JobsPage(props: { searchParams?: Promise<{ page?: 
            {totalPages > 1 && (
              <div className="mt-8 flex justify-center items-center gap-2">
                 <Link 
-                   href={`/jobs?page=${Math.max(1, page - 1)}&type=${typeFilter}&q=${query}`}
+                   href={`/jobs?page=${Math.max(1, page - 1)}&type=${typeFilter}&q=${query}&district=${district}&qualification=${qualification}&organization=${organization}&status=${status}&sort=${sort}`}
                    className={`p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${page <= 1 ? 'opacity-50 pointer-events-none' : ''}`}
                 >
                    <ChevronLeft size={20} />
@@ -104,18 +130,13 @@ export default async function JobsPage(props: { searchParams?: Promise<{ page?: 
                    Page {page} of {totalPages}
                 </div>
                 <Link 
-                   href={`/jobs?page=${Math.min(totalPages, page + 1)}&type=${typeFilter}&q=${query}`}
+                   href={`/jobs?page=${Math.min(totalPages, page + 1)}&type=${typeFilter}&q=${query}&district=${district}&qualification=${qualification}&organization=${organization}&status=${status}&sort=${sort}`}
                    className={`p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${page >= totalPages ? 'opacity-50 pointer-events-none' : ''}`}
                 >
                    <ChevronRight size={20} />
                 </Link>
              </div>
            )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="w-full lg:w-80 shrink-0 space-y-6">
-           <AdSidebar />
         </div>
       </main>
     </div>

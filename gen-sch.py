@@ -1,4 +1,4 @@
-
+﻿code = """
 import PageHeader from "@/components/PageHeader";
 import AdSidebar from "@/components/AdSidebar";
 import ScholarshipCard from "@/components/feeds/ScholarshipCard";
@@ -47,7 +47,7 @@ export default async function ScholarshipsPage(props: { searchParams?: Promise<{
 
   return (
     <div className="flex flex-col min-h-screen">
-      <PageHeader title="Scholarships & Schemes" subtitle="Explore financial aid, scholarships, and student schemes in Assam." theme="orange" />
+      <PageHeader title="Scholarships & Schemes" subtitle="Explore financial aid, scholarships, and student schemes in Assam." theme="amber" />
       
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
         
@@ -129,4 +129,6 @@ export default async function ScholarshipsPage(props: { searchParams?: Promise<{
     </div>
   );
 }
-
+"""
+with open("src/app/scholarships/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)
