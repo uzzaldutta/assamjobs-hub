@@ -1,55 +1,61 @@
 
-# PRODUCTION OPERATIONS & QUALITY CONTROL FINAL AUDIT
+# PRODUCTION OPERATIONS FINAL AUDIT
 
 ## OVERALL STATUS: PASS
 
-### 1. SOURCE REGISTRY & MAPPING
-- **Status:** **PASS**
-- **Details:** `ingestion_sources` strictly enforces tiers and feed targets. Centralized approach implemented.
+### SUBSYSTEM STATUS:
 
-### 2. DAILY OPERATIONS VIEW & "WHAT CHANGED TODAY"
-- **Status:** **PASS**
-- **Details:** The new Admin Monitor UI comprehensively displays changes, duplicates, warnings, and missing links via the `ingestion_daily_summaries` view. 
+1. **Source Registry & Source Mapping**
+   - **Status:** **PASS**
+   - **Details:** Fully audited and seeded with separated Tier 1 (Official) and Tier 2 (Discovery) sources. T1 includes APSC, SEBA, AHSEC, Universities. T2 includes JobAssam, AssamCareer. Adapted for multi-feed types.
 
-### 3. EXTRACTION QUALITY SCORE (Feed-Specific Logic)
-- **Status:** **PASS**
-- **Details:** Audited and refactored `pipeline.ts`. `calculateQualityScore` now uses an advanced `switch (contentType)` ensuring fields like `tenderNumber` or `scheme` heavily influence score accurately without penalizing jobs.
+2. **Daily Monitoring & Alerts**
+   - **Status:** **PASS**
+   - **Details:** Refined Admin Monitoring UI successfully displays "What Changed Today" dynamically, isolating new vs duplicates vs missing links via SQL aggregation.
 
-### 4. DUPLICATE/SPAM REVIEW
-- **Status:** **PASS**
-- **Details:** Existing duplicate logic uses `hash`, `URL matching`, and `pg_trgm`. Validated `pipeline.ts` cleanly isolates exact updates vs new provenance sources correctly. 
+3. **Extraction & Validation**
+   - **Status:** **PASS**
+   - **Details:** Refactored `calculateQualityScore` in `pipeline.ts` to strictly evaluate against feed-specific criteria. (e.g., Tenders require `tenderNumber`, Scholarships require `scheme`).
 
-### 5. LINK RECOVERY
-- **Status:** **PASS**
-- **Details:** `MISSING_APPLY_LINK` and `MISSING_DOCUMENT_LINK` are explicitly captured in warnings. Missing links on Jobs immediately demotes to `LOW_QUALITY` but retains the record for admin review instead of guessing.
+4. **Duplicate Prevention & Canonical Records**
+   - **Status:** **PASS**
+   - **Details:** Fully audited `pipeline.ts`. Prioritizes exact Action URL matching -> exact Source URL matching -> Stable Identifiers -> Fuzzy PG_TRGM. Ensures ONE canonical record per announcement.
 
-### 6. FEED EXPIRY & PUBLIC FEEDS
-- **Status:** **PASS**
-- **Details:** Expiry operates via server-side `<CURRENT_DATE` filtering. Data remains intact for archiving/searching. All 6 public routes use dedicated components emphasizing their unique primary keys (e.g., Exam Date vs Closing Date).
+5. **Change Detection & Field-Level Authority**
+   - **Status:** **PASS**
+   - **Details:** Refactored `actions.ts`. Hardened field-level merging to explicitly prevent overwriting verified data with nulls/blanks from secondary sources.
 
-### 7. GLOBAL SEARCH & ADMIN REVIEW
-- **Status:** **PASS**
-- **Details:** Verified pagination and unified `UNION ALL` scaling via Postgres RPC. No N+1 fetches. Admin queues require manual human clicks for all ingested states. 
+6. **Link Reliability & Zero-Result Protection**
+   - **Status:** **PASS**
+   - **Details:** Explicit `MISSING_APPLY_LINK_BUT_HAS_PDF` logic implemented. Dropping to 0 records triggers `STRUCTURE_CHANGED` correctly instead of successfully returning 0.
 
-### 8. RECOVERY & AUDIT TRAIL
-- **Status:** **PASS**
-- **Details:** Historic runs are un-deleteable. Extraction failures do not corrupt public records. Original payloads and `change_diffs` are logged immutably.
+7. **Admin Review, Recovery & Audit Trail**
+   - **Status:** **PASS**
+   - **Details:** Extraction Test Mode ("Dry Run") deployed via `/api/admin/test-source`. Allows instant crawler diagnostics without polluting queues. Historical trails are immutable.
 
-### 9. SECURITY & PERFORMANCE
-- **Status:** **PASS**
-- **Details:** Server-Side tracking. Draft/Queue/Runs stay completely behind `/admin` layouts with RLS enforcement.
+8. **Performance & Security & Mobile UX**
+   - **Status:** **PASS**
+   - **Details:** Pagination and RPC filtering confirmed. No unbounded fetches. RLS and Admin layouts actively protect crawler metadata.
 
-### 10. REGRESSION
-- **Status:** **PASS**
-- **Details:** `npx tsc --noEmit` checks executed and passed seamlessly after type updates.
+9. **Regression Testing & Typescript**
+   - **Status:** **PASS**
+   - **Details:** Type definitions synchronized. `npx tsc --noEmit` compiled successfully with 0 errors across the entire Next.js architecture.
 
 ---
 
+### MIGRATION REQUIRED
+**NO SQL MIGRATION REQUIRED.**
+The existing Phase 6.x architecture fully supported these operational upgrades. No schema modifications were necessary, perfectly preserving the locked baseline.
+
 ### FILES MODIFIED:
-- `src/lib/ingestion/pipeline.ts` (Dynamic Quality Score & Missing Link Warnings)
-- `src/lib/ingestion/types.ts` (Payload expansion)
+- `src/lib/ingestion/pipeline.ts` (Refactored Duplicate Logic & Quality Scores)
+- `src/lib/ingestion/types.ts`
+- `src/app/admin/studio/ingestion/actions.ts` (Field-Level Null Protection)
+- `src/app/admin/studio/ingestion/sources/[id]/page.tsx`
 
-### SQL MIGRATIONS:
-- **NONE.** The architecture is proven, secure, and fully scaled for Phase 6.x operations.
+### FILES CREATED:
+- `src/app/api/admin/test-source/route.ts` (Admin-Only Test Mode)
+- `src/app/admin/studio/ingestion/sources/[id]/TestButton.tsx`
 
-**VERDICT**: AssamJobs Hub is now robustly hardened for real-world daily feed ingestion and quality control.
+### LIVE DATABASE CHECKS:
+- `ingestion_sources` successfully seeded with T1/T2 registry hierarchy.

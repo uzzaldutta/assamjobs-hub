@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw, AlertTriangle, ShieldCheck, Link2Off, FileX } from "lucide-react";
 import RetryButton from "./RetryButton";
+import TestButton from "./TestButton";
 
 export default async function SourceDetail({ params }: { params: { id: string } }) {
   const { data: source } = await supabase.from('ingestion_sources').select('*').eq('id', params.id).single();
@@ -31,6 +32,7 @@ export default async function SourceDetail({ params }: { params: { id: string } 
             <span>{source.feed_type || 'MULTIPLE FEEDS'}</span>
           </div>
         </div>
+        <TestButton sourceId={source.id} adapterName={source.adapter_name} />
         <RetryButton sourceId={source.id} adapterName={source.adapter_name} />
       </div>
 
