@@ -1,4 +1,4 @@
-
+﻿code = """
 import HeroSection from "@/components/HeroSection";
 import SubscribeForm from "@/components/SubscribeForm";
 import JobCard from "@/components/JobCard";
@@ -243,3 +243,6 @@ export default async function Home() {
     </div>
   );
 }
+"""
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

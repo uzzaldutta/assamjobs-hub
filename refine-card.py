@@ -1,4 +1,4 @@
-
+﻿code = """
 "use client";
 
 import Link from "next/link";
@@ -113,3 +113,6 @@ export default function JobCard({ job }: JobCardProps) {
     </div>
   );
 }
+"""
+with open("src/components/JobCard.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

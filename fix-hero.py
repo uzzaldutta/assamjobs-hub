@@ -1,4 +1,4 @@
-
+﻿code = """
 "use client";
 
 import React, { useState } from 'react';
@@ -72,3 +72,6 @@ export default function HeroSection() {
     </div>
   );
 }
+"""
+with open("src/components/HeroSection.tsx", "w", encoding="utf-8") as f:
+    f.write(code)
