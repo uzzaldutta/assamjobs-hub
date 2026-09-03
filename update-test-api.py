@@ -1,4 +1,4 @@
-
+﻿code = """
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { APSCAdapter } from '@/lib/ingestion/adapters/APSCAdapter';
@@ -56,3 +56,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, error: error.message, not_live_verified: true }, { status: 500 });
   }
 }
+"""
+with open("src/app/api/admin/test-source/route.ts", "w", encoding="utf-8") as f:
+    f.write(code)
