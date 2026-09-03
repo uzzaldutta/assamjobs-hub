@@ -1,4 +1,4 @@
-
+﻿code = """
 -- PHASE 6.x MASTER MIGRATION FILE
 -- This file contains all schema changes required for the Universal Ingestion Engine & Feed Ecosystem.
 
@@ -277,3 +277,6 @@ BEGIN
   LIMIT 5;
 END;
 $$;
+"""
+with open("MASTER_PHASE_6_MIGRATION.sql", "w", encoding="utf-8") as f:
+    f.write(code)

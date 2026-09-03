@@ -63,7 +63,7 @@ export async function approveQueueItemAction(queueId: string) {
         job_type: item.content_type === 'JOB' ? 'GOVERNMENT' : 'PRIVATE',
         category: payload.category || 'OTHER',
         vacancies: payload.vacancy || 'Not Specified',
-        location: payload.location || 'Assam',
+        district: payload.location || 'Assam',
         last_date: payload.applicationEnd || null,
         apply_url: payload.applyUrl || payload.sourceUrl,
         official_pdf_url: payload.notificationUrl || null,
