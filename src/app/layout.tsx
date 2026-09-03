@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
 import { Sparkles, CreditCard, Award, Bookmark, GraduationCap, FileText, Calendar, BookOpen, Compass, Mic, BrainCircuit, CheckCircle2 } from "lucide-react";
@@ -13,6 +13,7 @@ import MobileMenu from "@/components/MobileMenu";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import DesktopNav from "@/components/DesktopNav";
 import NotificationBell from "@/components/NotificationBell";
+import AccountPlaceholder from "@/components/AccountPlaceholder";
 import Script from "next/script";
 import AdBanner from "@/components/AdBanner";
 
@@ -107,7 +108,8 @@ export default function RootLayout({
                     {/* Notification Bell (Mobile & Desktop) */}
                     <NotificationBell />
 
-                    {/* Removed Sign In button per user request */}
+                    {/* Optional Personalization Placeholder (No Auth Logic) */}
+                    <AccountPlaceholder />
                     
                     {/* Mobile Hamburger (Now moved to Bottom Nav, but keeping a simplified one for settings fallback if needed, or remove it entirely) */}
                     {/* We are removing MobileMenu component here since we have BottomNav! */}
@@ -261,3 +263,4 @@ export default function RootLayout({
     </html>
   );
 }
+
