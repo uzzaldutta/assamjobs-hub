@@ -1,5 +1,5 @@
 
-export type ContentType = 'JOB' | 'PRIVATE_JOB' | 'TENDER' | 'ADMISSION' | 'RESULT';
+export type ContentType = 'JOB' | 'PRIVATE_JOB' | 'TENDER' | 'ADMISSION' | 'RESULT' | 'ADMIT_CARD' | 'SCHOLARSHIP' | 'EXAM';
 
 export interface RawContent {
   url: string;
@@ -17,7 +17,14 @@ export interface NormalizedPayload {
   title: string;
   organization?: string;
   department?: string;
+  
+  // Dates
+  applicationStart?: string;
   applicationEnd?: string;
+  examDate?: string;
+  releaseDate?: string;
+  
+  // Specific Fields
   vacancy?: string;
   estimatedValue?: string;
   tenderNumber?: string;
@@ -25,6 +32,9 @@ export interface NormalizedPayload {
   examName?: string;
   qualification?: string;
   description?: string;
+  scheme?: string;
+  amount?: string;
+  
   externalId?: string;
   attachments?: any[];
   category?: string;

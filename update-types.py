@@ -1,19 +1,76 @@
-﻿import re
+﻿code = """
+export type ContentType = 'JOB' | 'PRIVATE_JOB' | 'TENDER' | 'ADMISSION' | 'RESULT' | 'ADMIT_CARD' | 'SCHOLARSHIP' | 'EXAM';
 
-with open("src/lib/ingestion/types.ts", "r", encoding="utf-8") as f:
-    content = f.read()
+export interface RawContent {
+  url: string;
+  externalId?: string;
+  html?: string;
+  json?: any;
+}
 
-# Add CHANGE_DETECTED to IngestionStatus
-if "'CHANGE_DETECTED'" not in content:
-    content = content.replace("'DUPLICATE_RISK'", "'DUPLICATE_RISK'\n  | 'CHANGE_DETECTED'\n  | 'VERIFICATION_PENDING'")
+export interface NormalizedPayload {
+  source: string;
+  sourceUrl: string;
+  notificationUrl?: string;
+  applyUrl?: string;
+  contentType: ContentType;
+  title: string;
+  organization?: string;
+  department?: string;
+  
+  // Dates
+  applicationStart?: string;
+  applicationEnd?: string;
+  examDate?: string;
+  releaseDate?: string;
+  
+  // Specific Fields
+  vacancy?: string;
+  estimatedValue?: string;
+  tenderNumber?: string;
+  course?: string;
+  examName?: string;
+  qualification?: string;
+  description?: string;
+  scheme?: string;
+  amount?: string;
+  
+  externalId?: string;
+  attachments?: any[];
+  category?: string;
+  location?: string;
+}
 
-if "change_diff?: any[];" not in content:
-    # insert change_diff into QueueItem
-    content = content.replace("validation_warnings: any[];", "validation_warnings: any[];\n  change_diff?: any[];")
+export interface IngestionSource {
+  id: string;
+  source_name: string;
+  base_url: string;
+  adapter_name: string;
+  is_official: boolean;
+  tier: number;
+  feed_type?: string;
+  is_active: boolean;
+}
 
-# Add tier and is_official to IngestionSource
-if "tier: number;" not in content:
-    content = content.replace("is_active: boolean;", "is_active: boolean;\n  tier: number;\n  is_official: boolean;\n  feed_type: string;")
-
+export interface QueueItem {
+  id: string;
+  source_id: string;
+  content_type: ContentType;
+  external_id: string;
+  source_url: string;
+  title: string;
+  normalized_payload: NormalizedPayload;
+  raw_payload: any;
+  content_hash: string;
+  status: 'NEW' | 'APPROVED' | 'REJECTED' | 'DUPLICATE_RISK' | 'CHANGE_DETECTED' | 'POSSIBLE_MATCH' | 'LOW_QUALITY' | 'FAILED';
+  quality_score: number;
+  duplicate_score: number;
+  duplicate_of?: string;
+  change_diff?: any[];
+  validation_errors: string[];
+  validation_warnings: string[];
+  created_at: string;
+}
+"""
 with open("src/lib/ingestion/types.ts", "w", encoding="utf-8") as f:
-    f.write(content)
+    f.write(code)

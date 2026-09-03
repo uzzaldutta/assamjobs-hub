@@ -1,79 +1,54 @@
 ﻿import re
 
-with open("src/components/admin/PrepDashboard.tsx", "r", encoding="utf-8") as f:
+with open("src/app/admin/studio/ingestion/actions.ts", "r", encoding="utf-8") as f:
     content = f.read()
 
-# Add imports for server actions
-if "adminInsert" not in content:
-    content = content.replace('import { supabase } from "@/lib/supabase";', 'import { supabase } from "@/lib/supabase";\nimport { adminInsert, adminDelete, adminUpdate } from "@/app/admin/actions";')
+replacement = """
+    // --- 5. ADMIT CARD ---
+    if (item.content_type === 'ADMIT_CARD') {
+      const { data: newAc, error: insertErr } = await supabase.from('admit_cards').insert({
+        title: payload.title,
+        organization: payload.organization || 'Unknown',
+        exam_name: payload.examName || null,
+        exam_date: payload.examDate || null,
+        release_date: payload.releaseDate || null,
+        download_url: payload.applyUrl || payload.sourceUrl,
+        notification_url: payload.notificationUrl || null,
+        status: 'PUBLISHED',
+        verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+      }).select('id').single();
+      if (insertErr) throw insertErr;
+      canonicalId = newAc.id;
+    }
 
-# Replace saveExam logic
-content = re.sub(
-    r'const \{ error \} = await supabase\.from\("prep_exams"\)\.insert\(\[\{(.*?)\}\]\);',
-    r'let error = null;\n    try {\n      await adminInsert("prep_exams", {\1});\n    } catch(e: any) { error = e; }',
-    content,
-    flags=re.DOTALL
-)
+    // --- 6. SCHOLARSHIP ---
+    if (item.content_type === 'SCHOLARSHIP') {
+      const { data: newSch, error: insertErr } = await supabase.from('scholarships').insert({
+        title: payload.title,
+        organization: payload.organization || 'Unknown',
+        scheme: payload.scheme || null,
+        amount: payload.amount || null,
+        eligibility: payload.qualification || null,
+        application_start: payload.applicationStart || null,
+        application_deadline: payload.applicationEnd || null,
+        application_url: payload.applyUrl || payload.sourceUrl,
+        notification_url: payload.notificationUrl || null,
+        status: 'PUBLISHED',
+        verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+      }).select('id').single();
+      if (insertErr) throw insertErr;
+      canonicalId = newSch.id;
+    }
+"""
 
-# Replace deleteExam logic
+# Insert right before the generic check (or right after RESULTS block)
 content = re.sub(
-    r'const \{ error \} = await supabase\.from\("prep_exams"\)\.delete\(\)\.eq\("id", id\);',
-    r'let error = null;\n    try {\n      await adminDelete("prep_exams", "id", id);\n    } catch(e: any) { error = e; }',
+    r'(// --- 4\. RESULTS ---[\s\S]*?canonicalId = newRes\.id;\s*\})',
+    r'\1\n' + replacement,
     content
 )
 
-# Replace addSubject
-content = re.sub(
-    r'const \{ data, error \} = await supabase\.from\("prep_subjects"\)\.insert\(\[\{ exam_id: selectedExamId, title: newSubjectTitle \}\]\)\.select\(\);',
-    r'let error = null, data = null;\n    try { data = await adminInsert("prep_subjects", { exam_id: selectedExamId, title: newSubjectTitle }); } catch(e:any) { error = e; }',
-    content
-)
-
-# Replace addChapter
-content = re.sub(
-    r'const \{ data, error \} = await supabase\.from\("prep_chapters"\)\.insert\(\[\{ subject_id: subjectId, title: newChapterTitle \}\]\)\.select\(\);',
-    r'let error = null, data = null;\n    try { data = await adminInsert("prep_chapters", { subject_id: subjectId, title: newChapterTitle }); } catch(e:any) { error = e; }',
-    content
-)
-
-# Replace addTopic
-content = re.sub(
-    r'const \{ data, error \} = await supabase\.from\("prep_topics"\)\.insert\(\[\{ chapter_id: chapterId, title: newTopicTitle \}\]\)\.select\(\);',
-    r'let error = null, data = null;\n    try { data = await adminInsert("prep_topics", { chapter_id: chapterId, title: newTopicTitle }); } catch(e:any) { error = e; }',
-    content
-)
-
-# Replace generic deleteItem
-content = re.sub(
-    r'await supabase\.from\(table\)\.delete\(\)\.eq\("id", id\);',
-    r'await adminDelete(table, "id", id);',
-    content
-)
-
-# Replace saveQuestion
-content = re.sub(
-    r'const \{ error \} = await supabase\.from\("prep_questions"\)\.insert\(\[\{(.*?)\}\]\);',
-    r'let error = null;\n    try {\n      await adminInsert("prep_questions", {\1});\n    } catch(e:any) { error = e; }',
-    content,
-    flags=re.DOTALL
-)
-
-# Replace saveMockTest
-content = re.sub(
-    r'const \{ error \} = await supabase\.from\("prep_mock_tests"\)\.insert\(\[\{(.*?)\}\]\);',
-    r'let error = null;\n    try {\n      await adminInsert("prep_mock_tests", {\1});\n    } catch(e:any) { error = e; }',
-    content,
-    flags=re.DOTALL
-)
-
-# Replace toggleTestQuestion delete
-content = re.sub(
-    r'await supabase\.from\("prep_mock_test_questions"\)\.delete\(\)\.match\(\{ test_id: managingTestId, question_id: questionId \}\);',
-    r'await adminDelete("prep_mock_test_questions", "question_id", questionId); // Simplified since question_id is unique per test currently, wait actually let\'s keep match by just modifying toggleTestQuestion manually below',
-    content
-)
-# Wait, adminDelete only takes one match column. I'll modify the script to just handle toggleTestQuestion manually.
-
-with open("src/components/admin/PrepDashboard.tsx", "w", encoding="utf-8") as f:
+with open("src/app/admin/studio/ingestion/actions.ts", "w", encoding="utf-8") as f:
     f.write(content)
-print("Updated API calls to Server Actions")
