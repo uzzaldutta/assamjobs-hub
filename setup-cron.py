@@ -1,0 +1,64 @@
+﻿code_api = """
+import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
+import { IngestionPipeline } from '@/lib/ingestion/pipeline';
+import { APSCAdapter } from '@/lib/ingestion/adapters/APSCAdapter';
+import { JobAssamAdapter } from '@/lib/ingestion/adapters/JobAssamAdapter';
+import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter';
+
+// Secure the route with a cron secret
+const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret';
+
+export async function GET(req: Request) {
+  const authHeader = req.headers.get('authorization');
+  if (authHeader !== `Bearer ${CRON_SECRET}` && process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { data: sources } = await supabase.from('ingestion_sources').select('*').eq('is_active', true);
+    if (!sources || sources.length === 0) return NextResponse.json({ message: 'No active sources' });
+
+    // In a real high-scale system, this would push to a worker queue (e.g. Inngest / AWS SQS)
+    // For this Phase 6.x architecture, we will process sequentially or via Promise.allSettled
+    
+    const results = [];
+    for (const source of sources) {
+        let adapterInstance: any;
+        if (source.adapter_name === 'APSCAdapter') adapterInstance = new APSCAdapter(source);
+        else if (source.adapter_name === 'JobAssamAdapter') adapterInstance = new JobAssamAdapter(source);
+        else if (source.adapter_name === 'AssamCareerAdapter') adapterInstance = new AssamCareerAdapter(source);
+        
+        if (adapterInstance) {
+            // Background execution
+            IngestionPipeline.processSource(adapterInstance).catch(err => console.error(err));
+            results.push({ source: source.source_name, status: 'started' });
+        } else {
+            results.push({ source: source.source_name, status: 'unsupported_adapter' });
+        }
+    }
+
+    return NextResponse.json({ success: true, triggered: results });
+
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+"""
+import os
+os.makedirs("src/app/api/cron/ingestion", exist_ok=True)
+with open("src/app/api/cron/ingestion/route.ts", "w", encoding="utf-8") as f:
+    f.write(code_api)
+
+vercel = """
+{
+  "crons": [
+    {
+      "path": "/api/cron/ingestion",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
+"""
+with open("vercel.json", "w", encoding="utf-8") as f:
+    f.write(vercel)
