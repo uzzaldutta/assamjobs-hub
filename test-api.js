@@ -1,13 +1,17 @@
 ﻿const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config({ path: '.env.local' });
 
-async function testApi() {
-  const res = await fetch('http://localhost:9000/api/admin/spam-control', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ keyword: 'bio-data', password: 'assamhub2026' })
-  });
-  const data = await res.json();
-  console.log("Status:", res.status);
-  console.log("Data:", data);
+async function runApiTest() {
+    try {
+        const res = await fetch(`http://localhost:3000/api/admin/test-source`, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ sourceId: 'dummy', adapterName: 'JobAssamAdapter' })
+        });
+        const data = await res.json();
+        console.log(data);
+    } catch(e) {
+        console.error(e);
+    }
 }
-testApi();
+runApiTest();

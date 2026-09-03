@@ -1,5 +1,4 @@
-
-import * as cheerio from 'cheerio';
+﻿code = """import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource } from "../types";
 
@@ -24,18 +23,14 @@ export class AssamCareerAdapter implements SourceAdapter {
       $('.post-title a').each((i, el) => {
         const title = $(el).text().trim();
         const link = $(el).attr('href');
-        
         if (title && link) {
-           items.push({
-             url: link,
-             externalId: link
-           });
+           items.push({ url: link, externalId: link });
         }
       });
-      return items.slice(0, 15); // Limit Discovery per run
+      return items.slice(0, 15);
     } catch (error) {
        console.error("AssamCareer Discovery Error:", error);
-       throw error; // Fail loudly so it logs in ingestion_runs
+       throw error;
     }
   }
 
@@ -58,14 +53,12 @@ export class AssamCareerAdapter implements SourceAdapter {
     const title = $('.post-title').text().trim() || '';
     const bodyText = $('.post-body').text();
     const titleLower = title.toLowerCase();
-
     
-    // Deep Extraction
-    const orgMatch = bodyText.match(/Name of organization:\s*([^\n]+)/i) || bodyText.match(/Organization:\s*([^\n]+)/i);
-    const dateMatch = bodyText.match(/Last Date:\s*([^\n]+)/i);
-    const vacancyMatch = bodyText.match(/No of posts:\s*(\d+)/i) || bodyText.match(/Total Vacancy:\s*(\d+)/i);
+    // Pattern matches
+    const orgMatch = bodyText.match(/Name of organization:.*?([A-Za-z\s]+)/i);
+    const dateMatch = bodyText.match(/Last Date:.*?([\d]{1,2}.[\d]{1,2}.[\d]{4}|[A-Za-z]+\s\d+,\s\d{4})/i);
+    const vacancyMatch = bodyText.match(/No of posts:.*?(\d+)/i);
     
-    // Link Extraction Logic
     let applyUrl = '';
     let notificationUrl = '';
     
@@ -73,47 +66,54 @@ export class AssamCareerAdapter implements SourceAdapter {
       const linkText = $(el).text().toLowerCase();
       const href = $(el).attr('href');
       if (!href) return;
-      
-      if (linkText.includes('apply online') || linkText.includes('online application')) {
+      if (linkText.includes('apply') || linkText.includes('online') || linkText.includes('download')) {
         applyUrl = href;
-      } else if (linkText.includes('advertisement') || linkText.includes('official notification') || href.endsWith('.pdf')) {
+      } else if (linkText.includes('advertisement') || href.endsWith('.pdf')) {
         notificationUrl = href;
       }
     });
-    
 
     let detectedType: 'JOB' | 'TENDER' | 'ADMISSION' | 'RESULT' | 'ADMIT_CARD' | 'SCHOLARSHIP' = 'JOB';
     if (titleLower.includes('result') || titleLower.includes('merit list')) detectedType = 'RESULT';
-    else if (titleLower.includes('admit card') || titleLower.includes('call letter') || titleLower.includes('hall ticket')) detectedType = 'ADMIT_CARD';
+    else if (titleLower.includes('admit card') || titleLower.includes('call letter')) detectedType = 'ADMIT_CARD';
     else if (titleLower.includes('admission')) detectedType = 'ADMISSION';
     else if (titleLower.includes('scholarship')) detectedType = 'SCHOLARSHIP';
     else if (titleLower.includes('tender')) detectedType = 'TENDER';
     
     return {
       title,
-      detectedType,
       url: raw.url,
       organization: orgMatch ? orgMatch[1].trim() : 'Unknown',
       lastDate: dateMatch ? dateMatch[1].trim() : undefined,
       vacancy: vacancyMatch ? vacancyMatch[1].trim() : undefined,
       applyUrl,
-      notificationUrl
+      notificationUrl,
+      detectedType
     };
   }
 
   async normalize(extracted: any): Promise<NormalizedPayload> {
-    return {
+    const payload: NormalizedPayload = {
       source: this.sourceConfig.source_name,
-      sourceUrl: extracted.url, // Original provenance link
-      applyUrl: extracted.applyUrl || extracted.url, // Fallback if no specific link
+      sourceUrl: extracted.url,
+      applyUrl: extracted.applyUrl || undefined,
       notificationUrl: extracted.notificationUrl,
-      contentType: 'JOB',
+      contentType: extracted.detectedType || 'JOB',
       title: extracted.title,
       organization: extracted.organization,
-      applicationEnd: extracted.lastDate,
-      vacancy: extracted.vacancy,
       externalId: extracted.url
     };
+
+    if (payload.contentType === 'JOB') {
+        payload.applicationEnd = extracted.lastDate;
+        payload.vacancy = extracted.vacancy;
+    } else if (payload.contentType === 'ADMIT_CARD' || payload.contentType === 'RESULT') {
+        payload.examName = extracted.title;
+        payload.resultDate = extracted.lastDate;
+        payload.releaseDate = extracted.lastDate;
+    }
+
+    return payload;
   }
 
   validate(payload: NormalizedPayload): { isValid: boolean; errors: string[]; warnings: string[] } {
@@ -121,9 +121,9 @@ export class AssamCareerAdapter implements SourceAdapter {
     const warnings: string[] = [];
     if (!payload.title) errors.push("Missing title");
     if (!payload.sourceUrl) errors.push("Missing source URL");
-    if (payload.organization === 'Unknown') warnings.push("Organization unconfirmed");
-    if (!payload.applyUrl && !payload.notificationUrl) warnings.push("No actionable external link found");
-    
     return { isValid: errors.length === 0, errors, warnings };
   }
 }
+"""
+with open("src/lib/ingestion/adapters/AssamCareerAdapter.ts", "w", encoding="utf-8") as f:
+    f.write(code)
