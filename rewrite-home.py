@@ -1,7 +1,7 @@
-﻿
+﻿code = """
 import HeroSection from "@/components/HeroSection";
 import SubscribeForm from "@/components/SubscribeForm";
-import JobCard from "@/components/JobCard";
+import JobCard from "@/components/feeds/JobCard";
 import TenderCard from "@/components/feeds/TenderCard";
 import AdmissionCard from "@/components/feeds/AdmissionCard";
 import ResultCard from "@/components/feeds/ResultCard";
@@ -118,7 +118,7 @@ export default async function Home() {
                 </div>
                 <div className="space-y-4">
                    {recentResults?.map(res => (
-                      <ResultCard key={res.id} result={res} />
+                      <ResultCard key={res.id} data={res} compact={true} />
                    ))}
                    {(!recentResults || recentResults.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent results.</div>}
                 </div>
@@ -132,7 +132,7 @@ export default async function Home() {
                 </div>
                 <div className="space-y-4">
                    {recentAdmitCards?.map(adm => (
-                      <AdmitCard key={adm.id} admitCard={adm} />
+                      <AdmitCard key={adm.id} data={adm} compact={true} />
                    ))}
                    {(!recentAdmitCards || recentAdmitCards.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent admit cards.</div>}
                 </div>
@@ -146,7 +146,7 @@ export default async function Home() {
                 </div>
                 <div className="space-y-4">
                    {recentAdmissions?.map(adm => (
-                      <AdmissionCard key={adm.id} admission={adm} />
+                      <AdmissionCard key={adm.id} data={adm} compact={true} />
                    ))}
                    {(!recentAdmissions || recentAdmissions.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent admissions.</div>}
                 </div>
@@ -183,5 +183,6 @@ export default async function Home() {
     </div>
   );
 }
-
-
+"""
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import SearchAutocomplete from "./SearchAutocomplete";
 import { useLanguage } from "./LanguageContext";
-import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home } from "lucide-react";
+import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home, Bell } from "lucide-react";
 
 export default function DesktopNav() {
   const { t } = useLanguage();
@@ -58,13 +58,16 @@ export default function DesktopNav() {
           <BookOpen size={16} /> Preparation <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
-          <Link href="/study-materials" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📖 {t("nav_study")}</Link>
-          <Link href="/previous-papers" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📄 Previous Papers</Link>
-          <Link href="/mock-tests" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">🎯 {t("nav_mock")}</Link>
-          <Link href="/syllabus" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📋 {t("nav_syllabus")}</Link>
+          <Link href="/study-materials" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸ“– {t("nav_study")}</Link>
+          <Link href="/previous-papers" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸ“„ Previous Papers</Link>
+          <Link href="/mock-tests" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸŽ¯ {t("nav_mock")}</Link>
+          <Link href="/syllabus" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸ“‹ {t("nav_syllabus")}</Link>
         </div>
       </div>
 
+      <Link href="/updates" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
+        <Bell size={16} /> Updates
+      </Link>
       {/* Tenders */}
       <Link href="/tenders" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
         <FileText size={16} /> {t("nav_tenders")}
@@ -124,3 +127,5 @@ export default function DesktopNav() {
 
   );
 }
+
+
