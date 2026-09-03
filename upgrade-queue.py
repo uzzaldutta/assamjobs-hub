@@ -1,4 +1,4 @@
-
+﻿code = """
 import { supabase } from "@/lib/supabase";
 import PageHeader from "@/components/PageHeader";
 import { CheckCircle, XCircle, ExternalLink, ShieldAlert, FileSearch, ArrowRight, ShieldCheck, AlertTriangle } from "lucide-react";
@@ -175,3 +175,6 @@ export default async function IngestionQueue() {
     </div>
   );
 }
+"""
+with open("src/app/admin/studio/ingestion/queue/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code)

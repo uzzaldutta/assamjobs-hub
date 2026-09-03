@@ -1,4 +1,4 @@
-
+﻿code = """
 import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource } from "../types";
@@ -117,3 +117,6 @@ export class APSCAdapter implements SourceAdapter {
     return { isValid: errors.length === 0, errors, warnings };
   }
 }
+"""
+with open("src/lib/ingestion/adapters/APSCAdapter.ts", "w", encoding="utf-8") as f:
+    f.write(code)
