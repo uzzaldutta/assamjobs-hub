@@ -132,7 +132,7 @@ export default function DiscoveryLanding() {
                 <PenTool className="h-8 w-8 text-orange-500 mb-3 group-hover:scale-110 transition-transform" />
                 <span className="font-bold text-slate-800 dark:text-white text-sm">Practice</span>
               </Link>
-              <Link href="/tests" className="flex flex-col items-center p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-indigo-500 hover:shadow-md transition-all group opacity-50 cursor-not-allowed" title="Coming Soon">
+              <Link href="/mock-tests" className="flex flex-col items-center p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-indigo-500 hover:shadow-md transition-all group">
                 <BookOpen className="h-8 w-8 text-purple-500 mb-3 group-hover:scale-110 transition-transform" />
                 <span className="font-bold text-slate-800 dark:text-white text-sm">Mock Tests</span>
               </Link>

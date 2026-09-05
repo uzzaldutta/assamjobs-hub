@@ -1,153 +1,107 @@
-import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
-import { BookOpen, Clock, FileText, ArrowRight } from 'lucide-react';
-import PageHeader from '@/components/PageHeader';
-import FeedList from "@/components/FeedList";
-import RecentMarquee from "@/components/RecentMarquee";
 
-export const revalidate = 60; // ISR cache
+import { supabase } from "@/lib/supabase";
+import PageHeader from "@/components/PageHeader";
+import Link from "next/link";
+import { Search, FileText, FileCheck, ArrowRight, BookOpen } from "lucide-react";
 
-export default async function StudyMaterialsLibrary({ searchParams }: { searchParams: Promise<{ q?: string, subject?: string }> }) {
-  const { q, subject } = await searchParams;
-  const query = q ? q.toLowerCase() : "";
-  const activeSubject = subject || "ALL";
-  // 1. Fetch AI Generated Study Materials
-  let { data: aiMaterials } = await supabase
-    .from('jobs')
-    .select('id, title, scraped_at, job_type')
-    .eq('category', 'STUDY_MATERIAL')
-    .order('scraped_at', { ascending: false });
-  if (aiMaterials) {
-    if (query) {
-      aiMaterials = aiMaterials.filter((m: any) => (m.title || "").toLowerCase().includes(query));
-    }
-    if (activeSubject !== "ALL") {
-      aiMaterials = aiMaterials.filter((m: any) => m.job_type === activeSubject);
-    }
+export const revalidate = 60;
+
+export default async function StudyMaterialsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
+  const searchParams = await props.searchParams;
+  const q = searchParams?.q || "";
+  const sort = searchParams?.sort || "newest";
+
+  let queryBuilder = supabase
+    .from('prep_materials')
+    .select('*, prep_exams(title)')
+    .eq('status', 'PUBLISHED');
+
+  if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
+  
+  if (sort === 'newest') {
+    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+  } else {
+    queryBuilder = queryBuilder.order('title', { ascending: true });
   }
 
-
-  // 2. Fetch Manual PDFs (Old System)
-  let manualPdfs: any[] = [];
-  try {
-    const { data } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('job_type', 'STUDY_MATERIAL')
-      .order('scraped_at', { ascending: false });
-      
-    if (data) {
-      manualPdfs = data.map(job => ({
-        ...job,
-        type: job.job_type,
-        lastDate: job.last_date,
-        officialUrl: job.official_pdf_url || job.apply_url,
-        createdAt: new Date(job.scraped_at || job.created_at || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-      }));
-    }
-  } catch(e) {
-    console.error("Could not load from Supabase", e);
-  }
+  const { data: materials, error } = await queryBuilder;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
       <PageHeader 
-        title="Study Materials & PDFs" 
-        subtitle="Browse AI-generated study guides and download official syllabus PDFs."
-        theme="blue"
+        title="Study Materials" 
+        subtitle="PDF notes, previous year papers, and syllabus guides." 
+        theme="green" 
       />
-
-      <div className="flex justify-center mt-4 mb-8 relative z-20">
-        <Link href="/study-materials/ai-generator" className="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400 font-bold py-2 px-6 rounded-full shadow-sm hover:shadow-md transition flex items-center gap-2">
-          <BookOpen size={18} />
-          Generate AI Study Guide
-        </Link>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 mt-8 relative z-10">
-        
-        {/* Section 1: AI Materials */}
-        <form action="/study-materials" method="GET" className="mb-8 relative max-w-2xl mx-auto">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          </div>
-          <input 
-            type="text" 
-            name="q" 
-            defaultValue={query} 
-            placeholder="Search study materials by exam or topic..." 
-            className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <button type="submit" className="absolute right-2 top-1.5 bottom-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-bold text-sm">Search</button>
-        </form>
-
-        <style dangerouslySetInnerHTML={{__html: `
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}} />
-      <div className="mb-8 overflow-x-auto pb-2 hide-scrollbar">
-          <div className="flex gap-2 w-max">
-            <Link href="/study-materials" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ALL' ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>All Subjects</Link>
-            <Link href="/study-materials?subject=HISTORY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'HISTORY' ? 'bg-amber-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>History</Link>
-            <Link href="/study-materials?subject=POLITY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'POLITY' ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Polity & Governance</Link>
-            <Link href="/study-materials?subject=ECONOMICS" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ECONOMICS' ? 'bg-green-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Economics</Link>
-            <Link href="/study-materials?subject=GEOGRAPHY" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'GEOGRAPHY' ? 'bg-teal-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Geography</Link>
-            <Link href="/study-materials?subject=GENERAL_SCIENCE" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'GENERAL_SCIENCE' ? 'bg-cyan-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>General Science</Link>
-            <Link href="/study-materials?subject=ASSAM_GK" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'ASSAM_GK' ? 'bg-red-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Assam GK</Link>
-            <Link href="/study-materials?subject=MATH_REASONING" className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeSubject === 'MATH_REASONING' ? 'bg-violet-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>Math & Reasoning</Link>
-          </div>
+      
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search */}
+        <div className="mb-8">
+          <form action="/study-materials" className="flex flex-col sm:flex-row gap-4 max-w-2xl bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="relative flex-1">
+              <input 
+                type="text" 
+                name="q" 
+                defaultValue={q} 
+                placeholder="Search materials by topic or exam..." 
+                className="w-full bg-transparent py-3 pl-12 pr-4 text-slate-900 dark:text-white outline-none font-medium"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            </div>
+            <button type="submit" className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-xl transition-colors">
+              Search
+            </button>
+          </form>
         </div>
-        
-        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
-          <BookOpen className="text-blue-500" /> Interactive Study Library
-        </h3>
-        
-        {!aiMaterials || aiMaterials.length === 0 ? (
-          <div className="text-center py-10 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 mb-12">
-            <BookOpen size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
-            <p className="text-slate-500 mb-4">No interactive study books found. Use the Admin Panel to add some!</p>
-            <Link href="/study-materials/ai-generator" className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold px-6 py-2 rounded-xl hover:bg-blue-700 transition">
-              Generate Now
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {aiMaterials.map(mat => (
-              <Link key={mat.id} href={`/study-materials/${mat.id}`} className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 hover:border-blue-400 hover:shadow-lg transition group">
-                <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-4">
-                  <FileText size={24} />
-                </div>
-                <span className="inline-block px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider rounded-md mb-3">
-                  {mat.job_type?.replace('_', ' ') || 'STUDY GUIDE'}
+
+        {/* Results */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {materials?.map((material: any) => (
+            <Link 
+              href={`/study-materials/${material.id}`} 
+              key={material.id}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-700 transition-all flex flex-col group"
+            >
+              <div className="mb-4">
+                <span className="text-[10px] md:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-lg bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 border border-teal-100 dark:border-teal-800">
+                  {material.type || 'Material'}
                 </span>
-                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 line-clamp-2">
-                  {mat.title}
-                </h3>
-                <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400 mb-6">
-                  <span className="flex items-center gap-1"><Clock size={14}/> Quick Read</span>
+              </div>
+              
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors line-clamp-2">
+                {material.title}
+              </h3>
+              
+              {material.prep_exams && (
+                <p className="text-sm font-medium text-slate-500 mb-6 flex items-center gap-1.5">
+                  <FileCheck size={16} className="text-slate-400" />
+                  {material.prep_exams.title}
+                </p>
+              )}
+              
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center mt-auto">
+                <span className="text-teal-600 dark:text-teal-400 font-bold text-sm flex items-center gap-1"><BookOpen size={16} /> Read Now</span>
+                <div className="w-8 h-8 rounded-full bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors text-teal-600 dark:text-teal-400">
+                  <ArrowRight size={16} />
                 </div>
-                <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Read Guide <ArrowRight size={16} className="ml-1" />
-                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {(!materials || materials.length === 0) && (
+          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+            <FileText size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Study Materials Found</h3>
+            <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">We couldn't find any materials matching your criteria.</p>
+            {q && (
+              <Link href="/study-materials" className="inline-block px-6 py-2.5 bg-teal-50 text-teal-600 font-bold rounded-xl hover:bg-teal-100 transition-colors">
+                Clear Search
               </Link>
-            ))}
+            )}
           </div>
         )}
-
-        <hr className="border-slate-200 dark:border-slate-800 my-10" />
-
-        {/* Section 2: Manual PDFs (Old System) */}
-        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
-          <FileText className="text-fuchsia-500" /> Official PDFs & Syllabus
-        </h3>
-        
-        {manualPdfs.length > 0 && <RecentMarquee jobs={manualPdfs.slice(0, 8)} title="Recent Uploads" />}
-        
-        <div className="mt-6">
-          <FeedList initialJobs={manualPdfs} defaultFilter="STUDY_MATERIAL" hideFilters={true} />
-        </div>
-
-      </div>
+      </main>
     </div>
   );
 }

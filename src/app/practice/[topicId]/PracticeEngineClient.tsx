@@ -1,24 +1,24 @@
-
 "use client";
 
+
 import { useState, useEffect } from "react";
-import { CheckCircle2, XCircle, ArrowRight, Lightbulb, Trophy, RotateCcw, Eye, ChevronLeft, Loader2 } from "lucide-react";
+import { CheckCircle2, XCircle, ArrowRight, Lightbulb, Trophy, RotateCcw, Eye, ChevronLeft, Loader2, List, Hash } from "lucide-react";
 import { getPracticeSession, getSecureQuestion, checkAnswer } from "../actions";
 
 interface SecureQuestion {
   id: string;
   question_text: string;
-  options: { A: string; B: string; C: string; D: string };
-  difficulty: string;
+  options: { [key: string]: string };
+  difficulty: "EASY" | "MEDIUM" | "HARD";
 }
 
-interface AnswerRecord {
+interface AnswerResult {
   selected: string;
   isCorrect: boolean;
   correctAnswer: string;
   explanation: string;
   questionText: string;
-  options: { A: string; B: string; C: string; D: string };
+  options: { [key: string]: string };
 }
 
 interface PracticeSession {
@@ -26,7 +26,7 @@ interface PracticeSession {
   topicId: string;
   questionIds: string[];
   currentIndex: number;
-  answers: Record<string, AnswerRecord>;
+  answers: { [qId: string]: AnswerResult };
   status: "IN_PROGRESS" | "COMPLETED";
 }
 
@@ -37,48 +37,53 @@ export default function PracticeEngineClient({ topic }: { topic: any }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [viewMode, setViewMode] = useState<"PRACTICE" | "RESULT" | "REVIEW">("PRACTICE");
+  const [reviewIndex, setReviewIndex] = useState(0);
 
-  const storageKey = `practice_sess_${topic.id}`;
+  const testType = topic.isMock ? 'mock' : 'topic';
 
-  // 1. Initialize or Load Session
+  // INITIALIZATION
   useEffect(() => {
     async function init() {
       try {
-        const stored = localStorage.getItem(storageKey);
-        if (stored) {
-          const parsed: PracticeSession = JSON.parse(stored);
-          if (parsed.status === "IN_PROGRESS") {
+        // Try to load existing active session from local storage for this topic
+        const saved = localStorage.getItem(`practice_session_${topic.id}`);
+        if (saved) {
+          const parsed: PracticeSession = JSON.parse(saved);
+          if (parsed.status === "IN_PROGRESS" && parsed.questionIds.length > 0) {
             setSession(parsed);
-            return;
+            return; // We have a session, next useEffect will load the question
           }
         }
         // Start new session
-        const { sessionId, questionIds } = await getPracticeSession(topic.id);
+        const { sessionId, questionIds } = await getPracticeSession(topic.id, testType);
         if (questionIds.length === 0) {
-          setError("No questions available for this topic.");
+          setError("No questions available for this module.");
           setLoading(false);
           return;
         }
         const newSession: PracticeSession = {
-          sessionId,
-          topicId: topic.id,
-          questionIds,
-          currentIndex: 0,
-          answers: {},
-          status: "IN_PROGRESS"
+          sessionId, topicId: topic.id, questionIds, currentIndex: 0, answers: {}, status: "IN_PROGRESS"
         };
         setSession(newSession);
-        localStorage.setItem(storageKey, JSON.stringify(newSession));
+        localStorage.setItem(`practice_session_${topic.id}`, JSON.stringify(newSession));
       } catch (err: any) {
-        setError(String(String(err.message) || "Failed to start session."));
+        setError(err.message || "Failed to initialize session");
+        setLoading(false);
       }
     }
     init();
-  }, [topic.id, storageKey]);
+  }, [topic.id, testType]);
 
-  // 2. Load Current Question securely
+  // QUESTION LOADING
   useEffect(() => {
-    if (!session || session.status === "COMPLETED") {
+    if (!session || session.questionIds.length === 0) return;
+    
+    if (session.currentIndex >= session.questionIds.length) {
+      if (session.status !== "COMPLETED") {
+        const updated = { ...session, status: "COMPLETED" as const };
+        setSession(updated);
+        localStorage.setItem(`practice_session_${topic.id}`, JSON.stringify(updated));
+      }
       if (session?.status === "COMPLETED") setViewMode("RESULT");
       return;
     }
@@ -89,8 +94,7 @@ export default function PracticeEngineClient({ topic }: { topic: any }) {
       setError("");
       try {
         const qId = session!.questionIds[session!.currentIndex];
-        // If we already answered it (e.g., refresh after answer but before next), we still need the text to render it, 
-        // but we already have it in session.answers. Actually, let's just fetch it to be clean.
+        // Fetch it
         const q = await getSecureQuestion(qId);
         if (isMounted) setCurrentQ(q);
       } catch (err: any) {
@@ -125,10 +129,10 @@ export default function PracticeEngineClient({ topic }: { topic: any }) {
 
       const updatedSession = { ...session, answers: newAnswers };
       setSession(updatedSession);
-      localStorage.setItem(storageKey, JSON.stringify(updatedSession));
+      localStorage.setItem(`practice_session_${topic.id}`, JSON.stringify(updatedSession));
       
     } catch (err) {
-      alert("Network error submitting answer. Please try again.");
+      setError("Failed to check answer. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -136,260 +140,303 @@ export default function PracticeEngineClient({ topic }: { topic: any }) {
 
   const handleNext = () => {
     if (!session) return;
-    if (session.currentIndex < session.questionIds.length - 1) {
-      const updated = { ...session, currentIndex: session.currentIndex + 1 };
-      setSession(updated);
-      localStorage.setItem(storageKey, JSON.stringify(updated));
-    } else {
-      const updated: PracticeSession = { ...session, status: "COMPLETED" };
-      setSession(updated);
-      localStorage.setItem(storageKey, JSON.stringify(updated));
+    const nextIndex = session.currentIndex + 1;
+    const updatedSession = { ...session, currentIndex: nextIndex };
+    if (nextIndex >= session.questionIds.length) {
+      updatedSession.status = "COMPLETED";
       setViewMode("RESULT");
     }
+    setSession(updatedSession);
+    localStorage.setItem(`practice_session_${topic.id}`, JSON.stringify(updatedSession));
+    setCurrentQ(null);
   };
 
-  const handleRestart = async () => {
+  const resetSession = async () => {
     setLoading(true);
     setViewMode("PRACTICE");
     try {
-      const { sessionId, questionIds } = await getPracticeSession(topic.id);
+      const { sessionId, questionIds } = await getPracticeSession(topic.id, testType);
       const newSession: PracticeSession = {
         sessionId, topicId: topic.id, questionIds, currentIndex: 0, answers: {}, status: "IN_PROGRESS"
       };
       setSession(newSession);
-      localStorage.setItem(storageKey, JSON.stringify(newSession));
-    } catch(err) {
-      setError("Failed to restart.");
+      localStorage.setItem(`practice_session_${topic.id}`, JSON.stringify(newSession));
+    } catch (err: any) {
+      setError("Failed to restart");
     }
   };
 
+  if (loading && !currentQ) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <Loader2 size={48} className="animate-spin text-indigo-500 mb-4" />
+        <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300">Loading Questions...</h3>
+      </div>
+    );
+  }
+
   if (error && !currentQ) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 text-center">
-        <p className="text-slate-500 mb-6">{error}</p>
-        <button onClick={() => window.location.reload()} className="py-3 px-6 bg-indigo-600 text-white rounded-xl font-bold">Retry</button>
+      <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm px-6">
+        <XCircle size={48} className="mx-auto text-red-500 mb-4" />
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Oops!</h3>
+        <p className="text-slate-600 dark:text-slate-400 mb-6">{error}</p>
+        <button onClick={resetSession} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl transition-colors inline-flex items-center gap-2">
+          <RotateCcw size={18} /> Try Again
+        </button>
       </div>
     );
   }
 
-  if (!session || (loading && !currentQ)) {
+  if (viewMode === "RESULT" && session) {
+    const total = session.questionIds.length;
+    const correct = Object.values(session.answers).filter(a => a.isCorrect).length;
+    const incorrect = Object.values(session.answers).length - correct;
+    const unattempted = total - Object.values(session.answers).length;
+    
+    // Save to historical if it's a mock
+    if (topic.isMock) {
+       // Typically you'd write a server action here to save score to user profile (Phase 7)
+    }
+
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-        <Loader2 className="animate-spin mb-4" size={32} />
-        <p className="font-medium tracking-wide">Loading secure session...</p>
-      </div>
-    );
-  }
-
-  const totalQuestions = session.questionIds.length;
-  const answeredIds = Object.keys(session.answers);
-  const correctCount = Object.values(session.answers).filter(a => a.isCorrect).length;
-  const incorrectCount = answeredIds.length - correctCount;
-  const accuracy = answeredIds.length > 0 ? Math.round((correctCount / answeredIds.length) * 100) : 0;
-
-  if (viewMode === "RESULT") {
-    return (
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 text-center animate-in zoom-in-95 duration-500 shadow-sm">
-        <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Trophy size={40} className="text-indigo-600 dark:text-indigo-400" />
-        </div>
-        <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-2">Practice Complete</h2>
-        <p className="text-slate-500 mb-8">You have completed the question set for {topic.title}.</p>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl">
-            <div className="text-2xl font-black text-slate-800 dark:text-white">{totalQuestions}</div>
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Total</div>
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden animate-in zoom-in-95 duration-500">
+        <div className="bg-indigo-600 text-white p-8 md:p-12 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 opacity-10">
+            <Trophy size={180} />
           </div>
-          <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl">
-            <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{correctCount}</div>
-            <div className="text-xs font-bold text-emerald-500 uppercase tracking-wider mt-1">Correct</div>
-          </div>
-          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-2xl">
-            <div className="text-2xl font-black text-red-600 dark:text-red-400">{incorrectCount}</div>
-            <div className="text-xs font-bold text-red-500 uppercase tracking-wider mt-1">Incorrect</div>
-          </div>
-          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl">
-            <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{accuracy}%</div>
-            <div className="text-xs font-bold text-indigo-500 uppercase tracking-wider mt-1">Accuracy</div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-          <button onClick={() => setViewMode("REVIEW")} className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-colors">
-            <Eye size={20} /> Review Answers
-          </button>
-          <button onClick={handleRestart} className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-colors">
-            <RotateCcw size={20} /> Practice Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (viewMode === "REVIEW") {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <button onClick={() => setViewMode("RESULT")} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:hover:text-white font-bold transition-colors">
-            <ChevronLeft size={20} /> Back to Results
-          </button>
-          <div className="text-sm font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Review Mode</div>
+          <Trophy size={64} className="mx-auto mb-4 text-indigo-200 relative z-10" />
+          <h2 className="text-3xl md:text-5xl font-black mb-2 relative z-10">Test Completed</h2>
+          <p className="text-indigo-100 font-medium relative z-10 text-lg">Here is your performance summary</p>
         </div>
         
-        {session.questionIds.map((qId, index) => {
-          const ans = session.answers[qId];
-          if (!ans) return null;
+        <div className="p-6 md:p-10 text-center">
+          <div className="grid grid-cols-3 gap-4 mb-10 max-w-lg mx-auto">
+             <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total</span>
+                <span className="text-3xl font-black text-slate-800 dark:text-white">{total}</span>
+             </div>
+             <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl border border-emerald-100 dark:border-emerald-800/50">
+                <span className="block text-[10px] font-bold text-emerald-600/70 uppercase tracking-wider mb-1">Correct</span>
+                <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400">{correct}</span>
+             </div>
+             <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-2xl border border-red-100 dark:border-red-800/50">
+                <span className="block text-[10px] font-bold text-red-600/70 uppercase tracking-wider mb-1">Incorrect</span>
+                <span className="text-3xl font-black text-red-600 dark:text-red-400">{incorrect}</span>
+             </div>
+          </div>
           
-          return (
-            <div key={qId} className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border-2 ${ans.isCorrect ? 'border-emerald-100 dark:border-emerald-900/30' : 'border-red-100 dark:border-red-900/30'} shadow-sm`}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-slate-400 font-black text-sm uppercase tracking-wider">Q {index + 1}</span>
-                {ans.isCorrect ? (
-                  <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold text-xs bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-md"><CheckCircle2 size={14}/> Correct</span>
-                ) : (
-                  <span className="flex items-center gap-1 text-red-600 dark:text-red-400 font-bold text-xs bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md"><XCircle size={14}/> Incorrect</span>
-                )}
-              </div>
-              <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">{ans.questionText}</h3>
-              
-              <div className="space-y-2 mb-6">
-                 {(["A", "B", "C", "D"] as const).map(key => {
-                    const isSelected = ans.selected === key;
-                    const isActualCorrect = ans.correctAnswer === key;
-                    
-                    let bg = "bg-slate-50 dark:bg-slate-800/50 text-slate-500 border-transparent";
-                    if (isActualCorrect) bg = "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 font-bold";
-                    else if (isSelected && !isActualCorrect) bg = "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800 line-through opacity-70";
-                    
-                    return (
-                      <div key={key} className={`p-3 rounded-xl border flex items-start gap-3 ${bg}`}>
-                        <div className="font-black mt-0.5">{key}</div>
-                        <div>{ans.options[key as keyof typeof ans.options]}</div>
-                      </div>
-                    );
-                 })}
-              </div>
-              
-              {ans.explanation && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl text-sm text-blue-900 dark:text-blue-300">
-                  <div className="font-bold flex items-center gap-1 mb-1"><Lightbulb size={16}/> Explanation</div>
-                  {ans.explanation}
-                </div>
-              )}
-            </div>
-          );
-        })}
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <button 
+              onClick={() => { setViewMode("REVIEW"); setReviewIndex(0); }}
+              className="flex-1 max-w-[200px] flex justify-center items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-bold py-3 px-6 rounded-xl transition-colors border border-slate-200 dark:border-slate-700"
+            >
+              <Eye size={18} /> Review Answers
+            </button>
+            <button 
+              onClick={resetSession}
+              className="flex-1 max-w-[200px] flex justify-center items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-colors"
+            >
+              <RotateCcw size={18} /> Practice Again
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
-  // PRACTICE MODE
-  const isAnswered = !!(currentQ && session.answers[currentQ.id]);
-  const currentAnswer = currentQ ? session.answers[currentQ.id] : null;
-
-  return (
-    <div className="space-y-6">
-      {/* Progress Bar */}
-      <div className="flex items-center gap-4">
-        <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-indigo-600 rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${((session.currentIndex + 1) / totalQuestions) * 100}%` }}
-          ></div>
+  if (viewMode === "REVIEW" && session) {
+    const qId = session.questionIds[reviewIndex];
+    const answer = session.answers[qId];
+    
+    return (
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden animate-in fade-in duration-300">
+        <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+          <button 
+            onClick={() => setViewMode("RESULT")}
+            className="flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+          >
+            <ChevronLeft size={16} /> Back to Summary
+          </button>
+          <div className="font-bold text-slate-500">
+            Review: {reviewIndex + 1} / {session.questionIds.length}
+          </div>
+          <div className="w-20"></div> {/* Spacer for center alignment */}
         </div>
-        <div className="text-sm font-bold text-slate-500">
-          {session.currentIndex + 1} <span className="opacity-50">/ {totalQuestions}</span>
+        
+        <div className="p-6 md:p-10">
+          {!answer ? (
+            <div className="text-center py-10 text-slate-500 italic">This question was not attempted.</div>
+          ) : (
+            <>
+              <h3 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white mb-6 leading-relaxed">
+                <span className="text-indigo-500 mr-2">Q.</span>
+                {answer.questionText}
+              </h3>
+              
+              <div className="space-y-3 mb-8">
+                {Object.entries(answer.options).map(([key, text]) => {
+                  let bgColor = "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700";
+                  let icon = null;
+                  
+                  if (key === answer.correctAnswer) {
+                    bgColor = "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-500 dark:border-emerald-500 text-emerald-900 dark:text-emerald-100 ring-1 ring-emerald-500";
+                    icon = <CheckCircle2 size={18} className="text-emerald-600 dark:text-emerald-400" />;
+                  } else if (key === answer.selected && !answer.isCorrect) {
+                    bgColor = "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-800 text-red-900 dark:text-red-100";
+                    icon = <XCircle size={18} className="text-red-600 dark:text-red-400" />;
+                  }
+                  
+                  return (
+                    <div key={key} className={`flex items-start gap-4 p-4 rounded-xl border ${bgColor}`}>
+                      <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${key === answer.correctAnswer ? 'bg-emerald-500 text-white' : key === answer.selected && !answer.isCorrect ? 'bg-red-500 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                        {key}
+                      </div>
+                      <div className="flex-1 font-medium">{text}</div>
+                      {icon}
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl p-5 border border-indigo-100 dark:border-indigo-800/50">
+                <h4 className="flex items-center gap-2 font-bold text-indigo-800 dark:text-indigo-300 mb-2">
+                  <Lightbulb size={18} className="text-indigo-500" /> Explanation
+                </h4>
+                <p className="text-indigo-900/80 dark:text-indigo-200/80 text-sm md:text-base leading-relaxed">
+                  {answer.explanation || "No detailed explanation available for this question."}
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+        
+        <div className="flex border-t border-slate-100 dark:border-slate-800">
+           <button 
+             disabled={reviewIndex === 0}
+             onClick={() => setReviewIndex(r => r - 1)}
+             className="flex-1 p-4 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 disabled:opacity-30 transition-colors"
+           >
+             Previous
+           </button>
+           <div className="w-px bg-slate-100 dark:bg-slate-800"></div>
+           <button 
+             disabled={reviewIndex === session.questionIds.length - 1}
+             onClick={() => setReviewIndex(r => r + 1)}
+             className="flex-1 p-4 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 disabled:opacity-30 transition-colors"
+           >
+             Next
+           </button>
         </div>
       </div>
+    );
+  }
 
-      {/* Question Card */}
-      {currentQ && (
-        <div className={`bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
-          <div className="flex items-center gap-2 mb-4">
-            <span className={`text-xs font-black px-2.5 py-1 rounded-md uppercase tracking-wider ${
-              currentQ.difficulty === 'EASY' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
-              currentQ.difficulty === 'HARD' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-              'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+  // DEFAULT PRACTICE VIEW
+  if (viewMode === "PRACTICE" && session && currentQ) {
+    const isAnswered = !!session.answers[currentQ.id];
+    const answer = session.answers[currentQ.id];
+    const progressPercent = ((session.currentIndex + (isAnswered ? 1 : 0)) / session.questionIds.length) * 100;
+
+    return (
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden animate-in fade-in duration-500">
+        
+        {/* Header / Progress */}
+        <div className="p-4 md:px-8 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Question {session.currentIndex + 1} of {session.questionIds.length}
+            </span>
+            <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-md border ${
+              currentQ.difficulty === 'HARD' ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800' : 
+              currentQ.difficulty === 'MEDIUM' ? 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800' :
+              'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800'
             }`}>
               {currentQ.difficulty}
             </span>
-            {submitting && <Loader2 size={16} className="animate-spin text-indigo-500" />}
           </div>
-          
-          <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-white leading-relaxed mb-8">
+          <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-indigo-500 transition-all duration-500 ease-out" 
+              style={{ width: `${progressPercent}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Question Area */}
+        <div className="p-6 md:p-8 lg:p-10">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-white mb-8 leading-relaxed">
+            <span className="text-indigo-500 mr-2">Q.</span>
             {currentQ.question_text}
           </h2>
 
-          {/* Options */}
-          <div className="space-y-3">
-            {(["A", "B", "C", "D"] as const).map((key) => {
-              const isSelected = currentAnswer?.selected === key;
-              const isCorrect = currentAnswer?.correctAnswer === key;
+          <div className="space-y-4 mb-8">
+            {Object.entries(currentQ.options).map(([key, text]) => {
               
-              let btnClass = "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/80";
-              
+              let stateClass = "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer";
+              let icon = null;
+
               if (isAnswered) {
-                if (isCorrect) {
-                  btnClass = "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300 font-bold z-10 scale-[1.02] shadow-sm";
-                } else if (isSelected && !isCorrect) {
-                  btnClass = "border-red-300 bg-red-50 dark:bg-red-900/10 text-red-500 dark:text-red-400 opacity-80";
-                } else {
-                  btnClass = "border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 text-slate-400 opacity-50";
+                stateClass = "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/30 opacity-70 cursor-default"; // Default disabled state
+                
+                if (key === answer.correctAnswer) {
+                  stateClass = "border-emerald-500 bg-emerald-50 text-emerald-900 dark:bg-emerald-900/20 dark:text-emerald-100 ring-2 ring-emerald-500 dark:ring-emerald-400 cursor-default shadow-sm z-10 relative";
+                  icon = <CheckCircle2 size={20} className="text-emerald-600 dark:text-emerald-400" />;
+                } else if (key === answer.selected && !answer.isCorrect) {
+                  stateClass = "border-red-300 bg-red-50 text-red-900 dark:bg-red-900/20 dark:border-red-800 dark:text-red-100 cursor-default";
+                  icon = <XCircle size={20} className="text-red-600 dark:text-red-400" />;
                 }
               }
 
               return (
                 <button
                   key={key}
-                  onClick={() => handleSelectOption(key)}
                   disabled={isAnswered || submitting}
-                  className={`w-full text-left p-4 rounded-2xl border-2 transition-all duration-300 flex items-center gap-4 ${btnClass}`}
+                  onClick={() => handleSelectOption(key)}
+                  className={`w-full text-left p-4 md:p-5 rounded-2xl border-2 transition-all flex items-start gap-4 ${stateClass}`}
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black flex-shrink-0 transition-colors ${
-                    isAnswered && isCorrect ? "bg-emerald-500 text-white" : 
-                    isAnswered && isSelected && !isCorrect ? "bg-red-200 text-red-600" :
-                    "bg-slate-100 dark:bg-slate-700 text-slate-500"
+                  <div className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                    isAnswered && key === answer.correctAnswer ? 'bg-emerald-500 text-white' : 
+                    isAnswered && key === answer.selected && !answer.isCorrect ? 'bg-red-500 text-white' :
+                    'bg-slate-100 dark:bg-slate-700 text-slate-500 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900'
                   }`}>
-                    {isAnswered && isCorrect ? <CheckCircle2 size={18} /> : 
-                     isAnswered && isSelected && !isCorrect ? <XCircle size={18} /> : key}
+                    {key}
                   </div>
-                  <span className="text-base md:text-lg leading-relaxed flex-1">
-                    {currentQ.options[key as keyof typeof currentQ.options]}
-                  </span>
+                  <div className="flex-1 font-medium text-base pt-0.5">{text}</div>
+                  {icon}
                 </button>
               );
             })}
           </div>
 
-          {/* Instant Explanation */}
-          {isAnswered && currentAnswer && (
-            <div className="mt-8 animate-in fade-in slide-in-from-top-4 duration-500">
-              {currentAnswer.explanation ? (
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/50 rounded-2xl p-5">
-                  <div className="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold mb-2">
-                    <Lightbulb size={18} /> Explanation
-                  </div>
-                  <p className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed">
-                    {currentAnswer.explanation}
-                  </p>
-                </div>
-              ) : (
-                 <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-center text-sm text-slate-500">
-                   Correct Answer: Option {currentAnswer.correctAnswer}
-                 </div>
-              )}
-
-              <button 
-                onClick={handleNext} 
-                className="mt-6 w-full py-4 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-xl font-black text-lg flex items-center justify-center gap-2 transition-colors shadow-md"
-              >
-                {session.currentIndex < totalQuestions - 1 ? "Next Question" : "View Results"} <ArrowRight size={20} />
-              </button>
+          {/* Post-Answer Actions & Explanation */}
+          {isAnswered && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-6">
+              
+              <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl p-5 md:p-6 border border-indigo-100 dark:border-indigo-800/50">
+                <h4 className="flex items-center gap-2 font-bold text-indigo-800 dark:text-indigo-300 mb-2">
+                  <Lightbulb size={18} className="text-indigo-500" /> Explanation
+                </h4>
+                <p className="text-indigo-900/80 dark:text-indigo-200/80 text-sm md:text-base leading-relaxed">
+                  {answer.explanation || "No detailed explanation available for this question."}
+                </p>
+              </div>
+              
+              <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button 
+                  onClick={handleNext}
+                  className="bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold py-3.5 px-8 rounded-xl transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
+                >
+                  {session.currentIndex === session.questionIds.length - 1 ? 'Finish Module' : 'Next Question'} <ArrowRight size={18} />
+                </button>
+              </div>
+              
             </div>
           )}
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return null;
 }

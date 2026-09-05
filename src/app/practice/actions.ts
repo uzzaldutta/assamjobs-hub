@@ -1,4 +1,5 @@
-﻿"use server";
+
+"use server";
 
 import { createClient } from "@supabase/supabase-js";
 
@@ -9,23 +10,41 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function getPracticeSession(topicId: string) {
-  // Fetch only the IDs to establish order
-  const { data, error } = await supabaseAdmin
-    .from("prep_questions")
-    .select("id")
-    .eq("topic_id", topicId)
-    .eq("status", "PUBLISHED");
+export async function getPracticeSession(id: string, type: 'topic' | 'mock' = 'topic') {
+  let questionIds: string[] = [];
 
-  if (error) throw new Error("Failed to initialize session");
-  if (!data || data.length === 0) return { sessionId: `sess_${Date.now()}_temp`, questionIds: [] };
+  if (type === 'mock') {
+    // Fetch from mock test join table
+    const { data, error } = await supabaseAdmin
+      .from("prep_mock_test_questions")
+      .select("question_id")
+      .eq("test_id", id)
+      .order("order_index", { ascending: true });
+      
+    if (error) throw new Error("Failed to load mock test questions");
+    if (data) {
+      questionIds = data.map(r => r.question_id);
+    }
+  } else {
+    // Fetch from topic
+    const { data, error } = await supabaseAdmin
+      .from("prep_questions")
+      .select("id")
+      .eq("topic_id", id)
+      .eq("status", "PUBLISHED");
 
-  // Randomize array
-  const shuffled = data.map(v => v.id).sort(() => 0.5 - Math.random());
-  
+    if (error) throw new Error("Failed to initialize session");
+    if (data) {
+      // Randomize array for topic practice
+      questionIds = data.map(v => v.id).sort(() => 0.5 - Math.random());
+    }
+  }
+
+  if (questionIds.length === 0) return { sessionId: `sess_${Date.now()}_temp`, questionIds: [] };
+
   return {
     sessionId: `sess_${Date.now()}_${Math.random().toString(36).substring(7)}`,
-    questionIds: shuffled
+    questionIds
   };
 }
 

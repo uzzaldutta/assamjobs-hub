@@ -1,232 +1,118 @@
-"use client";
 
-import Link from "next/link";
-import { BookOpen, Award, Clock, ArrowRight, Target, Flame, Activity } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import PageHeader from "@/components/PageHeader";
-import { useMockTests } from "@/hooks/useMockTests";
+import Link from "next/link";
+import { Search, Activity, FileCheck, ArrowRight, Clock, Hash } from "lucide-react";
 
-export default function MockTestsIndex() {
-  const { isLoaded, testsCompleted, averageScore, results } = useMockTests();
+export const revalidate = 60;
 
-  const tests = [
-    {
-      id: "assam-history",
-      title: "Assam History (Ancient to Modern)",
-      category: "Assam GK",
-      questions: 20,
-      time: "20 Mins",
-      color: "border-blue-200 hover:border-blue-500",
-      bg: "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-    },
-    {
-      id: "assam-geography",
-      title: "Assam Geography & Economy",
-      category: "Assam GK",
-      questions: 20,
-      time: "20 Mins",
-      color: "border-emerald-200 hover:border-emerald-500",
-      bg: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
-    },
-    {
-      id: "assam-culture",
-      title: "Assam Art, Culture & Literature",
-      category: "Assam GK",
-      questions: 20,
-      time: "20 Mins",
-      color: "border-amber-200 hover:border-amber-500",
-      bg: "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
-    },
-    {
-      id: "english-grammar-1",
-      title: "English Grammar & Vocabulary Set 1",
-      category: "English",
-      questions: 20,
-      time: "20 Mins",
-      color: "border-violet-200 hover:border-violet-500",
-      bg: "bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400"
-    },
-    {
-      id: "english-grammar-2",
-      title: "English Comprehension & Usage Set 2",
-      category: "English",
-      questions: 20,
-      time: "20 Mins",
-      color: "border-fuchsia-200 hover:border-fuchsia-500",
-      bg: "bg-fuchsia-50 dark:bg-fuchsia-900/30 text-fuchsia-600 dark:text-fuchsia-400"
-    },
-    {
-      id: "logical-reasoning-1",
-      title: "Logical Reasoning & Aptitude 1",
-      category: "Reasoning",
-      questions: 20,
-      time: "25 Mins",
-      color: "border-rose-200 hover:border-rose-500",
-      bg: "bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400"
-    },
-    {
-      id: "logical-reasoning-2",
-      title: "Analytical Reasoning & Puzzles 2",
-      category: "Reasoning",
-      questions: 20,
-      time: "25 Mins",
-      color: "border-orange-200 hover:border-orange-500",
-      bg: "bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400"
-    },
-    {
-      id: "indian-polity",
-      title: "Indian Constitution & Polity",
-      category: "Polity",
-      questions: 20,
-      time: "15 Mins",
-      color: "border-sky-200 hover:border-sky-500",
-      bg: "bg-sky-50 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400"
-    },
-    {
-      id: "general-science",
-      title: "General Science & Technology",
-      category: "Science",
-      questions: 20,
-      time: "15 Mins",
-      color: "border-teal-200 hover:border-teal-500",
-      bg: "bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400"
-    },
-    {
-      id: "current-affairs",
-      title: "Latest Current Affairs (National & Assam)",
-      category: "Current Affairs",
-      questions: 20,
-      time: "15 Mins",
-      color: "border-indigo-200 hover:border-indigo-500",
-      bg: "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
-    }
-  ];
+export default async function MockTestsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
+  const searchParams = await props.searchParams;
+  const q = searchParams?.q || "";
+  const sort = searchParams?.sort || "newest";
+
+  let queryBuilder = supabase
+    .from('prep_mock_tests')
+    .select('*, prep_exams(title)')
+    .eq('status', 'PUBLISHED');
+
+  if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
+  
+  if (sort === 'newest') {
+    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+  } else {
+    queryBuilder = queryBuilder.order('title', { ascending: true });
+  }
+
+  const { data: tests, error } = await queryBuilder;
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
       <PageHeader 
-        title="Mock Tests" 
-        subtitle="Practice for ADRE, APSC, and Assam Police exams"
-        theme="blue"
+        title="Mock Tests & Practice" 
+        subtitle="Free full-length mock tests for Assam Govt exams." 
+        theme="purple" 
       />
+      
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search */}
+        <div className="mb-8">
+          <form action="/mock-tests" className="flex flex-col sm:flex-row gap-4 max-w-2xl bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="relative flex-1">
+              <input 
+                type="text" 
+                name="q" 
+                defaultValue={q} 
+                placeholder="Search mock tests by name..." 
+                className="w-full bg-transparent py-3 pl-12 pr-4 text-slate-900 dark:text-white outline-none font-medium"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            </div>
+            <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl transition-colors">
+              Search
+            </button>
+          </form>
+        </div>
 
-      <div className="max-w-5xl mx-auto w-full px-4 py-8">
-        
-        {/* Premium AI Generator Banner */}
-        <div className="mb-8 relative overflow-hidden bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl p-8 sm:p-10 shadow-xl border border-indigo-500/50 group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute -bottom-10 left-10 w-40 h-40 bg-fuchsia-500/20 rounded-full blur-2xl"></div>
-          
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-white">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="bg-white/20 backdrop-blur-md text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1 border border-white/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                  New Feature
+        {/* Results */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tests?.map((test: any) => (
+            <Link 
+              href={`/mock-tests/${test.id}`} 
+              key={test.id}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-700 transition-all flex flex-col group"
+            >
+              <div className="mb-4">
+                <span className="text-[10px] md:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800">
+                  Mock Test
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black mb-3 leading-tight tracking-tight">AI Mock Test Generator</h2>
-              <p className="text-indigo-100 font-medium text-lg max-w-xl">
-                Type any exam name or subject, and our Gemini 3.6 AI will instantly craft a custom 20-question mock test just for you.
-              </p>
-            </div>
-            
-            <Link href="/mock-tests/ai-generator" className="shrink-0 w-full md:w-auto bg-white text-indigo-700 hover:bg-slate-50 font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center justify-center gap-2 group-hover:scale-105 active:scale-95">
-              Generate Test Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+                {test.title}
+              </h3>
+              
+              {test.prep_exams && (
+                <p className="text-sm font-medium text-slate-500 mb-4 flex items-center gap-1.5">
+                  <FileCheck size={16} className="text-slate-400" />
+                  {test.prep_exams.title}
+                </p>
+              )}
+
+              <div className="grid grid-cols-2 gap-3 mb-6 mt-auto">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                   <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Duration</span>
+                   <span className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5"><Clock size={14} className="text-slate-400"/> {test.duration_minutes || '--'} Mins</span>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                   <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Marks</span>
+                   <span className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5"><Hash size={14} className="text-slate-400"/> {test.total_marks || '--'} Marks</span>
+                </div>
+              </div>
+              
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                <span className="text-indigo-600 dark:text-indigo-400 font-bold text-sm">View Details</span>
+                <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors text-indigo-600 dark:text-indigo-400">
+                  <ArrowRight size={16} />
+                </div>
+              </div>
             </Link>
-          </div>
+          ))}
         </div>
 
-        
-        {/* Practice Dashboard */}
-        {isLoaded && (
-          <div className="mb-10 bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 dark:bg-blue-900/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-            
-            <h2 className="text-xl md:text-2xl font-black text-slate-800 dark:text-white mb-6 flex items-center gap-2 relative z-10">
-              <Target className="text-blue-600 dark:text-blue-400" /> Your Practice Dashboard
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 relative z-10">
-              
-              {/* Continue Practice */}
-              <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white flex flex-col justify-between shadow-md">
-                <div className="flex items-center gap-2 mb-4 font-bold text-blue-100">
-                  <Flame size={20} className="text-orange-300 fill-orange-300" /> Keep the streak alive
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-1">Assam GK (Set 2)</h3>
-                  <p className="text-blue-200 text-sm mb-4">Recommended next test</p>
-                  <Link href="/mock-tests/assam-gk" className="inline-flex items-center gap-1.5 bg-white text-blue-700 font-bold px-4 py-2 rounded-xl hover:bg-blue-50 transition-colors text-sm">
-                    Start Now <ArrowRight size={16} />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                    <Activity size={20} />
-                  </div>
-                  <span className="text-slate-500 dark:text-slate-400 font-medium text-sm uppercase tracking-wider">Tests Completed</span>
-                </div>
-                <div className="text-4xl font-black text-slate-800 dark:text-white ml-1">{testsCompleted}</div>
-              </div>
-
-              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
-                    <Award size={20} />
-                  </div>
-                  <span className="text-slate-500 dark:text-slate-400 font-medium text-sm uppercase tracking-wider">Average Score</span>
-                </div>
-                <div className="text-4xl font-black text-slate-800 dark:text-white ml-1">{averageScore}%</div>
-              </div>
-
-            </div>
+        {(!tests || tests.length === 0) && (
+          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+            <Activity size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Mock Tests Available</h3>
+            <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">We are adding new mock tests soon. Check back later!</p>
+            {q && (
+              <Link href="/mock-tests" className="inline-block px-6 py-2.5 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-colors">
+                Clear Search
+              </Link>
+            )}
           </div>
         )}
-
-        {/* Available Tests */}
-        <h3 className="text-lg font-black text-slate-800 dark:text-white mb-6 uppercase tracking-wider">Available Tests</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {tests.map((test) => {
-            const hasCompleted = results?.some(r => r.testId === test.id);
-            const bestScore = results?.filter(r => r.testId === test.id).sort((a, b) => b.score - a.score)[0];
-
-            return (
-              <Link 
-                href={`/mock-tests/${test.id}`} 
-                key={test.id}
-                className={`bg-white dark:bg-slate-900 border-2 ${test.color} dark:border-slate-800 rounded-2xl p-5 hover:shadow-lg transition-all flex flex-col group`}
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <span className={`text-[10px] md:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-lg ${test.bg}`}>
-                    {test.category}
-                  </span>
-                  
-                  {hasCompleted && bestScore && (
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded border border-emerald-100 dark:border-emerald-800">
-                      Score: {bestScore.score}/{bestScore.totalQuestions}
-                    </span>
-                  )}
-                </div>
-                
-                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
-                  {test.title}
-                </h3>
-                  <div className="text-[10px] text-slate-400 font-mono mb-4" title="Feed ID">ID: AJH-{test.id.slice(-6).toUpperCase()}</div>
-                
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm font-medium">
-                  <div className="flex items-center gap-1.5"><BookOpen size={16} /> {test.questions} Qs</div>
-                  <div className="flex items-center gap-1.5"><Clock size={16} /> {test.time}</div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-      </div>
+      </main>
     </div>
   );
 }

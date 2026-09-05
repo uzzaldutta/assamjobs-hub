@@ -19,7 +19,7 @@ export default function CalendarApp() {
       const { data } = await supabase
         .from('jobs')
         .select('*')
-      .neq('category', 'BANNED_KEYWORD')
+      .eq('status', 'PUBLISHED')
         .not('last_date', 'is', null);
       
       if (data) setJobs(data);

@@ -85,11 +85,11 @@ export default function MobileBottomNav() {
 
         {activePopup === "jobs" && (
           <div className="grid grid-cols-2 gap-3">
-            <Link href="/govt-jobs" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-100 hover:bg-emerald-100 transition-colors group">
+            <Link href="/jobs?type=GOVERNMENT" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-100 hover:bg-emerald-100 transition-colors group">
               <div className="p-3 bg-emerald-100 text-emerald-600 rounded-full group-hover:scale-110 transition-transform"><Briefcase size={24} /></div>
               <span className="font-bold text-emerald-900 text-sm">Govt Jobs</span>
             </Link>
-            <Link href="/private-jobs" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-3 p-4 bg-blue-50 rounded-2xl border border-blue-100 hover:bg-blue-100 transition-colors group">
+            <Link href="/jobs?type=PRIVATE" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-3 p-4 bg-blue-50 rounded-2xl border border-blue-100 hover:bg-blue-100 transition-colors group">
               <div className="p-3 bg-blue-100 text-blue-600 rounded-full group-hover:scale-110 transition-transform"><Building2 size={24} /></div>
               <span className="font-bold text-blue-900 text-sm">Private Jobs</span>
             </Link>
@@ -124,3 +124,4 @@ export default function MobileBottomNav() {
     </>
   );
 }
+

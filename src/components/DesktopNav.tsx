@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import SearchAutocomplete from "./SearchAutocomplete";
@@ -27,8 +27,8 @@ export default function DesktopNav() {
           <Briefcase size={16} /> {t("nav_jobs")} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
-          <Link href="/govt-jobs" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_govt")}</Link>
-          <Link href="/private-jobs" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_private")}</Link>
+          <Link href="/jobs?type=GOVERNMENT" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_govt")}</Link>
+          <Link href="/jobs?type=PRIVATE" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_private")}</Link>
           <Link href="/admissions" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">{t("nav_admissions")}</Link>
         </div>
       </div>
@@ -58,10 +58,10 @@ export default function DesktopNav() {
           <BookOpen size={16} /> Preparation <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
-          <Link href="/study-materials" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸ“– {t("nav_study")}</Link>
-          <Link href="/previous-papers" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸ“„ Previous Papers</Link>
-          <Link href="/mock-tests" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸŽ¯ {t("nav_mock")}</Link>
-          <Link href="/syllabus" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">ðŸ“‹ {t("nav_syllabus")}</Link>
+          <Link href="/study-materials" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📖 {t("nav_study")}</Link>
+          <Link href="/previous-papers" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📄 Previous Papers</Link>
+          <Link href="/mock-tests" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">🎯 {t("nav_mock")}</Link>
+          <Link href="/syllabus" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📋 {t("nav_syllabus")}</Link>
         </div>
       </div>
 
@@ -127,5 +127,6 @@ export default function DesktopNav() {
 
   );
 }
+
 
 

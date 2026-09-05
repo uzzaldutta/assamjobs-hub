@@ -1,80 +1,97 @@
-
 import React from 'react';
-import { Calendar, FileText, CheckCircle, AlertCircle, Award, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
+import { Calendar, Building2, MapPin, CheckCircle2, AlertCircle, XCircle, FileText, ExternalLink, IndianRupee, GraduationCap, FileCheck } from 'lucide-react';
 
 export default function ResultCard({ result }: { result: any }) {
-  const isVerified = result.verification_status === 'VERIFIED';
-  
+  // Determine Deadline State
+  let deadlineState = "ACTIVE";
+  if (result.result_date) {
+    const end = new Date(result.result_date);
+    const now = new Date();
+    const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
+    if (daysLeft < 0) deadlineState = "CLOSED";
+    else if (daysLeft <= 7) deadlineState = "CLOSING_SOON";
+  }
+
+  // Determine Badge Styling
+  let statusBadge = null;
+  if (result.status === 'PUBLISHED' && result.verification_status === 'VERIFIED') {
+    statusBadge = <span className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200"><CheckCircle2 size={12}/> VERIFIED</span>;
+  }
+
+  let dateColor = "text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700";
+  let dateIcon = <Calendar size={14} className="text-slate-400" />;
+  if (deadlineState === "CLOSING_SOON") {
+    dateColor = "text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-900/50";
+    dateIcon = <AlertCircle size={14} className="text-amber-500" />;
+  } else if (deadlineState === "CLOSED") {
+    dateColor = "text-slate-500 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-800";
+    dateIcon = <XCircle size={14} className="text-slate-400" />;
+  }
+
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm transition hover:shadow-md">
+    <div className={`relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col overflow-hidden ${deadlineState === 'CLOSED' ? 'opacity-80 grayscale-[15%]' : 'hover:border-pink-300 dark:hover:border-pink-700'}`}>
+      
+      {/* Top Row: Category Badge */}
       <div className="flex justify-between items-start mb-3">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] font-black uppercase rounded tracking-wider">
-              {result.result_type || 'Result'}
-            </span>
-            {isVerified ? (
-              <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase rounded flex items-center gap-1 tracking-wider">
-                <CheckCircle size={10} /> Verified
-              </span>
-            ) : (
-              <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-black uppercase rounded flex items-center gap-1 tracking-wider">
-                <AlertCircle size={10} /> Unverified
-              </span>
-            )}
-            {result.year && (
-              <span className="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase rounded tracking-wider">
-                {result.year}
-              </span>
-            )}
-          </div>
-          <h3 className="text-lg font-bold text-slate-900 line-clamp-2 leading-tight">
-            {result.title}
-          </h3>
-          <p className="text-sm font-medium text-slate-600 mt-1 flex items-center gap-1.5">
-            <Award size={14} className="text-slate-400" /> {result.organization}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-md text-pink-700 bg-pink-50 border border-pink-200">
+            Result
+          </span>
+          {statusBadge}
+        </div>
+      </div>
+
+      {/* Title & Org */}
+      <Link href={`/results/${result.id}`} className="group block mb-4">
+        <h3 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white leading-tight group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors mb-1 pr-4 line-clamp-2">
+          {result.title}
+        </h3>
+        {result.organization && (
+          <p className="text-slate-600 dark:text-slate-400 font-medium text-sm flex items-center gap-1.5">
+            <Building2 size={14} className="opacity-70 shrink-0" /> <span className="truncate">{result.organization}</span>
           </p>
-        </div>
-      </div>
+        )}
+      </Link>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-4">
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 md:col-span-2">
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Exam Name</span>
-          <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5 truncate">
-            <FileText size={14} className="text-slate-400"/> {result.exam_name || 'Various Exams'}
-          </span>
-        </div>
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Exam Date</span>
-          <span className="text-sm font-bold text-slate-700 truncate">
-            {result.exam_date ? new Date(result.exam_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
-          </span>
-        </div>
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Result Declared</span>
-          <span className="text-sm font-bold text-slate-700 flex items-center gap-1">
-            <Calendar size={12} className="text-blue-500"/> 
-            {result.result_date ? new Date(result.result_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
-          </span>
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-2">
-        {result.result_url || result.official_source_url ? (
-          <a 
-            href={result.result_url || result.official_source_url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-600/20 rounded-xl font-bold text-sm text-center transition flex justify-center items-center gap-2"
-          >
-            Check Result <ExternalLink size={14} />
-          </a>
-        ) : (
-          <button disabled className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-sm text-center bg-slate-100 text-slate-400 cursor-not-allowed">
-            Link Unavailable
-          </button>
+      {/* Grid Specs */}
+      <div className="grid grid-cols-2 gap-3 mb-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+        
+        {result.exam_name && (
+          <div className="flex items-center gap-1.5" title={result.exam_name}>
+            <FileCheck size={14} className="text-slate-400 shrink-0" />
+            <span className="truncate">{result.exam_name}</span>
+          </div>
         )}
       </div>
+
+      {/* Deadline Highlight */}
+      <div className={`px-3 py-2 rounded-lg font-bold text-xs md:text-sm mb-4 flex items-center gap-2 border ${dateColor}`}>
+        {dateIcon} 
+        <span>
+          {deadlineState === "CLOSED" ? "Declared: " : deadlineState === "CLOSING_SOON" ? "Declared: " : "Declared: "}
+          {result.result_date ? new Date(result.result_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
+        </span>
+      </div>
+
+      {/* Footer & Actions */}
+      <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 flex-1">
+          {result.official_pdf_url ? (
+            <a href={result.official_pdf_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+              View Result <ExternalLink size={12} />
+            </a>
+          ) : result.official_source_url ? (
+            <a href={result.official_source_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+              <FileText size={12} /> Source
+            </a>
+          ) : null}
+        </div>
+        <Link href={`/results/${result.id}`} className="text-sm font-bold text-pink-600 dark:text-pink-400 hover:underline">
+          Details
+        </Link>
+      </div>
+
     </div>
   );
 }

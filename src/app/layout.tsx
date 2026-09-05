@@ -56,11 +56,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
       <head>
-        <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+        <meta name="google-adsense-account" content="ca-pub-4651508083326671" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#4f46e5" />
         <link rel="apple-touch-icon" href="/logo.jpg" />
-        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossOrigin="anonymous" strategy="afterInteractive" />
+        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4651508083326671" crossOrigin="anonymous" strategy="afterInteractive" />
         
         {/* Google Analytics Setup */}
         {process.env.NEXT_PUBLIC_GA_ID && (
@@ -88,7 +88,12 @@ export default function RootLayout({
                   
                   {/* Logo */}
                   <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
-                    <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-16 md:h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
+                    
+                      {/* Full Logo for Desktop */}
+                      <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="hidden md:block h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
+                      {/* Compact Logo for Mobile */}
+                      <img src="/icon-192.png" alt="AssamJobs Hub Compact Logo" className="block md:hidden h-10 w-auto object-contain drop-shadow-sm rounded-lg" />
+
                   </Link>
 
                   {/* Desktop Navigation */}

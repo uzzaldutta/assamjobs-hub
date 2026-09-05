@@ -9,6 +9,14 @@ import { ChevronLeft, ChevronRight, Search, Briefcase, Building2, SlidersHorizon
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: "Jobs in Assam",
+  description: "Latest Government & Private jobs in Assam. Apply online for Assam Police, ADRE, APSC and other recruitment.",
+  alternates: {
+    canonical: "/jobs",
+  }
+};
+
 export default async function JobsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1", 10);
@@ -105,16 +113,25 @@ export default async function JobsPage(props: { searchParams?: Promise<{ [key: s
                 <JobCard key={job.id} job={job} />
               ))}
               
-              {(!jobs || jobs.length === 0) && (
+                            {(!jobs || jobs.length === 0) && (() => {
+                const hasFilters = typeFilter !== "ALL" || query || district || qualification || organization || status !== "ALL";
+                return (
                 <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                   <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No jobs found</h3>
-                  <p className="text-slate-500 dark:text-slate-400 mb-6">Try adjusting your filters or search terms.</p>
-                  <Link href="/jobs" className="px-6 py-2.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 transition-colors">
-                    Clear All Filters
-                  </Link>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                    {hasFilters ? "No jobs match these filters." : "No jobs available right now."}
+                  </h3>
+                  <p className="text-slate-500 dark:text-slate-400 mb-6">
+                    {hasFilters ? "Try adjusting your filters or search terms." : "Check back later for new opportunities."}
+                  </p>
+                  {hasFilters && (
+                    <Link href="/jobs" className="px-6 py-2.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 transition-colors">
+                      Clear Filters
+                    </Link>
+                  )}
                 </div>
-              )}
+                );
+              })()}
            </div>
 
            {/* Server-Side Pagination */}

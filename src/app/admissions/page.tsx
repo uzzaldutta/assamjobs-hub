@@ -9,6 +9,14 @@ import { Search, ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-rea
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: "Admissions in Assam",
+  description: "Latest university and college admission notifications in Assam.",
+  alternates: {
+    canonical: "/admissions",
+  }
+};
+
 export default async function AdmissionsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1");
@@ -114,14 +122,25 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
           {admissions?.map(adm => (
             <AdmissionCard key={adm.id} admission={adm} />
           ))}
-          {(!admissions || admissions.length === 0) && (
-            <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-              <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No admissions found</h3>
-              <p className="text-slate-500 dark:text-slate-400 mb-6">Try adjusting your filters or search terms.</p>
-            </div>
-          )}
-          {totalPages > 1 && (
+                    {(!admissions || admissions.length === 0) && (() => {
+            const hasFilters = q || inst || course || status !== 'ALL';
+            return (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                  {hasFilters ? "No admissions match these filters." : "No admissions available right now."}
+                </h3>
+                <p className="text-slate-500 dark:text-slate-400 mb-6">
+                  {hasFilters ? "Try adjusting your filters or search terms." : "Check back later for new updates."}
+                </p>
+                {hasFilters && (
+                  <Link href="/admissions" className="inline-block px-6 py-2.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 transition-colors">
+                    Clear All Filters
+                  </Link>
+                )}
+              </div>
+            );
+          })()}          {totalPages > 1 && (
             <div className="mt-8 flex justify-center items-center gap-2">
                <Link href={`/admissions?page=${Math.max(1, page - 1)}&q=${q}&inst=${inst}&course=${course}&status=${status}&sort=${sort}`} className={`p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 ${page <= 1 ? 'opacity-50 pointer-events-none' : ''}`}>
                  <ChevronLeft size={20} />

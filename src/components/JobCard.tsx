@@ -2,8 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Building2, MapPin, Clock, Bookmark, Users, CheckCircle2, AlertCircle, XCircle } from "lucide-react";
-import { useLanguage } from "./LanguageContext";
+import { Building2, MapPin, Clock, Bookmark, Users, CheckCircle2, AlertCircle, XCircle, GraduationCap, ExternalLink, FileText } from "lucide-react";
 import { useBookmarks } from "@/hooks/useBookmarks";
 
 interface JobCardProps {
@@ -11,9 +10,7 @@ interface JobCardProps {
 }
 
 export default function JobCard({ job }: JobCardProps) {
-  const { t } = useLanguage();
   const { isSaved, toggleSave, isLoaded } = useBookmarks();
-  
   const saved = isLoaded ? isSaved(job.id) : false;
 
   // Determine Deadline State
@@ -28,8 +25,8 @@ export default function JobCard({ job }: JobCardProps) {
 
   // Determine Badge Styling
   let statusBadge = null;
-  if (job.status === 'PUBLISHED' && job.tier === 1) {
-    statusBadge = <span className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200"><CheckCircle2 size={12}/> VERIFIED</span>;
+  if (job.status === 'PUBLISHED' && job.verification_status === 'VERIFIED') {
+    statusBadge = <span className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200"><CheckCircle2 size={12}/> VERIFIED</span>;
   }
 
   let dateColor = "text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700";
@@ -43,16 +40,13 @@ export default function JobCard({ job }: JobCardProps) {
   }
 
   return (
-    <div className={`relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col group overflow-hidden ${deadlineState === 'CLOSED' ? 'opacity-70 grayscale-[30%]' : 'hover:border-indigo-300 dark:hover:border-indigo-700'}`}>
-      
-      {/* Invisible link covering the entire card */}
-      <Link href={`/jobs/${job.id}`} className="absolute inset-0 z-0" aria-label={`View details for ${job.title}`} />
+    <div className={`relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col overflow-hidden ${deadlineState === 'CLOSED' ? 'opacity-80 grayscale-[15%]' : 'hover:border-indigo-300 dark:hover:border-indigo-700'}`}>
       
       {/* Top Row: Category Badge & Bookmark */}
-      <div className="relative z-10 flex justify-between items-start mb-3">
-        <div className="flex flex-wrap items-center gap-2 pointer-events-none">
-          <span className={`text-[10px] md:text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-md ${job.job_type === 'GOVERNMENT' ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-blue-700 bg-blue-50 border border-blue-200'}`}>
-            {job.job_type || job.type || 'JOB'}
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`text-[10px] md:text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${job.job_type === 'GOVERNMENT' ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-blue-700 bg-blue-50 border border-blue-200'}`}>
+            {job.job_type || 'JOB'}
           </span>
           {statusBadge}
         </div>
@@ -70,47 +64,70 @@ export default function JobCard({ job }: JobCardProps) {
       </div>
 
       {/* Title & Org */}
-      <h3 className="relative z-10 text-lg md:text-xl font-bold text-slate-800 dark:text-white leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1 pointer-events-none pr-4">
-        {job.title}
-      </h3>
-      <p className="relative z-10 text-slate-600 dark:text-slate-400 font-medium text-sm mb-4 flex items-center gap-1.5 pointer-events-none">
-        <Building2 size={14} className="opacity-70 shrink-0" /> <span className="truncate">{job.organization}</span>
-      </p>
+      <Link href={`/jobs/${job.id}`} className="group block mb-4">
+        <h3 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1 pr-4 line-clamp-2">
+          {job.title}
+        </h3>
+        {job.organization && (
+          <p className="text-slate-600 dark:text-slate-400 font-medium text-sm flex items-center gap-1.5">
+            <Building2 size={14} className="opacity-70 shrink-0" /> <span className="truncate">{job.organization}</span>
+          </p>
+        )}
+      </Link>
 
       {/* Grid Specs */}
-      <div className="relative z-10 grid grid-cols-2 gap-3 mb-4 text-sm font-medium text-slate-600 dark:text-slate-300 pointer-events-none">
-        <div className="flex items-center gap-1.5">
-          <MapPin size={14} className="text-slate-400 shrink-0" />
-          <span className="truncate">{job.district || "Assam"}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Users size={14} className="text-slate-400 shrink-0" />
-          <span className="truncate">{job.vacancies ? `${job.vacancies} Posts` : "Multiple Posts"}</span>
-        </div>
+      <div className="grid grid-cols-2 gap-3 mb-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+        {job.district && (
+          <div className="flex items-center gap-1.5" title={job.district}>
+            <MapPin size={14} className="text-slate-400 shrink-0" />
+            <span className="truncate">{job.district}</span>
+          </div>
+        )}
+        {job.vacancies && (
+          <div className="flex items-center gap-1.5" title={`${job.vacancies} Posts`}>
+            <Users size={14} className="text-slate-400 shrink-0" />
+            <span className="truncate">{job.vacancies} Posts</span>
+          </div>
+        )}
+        {job.qualification && (
+          <div className="flex items-center gap-1.5 col-span-2" title={job.qualification}>
+            <GraduationCap size={14} className="text-slate-400 shrink-0" />
+            <span className="truncate">{job.qualification}</span>
+          </div>
+        )}
       </div>
 
       {/* Deadline Highlight */}
-      <div className={`relative z-10 px-3 py-2 rounded-lg font-bold text-xs md:text-sm mb-4 flex items-center gap-2 border pointer-events-none ${dateColor}`}>
+      <div className={`px-3 py-2 rounded-lg font-bold text-xs md:text-sm mb-4 flex items-center gap-2 border ${dateColor}`}>
         {dateIcon} 
         <span>
-          {deadlineState === "CLOSED" ? "Closed on " : "Last Date: "}
+          {deadlineState === "CLOSED" ? "Closed on " : deadlineState === "CLOSING_SOON" ? "Closing Soon: " : "Last Date: "}
           {job.last_date ? new Date(job.last_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
         </span>
       </div>
 
-      {/* Footer */}
-      <div className="relative z-10 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between pointer-events-none">
-        <div className="flex flex-col gap-0.5">
-            <span className="text-[11px] text-slate-400 font-medium">
-              Posted: {new Date(job.created_at || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-            </span>
+      {/* Footer & Actions */}
+      <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 flex-1">
+          {job.apply_url ? (
+            <a href={job.apply_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+              Apply Now <ExternalLink size={12} />
+            </a>
+          ) : job.official_pdf_url ? (
+            <a href={job.official_pdf_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+              <FileText size={12} /> Official Notification
+            </a>
+          ) : job.official_source_url ? (
+            <a href={job.official_source_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+              <FileText size={12} /> Source
+            </a>
+          ) : null}
         </div>
-        <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
-          Details
-        </span>
+        <Link href={`/jobs/${job.id}`} className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+          View Details
+        </Link>
       </div>
 
     </div>
   );
 }
-

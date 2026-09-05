@@ -1,117 +1,110 @@
-"use client";
 
+import { supabase } from "@/lib/supabase";
 import PageHeader from "@/components/PageHeader";
-import { FileText, Download, GraduationCap, ChevronDown, CheckCircle2 } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { Search, BookOpen, ArrowRight, Layers } from "lucide-react";
 
-const mockSyllabus = [
-  {
-    id: "s1",
-    title: "ADRE Grade III & IV (Assam Direct Recruitment)",
-    organization: "SLRC Assam",
-    topics: ["General Knowledge (Assam History, Geography)", "General English", "Mathematics (Class 10 level)", "Mental Ability / Logical Reasoning"],
-    examPattern: "100 Multiple Choice Questions (OMR based) carrying 1.5 marks each. Negative marking of 0.5 for Grade III.",
-    pdfLink: "#"
-  },
-  {
-    id: "s2",
-    title: "Assam Police SI (Sub Inspector)",
-    organization: "SLPRB Assam",
-    topics: ["Logical Reasoning, Aptitude, Comprehension", "History and Culture of Assam and India", "General Knowledge", "General Science"],
-    examPattern: "100 questions carrying 100 marks. 1/2 mark negative for every wrong answer.",
-    pdfLink: "#"
-  },
-  {
-    id: "s3",
-    title: "APSC CCE (Combined Competitive Exam)",
-    organization: "Assam Public Service Commission",
-    topics: ["General Studies I (Indian History, Geography, Polity)", "General Studies II (Aptitude, Comprehension)", "Assam specific GS"],
-    examPattern: "Prelims (2 Papers, 400 marks). Mains (6 Papers, 1500 marks) followed by Interview (275 marks).",
-    pdfLink: "#"
-  }
-];
+export const revalidate = 60;
 
-export default function SyllabusPage() {
-  const [expandedId, setExpandedId] = useState<string | null>(mockSyllabus[0].id);
+export default async function SyllabusPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
+  const searchParams = await props.searchParams;
+  const q = searchParams?.q || "";
 
+  let queryBuilder = supabase
+    .from('prep_exams')
+    .select('*, prep_subjects(id)')
+    .eq('status', 'PUBLISHED');
+
+  if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
+  
+  queryBuilder = queryBuilder.order('created_at', { ascending: false });
+
+  const { data: exams, error } = await queryBuilder;
+  
+  // Only show exams that have syllabus (prep_subjects) mapped, or show all? 
+  // Let's show all published exams so users know the exam exists, but we can highlight if syllabus is mapped.
+  
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
-      
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
       <PageHeader 
-        title="Exam Syllabus" 
-        subtitle="Download official syllabuses for all major Assam exams"
-        theme="blue"
+        title="Official Syllabus" 
+        subtitle="Detailed topic-wise syllabus for Assam Govt exams." 
+        theme="purple" 
       />
+      
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search */}
+        <div className="mb-8">
+          <form action="/syllabus" className="flex flex-col sm:flex-row gap-4 max-w-2xl bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="relative flex-1">
+              <input 
+                type="text" 
+                name="q" 
+                defaultValue={q} 
+                placeholder="Search syllabus by exam name..." 
+                className="w-full bg-transparent py-3 pl-12 pr-4 text-slate-900 dark:text-white outline-none font-medium"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            </div>
+            <button type="submit" className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-8 rounded-xl transition-colors">
+              Search
+            </button>
+          </form>
+        </div>
 
-      <div className="px-4 mt-8 max-w-5xl mx-auto w-full pb-20">
-        
-        <div className="space-y-4">
-          {mockSyllabus.map(item => {
-            const isExpanded = expandedId === item.id;
-          
-            return (
-              <div 
-                key={item.id} 
-                className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isExpanded ? 'border-indigo-300 shadow-md bg-white dark:bg-slate-900' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200'}`}
+        {/* Results */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {exams?.map((exam: any) => {
+             const hasSyllabus = exam.prep_subjects && exam.prep_subjects.length > 0;
+             return (
+              <Link 
+                href={`/exam/${exam.slug}`} 
+                key={exam.id}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-700 transition-all flex flex-col group"
               >
-                {/* Header (Clickable) */}
-                <button 
-                  onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                  className="w-full flex items-center justify-between p-5 text-left bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-                >
-                  <div>
-                    <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">{item.title}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{item.organization}</p>
+                <div className="mb-4 flex justify-between items-start">
+                  <span className="text-[10px] md:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-lg bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400 border border-violet-100 dark:border-violet-800">
+                    Syllabus
+                  </span>
+                  {hasSyllabus ? (
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-400">Available</span>
+                  ) : (
+                    <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">Compiling</span>
+                  )}
+                </div>
+                
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
+                  {exam.title}
+                </h3>
+                
+                <p className="text-sm font-medium text-slate-500 mb-6 line-clamp-2">
+                  {exam.description || "Detailed syllabus and preparation strategy."}
+                </p>
+                
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center mt-auto">
+                  <span className="text-violet-600 dark:text-violet-400 font-bold text-sm flex items-center gap-1"><BookOpen size={16} /> View Syllabus</span>
+                  <div className="w-8 h-8 rounded-full bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition-colors text-violet-600 dark:text-violet-400">
+                    <ArrowRight size={16} />
                   </div>
-                  <ChevronDown size={20} className={`text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                </button>
-
-                {/* Body (Expandable) */}
-                {isExpanded && (
-                  <div className="p-5 md:p-6 border-t border-slate-100 dark:border-slate-800">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      
-                      <div>
-                        <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
-                          <CheckCircle2 size={16} className="text-indigo-500" /> Key Topics
-                        </h4>
-                        <ul className="space-y-2">
-                          {item.topics.map((topic, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                              <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-1.5 shrink-0"></span>
-                              {topic}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
-                            <FileText size={16} className="text-indigo-500" /> Exam Pattern
-                          </h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-300 bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/50 leading-relaxed">
-                            {item.examPattern}
-                          </p>
-                        </div>
-
-                        <a 
-                          href={item.pdfLink} 
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-semibold rounded-xl transition shadow-sm"
-                        >
-                          <Download size={18} /> Download Full Syllabus PDF
-                        </a>
-                      </div>
-
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
+                </div>
+              </Link>
+            )
           })}
         </div>
-      </div>
 
+        {(!exams || exams.length === 0) && (
+          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+            <Layers size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Syllabus Found</h3>
+            <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">We couldn't find any syllabus matching your search.</p>
+            {q && (
+              <Link href="/syllabus" className="inline-block px-6 py-2.5 bg-violet-50 text-violet-600 font-bold rounded-xl hover:bg-violet-100 transition-colors">
+                Clear Search
+              </Link>
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

@@ -9,6 +9,14 @@ import { FileText, Search, ChevronLeft, ChevronRight, SlidersHorizontal } from "
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: "Tenders in Assam",
+  description: "Latest e-Procurement and Government Tenders in Assam.",
+  alternates: {
+    canonical: "/tenders",
+  }
+};
+
 export default async function TendersPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1");
@@ -111,14 +119,25 @@ export default async function TendersPage(props: { searchParams?: Promise<{ [key
             <TenderCard key={tender.id} tender={tender} />
           ))}
 
-          {(!tenders || tenders.length === 0) && (
-            <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-              <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No tenders found</h3>
-              <p className="text-slate-500 dark:text-slate-400 mb-6">Try adjusting your filters or search terms.</p>
-            </div>
-          )}
-
+                    {(!tenders || tenders.length === 0) && (() => {
+            const hasFilters = q || org || status !== 'ALL';
+            return (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                  {hasFilters ? "No tenders match these filters." : "No tenders available right now."}
+                </h3>
+                <p className="text-slate-500 dark:text-slate-400 mb-6">
+                  {hasFilters ? "Try adjusting your filters or search terms." : "Check back later for new updates."}
+                </p>
+                {hasFilters && (
+                  <Link href="/tenders" className="inline-block px-6 py-2.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 transition-colors">
+                    Clear All Filters
+                  </Link>
+                )}
+              </div>
+            );
+          })()}
           {totalPages > 1 && (
             <div className="mt-8 flex justify-center items-center gap-2">
                <Link href={`/tenders?page=${Math.max(1, page - 1)}&q=${q}&org=${org}&status=${status}&sort=${sort}`} className={`p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 ${page <= 1 ? 'opacity-50 pointer-events-none' : ''}`}>
