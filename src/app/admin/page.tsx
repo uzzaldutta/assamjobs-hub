@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image, X, BookOpen } from "lucide-react";
+import { Shield, PlusCircle, CheckCircle2, AlertCircle, Lock, Edit, Trash2, List, Image, X, BookOpen , Database, Activity, LayoutDashboard, FileCheck} from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import PrepDashboard from "@/components/admin/PrepDashboard";
@@ -360,6 +360,46 @@ export default function AdminPage() {
           </div>
         </div>
 
+        
+        {/* UNIVERSAL ADMIN HUB QUICK LINKS */}
+        <div className="mb-8">
+          <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Universal Content Studio</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Link href="/admin/studio/ingestion" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm hover:border-indigo-500 hover:shadow-md transition group flex flex-col gap-2">
+              <div className="text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 p-2 rounded-lg w-fit"><Database size={20} /></div>
+              <div>
+                <h3 className="font-bold text-slate-900 dark:text-white">Ingestion Engine</h3>
+                <p className="text-xs text-slate-500 mt-1">Manage sources & extractors</p>
+              </div>
+            </Link>
+            
+            <Link href="/admin/studio/ingestion/queue" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm hover:border-emerald-500 hover:shadow-md transition group flex flex-col gap-2">
+              <div className="text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 p-2 rounded-lg w-fit"><FileCheck size={20} /></div>
+              <div>
+                <h3 className="font-bold text-slate-900 dark:text-white">Review Queue</h3>
+                <p className="text-xs text-slate-500 mt-1">Approve pending jobs & duplicates</p>
+              </div>
+            </Link>
+
+            <Link href="/admin/studio/ingestion/reports" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm hover:border-amber-500 hover:shadow-md transition group flex flex-col gap-2">
+              <div className="text-amber-600 bg-amber-50 dark:bg-amber-900/30 p-2 rounded-lg w-fit"><Activity size={20} /></div>
+              <div>
+                <h3 className="font-bold text-slate-900 dark:text-white">Daily Operations</h3>
+                <p className="text-xs text-slate-500 mt-1">Daily feed and health reports</p>
+              </div>
+            </Link>
+
+            <Link href="/admin/studio" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm hover:border-fuchsia-500 hover:shadow-md transition group flex flex-col gap-2">
+              <div className="text-fuchsia-600 bg-fuchsia-50 dark:bg-fuchsia-900/30 p-2 rounded-lg w-fit"><LayoutDashboard size={20} /></div>
+              <div>
+                <h3 className="font-bold text-slate-900 dark:text-white">Exam Prep Studio</h3>
+                <p className="text-xs text-slate-500 mt-1">Mock tests, questions, and PDFs</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+        
+        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Legacy Management Tools</h2>
         {/* CMS Tabs */}
         <div className="flex gap-2 mb-6 bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-2xl flex-wrap">
           <button onClick={() => setActiveTab("manage")} className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === "manage" ? "bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}>
