@@ -79,7 +79,7 @@ export default async function FeedMonitoringDashboard({ searchParams }: { search
            <h2 className="text-sm font-black text-slate-400 uppercase tracking-wider">Daily Run Overview</h2>
            <form className="flex items-center gap-2">
               <input type="hidden" name="filter" value={filter} />
-              <select name="date" className="text-xs border-slate-200 rounded p-1 text-slate-600" defaultValue={targetDate} onChange={(e) => e.target.form?.submit()}>
+              <select name="date" className="text-xs border-slate-200 rounded p-1 text-slate-600" defaultValue={targetDate} >
                  {dailyStats?.map(d => (
                     <option key={d.run_date} value={d.run_date}>{d.run_date}</option>
                  ))}
@@ -136,7 +136,7 @@ export default async function FeedMonitoringDashboard({ searchParams }: { search
            <h2 className="text-sm font-black text-slate-400 uppercase tracking-wider">Source Health Matrix</h2>
            <form className="flex items-center gap-2">
               <input type="hidden" name="date" value={targetDate} />
-              <select name="filter" className="text-xs border-slate-200 rounded p-1 text-slate-600" defaultValue={filter} onChange={(e) => e.target.form?.submit()}>
+              <select name="filter" className="text-xs border-slate-200 rounded p-1 text-slate-600" defaultValue={filter} >
                  <option value="ALL">All Status</option>
                  <option value="HEALTHY">Healthy</option>
                  <option value="WARNING">Warning</option>

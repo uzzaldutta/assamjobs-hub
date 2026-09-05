@@ -1,13 +1,16 @@
-﻿import re
+﻿import os
 
-with open('src/app/search/page.tsx', 'r', encoding='utf-8') as f:
-    c = f.read()
-c = c.replace('theme="violet"', 'theme="purple"')
-with open('src/app/search/page.tsx', 'w', encoding='utf-8') as f:
-    f.write(c)
+fixes = {
+    "src/app/mock-tests/page.tsx": ('theme="indigo"', 'theme="purple"'),
+    "src/app/study-materials/page.tsx": ('theme="teal"', 'theme="green"'),
+    "src/app/syllabus/page.tsx": ('theme="violet"', 'theme="purple"')
+}
 
-with open('src/app/tools/eligibility-checker/page.tsx', 'r', encoding='utf-8') as f:
-    c = f.read()
-c = c.replace('theme="emerald"', 'theme="green"')
-with open('src/app/tools/eligibility-checker/page.tsx', 'w', encoding='utf-8') as f:
-    f.write(c)
+for path, (old, new) in fixes.items():
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+    content = content.replace(old, new)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+        
+print("Fixed PageHeader themes.")
