@@ -4,6 +4,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
 import SubscribeForm from "@/components/SubscribeForm";
 import JobCard from "@/components/JobCard";
+import ScrollableJobFeed from "@/components/ScrollableJobFeed";
 import TenderCard from "@/components/feeds/TenderCard";
 import AdmissionCard from "@/components/feeds/AdmissionCard";
 import ResultCard from "@/components/feeds/ResultCard";
@@ -145,19 +146,7 @@ export default async function Home() {
             </Link>
           </div>
           
-          <div className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-4">
-            <div className="h-[600px] overflow-y-auto custom-scroll pr-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {govtJobs?.map(job => (
-              <JobCard key={job.id} job={job} />
-            ))}
-            {(!govtJobs || govtJobs.length === 0) && (
-              <div className="col-span-full py-12 text-center text-slate-500">No recent government jobs found.</div>
-            )}
-          </div>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-slate-50/90 dark:from-slate-900/90 to-transparent pointer-events-none rounded-b-2xl"></div>
-          </div>
+          <ScrollableJobFeed jobs={govtJobs || []} emptyMessage="No recent government jobs found." theme="slate" />
           <div className="mt-6 sm:hidden text-center">
             <Link href="/jobs?type=GOVERNMENT" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-bold rounded-xl w-full justify-center hover:bg-emerald-500/20 transition-all shadow-sm">
               View All Govt Jobs <ArrowRight size={18} />
@@ -179,19 +168,7 @@ export default async function Home() {
             </Link>
           </div>
           
-          <div className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-4">
-            <div className="h-[600px] overflow-y-auto custom-scroll pr-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {privateJobs?.map(job => (
-              <JobCard key={job.id} job={job} />
-            ))}
-            {(!privateJobs || privateJobs.length === 0) && (
-              <div className="col-span-full py-12 text-center text-slate-500">No recent private jobs found.</div>
-            )}
-          </div>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-slate-50/90 dark:from-slate-900/90 to-transparent pointer-events-none rounded-b-2xl"></div>
-          </div>
+          <ScrollableJobFeed jobs={privateJobs || []} emptyMessage="No recent private jobs found." theme="slate" />
         </section>
 
         {/* CLOSING SOON SECTION */}
@@ -209,16 +186,7 @@ export default async function Home() {
                   View All <ArrowRight size={16} />
                 </Link>
               </div>
-              <div className="relative rounded-2xl border border-amber-200/60 dark:border-amber-900/40 bg-amber-50/30 dark:bg-amber-900/10 p-4">
-                <div className="h-[600px] overflow-y-auto custom-scroll pr-2">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {closingSoonJobs.map(job => (
-                  <JobCard key={job.id} job={job} />
-                ))}
-              </div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-amber-50/90 dark:from-slate-900/90 to-transparent pointer-events-none rounded-b-2xl"></div>
-              </div>
+              <ScrollableJobFeed jobs={closingSoonJobs || []} emptyMessage="No closing soon jobs found." theme="amber" />
             </div>
           </section>
         )}
