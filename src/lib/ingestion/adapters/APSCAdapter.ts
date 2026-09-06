@@ -1,7 +1,9 @@
-
-import * as cheerio from 'cheerio';
+﻿import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource } from "../types";
+
+// Allow self-signed/invalid SSL for govt websites
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export class APSCAdapter implements SourceAdapter {
   sourceConfig: IngestionSource;
@@ -21,7 +23,6 @@ export class APSCAdapter implements SourceAdapter {
       const $ = cheerio.load(html);
       
       const items: RawContent[] = [];
-      // Defensive selector: If table is completely missing, throw error to alert Admin
       if ($('table').length === 0) {
         throw new Error("EXTRACTION_STRUCTURE_CHANGED: Expected <table> element not found on APSC page.");
       }
@@ -34,12 +35,10 @@ export class APSCAdapter implements SourceAdapter {
           let notificationUrl = '';
           let applyUrl = '';
 
-          // Look for all links in the row
           $(tds).find('a').each((_, a) => {
              const href = $(a).attr('href');
              const text = $(a).text().toLowerCase();
              if (!href) return;
-             
              const absoluteHref = href.startsWith('http') ? href : new URL(href, this.sourceConfig.base_url).href;
              
              if (text.includes('apply') || absoluteHref.includes('apscrecruitment.in')) {
@@ -49,7 +48,6 @@ export class APSCAdapter implements SourceAdapter {
              }
           });
 
-          // Fallback if we only found one link
           if (!applyUrl && !notificationUrl) {
             const firstLink = $(tds).find('a').first().attr('href');
             if (firstLink) {
@@ -95,12 +93,21 @@ export class APSCAdapter implements SourceAdapter {
   }
 
   async normalize(extracted: any): Promise<NormalizedPayload> {
+    const titleLower = (extracted.title || '').toLowerCase();
+    let contentType = 'JOB';
+    
+    if (titleLower.includes('admit card') || titleLower.includes('call letter') || titleLower.includes('e-admission') || titleLower.includes('interview program') || titleLower.includes('screening test')) {
+      contentType = 'ADMIT_CARD';
+    } else if (titleLower.includes('result') || titleLower.includes('marks') || titleLower.includes('final select') || titleLower.includes('selected candidates')) {
+      contentType = 'RESULT';
+    }
+
     return {
       source: this.sourceConfig.source_name,
       sourceUrl: this.sourceConfig.base_url,
       applyUrl: extracted.applyUrl,
       notificationUrl: extracted.notificationUrl,
-      contentType: 'JOB',
+      contentType: contentType as any,
       title: extracted.title || 'Unknown APSC Notice',
       organization: 'Assam Public Service Commission (APSC)',
       applicationEnd: extracted.date || undefined,
