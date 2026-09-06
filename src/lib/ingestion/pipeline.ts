@@ -1,5 +1,5 @@
 
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase";
 import crypto from "crypto";
 import { NormalizedPayload, QueueItem, IngestionSource } from "./types";
 import { SourceAdapter } from "./BaseAdapter";

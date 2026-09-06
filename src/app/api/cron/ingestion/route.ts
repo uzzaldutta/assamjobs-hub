@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { IngestionPipeline } from '@/lib/ingestion/pipeline';
 import { APSCAdapter } from '@/lib/ingestion/adapters/APSCAdapter';
 import { JobAssamAdapter } from '@/lib/ingestion/adapters/JobAssamAdapter';

@@ -1,5 +1,5 @@
 
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowLeft, Activity, Search, AlertTriangle, ShieldCheck, Database, Calendar } from "lucide-react";
 

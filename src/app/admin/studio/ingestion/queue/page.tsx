@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase";
 import PageHeader from "@/components/PageHeader";
 import { CheckCircle, XCircle, AlertTriangle, ShieldCheck, ShieldAlert, ArrowRight, ExternalLink, FileSearch, Filter, Search as SearchIcon } from "lucide-react";
 import Link from "next/link";

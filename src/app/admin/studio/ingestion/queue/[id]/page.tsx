@@ -6,7 +6,7 @@ import {
   ShieldAlert, ExternalLink, Activity, Database, FileCode, Clock
 } from "lucide-react";
 import { approveQueueItemAction, rejectQueueItemAction } from "../../actions";
-import { supabase } from "@/lib/supabase"; // Use service role for admin!
+import { supabaseAdmin as supabase } from "@/lib/supabase"; // Use service role for admin!
 
 export default async function FeedEntryDetail({ params }: { params: { id: string } }) {
   // Using service role supabase client since this is an admin server component

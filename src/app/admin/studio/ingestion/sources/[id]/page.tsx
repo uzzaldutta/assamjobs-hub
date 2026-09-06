@@ -1,5 +1,5 @@
 
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw, AlertTriangle, ShieldCheck, Link2Off, FileX } from "lucide-react";
 import RetryButton from "./RetryButton";
