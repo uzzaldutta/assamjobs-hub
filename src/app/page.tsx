@@ -33,7 +33,7 @@ export default async function Home() {
   ] = await Promise.all([
     supabase.from('jobs').select('id, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(15),
     supabase.from('tenders').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
-    supabase.from('admissions').select('id, title, institution_name, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(10),
     supabase.from('results').select('id, title, organization, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
     supabase.from('admit_cards').select('id, title, organization, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
     supabase.from('scholarships').select('id, title, provider, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10)
@@ -70,7 +70,7 @@ export default async function Home() {
   ] = await Promise.all([
     supabase.from('jobs').select('id, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(15),
     supabase.from('tenders').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
-    supabase.from('admissions').select('id, title, institution_name, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
+    supabase.from('jobs').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
     supabase.from('scholarships').select('id, title, provider, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10)
   ]);
 
@@ -113,7 +113,7 @@ export default async function Home() {
   // Fetch Latest Updates (Results, Admit Cards, Admissions)
   const { data: recentResults } = await supabase.from('results').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
   const { data: recentAdmitCards } = await supabase.from('admit_cards').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
-  const { data: recentAdmissions } = await supabase.from('admissions').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
+  const { data: recentAdmissions } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(2);
 
   // Fetch Latest Tenders
   const { data: latestTenders } = await supabase.from('tenders').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);

@@ -22,7 +22,7 @@ export default function QueueActionButtons({
     setIsApproving(true);
     setError(null);
     try {
-      const res = await approveQueueItemAction(queueId, payload, duplicateOf ? 'UPDATE' : 'NEW');
+      const res = await approveQueueItemAction(queueId, duplicateOf ? 'UPDATE' : 'NEW');
       if (res?.success) {
         setSuccess("Approved successfully");
       }

@@ -5,8 +5,8 @@ import { Calendar, Building2, MapPin, CheckCircle2, AlertCircle, XCircle, FileTe
 export default function AdmissionCard({ admission }: { admission: any }) {
   // Determine Deadline State
   let deadlineState = "ACTIVE";
-  if (admission.application_deadline) {
-    const end = new Date(admission.application_deadline);
+  if (admission.closing_date) {
+    const end = new Date(admission.closing_date);
     const now = new Date();
     const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
     if (daysLeft < 0) deadlineState = "CLOSED";
@@ -47,9 +47,9 @@ export default function AdmissionCard({ admission }: { admission: any }) {
         <h3 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white leading-tight group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors mb-1 pr-4 line-clamp-2">
           {admission.title}
         </h3>
-        {admission.institution && (
+        {admission.organization && (
           <p className="text-slate-600 dark:text-slate-400 font-medium text-sm flex items-center gap-1.5">
-            <Building2 size={14} className="opacity-70 shrink-0" /> <span className="truncate">{admission.institution}</span>
+            <Building2 size={14} className="opacity-70 shrink-0" /> <span className="truncate">{admission.organization}</span>
           </p>
         )}
       </Link>
@@ -57,10 +57,10 @@ export default function AdmissionCard({ admission }: { admission: any }) {
       {/* Grid Specs */}
       <div className="grid grid-cols-2 gap-3 mb-4 text-sm font-medium text-slate-600 dark:text-slate-300">
         
-        {admission.course && (
-          <div className="flex items-center gap-1.5" title={admission.course}>
+        {admission.title && (
+          <div className="flex items-center gap-1.5" title={admission.title}>
             <GraduationCap size={14} className="text-slate-400 shrink-0" />
-            <span className="truncate">{admission.course}</span>
+            <span className="truncate">{admission.title}</span>
           </div>
         )}
         {admission.application_fee && (
@@ -76,19 +76,19 @@ export default function AdmissionCard({ admission }: { admission: any }) {
         {dateIcon} 
         <span>
           {deadlineState === "CLOSED" ? "Closed on " : deadlineState === "CLOSING_SOON" ? "Closing Soon: " : "Deadline: "}
-          {admission.application_deadline ? new Date(admission.application_deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
+          {admission.closing_date ? new Date(admission.closing_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
         </span>
       </div>
 
       {/* Footer & Actions */}
       <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2 flex-1">
-          {admission.apply_url ? (
-            <a href={admission.apply_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+          {admission.application_url ? (
+            <a href={admission.application_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
               Apply Now <ExternalLink size={12} />
             </a>
-          ) : admission.official_pdf_url ? (
-            <a href={admission.official_pdf_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+          ) : admission.notification_url ? (
+            <a href={admission.notification_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
               <FileText size={12} /> Official Details
             </a>
           ) : null}

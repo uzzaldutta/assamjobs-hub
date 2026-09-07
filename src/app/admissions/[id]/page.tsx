@@ -12,13 +12,13 @@ export const revalidate = 60;
 
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { data: record } = await supabase.from('admissions').select('*').eq('id', params.id).single();
+  const { data: record } = await supabase.from('jobs').select('*').eq('id', params.id).single();
   
   if (!record || record.status !== 'PUBLISHED') {
     return { title: 'Not Found', robots: { index: false } };
   }
 
-  const org = record.institution || 'AssamJobs Hub';
+  const org = record.organization || 'AssamJobs Hub';
   const title = `${record.title} at ${org}`;
   const desc = `Details for ${record?.title} provided by ${org}. Check important dates, application links, and official notifications.`;
   
@@ -48,7 +48,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
   const { id } = params;
   
   const { data: record, error } = await supabase
-    .from('admissions')
+    .from('jobs')
     .select('*')
     .eq('id', id)
     .single();
@@ -59,8 +59,8 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
 
   // Determine Deadline State (if applicable)
   let deadlineState = "ACTIVE";
-  if (record.application_deadline) {
-    const end = new Date(record.application_deadline);
+  if (record.closing_date) {
+    const end = new Date(record.closing_date);
     const now = new Date();
     const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
     if (daysLeft < 0) deadlineState = "CLOSED";
@@ -114,10 +114,10 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
             {record.title}
           </h1>
 
-          {record.institution && (
+          {record.organization && (
             <div className="flex items-center gap-2 text-lg font-medium text-slate-600 dark:text-slate-300 mb-6">
               <Building2 size={20} className="text-slate-400" />
-              <span>{record.institution}</span>
+              <span>{record.organization}</span>
             </div>
           )}
 
@@ -141,11 +141,11 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
             </div>
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
               
-              {record.course && (
+              {record.title && (
                 <div className="sm:col-span-2">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Course / Program</p>
                   <p className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                    <GraduationCap size={16} className="text-slate-400" /> {record.course}
+                    <GraduationCap size={16} className="text-slate-400" /> {record.title}
                   </p>
                 </div>
               )}
@@ -209,11 +209,11 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
               </h3>
               
               <div className="space-y-4">
-                {record.application_deadline && (
+                {record.closing_date && (
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Application Deadline</span>
                     <span className={`font-bold ${deadlineState === 'CLOSED' ? 'text-red-500' : deadlineState === 'CLOSING_SOON' ? 'text-amber-500' : 'text-slate-800 dark:text-white'}`}>
-                      {new Date(record.application_deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {new Date(record.closing_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
                 )}
@@ -234,13 +234,13 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
                 </a>
               ) : null}
 
-              {record.official_pdf_url ? (
-                <a href={record.official_pdf_url} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold py-3.5 px-4 rounded-xl transition-colors shadow-sm text-center">
+              {record.notification_url ? (
+                <a href={record.notification_url} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold py-3.5 px-4 rounded-xl transition-colors shadow-sm text-center">
                   <Link2 size={18} /> Source Reference
                 </a>
               ) : null}
 
-              {(!record.apply_url && !record.official_pdf_url) && (
+              {(!record.apply_url && !record.notification_url) && (
                 <p className="text-sm text-slate-500 dark:text-slate-400 text-center font-medium italic">
                   Links currently unavailable.
                 </p>

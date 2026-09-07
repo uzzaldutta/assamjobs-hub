@@ -30,9 +30,10 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
   const offset = (page - 1) * limit;
 
   let queryBuilder = supabase
-    .from('admissions')
+    .from('jobs')
     .select('*', { count: 'exact' })
-    .eq('status', 'PUBLISHED');
+    .eq('status', 'PUBLISHED')
+    .eq('job_type', 'ADMISSION');
 
   if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
   if (inst) queryBuilder = queryBuilder.ilike('organization', `%${inst}%`);

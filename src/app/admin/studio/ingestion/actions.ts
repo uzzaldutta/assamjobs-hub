@@ -4,10 +4,11 @@
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 
-export async function approveQueueItemAction(queueId: string, payload: any, action: 'NEW' | 'UPDATE' = 'NEW') {
+export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'UPDATE' = 'NEW') {
   // 1. Fetch queue item
   const { data: item } = await supabase.from('ingestion_queue').select('*').eq('id', queueId).single();
   if (!item) throw new Error("Queue item not found");
+  const payload = item.normalized_payload;
 
   const { data: sourceMeta } = await supabase.from('ingestion_sources').select('*').eq('id', item.source_id).single();
 
@@ -33,7 +34,7 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
     if (Object.keys(updates).length > 0) {
       let targetTable = 'jobs';
       if (item.content_type === 'TENDER') targetTable = 'tenders';
-      if (item.content_type === 'ADMISSION') targetTable = 'admissions';
+      if (item.content_type === 'ADMISSION') targetTable = 'jobs';
       if (item.content_type === 'RESULT') targetTable = 'results';
       if (item.content_type === 'ADMIT_CARD') targetTable = 'admit_cards';
       if (item.content_type === 'SCHOLARSHIP') targetTable = 'scholarships';
@@ -77,12 +78,12 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
       newRecordId = newTender.id;
     }
     else if (item.content_type === 'ADMISSION') {
-      const { data: newAdm, error: insertErr } = await supabase.from('admissions').insert({
+      const { data: newAdm, error: insertErr } = await supabase.from('jobs').insert({
         title: payload.title,
-        institution: payload.organization || 'Unknown',
-        course: payload.course,
-        application_deadline: payload.applicationEnd,
-        application_link: payload.applyUrl || payload.sourceUrl,
+        organization: payload.organization || 'Unknown',
+        job_type: 'ADMISSION',
+        closing_date: payload.applicationEnd || null,
+        application_url: payload.applyUrl || payload.sourceUrl,
         official_source_url: payload.sourceUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING'
