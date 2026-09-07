@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { Building2, MapPin, Clock, Bookmark, Users, CheckCircle2, AlertCircle, XCircle, GraduationCap, ExternalLink, FileText } from "lucide-react";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 
 interface JobCardProps {
   job: any;
@@ -14,6 +15,8 @@ export default function JobCard({ job }: JobCardProps) {
   const saved = isLoaded ? isSaved(job.id) : false;
 
   // Determine Deadline State
+  const advtNo = extractAdvtNo(job.title) || extractAdvtNo(job.unique_description);
+
   let deadlineState = "ACTIVE";
   if (job.last_date) {
     const end = new Date(job.last_date);
@@ -48,6 +51,7 @@ export default function JobCard({ job }: JobCardProps) {
           <span className={`text-[10px] md:text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${job.job_type === 'GOVERNMENT' ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-blue-700 bg-blue-50 border border-blue-200'}`}>
             {job.job_type || 'JOB'}
           </span>
+            <span className="text-[10px] md:text-xs font-mono text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700" title="Feed ID">ID: {job.id.split("-")[0]}</span>
           {statusBadge}
         </div>
         <button 
@@ -71,6 +75,11 @@ export default function JobCard({ job }: JobCardProps) {
         {job.organization && (
           <p className="text-slate-600 dark:text-slate-400 font-medium text-sm flex items-center gap-1.5">
             <Building2 size={14} className="opacity-70 shrink-0" /> <span className="truncate">{job.organization}</span>
+          </p>
+        )}
+        {advtNo && (
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-xs flex items-center gap-1.5 mt-1">
+            <FileText size={12} className="opacity-70 shrink-0" /> <span className="truncate">Advt: {advtNo}</span>
           </p>
         )}
       </Link>

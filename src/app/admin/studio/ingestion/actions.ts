@@ -47,16 +47,16 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
       const { data: newJob, error: insertErr } = await supabase.from('jobs').insert({
         title: payload.title,
         organization: payload.organization || 'Unknown',
-        job_type: item.content_type === 'JOB' ? 'GOVERNMENT' : 'PRIVATE',
+        job_type: payload.category === 'RAILWAY' ? 'RAILWAY' : (item.content_type === 'JOB' ? 'GOVERNMENT' : 'PRIVATE'),
         category: payload.category || 'OTHER',
         vacancies: payload.vacancy || 'Not Specified',
         district: payload.location || 'Assam',
         last_date: payload.applicationEnd || null,
-        apply_url: payload.applyUrl || payload.sourceUrl,
+        apply_url: payload.applyUrl || null,
         official_pdf_url: payload.notificationUrl || null,
         status: 'PUBLISHED', 
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+        official_source_url: payload.sourceUrl || null
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newJob.id;
@@ -69,7 +69,7 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
         tender_number: payload.tenderNumber,
         estimated_value: payload.estimatedValue,
         closing_date: payload.applicationEnd,
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null,
+        official_source_url: payload.sourceUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING'
       }).select('id').single();
@@ -83,7 +83,7 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
         course: payload.course,
         application_deadline: payload.applicationEnd,
         application_link: payload.applyUrl || payload.sourceUrl,
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null,
+        official_source_url: payload.sourceUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING'
       }).select('id').single();
@@ -99,7 +99,7 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
         result_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+        official_source_url: payload.sourceUrl || null
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newRes.id;
@@ -114,7 +114,7 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
         download_url: payload.applyUrl || payload.sourceUrl,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+        official_source_url: payload.sourceUrl || null
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newAdc.id;
@@ -132,7 +132,7 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
         notification_url: payload.notificationUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: sourceMeta?.is_official ? payload.sourceUrl : null
+        official_source_url: payload.sourceUrl || null
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newSch.id;

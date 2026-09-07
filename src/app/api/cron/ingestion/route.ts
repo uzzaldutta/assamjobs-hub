@@ -8,6 +8,7 @@ import { NHMAssamAdapter } from '@/lib/ingestion/adapters/NHMAssamAdapter';
 import { GenericAssamGovAdapter } from '@/lib/ingestion/adapters/GenericAssamGovAdapter';
 import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter';
 import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggregatorAdapter';
+import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
 
 // Secure the route with a cron secret
 const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret';
@@ -34,6 +35,7 @@ export async function GET(req: Request) {
         else if (source.adapter_name === 'GenericAssamGovAdapter') adapterInstance = new GenericAssamGovAdapter(source);
         else if (source.adapter_name === 'NHMAssamAdapter') adapterInstance = new NHMAssamAdapter(source);
         else if (source.adapter_name === 'GenericAggregatorAdapter') adapterInstance = new GenericAggregatorAdapter(source);
+        else if (source.adapter_name === 'IndGovtJobsAdapter') adapterInstance = new IndGovtJobsAdapter(source);
         
         if (adapterInstance) {
             // Background execution

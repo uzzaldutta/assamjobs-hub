@@ -7,6 +7,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
+import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 
 export const revalidate = 60;
 
@@ -69,6 +70,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
   }
 
   const isVerified = job.status === 'PUBLISHED' && job.verification_status === 'VERIFIED';
+  const advtNo = extractAdvtNo(job.title) || extractAdvtNo(job.unique_description);
 
   return (
     <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20">
@@ -122,6 +124,12 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
             <div className="flex items-center gap-2 text-lg font-medium text-slate-600 dark:text-slate-300 mb-6">
               <Building2 size={20} className="text-slate-400" />
               <span>{job.organization}</span>
+            </div>
+          )}
+          {advtNo && (
+            <div className="flex items-center gap-2 text-md font-bold text-slate-500 dark:text-slate-400 mb-6 -mt-3">
+              <FileText size={18} className="text-slate-400" />
+              <span>Advt No: {advtNo}</span>
             </div>
           )}
 

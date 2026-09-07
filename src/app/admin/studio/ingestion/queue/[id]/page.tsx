@@ -6,7 +6,8 @@ import {
   ShieldAlert, ExternalLink, Activity, Database, FileCode, Clock
 } from "lucide-react";
 import QueueActionButtons from "@/components/admin/QueueActionButtons";
-import { supabaseAdmin as supabase } from "@/lib/supabase"; // Use service role for admin!
+import { supabaseAdmin as supabase } from "@/lib/supabase";
+import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher"; // Use service role for admin!
 
 export default async function FeedEntryDetail({ params }: { params: { id: string } }) {
   // Using service role supabase client since this is an admin server component
@@ -37,6 +38,7 @@ export default async function FeedEntryDetail({ params }: { params: { id: string
     .single();
 
   const payload = item.normalized_payload || {};
+  const advtNo = extractAdvtNo(payload.title) || extractAdvtNo(item.raw_payload?.description);
   let canonicalId = item.duplicate_of;
   
   if (!canonicalId && item.status === 'APPROVED' && item.content_hash) {

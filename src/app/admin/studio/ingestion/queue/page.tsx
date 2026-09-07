@@ -1,6 +1,7 @@
+import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import PageHeader from "@/components/PageHeader";
-import { CheckCircle, XCircle, AlertTriangle, ShieldCheck, ShieldAlert, ArrowRight, ExternalLink, FileSearch, Filter, Search as SearchIcon } from "lucide-react";
+import { CheckCircle, XCircle, AlertTriangle, ShieldCheck, ShieldAlert, ArrowRight, ExternalLink, FileSearch, Filter, Search as SearchIcon , FileText} from "lucide-react";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import QueueActionButtons from "@/components/admin/QueueActionButtons";
@@ -100,6 +101,7 @@ export default async function IngestionQueue({
         ) : (
           queueItems.map((item) => {
             const payload = item.normalized_payload || {};
+            const advtNo = extractAdvtNo(payload.title);
             const sourceMeta = item.ingestion_sources;
             
             // Server actions wrapper
@@ -144,6 +146,10 @@ export default async function IngestionQueue({
                   </div>
                   <h3 className="text-base font-bold text-slate-900 truncate mb-1" title={payload.title}>{payload.title || 'Untitled Entry'}</h3>
                   <div className="text-sm text-slate-600 truncate mb-2">{payload.organization || 'No Organization'}</div>
+                  <div className="flex flex-wrap gap-2 text-[10px] text-slate-400 font-mono mb-2">
+                    <span title="Feed ID">ID: {item.id.split("-")[0]}</span>
+                    {advtNo && <span className="text-slate-500 font-bold flex items-center gap-1"><FileText size={10}/> Advt: {advtNo}</span>}
+                  </div>
                   
                   <div className="flex flex-wrap gap-3 items-center text-[10px] font-bold text-slate-400 uppercase">
                      {payload.applicationEnd && <span>Deadline: {payload.applicationEnd}</span>}
