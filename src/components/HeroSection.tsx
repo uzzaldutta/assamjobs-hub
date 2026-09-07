@@ -28,9 +28,9 @@ export default function HeroSection() {
          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4 py-16 md:py-24">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4 py-8 md:py-12">
         
-        <h1 className="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight text-white">
+        <h1 className="text-2xl md:text-4xl font-black mb-4 leading-tight tracking-tight text-white">
           The Ultimate Platform for <br className="hidden md:block"/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
             Assam Govt & Private Jobs
@@ -65,6 +65,10 @@ export default function HeroSection() {
           <Link href="/search?q=ADRE" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">ADRE</Link>
           <Link href="/search?q=APSC" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">APSC</Link>
           <Link href="/search?q=Assam+Police" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">Assam Police</Link>
+          <Link href="/search?q=DHS" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">DHS</Link>
+          <Link href="/search?q=TET" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">TET</Link>
+          <Link href="/search?q=Railway" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">Railway</Link>
+          <Link href="/search?q=Assam+Rifles" className="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors font-medium border border-slate-700">Assam Rifles</Link>
           <Link href="/jobs?type=GOVERNMENT" className="text-emerald-400 hover:text-emerald-300 bg-emerald-900/30 hover:bg-emerald-900/50 px-4 py-1.5 rounded-full transition-colors font-bold border border-emerald-800/50">Govt Jobs</Link>
         </div>
 

@@ -74,7 +74,7 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
     let animationFrameId: number;
     const scrollStep = () => {
       if (el) {
-        el.scrollLeft += 1; // Scroll speed
+        el.scrollLeft += 0.3; // Scroll speed
         // Reset to beginning seamlessly if we hit halfway point (since we duplicated the list)
         if (el.scrollLeft >= el.scrollWidth / 2) {
           el.scrollLeft -= el.scrollWidth / 2;
@@ -120,14 +120,14 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
         <div className="flex p-1 rounded-xl w-fit gap-2">
           <button 
             onClick={() => setActiveTab('recent')} 
-            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'recent' ? 'bg-emerald-600 shadow-md text-white scale-105 ring-2 ring-emerald-500/30' : 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100'} relative`}
+            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'recent' ? 'bg-emerald-600 shadow-md text-white scale-105 ring-2 ring-emerald-500/30' : 'bg-emerald-200 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-300'} relative`}
           >
             {activeTab !== 'recent' && <span className="absolute top-0 right-0 w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>}
             <Sparkles size={14} /> Recent
           </button>
           <button 
             onClick={() => setActiveTab('closing')} 
-            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'closing' ? 'bg-red-600 shadow-md text-white scale-105 ring-2 ring-red-500/30' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-100'} relative`}
+            className={`px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'closing' ? 'bg-red-600 shadow-md text-white scale-105 ring-2 ring-red-500/30' : 'bg-red-200 dark:bg-red-900/40 text-red-800 dark:text-red-300 hover:bg-red-300'} relative`}
           >
             {activeTab !== 'closing' && <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>}
             <Clock size={14} /> Closing Soon
