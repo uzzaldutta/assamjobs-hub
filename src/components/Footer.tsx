@@ -20,7 +20,7 @@ export default function Footer() {
         {/* Brand */}
         <div className="col-span-1 lg:col-span-1">
           <Link href="/" className="flex items-center gap-2 mb-4 hover:opacity-90 transition-opacity">
-            <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="h-12 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
+            <img src="/logo.png?v=7" alt="AssamJobs Hub Logo" className="h-12 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
           </Link>
           <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
             The #1 platform for Assam Govt Jobs, Private Jobs, Tenders, and Free AI-powered Career Tools.

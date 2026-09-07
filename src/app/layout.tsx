@@ -90,7 +90,7 @@ export default function RootLayout({
                   <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
                     
                       {/* Full Logo for Desktop */}
-                      <img src="/logo.png?v=5" alt="AssamJobs Hub Logo" className="hidden md:block h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
+                      <img src="/logo.png?v=6" alt="AssamJobs Hub Logo" className="hidden md:block h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
                       {/* Compact Logo for Mobile */}
                       <img src="/icon-192.png" alt="AssamJobs Hub Compact Logo" className="block md:hidden h-10 w-auto object-contain drop-shadow-sm rounded-lg" />
 
