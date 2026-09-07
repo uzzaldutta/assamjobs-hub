@@ -46,6 +46,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     
     if (item.content_type === 'JOB' || item.content_type === 'PRIVATE_JOB') {
       const { data: newJob, error: insertErr } = await supabase.from('jobs').insert({
+          id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         job_type: payload.category === 'RAILWAY' ? 'RAILWAY' : (item.content_type === 'JOB' ? 'GOVERNMENT' : 'PRIVATE'),
@@ -64,6 +65,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     } 
     else if (item.content_type === 'TENDER') {
       const { data: newTender, error: insertErr } = await supabase.from('tenders').insert({
+          id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         department: payload.department,
@@ -79,6 +81,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     }
     else if (item.content_type === 'ADMISSION') {
       const { data: newAdm, error: insertErr } = await supabase.from('jobs').insert({
+          id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         job_type: 'ADMISSION',
@@ -93,6 +96,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     }
     else if (item.content_type === 'RESULT') {
       const { data: newRes, error: insertErr } = await supabase.from('results').insert({
+          id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         exam_name: payload.examName,
@@ -107,6 +111,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     }
     else if (item.content_type === 'ADMIT_CARD') {
       const { data: newAdc, error: insertErr } = await supabase.from('admit_cards').insert({
+          id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         exam_name: payload.examName,
@@ -122,6 +127,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     }
     else if (item.content_type === 'SCHOLARSHIP') {
       const { data: newSch, error: insertErr } = await supabase.from('scholarships').insert({
+          id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         scheme: payload.scheme || null,
