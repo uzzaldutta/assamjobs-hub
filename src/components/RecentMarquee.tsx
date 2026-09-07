@@ -72,12 +72,17 @@ export default function RecentMarquee({ jobs, title }: RecentMarqueeProps) {
     if (!el || isPaused) return;
 
     let animationFrameId: number;
+    let exactScroll = el.scrollLeft;
+    
     const scrollStep = () => {
       if (el) {
-        el.scrollLeft += 0.3; // Scroll speed
+        exactScroll += 0.7; // Fixed fractional scrolling (0.7 is a smooth medium-low speed)
+        el.scrollLeft = exactScroll;
+        
         // Reset to beginning seamlessly if we hit halfway point (since we duplicated the list)
         if (el.scrollLeft >= el.scrollWidth / 2) {
-          el.scrollLeft -= el.scrollWidth / 2;
+          exactScroll -= el.scrollWidth / 2;
+          el.scrollLeft = exactScroll;
         }
       }
       animationFrameId = requestAnimationFrame(scrollStep);
