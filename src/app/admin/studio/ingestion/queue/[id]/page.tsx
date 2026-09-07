@@ -5,7 +5,7 @@ import {
   ArrowLeft, CheckCircle, XCircle, AlertTriangle, ShieldCheck, 
   ShieldAlert, ExternalLink, Activity, Database, FileCode, Clock
 } from "lucide-react";
-import { approveQueueItemAction, rejectQueueItemAction } from "../../actions";
+import QueueActionButtons from "@/components/admin/QueueActionButtons";
 import { supabaseAdmin as supabase } from "@/lib/supabase"; // Use service role for admin!
 
 export default async function FeedEntryDetail({ params }: { params: { id: string } }) {
@@ -36,7 +36,7 @@ export default async function FeedEntryDetail({ params }: { params: { id: string
     .eq('id', item.source_id)
     .single();
 
-  const payload = item.payload || {};
+  const payload = item.normalized_payload || {};
   let canonicalId = item.duplicate_of;
   
   if (!canonicalId && item.status === 'APPROVED' && item.content_hash) {
@@ -64,15 +64,6 @@ export default async function FeedEntryDetail({ params }: { params: { id: string
     const { data: canonical } = await supabase.from(targetTable).select('*').eq('id', canonicalId).single();
     canonicalRecord = canonical;
   }
-
-  const handleApprove = async (formData: FormData) => {
-    "use server";
-    await approveQueueItemAction(item.id, item.payload, item.duplicate_of ? 'UPDATE' : 'NEW');
-  };
-  const handleReject = async (formData: FormData) => {
-    "use server";
-    await rejectQueueItemAction(item.id);
-  };
 
   return (
     <div className="max-w-6xl mx-auto pb-20">
@@ -107,27 +98,8 @@ export default async function FeedEntryDetail({ params }: { params: { id: string
             </p>
           </div>
           <div className="flex gap-2">
-            {item.status !== 'APPROVED' && item.status !== 'REJECTED' && (
-              <>
-                <form action={handleReject}>
-                  <button type="submit" className="text-sm font-bold bg-white border-2 border-rose-200 text-rose-600 hover:bg-rose-50 px-6 py-2.5 rounded-xl flex items-center gap-2 transition">
-                    <XCircle size={16}/> Reject Entry
-                  </button>
-                </form>
-                <form action={handleApprove}>
-                  <button type="submit" className="text-sm font-bold bg-emerald-500 text-white hover:bg-emerald-600 px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition">
-                    <CheckCircle size={16}/> {item.status === 'CHANGE_DETECTED' ? 'Approve Update' : item.duplicate_of ? 'Merge Duplicate' : 'Approve & Publish'}
-                  </button>
-                </form>
-              </>
-            )}
-            {item.status === 'REJECTED' && (
-              <form action={handleApprove}>
-                <button type="submit" className="text-sm font-bold bg-emerald-500 text-white hover:bg-emerald-600 px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition">
-                  <CheckCircle size={16}/> Re-Approve & Publish
-                </button>
-              </form>
-            )}
+            {item.status !== 'APPROVED' && item.status !== 'REJECTED' && (<QueueActionButtons queueId={item.id} payload={item.normalized_payload} duplicateOf={item.duplicate_of} />)}
+            {item.status === 'REJECTED' && (<QueueActionButtons queueId={item.id} payload={item.normalized_payload} duplicateOf={item.duplicate_of} />)}
           </div>
         </div>
       </div>

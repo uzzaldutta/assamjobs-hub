@@ -3,7 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import { CheckCircle, XCircle, AlertTriangle, ShieldCheck, ShieldAlert, ArrowRight, ExternalLink, FileSearch, Filter, Search as SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
-import { approveQueueItemAction, rejectQueueItemAction } from "../actions";
+import QueueActionButtons from "@/components/admin/QueueActionButtons";
 
 export const revalidate = 0;
 
@@ -99,22 +99,10 @@ export default async function IngestionQueue({
           </div>
         ) : (
           queueItems.map((item) => {
-            const payload = item.payload || {};
+            const payload = item.normalized_payload || {};
             const sourceMeta = item.ingestion_sources;
             
             // Server actions wrapper
-            const handleApprove = async (formData: FormData) => {
-              "use server";
-              await approveQueueItemAction(item.id, item.payload, item.duplicate_of ? 'UPDATE' : 'NEW');
-              revalidatePath('/admin/studio/ingestion/queue');
-            };
-            
-            const handleReject = async (formData: FormData) => {
-              "use server";
-              await rejectQueueItemAction(item.id);
-              revalidatePath('/admin/studio/ingestion/queue');
-            };
-            
             return (
               <div key={item.id} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col md:flex-row gap-4 items-center">
                 
@@ -170,18 +158,7 @@ export default async function IngestionQueue({
                   </Link>
                   
                   {(currentStatus === 'PENDING' || ['NEW', 'CHANGE_DETECTED', 'DUPLICATE_RISK'].includes(item.status)) && (
-                    <div className="flex gap-2 flex-1 md:flex-none">
-                      <form action={handleReject} className="flex-1 md:flex-none">
-                        <button type="submit" className="w-full text-xs font-bold bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 px-3 py-2 rounded-lg flex justify-center items-center gap-1 transition">
-                          <XCircle size={14}/> Reject
-                        </button>
-                      </form>
-                      <form action={handleApprove} className="flex-1 md:flex-none">
-                        <button type="submit" className="w-full text-xs font-bold bg-emerald-500 text-white hover:bg-emerald-600 px-3 py-2 rounded-lg flex justify-center items-center gap-1 shadow-sm transition">
-                          <CheckCircle size={14}/> {item.duplicate_of ? 'Merge' : 'Approve'}
-                        </button>
-                      </form>
-                    </div>
+                    <QueueActionButtons queueId={item.id} payload={item.normalized_payload} duplicateOf={item.duplicate_of} />
                   )}
                 </div>
 

@@ -1,5 +1,8 @@
+"use server";
+
 
 import { supabaseAdmin as supabase } from "@/lib/supabase";
+import { revalidatePath } from "next/cache";
 
 export async function approveQueueItemAction(queueId: string, payload: any, action: 'NEW' | 'UPDATE' = 'NEW') {
   // 1. Fetch queue item
@@ -151,11 +154,13 @@ export async function approveQueueItemAction(queueId: string, payload: any, acti
 
   // Mark queue item as APPROVED. This retains the change_diff as a permanent audit trail.
   await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
+  revalidatePath('/admin/studio/ingestion/queue');
   return { success: true };
 }
 
 export async function rejectQueueItemAction(queueId: string) {
   await supabase.from('ingestion_queue').update({ status: 'REJECTED', rejected_at: new Date().toISOString() }).eq('id', queueId);
+  revalidatePath('/admin/studio/ingestion/queue');
   return { success: true };
 }
 
