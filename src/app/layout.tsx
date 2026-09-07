@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 import SubscribeForm from "@/components/SubscribeForm";
+import AutoScrollTrack from "@/components/AutoScrollTrack";
 import Footer from "@/components/Footer";
 import MobileMenu from "@/components/MobileMenu";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -188,7 +189,7 @@ export default function RootLayout({
                       </h3>
                       
                       {/* Scrolling Container */}
-                      <div className="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar" style={{ WebkitOverflowScrolling: "touch" }}>
+                      <AutoScrollTrack direction="left" speed={0.7}>
                           <Link href="/tools/standard-form" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-500 transition text-center group">
                             <FileText className="mx-auto mb-2 text-indigo-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Standard Form</span>
@@ -220,8 +221,8 @@ export default function RootLayout({
                           <Link href="/tools/fee-calculator" className="shrink-0 w-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-orange-500 transition text-center group">
                             <CreditCard className="mx-auto mb-2 text-orange-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Fee Calculator</span>
-                          </Link>
-                      </div>
+                            </Link>
+                        </AutoScrollTrack>
                     </div>
 
                     {/* AI Powered Tools Section */}
@@ -231,7 +232,7 @@ export default function RootLayout({
                       </h3>
                       
                       {/* Scrolling Container */}
-                      <div className="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar" style={{ WebkitOverflowScrolling: "touch" }}>
+                      <AutoScrollTrack direction="right" speed={0.7}>
                           <Link href="/tools/career-advisor" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-fuchsia-500 transition text-center group flex flex-col items-center justify-center">
                             <Compass className="mx-auto mb-2 text-fuchsia-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Career Advisor</span>
@@ -251,8 +252,8 @@ export default function RootLayout({
                           <Link href="/cover-letter" className="shrink-0 w-48 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-pink-500 transition text-center group flex flex-col items-center justify-center">
                             <FileText className="mx-auto mb-2 text-pink-500 group-hover:scale-110 transition" size={24} />
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">AI Cover Letter</span>
-                          </Link>
-                      </div>
+                            </Link>
+                        </AutoScrollTrack>
                     </div>
                   </div>
                 </main>
@@ -268,4 +269,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
