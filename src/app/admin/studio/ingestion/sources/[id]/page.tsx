@@ -36,7 +36,7 @@ export default async function SourceDetail({ params }: { params: { id: string } 
         <RetryButton sourceId={source.id} adapterName={source.adapter_name} />
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-x-auto overflow-y-hidden">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
            <h3 className="font-bold text-slate-800 text-sm">Historical Run Audits (Last 50)</h3>
         </div>

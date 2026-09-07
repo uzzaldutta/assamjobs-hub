@@ -1,5 +1,9 @@
+﻿import os
 
-import { supabaseAdmin as supabase } from "@/lib/supabase";
+os.makedirs("src/app/admin/studio/ingestion/reports", exist_ok=True)
+
+report_page = """
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowLeft, Activity, Search, AlertTriangle, ShieldCheck, Database, Calendar } from "lucide-react";
 
@@ -182,7 +186,7 @@ export default async function DailyFeedReport({ searchParams }: { searchParams: 
       </div>
 
       {/* Source-by-Source Report */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-x-auto overflow-y-hidden shadow-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
            <h3 className="font-black text-lg text-slate-800 dark:text-slate-200">Source-by-Source Report</h3>
            <span className="text-xs font-medium text-slate-500 uppercase">Active Sources Only</span>
@@ -236,3 +240,8 @@ export default async function DailyFeedReport({ searchParams }: { searchParams: 
     </div>
   );
 }
+"""
+
+with open("src/app/admin/studio/ingestion/reports/page.tsx", "w", encoding="utf-8") as f:
+    f.write(report_page)
+print("Created Feed Report Page")

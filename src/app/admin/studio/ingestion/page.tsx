@@ -147,7 +147,7 @@ export default async function FeedMonitoringDashboard({ searchParams }: { search
               <button type="submit" className="text-[10px] bg-slate-100 px-2 py-1 rounded font-bold text-slate-600">Filter</button>
            </form>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 border-b border-slate-100 text-[10px] uppercase font-black text-slate-500 tracking-wider">
               <tr>
