@@ -60,14 +60,14 @@ export default function QueueActionButtons({
           <button 
             onClick={handleReject} 
             disabled={isApproving || isRejecting}
-            className="flex-1 text-xs font-bold bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 disabled:opacity-50 px-4 py-2 rounded-lg flex justify-center items-center gap-1 transition"
+            className="flex-1 text-xs font-bold bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 disabled:opacity-50 px-4 py-2.5 rounded-xl flex justify-center items-center gap-1 transition"
           >
             <XCircle size={14}/> {isRejecting ? 'Rejecting...' : 'Reject'}
           </button>
           <button 
             onClick={handleApprove}
             disabled={isApproving || isRejecting}
-            className="flex-1 text-xs font-bold bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50 px-4 py-2 rounded-lg flex justify-center items-center gap-1 shadow-sm transition"
+            className="flex-1 text-xs font-bold bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50 px-4 py-2.5 rounded-xl flex justify-center items-center gap-1 shadow-sm transition"
           >
             <CheckCircle size={14}/> {isApproving ? 'Approving...' : (duplicateOf ? 'Merge' : 'Approve')}
           </button>

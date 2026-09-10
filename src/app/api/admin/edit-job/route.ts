@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: Request) {
   try {
@@ -28,6 +29,12 @@ export async function POST(request: Request) {
       .eq('id', id);
 
     if (error) throw error;
+
+    // Surgical ISR Cache Invalidation
+    revalidatePath('/jobs');
+    revalidatePath('/jobs/[id]', 'page');
+    revalidatePath('/');
+
 
     return NextResponse.json({ success: true, data });
   } catch (error: any) {

@@ -5,7 +5,7 @@ import PageHeader from '@/components/PageHeader';
 import FeedList from "@/components/FeedList";
 import RecentMarquee from "@/components/RecentMarquee";
 
-export const revalidate = 60; // ISR cache
+export const revalidate = 86400; // 24h caching - On-demand revalidation // ISR cache
 
 export default async function PreviousPapersLibrary({ searchParams }: { searchParams: Promise<{ q?: string, subject?: string }> }) {
   const { q, subject } = await searchParams;

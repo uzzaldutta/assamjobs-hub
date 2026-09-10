@@ -1,6 +1,8 @@
 
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import crypto from "crypto";
+import { evaluateJobAssamPromotionalContent } from "./jobassam-firewall";
+
 import { NormalizedPayload, QueueItem, IngestionSource } from "./types";
 import { SourceAdapter } from "./BaseAdapter";
 import { normalizeTitle, normalizeOrg, extractAdvtNo, normalizeDate, calculateSimilarity } from "./duplicate-matcher";
@@ -299,9 +301,21 @@ export class IngestionPipeline {
           const normalized = await adapter.normalize(extracted);
           const validation = adapter.validate(normalized);
           
-          
           let finalStatus = 'NEW';
           if (source.tier > 1 && !source.is_official) finalStatus = 'VERIFICATION_PENDING';
+
+          // --- JOBASSAM PROMOTIONAL FIREWALL ---
+          if (source.source_name.toLowerCase().includes('jobassam')) {
+             const spamScore = evaluateJobAssamPromotionalContent(normalized, extracted);
+             if (spamScore === 'HIGH') {
+               finalStatus = 'REJECTED';
+               validation.errors.push('BLOCKED_PROMOTIONAL_CONTENT');
+             } else if (spamScore === 'MEDIUM') {
+               finalStatus = 'PENDING';
+               validation.warnings.push('POSSIBLE_PROMOTIONAL_CONTENT');
+             }
+          }
+          // -------------------------------------
           
           if (!normalized.sourceUrl) {
             validation.errors.push('MISSING_LINK');

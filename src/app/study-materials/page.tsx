@@ -4,7 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
 import { Search, FileText, FileCheck, ArrowRight, BookOpen } from "lucide-react";
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export default async function StudyMaterialsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;

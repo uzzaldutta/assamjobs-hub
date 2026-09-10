@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search, Briefcase, Building2, SlidersHorizontal } from "lucide-react";
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export const metadata = {
   title: "Jobs in Assam",

@@ -39,6 +39,8 @@ export async function POST(req: Request) {
     if (error) throw error;
 
     revalidatePath('/');
+    revalidatePath('/jobs');
+    revalidatePath('/jobs/[id]', 'page');
     return NextResponse.json({ success: true, entry: newEntry }, { status: 200 });
 
   } catch (error: any) {

@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 import { Metadata } from "next";
 

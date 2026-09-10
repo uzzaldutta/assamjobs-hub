@@ -78,6 +78,8 @@ export async function GET(request: Request) {
     }
     
     revalidatePath('/');
+    revalidatePath('/jobs');
+    revalidatePath('/jobs/[id]', 'page');
     return NextResponse.json({
       success: true,
       message: `Successfully synchronized and inserted ${inserted} jobs from Adzuna (filtered spam).`,

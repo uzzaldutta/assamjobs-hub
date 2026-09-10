@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 
 

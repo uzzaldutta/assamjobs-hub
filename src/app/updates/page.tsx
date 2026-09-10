@@ -9,7 +9,7 @@ import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
 import { Award, FileText, GraduationCap, LibraryBig, ClipboardList } from "lucide-react";
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export default async function UpdatesPage() {
   const { data: results } = await supabase.from('results').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);

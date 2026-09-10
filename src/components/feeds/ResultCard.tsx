@@ -78,11 +78,11 @@ export default function ResultCard({ result }: { result: any }) {
       <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2 flex-1">
           {result.official_pdf_url ? (
-            <a href={result.official_pdf_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+            <a href={result.official_pdf_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold py-2.5 px-3.5 rounded-lg transition-colors flex-1 sm:flex-none">
               View Result <ExternalLink size={12} />
             </a>
           ) : result.official_source_url ? (
-            <a href={result.official_source_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition-colors flex-1 sm:flex-none">
+            <a href={result.official_source_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold py-2.5 px-3.5 rounded-lg transition-colors flex-1 sm:flex-none">
               <FileText size={12} /> Source
             </a>
           ) : null}

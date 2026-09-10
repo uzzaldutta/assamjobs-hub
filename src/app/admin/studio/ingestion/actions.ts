@@ -161,6 +161,23 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
 
   // Mark queue item as APPROVED. This retains the change_diff as a permanent audit trail.
   await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
+  
+  // --- SURGICAL CACHE INVALIDATION ---
+  revalidatePath('/');
+  revalidatePath('/jobs');
+  revalidatePath('/jobs/[id]', 'page');
+  revalidatePath('/tenders');
+  revalidatePath('/tenders/[id]', 'page');
+  revalidatePath('/admissions');
+  revalidatePath('/admissions/[id]', 'page');
+  revalidatePath('/results');
+  revalidatePath('/results/[id]', 'page');
+  revalidatePath('/admit-cards');
+  revalidatePath('/admit-cards/[id]', 'page');
+  revalidatePath('/scholarships');
+  revalidatePath('/scholarships/[id]', 'page');
+  // -----------------------------------
+  
   revalidatePath('/admin/studio/ingestion/queue');
   return { success: true };
 }

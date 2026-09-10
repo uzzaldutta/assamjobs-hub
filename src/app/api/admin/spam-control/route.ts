@@ -72,6 +72,8 @@ export async function POST(request: Request) {
     }
 
     revalidatePath('/');
+    revalidatePath('/jobs');
+    revalidatePath('/jobs/[id]', 'page');
     return NextResponse.json({ 
       success: true, 
       keyword: inserted,

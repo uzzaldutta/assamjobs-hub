@@ -15,7 +15,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, Briefcase, Building2, Bell, FileCheck, FileText } from "lucide-react";
 
-export const revalidate = 60; // 1 minute cache
+export const revalidate = 86400; // 24h caching - On-demand revalidation // 1 minute cache
 
 export default async function Home() {
 

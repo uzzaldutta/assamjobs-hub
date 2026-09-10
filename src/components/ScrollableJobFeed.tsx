@@ -50,14 +50,16 @@ export default function ScrollableJobFeed({
         />
       </div>
       
-      {/* Scrollable Grid */}
-      <div className="h-[600px] overflow-y-auto custom-scroll pr-2 relative">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-6">
+      {/* Scrollable Grid/Carousel */}
+      <div className="md:h-[600px] md:overflow-y-auto custom-scroll md:pr-2 relative w-full max-w-full">
+        <div className="flex overflow-x-auto snap-x snap-mandatory touch-pan-x gap-4 pb-6 hide-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:gap-5 md:pb-6">
           {filteredJobs.map(job => (
-            <JobCard key={job.id} job={job} />
+            <div key={job.id} className="w-[85vw] max-w-[340px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink">
+              <JobCard job={job} />
+            </div>
           ))}
           {filteredJobs.length === 0 && (
-            <div className="col-span-full py-16 text-center">
+            <div className="w-full shrink-0 col-span-full py-16 text-center">
               <div className="inline-block p-4 rounded-full bg-slate-100 dark:bg-slate-800 mb-3">
                  <Search className="h-6 w-6 text-slate-400" />
               </div>

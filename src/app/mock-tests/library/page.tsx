@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { BrainCircuit, Clock, FileText, ArrowRight } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 
-export const revalidate = 60; // ISR cache
+export const revalidate = 86400; // 24h caching - On-demand revalidation // ISR cache
 
 export default async function MockTestLibrary() {
   const { data: tests, error } = await supabase

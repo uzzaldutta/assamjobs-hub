@@ -4,7 +4,7 @@ import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
 import { deduplicateJobs } from "@/lib/dedup";
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export default async function RailwayJobsPage() {
   let jobs: any[] = [];
