@@ -12,7 +12,11 @@ export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { data: record } = await supabase.from('admit_cards').select('*').eq('id', params.id).single();
+  let { data: record } = await supabase.from('admit_cards').select('*').eq('id', params.id).single();
+  if (!record) {
+    const { data: jobRecord } = await supabase.from('jobs').select('*').eq('id', params.id).single();
+    if (jobRecord) record = { ...jobRecord, exam_date: jobRecord.last_date };
+  }
   
   if (!record || record.status !== 'PUBLISHED') {
     return { title: 'Not Found', robots: { index: false } };
