@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { evaluateJobAssamPromotionalContent } from "@/lib/ingestion/jobassam-firewall";
 
 export async function POST(request: Request) {
   try {
@@ -38,6 +39,20 @@ export async function POST(request: Request) {
 
     if (records.length > 0) {
       for (const record of records) {
+        // --- SPAM DETECTION ---
+        const spamScore = evaluateJobAssamPromotionalContent({
+          title: record.title,
+          organization: record.organization,
+          vacancy: record.vacancies,
+          applicationEnd: record.last_date,
+          applyUrl: record.apply_url
+        }, null);
+
+        if (spamScore === "HIGH" || spamScore === "MEDIUM") {
+          console.log(`Spam detected for: ${record.title}. Skipping.`);
+          continue;
+        }
+
         // Check for duplicates (By title/org OR by apply_url/pdf_url to prevent cross-site duplicates)
         let isDuplicate = false;
         

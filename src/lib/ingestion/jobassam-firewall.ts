@@ -1,4 +1,4 @@
-﻿export function evaluateJobAssamPromotionalContent(payload: any, rawPayload: any): "HIGH" | "MEDIUM" | "LOW" {
+export function evaluateJobAssamPromotionalContent(payload: any, rawPayload: any): "HIGH" | "MEDIUM" | "LOW" {
     const title = (payload.title || "").toLowerCase();
     const org = (payload.organization || "").toLowerCase();
     const hasOrg = org !== "unknown" && org.length > 2;
@@ -30,7 +30,8 @@
         "career services", "career counselling", "coaching promotion", "course promotion", 
         "training promotion", "advertisement services", "recruitment marketing", "paid services", 
         "membership services", "subscription services", "generic informational", "useful tools", 
-        "free tools"
+        "free tools", "image combiner", "image converter", "images to pdf", "image tool", 
+        "photo resizer", "photo maker", "photo converter"
     ];
 
     for (const kw of highPromoExact) {
