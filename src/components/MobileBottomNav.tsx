@@ -44,8 +44,8 @@ export default function MobileBottomNav() {
             <span className={`text-[10px] font-bold mt-0.5 ${pathname.includes("/exams") ? "text-emerald-600 dark:text-emerald-400" : ""}`}>Exams</span>
           </Link>
 
-          <Link href="/practice" onClick={() => setActivePopup(null)} className={`flex flex-col items-center justify-center w-full h-full gap-1 rounded-xl ${pathname.includes("/practice") ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
-            <Brain size={20} className={pathname.includes("/practice") ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+          <Link href="/mock-tests" onClick={() => setActivePopup(null)} className={`flex flex-col items-center justify-center w-full h-full gap-1 rounded-xl ${(pathname.includes("/mock-tests") || pathname.includes("/practice")) ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
+            <Brain size={20} className={(pathname.includes("/mock-tests") || pathname.includes("/practice")) ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
             <span className="text-[10px] font-bold">Practice</span>
           </Link>
 
