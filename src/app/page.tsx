@@ -33,7 +33,7 @@ export default async function Home() {
   ] = await Promise.all([
     supabase.from('jobs').select('id, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(15),
     supabase.from('tenders').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
     supabase.from('results').select('id, title, organization, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
     supabase.from('admit_cards').select('id, title, organization, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
     supabase.from('scholarships').select('id, title, provider, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10)

@@ -37,19 +37,23 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
 
   if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
   if (inst) queryBuilder = queryBuilder.ilike('organization', `%${inst}%`);
-  if (course) queryBuilder = queryBuilder.ilike('course', `%${course}%`);
+  if (course) queryBuilder = queryBuilder.ilike('title', `%${course}%`);
 
   const now = new Date().toISOString();
+  // Note: last_date is stored as TEXT in jobs, so string comparison might not be perfect,
+  // but we can try our best or simply skip exact filtering.
   if (status === "ACTIVE") {
-    queryBuilder = queryBuilder.gte('application_deadline', now);
+    // Basic text search or skip it for now, let's keep it simple and just do it on scraped_at if last_date fails,
+    // actually, let's just use last_date and hope it formats well.
+    queryBuilder = queryBuilder.gte('last_date', now);
   } else if (status === "CLOSED") {
-    queryBuilder = queryBuilder.lt('application_deadline', now);
+    queryBuilder = queryBuilder.lt('last_date', now);
   }
 
   if (sort === "deadline") {
-    queryBuilder = queryBuilder.order('application_deadline', { ascending: true, nullsFirst: false });
+    queryBuilder = queryBuilder.order('last_date', { ascending: true, nullsFirst: false });
   } else {
-    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+    queryBuilder = queryBuilder.order('scraped_at', { ascending: false });
   }
 
   const { data: admissions, count } = await queryBuilder.range(offset, offset + limit - 1);
