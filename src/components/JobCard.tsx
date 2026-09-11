@@ -5,6 +5,9 @@ import Link from "next/link";
 import { Building2, MapPin, Clock, Bookmark, Users, CheckCircle2, AlertCircle, XCircle, GraduationCap, ExternalLink, FileText } from "lucide-react";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
+import EligibilityCheckModal from './EligibilityCheckModal';
+import { useState } from 'react';
+
 
 interface JobCardProps {
   job: any;
@@ -13,6 +16,8 @@ interface JobCardProps {
 export default function JobCard({ job }: JobCardProps) {
   const { isSaved, toggleSave, isLoaded } = useBookmarks();
   const saved = isLoaded ? isSaved(job.id) : false;
+
+  const [showEligibility, setShowEligibility] = useState(false);
 
   // Determine Deadline State
   const advtNo = extractAdvtNo(job.title) || extractAdvtNo(job.unique_description);
@@ -137,6 +142,11 @@ export default function JobCard({ job }: JobCardProps) {
         </Link>
       </div>
 
+      <EligibilityCheckModal 
+        job={job}
+        isOpen={showEligibility}
+        onClose={() => setShowEligibility(false)}
+      />
     </div>
   );
 }
