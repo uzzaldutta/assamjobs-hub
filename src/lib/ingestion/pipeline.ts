@@ -317,6 +317,21 @@ export class IngestionPipeline {
           }
           // -------------------------------------
           
+          // --- EXPIRATION CHECK ---
+          if (normalized.applicationEnd) {
+             const parsedDate = Date.parse(normalized.applicationEnd);
+             if (!isNaN(parsedDate)) {
+                 const lastDate = new Date(parsedDate);
+                 const today = new Date();
+                 today.setHours(0, 0, 0, 0);
+                 if (lastDate < today) {
+                    finalStatus = 'REJECTED';
+                    validation.errors.push('EXPIRED_LAST_DATE');
+                 }
+             }
+          }
+          // -------------------------------------
+
           if (!normalized.sourceUrl) {
             validation.errors.push('MISSING_LINK');
             itemsMissingLink++;

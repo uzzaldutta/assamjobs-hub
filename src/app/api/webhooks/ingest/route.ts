@@ -53,6 +53,20 @@ export async function POST(request: Request) {
           continue;
         }
 
+        // --- EXPIRATION CHECK ---
+        if (record.last_date) {
+             const parsedDate = Date.parse(record.last_date);
+             if (!isNaN(parsedDate)) {
+                 const lastDate = new Date(parsedDate);
+                 const today = new Date();
+                 today.setHours(0, 0, 0, 0);
+                 if (lastDate < today) {
+                    console.log(`Expired feed detected for: ${record.title} (${record.last_date}). Skipping.`);
+                    continue;
+                 }
+             }
+        }
+
         // Check for duplicates (By title/org OR by apply_url/pdf_url to prevent cross-site duplicates)
         let isDuplicate = false;
         
