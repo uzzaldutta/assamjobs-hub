@@ -71,7 +71,7 @@ export default function ScholarshipCard({ scholarship }: { scholarship: any }) {
         {dateIcon} 
         <span>
           {deadlineState === "CLOSED" ? "Closed on " : deadlineState === "CLOSING_SOON" ? "Closing Soon: " : "Deadline: "}
-          {scholarship.application_deadline ? new Date(scholarship.application_deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
+          {deadline ? new Date(deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Not Specified"}
         </span>
       </div>
 
