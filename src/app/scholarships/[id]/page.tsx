@@ -12,7 +12,11 @@ export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { data: record } = await supabase.from('scholarships').select('*').eq('id', params.id).single();
+  let { data: record } = await supabase.from('scholarships').select('*').eq('id', params.id).single();
+  if (!record) {
+    const { data: jobRecord } = await supabase.from('jobs').select('*').eq('id', params.id).single();
+    if (jobRecord) record = { ...jobRecord };
+  }
   
   if (!record || record.status !== 'PUBLISHED') {
     return { title: 'Not Found', robots: { index: false } };
@@ -60,7 +64,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
   // Determine Deadline State (if applicable)
   let deadlineState = "ACTIVE";
   if (record.application_deadline) {
-    const end = new Date(record.application_deadline);
+    const end = new Date(record.application_deadline || record.last_date);
     const now = new Date();
     const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
     if (daysLeft < 0) deadlineState = "CLOSED";

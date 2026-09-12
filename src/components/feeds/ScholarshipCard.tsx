@@ -5,8 +5,9 @@ import { Calendar, Building2, MapPin, CheckCircle2, AlertCircle, XCircle, FileTe
 export default function ScholarshipCard({ scholarship }: { scholarship: any }) {
   // Determine Deadline State
   let deadlineState = "ACTIVE";
-  if (scholarship.application_deadline) {
-    const end = new Date(scholarship.application_deadline);
+  const deadline = scholarship.application_deadline || scholarship.last_date;
+  if (deadline) {
+    const end = new Date(deadline);
     const now = new Date();
     const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
     if (daysLeft < 0) deadlineState = "CLOSED";

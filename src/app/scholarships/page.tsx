@@ -38,15 +38,15 @@ export default async function ScholarshipsPage(props: { searchParams?: Promise<{
 
   const now = new Date().toISOString();
   if (status === "ACTIVE") {
-    queryBuilder = queryBuilder.gte('application_deadline', now);
+    queryBuilder = queryBuilder.gte('last_date', now);
   } else if (status === "CLOSED") {
-    queryBuilder = queryBuilder.lt('application_deadline', now);
+    queryBuilder = queryBuilder.lt('last_date', now);
   }
 
   if (sort === "deadline") {
-    queryBuilder = queryBuilder.order('application_deadline', { ascending: true, nullsFirst: false });
+    queryBuilder = queryBuilder.order('last_date', { ascending: true, nullsFirst: false });
   } else {
-    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+    queryBuilder = queryBuilder.order('scraped_at', { ascending: false });
   }
 
   const { data: scholarships, count } = await queryBuilder.range(offset, offset + limit - 1);
