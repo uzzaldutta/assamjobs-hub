@@ -29,9 +29,9 @@ export default async function ScholarshipsPage(props: { searchParams?: Promise<{
   const offset = (page - 1) * limit;
 
   let queryBuilder = supabase
-    .from('scholarships')
+    .from('jobs')
     .select('*', { count: 'exact' })
-    .eq('status', 'PUBLISHED');
+    .eq('status', 'PUBLISHED').or('job_type.eq.SCHOLARSHIP,title.ilike.%scholarship%,title.ilike.%scheme%');
 
   if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
   if (org) queryBuilder = queryBuilder.ilike('organization', `%${org}%`);
