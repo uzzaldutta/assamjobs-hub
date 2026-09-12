@@ -17,6 +17,8 @@ export const metadata = {
   }
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ScholarshipsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1");

@@ -17,6 +17,8 @@ export const metadata = {
   }
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ResultsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1");
@@ -28,17 +30,18 @@ export default async function ResultsPage(props: { searchParams?: Promise<{ [key
   const offset = (page - 1) * limit;
 
   let queryBuilder = supabase
-    .from('results')
+    .from('jobs')
     .select('*', { count: 'exact' })
-    .eq('status', 'PUBLISHED');
+    .eq('status', 'PUBLISHED')
+    .or('title.ilike.%result%,title.ilike.%merit list%,title.ilike.%cut off%');
 
   if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
   if (org) queryBuilder = queryBuilder.ilike('organization', `%${org}%`);
 
   if (sort === "result_date") {
-    queryBuilder = queryBuilder.order('result_date', { ascending: false, nullsFirst: false });
+    queryBuilder = queryBuilder.order('last_date', { ascending: false, nullsFirst: false });
   } else {
-    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+    queryBuilder = queryBuilder.order('scraped_at', { ascending: false });
   }
 
   const { data: results, count } = await queryBuilder.range(offset, offset + limit - 1);

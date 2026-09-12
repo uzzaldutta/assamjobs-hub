@@ -17,6 +17,8 @@ export const metadata = {
   }
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdmitCardsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
   const page = parseInt(searchParams?.page || "1");
@@ -28,17 +30,18 @@ export default async function AdmitCardsPage(props: { searchParams?: Promise<{ [
   const offset = (page - 1) * limit;
 
   let queryBuilder = supabase
-    .from('admit_cards')
+    .from('jobs')
     .select('*', { count: 'exact' })
-    .eq('status', 'PUBLISHED');
+    .eq('status', 'PUBLISHED')
+    .or('title.ilike.%admit card%,title.ilike.%hall ticket%,title.ilike.%call letter%');
 
   if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
   if (org) queryBuilder = queryBuilder.ilike('organization', `%${org}%`);
 
   if (sort === "exam_date") {
-    queryBuilder = queryBuilder.order('exam_date', { ascending: false, nullsFirst: false });
+    queryBuilder = queryBuilder.order('last_date', { ascending: false, nullsFirst: false });
   } else {
-    queryBuilder = queryBuilder.order('created_at', { ascending: false });
+    queryBuilder = queryBuilder.order('scraped_at', { ascending: false });
   }
 
   const { data: admitCards, count } = await queryBuilder.range(offset, offset + limit - 1);
