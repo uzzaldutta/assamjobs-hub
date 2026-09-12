@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { APSCAdapter } from '@/lib/ingestion/adapters/APSCAdapter';
 import { JobAssamAdapter } from '@/lib/ingestion/adapters/JobAssamAdapter';
+import { JobAssamHubAdapter } from '@/lib/ingestion/adapters/JobAssamHubAdapter';
 import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter';
 
 export async function POST(req: Request) {
@@ -12,7 +13,8 @@ export async function POST(req: Request) {
     
     let adapterInstance: any;
     if (adapterName === 'APSCAdapter') adapterInstance = new APSCAdapter(source || { id: 'test', base_url: 'https://apsc.nic.in' });
-    else if (adapterName === 'JobAssamAdapter') adapterInstance = new JobAssamAdapter(source || { id: 'test', base_url: 'https://jobassam.in' });
+    else if (adapterName === 'JobAssamAdapter') adapterInstance = new JobAssamAdapter(source);
+    else if (adapterName === 'JobAssamHubAdapter') adapterInstance = new JobAssamHubAdapter(source || { id: 'test', base_url: 'https://jobassam.in' });
     else if (adapterName === 'AssamCareerAdapter') adapterInstance = new AssamCareerAdapter(source || { id: 'test', base_url: 'https://assamcareer.com' });
     else {
       return NextResponse.json({ success: false, error: 'Adapter not implemented', not_live_verified: true });

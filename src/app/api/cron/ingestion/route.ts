@@ -4,6 +4,7 @@ import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { IngestionPipeline } from '@/lib/ingestion/pipeline';
 import { APSCAdapter } from '@/lib/ingestion/adapters/APSCAdapter';
 import { JobAssamAdapter } from '@/lib/ingestion/adapters/JobAssamAdapter';
+import { JobAssamHubAdapter } from '@/lib/ingestion/adapters/JobAssamHubAdapter';
 import { NHMAssamAdapter } from '@/lib/ingestion/adapters/NHMAssamAdapter';
 import { GenericAssamGovAdapter } from '@/lib/ingestion/adapters/GenericAssamGovAdapter';
 import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter';
@@ -31,6 +32,7 @@ export async function GET(req: Request) {
         let adapterInstance: any;
         if (source.adapter_name === 'APSCAdapter') adapterInstance = new APSCAdapter(source);
         else if (source.adapter_name === 'JobAssamAdapter') adapterInstance = new JobAssamAdapter(source);
+        else if (source.adapter_name === 'JobAssamHubAdapter') adapterInstance = new JobAssamHubAdapter(source);
         else if (source.adapter_name === 'AssamCareerAdapter') adapterInstance = new AssamCareerAdapter(source);
         else if (source.adapter_name === 'GenericAssamGovAdapter') adapterInstance = new GenericAssamGovAdapter(source);
         else if (source.adapter_name === 'NHMAssamAdapter') adapterInstance = new NHMAssamAdapter(source);
