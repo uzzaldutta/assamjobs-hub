@@ -33,7 +33,7 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
     .from('jobs')
     .select('*', { count: 'exact' })
     .eq('status', 'PUBLISHED')
-    .eq('job_type', 'ADMISSION');
+    .or('job_type.eq.ADMISSION,title.ilike.%admission%');
 
   if (q) queryBuilder = queryBuilder.ilike('title', `%${q}%`);
   if (inst) queryBuilder = queryBuilder.ilike('organization', `%${inst}%`);
