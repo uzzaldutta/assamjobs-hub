@@ -83,7 +83,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
             {/* Responsive main container */}
-            <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
+            <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative overflow-clip">
               {/* Header */}
               <header id="main-header" className="sticky top-0 z-50 glass transition-all duration-300 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300">
                 <div id="header-inner" className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center h-16 md:h-20 transition-all duration-300 ease-in-out">
