@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { Building2, MapPin, Users, Calendar, ArrowLeft, ExternalLink, FileText, CheckCircle2, AlertCircle, Briefcase, IndianRupee, GraduationCap, Link2 } from "lucide-react";
 import ShareButtons from "@/components/ShareButtons";
+import EligibilityDetailButton from "@/components/EligibilityDetailButton";
 import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -286,7 +287,10 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
               )}
             </div>
             
-            {/* Verification / Source Footer */}
+            <div className="px-4 pb-4">
+                <EligibilityDetailButton job={job} />
+              </div>
+              {/* Verification / Source Footer */}
             <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center gap-1 bg-white dark:bg-slate-900 text-center">
               {isVerified ? (
                 <p className="text-[10px] font-bold text-emerald-600 uppercase flex items-center gap-1"><CheckCircle2 size={12}/> Verified Source</p>
