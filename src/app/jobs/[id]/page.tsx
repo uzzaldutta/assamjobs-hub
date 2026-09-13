@@ -221,6 +221,10 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
             </div>
           )}
 
+          <div className="my-6">
+            <EligibilityDetailButton job={job} />
+          </div>
+
           {job.unique_description_assamese && (
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
               <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
