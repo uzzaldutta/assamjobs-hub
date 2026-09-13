@@ -65,7 +65,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
     // Convert tables to markdown
     $('figure.wp-block-table table').each((i, el) => {
         const headers: string[] = [];
-        $(el).find('th').each((j, th) => headers.push($(th).text().trim()));
+        $(el).find('th').each((j, th) => { headers.push($(th).text().trim()); });
         
         if (headers.length > 0) {
             description += `| ${headers.join(" | ")} |\n`;
