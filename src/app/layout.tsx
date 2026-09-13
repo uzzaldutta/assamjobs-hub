@@ -17,6 +17,7 @@ import NotificationBell from "@/components/NotificationBell";
 import AccountPlaceholder from "@/components/AccountPlaceholder";
 import Script from "next/script";
 import AdBanner from "@/components/AdBanner";
+import HeaderScrollTracker from "@/components/HeaderScrollTracker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -84,14 +85,14 @@ export default function RootLayout({
             {/* Responsive main container */}
             <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
               {/* Header */}
-              <header className="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300">
-                <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center h-16 md:h-20">
+              <header id="main-header" className="sticky top-0 z-50 glass transition-all duration-300 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300">
+                <div id="header-inner" className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center h-16 md:h-20 transition-all duration-300 ease-in-out">
                   
                   {/* Logo */}
                   <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0 mr-8">
                     
                       {/* Full Logo for Desktop */}
-                      <img src="/logo.png?v=6" alt="AssamJobs Hub Logo" className="hidden md:block h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180" />
+                      <img id="header-logo" src="/logo.png?v=6" alt="AssamJobs Hub Logo" className="hidden md:block h-20 w-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180 transition-all duration-300 ease-in-out" />
                       {/* Compact Logo for Mobile */}
                       <img src="/icon-192.png" alt="AssamJobs Hub Compact Logo" className="block md:hidden h-10 w-auto object-contain drop-shadow-sm rounded-lg" />
 
@@ -264,6 +265,7 @@ export default function RootLayout({
               <MobileBottomNav />
             </div>
           </LanguageProvider>
+          <HeaderScrollTracker />
         </ThemeProvider>
       </body>
     </html>
