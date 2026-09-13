@@ -106,7 +106,7 @@ export default async function MockTestDetail(props: { params: Promise<{ testId: 
            <div className="prose prose-slate dark:prose-invert max-w-none prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-headings:text-slate-800 dark:prose-headings:text-slate-100 mb-8">
              <h3 className="text-lg font-bold">Instructions</h3>
              {test.instructions ? (
-               <ReactMarkdown>{test.instructions}</ReactMarkdown>
+               <ReactMarkdown remarkPlugins={[remarkGfm]}>{test.instructions}</ReactMarkdown>
              ) : (
                <p className="text-slate-500">Read all questions carefully. You cannot pause the test once started.</p>
              )}

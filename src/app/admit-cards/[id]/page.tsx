@@ -5,6 +5,7 @@ import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
@@ -175,7 +176,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
                 </h2>
               </div>
               <div className="p-6 prose prose-slate dark:prose-invert max-w-none prose-a:text-cyan-600 dark:prose-a:text-cyan-400 prose-img:rounded-xl">
-                <ReactMarkdown>{record.unique_description}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{record.unique_description}</ReactMarkdown>
               </div>
             </div>
           )}
@@ -186,7 +187,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
                 <h2 className="text-lg font-bold text-slate-800 dark:text-white">অসমীয়াত বিৱৰণ (Assamese Description)</h2>
               </div>
               <div className="p-6 prose prose-slate dark:prose-invert max-w-none">
-                <ReactMarkdown>{record.unique_description_assamese}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{record.unique_description_assamese}</ReactMarkdown>
               </div>
             </div>
           )}

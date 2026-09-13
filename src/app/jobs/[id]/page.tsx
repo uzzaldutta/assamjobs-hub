@@ -6,6 +6,7 @@ import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 
@@ -212,7 +213,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
                 </h2>
               </div>
               <div className="p-6 prose prose-slate dark:prose-invert max-w-none prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-img:rounded-xl">
-                <ReactMarkdown>{job.unique_description}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{job.unique_description}</ReactMarkdown>
               </div>
             </div>
           )}
@@ -223,7 +224,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
                 <h2 className="text-lg font-bold text-slate-800 dark:text-white">অসমীয়াত বিৱৰণ (Assamese Description)</h2>
               </div>
               <div className="p-6 prose prose-slate dark:prose-invert max-w-none">
-                <ReactMarkdown>{job.unique_description_assamese}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{job.unique_description_assamese}</ReactMarkdown>
               </div>
             </div>
           )}

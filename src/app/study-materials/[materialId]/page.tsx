@@ -86,7 +86,7 @@ export default async function StudyMaterialDetail(props: { params: Promise<{ mat
            
            <div className="prose prose-slate dark:prose-invert max-w-none prose-a:text-teal-600 dark:prose-a:text-teal-400 prose-headings:text-slate-800 dark:prose-headings:text-slate-100 mb-8">
              {material.description ? (
-               <ReactMarkdown>{material.description}</ReactMarkdown>
+               <ReactMarkdown remarkPlugins={[remarkGfm]}>{material.description}</ReactMarkdown>
              ) : (
                <p className="text-slate-500 italic">No additional description provided for this material.</p>
              )}
