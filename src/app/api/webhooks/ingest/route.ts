@@ -40,7 +40,15 @@ export async function POST(request: Request) {
 
     if (records.length > 0) {
       for (const record of records) {
-        // --- SPAM DETECTION ---
+        
+          // HARD SPAM BLOCKLIST
+          const lowerTitle = (record.title || '').toLowerCase();
+          if (lowerTitle.includes('bio-data') || lowerTitle.includes('whatsapp') || lowerTitle.includes('telegram') || lowerTitle.includes('resume maker')) {
+             console.log("Hard spam block hit: " + record.title);
+             continue;
+          }
+
+          // --- SPAM DETECTION ---
         const spamScore = evaluateJobAssamPromotionalContent({
           title: record.title,
           organization: record.organization,
