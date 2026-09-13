@@ -1,7 +1,4 @@
 ﻿import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: Request) {
   try {
@@ -11,72 +8,101 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: 'Missing profile or job data' }, { status: 400 });
     }
 
+    const candidateAge = parseInt(profile.age);
+    const candidateQual = (profile.qualification || "").toLowerCase();
+    const candidateCat = profile.category || "General (UR)";
     
-    if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY.length < 5) {
-      return NextResponse.json({
-        success: true,
-        evaluation: {
-          eligible: true,
-          reason: "Please verify specific age and qualification criteria in the official notification to confirm your eligibility."
+    const jobQual = (job.qualification || "").toLowerCase();
+    const jobAgeLimit = (job.age_limit || "").toLowerCase();
+
+    let eligible = true;
+    let reasons: string[] = [];
+
+    // 1. AGE CHECK
+    if (!isNaN(candidateAge) && jobAgeLimit) {
+      // Find all numbers in the age limit string
+      const numbers = jobAgeLimit.match(/\d+/g);
+      if (numbers && numbers.length > 0) {
+        let maxAge = Math.max(...numbers.map(Number));
+        
+        // Usually, 18 is minimum, so if maxAge is 18, it might mean "Minimum 18" and no max specified.
+        // Or if they say "18 to 40", max is 40.
+        // Let's assume the highest number under 65 is the max age limit.
+        const validMaxAges = numbers.map(Number).filter((n: number) => n > 20 && n <= 65);
+        if (validMaxAges.length > 0) {
+           maxAge = Math.max(...validMaxAges);
+           
+           // Apply Assam govt age relaxation rules
+           if (candidateCat.includes("OBC") || candidateCat.includes("MOBC")) {
+               maxAge += 3;
+           } else if (candidateCat.includes("SC") || candidateCat.includes("ST")) {
+               maxAge += 5;
+           } else if (candidateCat.includes("PWD") || candidateCat.includes("Persons with Disabilities")) {
+               maxAge += 10;
+           }
+
+           if (candidateAge > maxAge) {
+               eligible = false;
+               reasons.push(`Your age (${candidateAge}) exceeds the maximum limit of ${maxAge} years (including category relaxation).`);
+           }
         }
-      });
+      }
     }
 
-    const prompt = `
-You are an expert career counselor for government and private jobs in Assam, India.
-A candidate wants to know if they are eligible for a specific job based on their profile.
+    // 2. QUALIFICATION CHECK (Basic Heuristic)
+    // Hierarchy: 8th < 10th < 12th < ITI/Diploma < Degree < Master
+    const qualLevels = [
+        { level: 1, keywords: ["8th", "viii"] },
+        { level: 2, keywords: ["10th", "matric", "hslc", "high school"] },
+        { level: 3, keywords: ["12th", "hs", "higher secondary", "10+2", "intermediate"] },
+        { level: 4, keywords: ["iti", "diploma"] },
+        { level: 5, keywords: ["degree", "graduation", "bachelor", "b.a", "b.sc", "b.com", "b.e", "b.tech"] },
+        { level: 6, keywords: ["master", "post graduate", "m.a", "m.sc", "m.com", "m.tech", "mba", "mca"] }
+    ];
 
-CANDIDATE PROFILE:
-- Age: ${profile.age}
-- Qualification: ${profile.qualification}
-- Caste Category: ${profile.category}
-
-JOB DETAILS:
-- Title: ${job.title}
-- Organization: ${job.organization}
-- Required Qualification (if specified): ${job.qualification || 'Not explicitly stated'}
-- Age Limit (if specified): ${job.age_limit || 'Not explicitly stated'}
-
-EVALUATION RULES:
-1. Compare the candidate's qualification with the required qualification. (e.g. if job requires 12th pass, and candidate has Graduation, they are usually eligible unless specified otherwise).
-2. Compare the candidate's age with the age limit. Note that in Assam/India, reserved categories (OBC/MOBC, SC, ST) generally receive a 3 to 5-year age relaxation on the upper age limit.
-3. If the job details lack specific age or qualification data, assume they MIGHT be eligible but state that they should read the official notification.
-
-Respond with a structured evaluation.
-
-`;
-
-    const schema = {
-      type: SchemaType.OBJECT,
-      properties: {
-        eligible: {
-          type: SchemaType.BOOLEAN,
-          description: "True if the candidate appears eligible, false if they clearly do not meet the criteria."
-        },
-        reason: {
-          type: SchemaType.STRING,
-          description: "A short, friendly 1-2 sentence explanation of why they are or aren't eligible, or advising them to check the notification if data is missing."
+    function getLevel(text: string) {
+        let maxLevel = 0;
+        for (const q of qualLevels) {
+            for (const kw of q.keywords) {
+                if (text.includes(kw) && q.level > maxLevel) {
+                    maxLevel = q.level;
+                }
+            }
         }
-      },
-      required: ["eligible", "reason"]
-    };
+        return maxLevel;
+    }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: schema as any,
-      },
+    if (jobQual && candidateQual) {
+        const requiredLevel = getLevel(jobQual);
+        const candidateLevel = getLevel(candidateQual);
+
+        if (requiredLevel > 0 && candidateLevel > 0 && candidateLevel < requiredLevel) {
+            eligible = false;
+            // Find what they required
+            const reqName = qualLevels.find(q => q.level === requiredLevel)?.keywords[0] || "higher qualification";
+            reasons.push(`This job appears to require a ${reqName.toUpperCase()} or equivalent, which is higher than your current profile.`);
+        }
+    }
+
+    let finalReason = "Based on the provided details, you appear to be eligible! Please verify specific criteria in the official notification.";
+    if (!eligible) {
+        finalReason = reasons.join(" ");
+    } else if (reasons.length > 0) {
+        finalReason = "You appear eligible, but note: " + reasons.join(" ") + " Verify with the official notification.";
+    } else if (!jobAgeLimit && !jobQual) {
+        finalReason = "We couldn't find explicit age or qualification data for this job. You might be eligible, but please read the official notification carefully.";
+    }
+
+    return NextResponse.json({ 
+        success: true, 
+        evaluation: {
+            eligible: eligible,
+            reason: finalReason
+        } 
     });
 
-    const responseText = result.response.text();
-    const parsed = JSON.parse(responseText);
-
-    return NextResponse.json({ success: true, evaluation: parsed });
-
   } catch (error: any) {
-    console.error("Single job eligibility check error:", error);
+    console.error("Rule-based eligibility check error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
