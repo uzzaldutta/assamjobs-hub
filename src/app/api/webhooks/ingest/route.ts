@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { evaluateJobAssamPromotionalContent } from "@/lib/ingestion/jobassam-firewall";
@@ -126,7 +127,8 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({ 
+    revalidatePath('/', 'layout');
+    return NextResponse.json({
       success: true, 
       message: `Processed ${incomingItems.length} items. Inserted: ${insertedCount}` 
     });

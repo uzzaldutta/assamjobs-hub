@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 
 import { NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '@/lib/supabase';
@@ -48,7 +49,9 @@ export async function GET(req: Request) {
         }
     }
 
-    return NextResponse.json({ success: true, triggered: results });
+    revalidatePath('/', 'layout');
+    return NextResponse.json({
+      success: true, triggered: results });
 
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
