@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import PageHeader from '@/components/PageHeader';
 import { FileText, Download, Clock, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 

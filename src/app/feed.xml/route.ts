@@ -31,8 +31,8 @@ export async function GET() {
       const jobUrl = `${baseUrl}/jobs/${job.id}`;
       
       // Basic XML escaping
-      const escapeXml = (unsafe) => {
-        return (unsafe || '').replace(/[<>&'"]/g, (c) => {
+      const escapeXml = (unsafe: string) => {
+        return (unsafe || '').replace(/[<>&'"]/g, (c: string) => {
           switch (c) {
             case '<': return '&lt;';
             case '>': return '&gt;';

@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import { Clock, ArrowLeft, PlayCircle, Hash, FileCheck, CheckCircle2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 

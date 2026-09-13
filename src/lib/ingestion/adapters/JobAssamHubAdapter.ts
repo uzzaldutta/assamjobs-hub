@@ -64,7 +64,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
     
     // Convert tables to markdown
     $('figure.wp-block-table table').each((i, el) => {
-        const headers = [];
+        const headers: string[] = [];
         $(el).find('th').each((j, th) => headers.push($(th).text().trim()));
         
         if (headers.length > 0) {
@@ -73,7 +73,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
         }
         
         $(el).find('tbody tr').each((j, tr) => {
-            const row = [];
+            const row: string[] = [];
             $(tr).find('td').each((k, td) => {
                 const text = $(td).text().replace(/\s+/g, ' ').trim();
                 const link = $(td).find('a').attr('href');
