@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Building2, MapPin, Users, Calendar, ArrowLeft, ExternalLink, FileText, CheckCircle2, AlertCircle, Briefcase, IndianRupee, GraduationCap, Link2 } from "lucide-react";
 import ShareButtons from "@/components/ShareButtons";
 import EligibilityDetailButton from "@/components/EligibilityDetailButton";
+import RecentlyViewed from "@/components/RecentlyViewed";
 import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -300,6 +301,8 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
               <p className="text-xs text-slate-500">Data provided for informational purposes.</p>
             </div>
           </div>
+
+          <RecentlyViewed currentJob={job} />
           
         </div>
       </div>

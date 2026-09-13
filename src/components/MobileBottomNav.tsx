@@ -15,7 +15,7 @@ import {
   FileText,
   ClipboardList,
   FolderOpen
-} from "lucide-react";
+, Bookmark} from "lucide-react";
 import { useState } from "react";
 
 export default function MobileBottomNav() {
@@ -85,6 +85,10 @@ export default function MobileBottomNav() {
 
         {activePopup === "jobs" && (
           <div className="grid grid-cols-2 gap-3">
+            <Link href="/saved" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-3 p-4 bg-rose-50 dark:bg-rose-900/20 rounded-2xl border border-rose-100 dark:border-rose-800/30 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition-colors group col-span-2">
+              <div className="p-3 bg-rose-100 dark:bg-rose-800 text-rose-600 dark:text-rose-400 rounded-full group-hover:scale-110 transition-transform"><Bookmark size={24} /></div>
+              <span className="font-bold text-rose-900 dark:text-rose-300 text-sm">Saved Jobs</span>
+            </Link>
             <Link href="/jobs?type=GOVERNMENT" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-100 hover:bg-emerald-100 transition-colors group">
               <div className="p-3 bg-emerald-100 text-emerald-600 rounded-full group-hover:scale-110 transition-transform"><Briefcase size={24} /></div>
               <span className="font-bold text-emerald-900 text-sm">Govt Jobs</span>

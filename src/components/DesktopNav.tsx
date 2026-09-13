@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
-import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home, Bell } from "lucide-react";
+import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home, Bell , Bookmark} from "lucide-react";
 
 export default function DesktopNav() {
   const { t } = useLanguage();
@@ -84,6 +84,10 @@ export default function DesktopNav() {
       </div>
 
       {/* Calendar */}
+      <Link href="/saved" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-2 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
+        <Bookmark size={16} /> Saved Jobs
+      </Link>
+
       <Link href="/calendar" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-2 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
         <CalendarDays size={16} /> {t("nav_calendar")}
       </Link>
