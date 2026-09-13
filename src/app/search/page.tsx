@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+﻿export const dynamic = "force-dynamic";
 
 
 import { executeGlobalSearch } from "@/lib/search/globalSearch";
@@ -13,7 +13,8 @@ export const metadata = {
   }
 };
 
-export default async function SearchPage({ searchParams }: { searchParams: { q?: string; type?: string; page?: string } }) {
+export default async function SearchPage(props: { searchParams?: Promise<{ q?: string; type?: string; page?: string }> }) {
+  const searchParams = await props.searchParams || {};
   const query = searchParams.q || "";
   const type = searchParams.type || "";
   const page = parseInt(searchParams.page || "1", 10);
