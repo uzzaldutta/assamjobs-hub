@@ -12,7 +12,8 @@ export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const params = await props.params;
   let { data: record } = await supabase.from('results').select('*').eq('id', params.id).single();
   if (!record) {
     const { data: jobRecord } = await supabase.from('jobs').select('*').eq('id', params.id).single();
