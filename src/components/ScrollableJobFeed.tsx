@@ -1,8 +1,8 @@
 ﻿"use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, UIEvent, useEffect } from "react";
 import JobCard from "@/components/JobCard";
-import { Search } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 
 export default function ScrollableJobFeed({ 
   jobs, 
@@ -14,6 +14,9 @@ export default function ScrollableJobFeed({
   theme?: 'slate' | 'amber' 
 }) {
   const [search, setSearch] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const [isScrollable, setIsScrollable] = useState(false);
   
   const filteredJobs = useMemo(() => {
     if (!search || !jobs) return jobs || [];
@@ -29,10 +32,44 @@ export default function ScrollableJobFeed({
   const bgClass = theme === 'amber' 
     ? 'bg-amber-50/30 dark:bg-amber-900/10 border-amber-200/60 dark:border-amber-900/40' 
     : 'bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800';
-    
+
+  // The gradient fade that covers the bottom of the list
   const fadeClass = theme === 'amber' 
-    ? 'from-amber-50/90 dark:from-slate-900/90' 
-    : 'from-slate-50/90 dark:from-slate-900/90';
+    ? 'from-[#fef3c7] dark:from-[#0f172a]' 
+    : 'from-white dark:from-[#0f172a]';
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollHeight, clientHeight, scrollTop } = scrollRef.current;
+      // Is the content larger than the container?
+      setIsScrollable(scrollHeight > clientHeight + 10);
+      // Are we at the bottom?
+      setIsAtBottom(scrollHeight - scrollTop <= clientHeight + 20);
+    }
+  };
+
+  useEffect(() => {
+    // Check initially and whenever jobs list changes
+    checkScroll();
+    
+    // Add a resize listener just in case screen size changes
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [filteredJobs]);
+
+  const handleScroll = () => {
+    checkScroll();
+  };
+
+  const scrollDown = () => {
+    if (scrollRef.current) {
+      // Scroll down by roughly one card height + gap (180px)
+      scrollRef.current.scrollBy({ top: 300, behavior: 'smooth' });
+    }
+  };
+
+  // Show button if content is scrollable AND we haven't reached the bottom yet
+  const showScrollButton = isScrollable && !isAtBottom;
 
   return (
     <div className={`relative rounded-2xl border ${bgClass} p-4 flex flex-col`}>
@@ -50,9 +87,13 @@ export default function ScrollableJobFeed({
         />
       </div>
       
-      {/* Scrollable Grid/Carousel */}
-      <div className="md:h-[600px] md:overflow-y-auto custom-scroll md:pr-2 relative w-full max-w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 pb-6">
+      {/* Boxed Scrollable Grid */}
+      <div 
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="max-h-[480px] overflow-y-auto custom-scroll pr-1 relative w-full max-w-full"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 pb-10">
           {filteredJobs.map(job => (
             <div key={job.id} className="w-full">
               <JobCard job={job} />
@@ -69,7 +110,17 @@ export default function ScrollableJobFeed({
         </div>
       </div>
       
-      <div className={`absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t ${fadeClass} to-transparent pointer-events-none rounded-b-2xl z-10`}></div>
+      {/* Scroll Indicator Gradient & Beautiful Bouncing Button */}
+      {showScrollButton && (
+        <div className={`absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t ${fadeClass} to-transparent pointer-events-none rounded-b-2xl z-10 flex items-end justify-center pb-5`}>
+          <button 
+            onClick={scrollDown}
+            className="pointer-events-auto flex items-center gap-2 bg-emerald-600/95 backdrop-blur-sm text-white px-5 py-2.5 rounded-full shadow-[0_8px_30px_rgb(16,185,129,0.3)] border border-emerald-500/20 text-xs font-bold animate-bounce hover:bg-emerald-700 transition-all hover:scale-105"
+          >
+            Scroll for more <ChevronDown size={16} strokeWidth={3} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
