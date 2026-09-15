@@ -93,7 +93,7 @@ export default function LatestUpdatesScroller({ recentItems, closingSoonItems }:
       >
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto gap-3 sm:gap-4 pb-6 px-4 snap-x snap-mandatory custom-scrollbar relative"
+          className="flex overflow-x-auto gap-3 sm:gap-4 pb-6 px-4 custom-scrollbar relative"
         >
           {displayItems.map((item, index) => {
             const isClosing = activeTab === 'closing' || item.isClosingSoon;
@@ -102,7 +102,7 @@ export default function LatestUpdatesScroller({ recentItems, closingSoonItems }:
               <Link 
                 key={`${item.badge_text}-${item.id}-${index}`} 
                 href={item.url}
-                className={`relative flex-shrink-0 w-[80vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] p-4 sm:p-5 rounded-2xl border snap-start transition-transform hover:-translate-y-1 ${
+                className={`relative flex-shrink-0 w-[80vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] p-4 sm:p-5 rounded-2xl border transition-transform hover:-translate-y-1 ${
                   isClosing 
                     ? 'bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-900/30' 
                     : 'bg-emerald-50/40 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-900/30'
