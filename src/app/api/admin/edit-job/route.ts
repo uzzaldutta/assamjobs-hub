@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     // Surgical ISR Cache Invalidation
     revalidatePath('/jobs');
-    revalidatePath('/jobs/[id]', 'page');
+    revalidatePath(`/jobs/${id}`);
     revalidatePath('/');
 
 

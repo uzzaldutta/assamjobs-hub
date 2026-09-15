@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 
     revalidatePath('/');
     revalidatePath('/jobs');
-    revalidatePath('/jobs/[id]', 'page');
+    revalidatePath(`/jobs/${id}`);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error(error);

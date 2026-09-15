@@ -9,12 +9,14 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
   const { data: item } = await supabase.from('ingestion_queue').select('*').eq('id', queueId).single();
   if (!item) throw new Error("Queue item not found");
   const payload = item.normalized_payload;
+  let modifiedRecordId: string | null = null;
 
   const { data: sourceMeta } = await supabase.from('ingestion_sources').select('*').eq('id', item.source_id).single();
 
   if (action === 'UPDATE' && item.duplicate_of) {
     // UPDATE EXISTING RECORD (Canonical Merge)
     const targetId = item.duplicate_of;
+    modifiedRecordId = targetId;
     let updates: any = {};
     
     if (sourceMeta?.is_official) {
@@ -62,6 +64,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newJob.id;
+      modifiedRecordId = newRecordId;
     } 
     else if (item.content_type === 'TENDER') {
       const { data: newTender, error: insertErr } = await supabase.from('tenders').insert({
@@ -78,6 +81,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newTender.id;
+      modifiedRecordId = newRecordId;
     }
     else if (item.content_type === 'ADMISSION') {
       const { data: newAdm, error: insertErr } = await supabase.from('jobs').insert({
@@ -93,6 +97,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newAdm.id;
+      modifiedRecordId = newRecordId;
     }
     else if (item.content_type === 'RESULT') {
       const { data: newRes, error: insertErr } = await supabase.from('results').insert({
@@ -108,6 +113,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newRes.id;
+      modifiedRecordId = newRecordId;
     }
     else if (item.content_type === 'ADMIT_CARD') {
       const { data: newAdc, error: insertErr } = await supabase.from('admit_cards').insert({
@@ -124,6 +130,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newAdc.id;
+      modifiedRecordId = newRecordId;
     }
     else if (item.content_type === 'SCHOLARSHIP') {
       const { data: newSch, error: insertErr } = await supabase.from('scholarships').insert({
@@ -143,6 +150,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
       }).select('id').single();
       if (insertErr) throw new Error(insertErr.message);
       newRecordId = newSch.id;
+      modifiedRecordId = newRecordId;
     } else {
       throw new Error(`Unsupported content type: ${item.content_type}`);
     }
@@ -165,17 +173,17 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
   // --- SURGICAL CACHE INVALIDATION ---
   revalidatePath('/');
   revalidatePath('/jobs');
-  revalidatePath('/jobs/[id]', 'page');
+  if (modifiedRecordId) revalidatePath(`/jobs/${modifiedRecordId}`);
   revalidatePath('/tenders');
-  revalidatePath('/tenders/[id]', 'page');
+  if (modifiedRecordId) revalidatePath(`/tenders/${modifiedRecordId}`);
   revalidatePath('/admissions');
-  revalidatePath('/admissions/[id]', 'page');
+  if (modifiedRecordId) revalidatePath(`/admissions/${modifiedRecordId}`);
   revalidatePath('/results');
-  revalidatePath('/results/[id]', 'page');
+  if (modifiedRecordId) revalidatePath(`/results/${modifiedRecordId}`);
   revalidatePath('/admit-cards');
-  revalidatePath('/admit-cards/[id]', 'page');
+  if (modifiedRecordId) revalidatePath(`/admit-cards/${modifiedRecordId}`);
   revalidatePath('/scholarships');
-  revalidatePath('/scholarships/[id]', 'page');
+  if (modifiedRecordId) revalidatePath(`/scholarships/${modifiedRecordId}`);
   // -----------------------------------
   
   revalidatePath('/admin/studio/ingestion/queue');

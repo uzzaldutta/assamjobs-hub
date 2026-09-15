@@ -69,11 +69,12 @@ export async function POST(request: Request) {
         
       if (deleteError) throw deleteError;
       deletedCount = idsToDelete.length;
+      idsToDelete.forEach(id => revalidatePath(`/jobs/${id}`));
     }
 
     revalidatePath('/');
     revalidatePath('/jobs');
-    revalidatePath('/jobs/[id]', 'page');
+    // Broad invalidation removed
     return NextResponse.json({ 
       success: true, 
       keyword: inserted,
