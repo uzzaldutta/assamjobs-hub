@@ -87,7 +87,7 @@ export async function GET(request: Request) {
 
     revalidatePath('/');
     revalidatePath('/jobs');
-    revalidatePath('/jobs/[id]', 'page');
+    // Broad invalidation removed
     return NextResponse.json({
       success: true,
       message: `Successfully synchronized ${inserted} new Railway jobs from NFR.`,
