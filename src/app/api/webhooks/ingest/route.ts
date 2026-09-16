@@ -43,7 +43,7 @@ export async function POST(request: Request) {
         
           // HARD SPAM BLOCKLIST
           const lowerTitle = (record.title || '').toLowerCase();
-          if (lowerTitle.includes('bio-data') || lowerTitle.includes('whatsapp') || lowerTitle.includes('telegram') || lowerTitle.includes('resume maker')) {
+          if (lowerTitle.includes('bio-data') || lowerTitle.includes('whatsapp') || lowerTitle.includes('telegram') || lowerTitle.includes('resume maker') || lowerTitle.includes('image resizer') || lowerTitle.includes('image combiner') || lowerTitle.includes('images to pdf') || lowerTitle.includes('qr code') || lowerTitle.includes('advertise with us') || lowerTitle.includes('advertising') || lowerTitle.includes('converter tool')) {
              console.log("Hard spam block hit: " + record.title);
              continue;
           }

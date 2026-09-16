@@ -35,7 +35,8 @@ export function evaluateJobAssamPromotionalContent(payload: any, rawPayload: any
     ];
 
     for (const kw of highPromoExact) {
-        if (title.includes(kw) && genuineScore < 5) return "HIGH";
+        // Return HIGH regardless of genuineScore for absolute spam patterns
+        if (title.includes(kw)) return "HIGH";
     }
 
     // Secondary Promotional keywords
