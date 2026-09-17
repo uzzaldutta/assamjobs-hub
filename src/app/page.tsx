@@ -1,5 +1,6 @@
 
 import HeroSection from "@/components/HeroSection";
+import ClassicUpdatesBoard from "@/components/ClassicUpdatesBoard";
 import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
 import SubscribeForm from "@/components/SubscribeForm";
