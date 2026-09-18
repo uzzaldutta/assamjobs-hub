@@ -64,10 +64,11 @@ export default async function ClassicUpdatesBoard() {
           </div>
           <div className="max-h-[450px] overflow-y-auto custom-thin-scroll bg-slate-50/30 dark:bg-slate-900/50">
             <ul className="flex flex-col px-3">
-              {latestUpdates.map(item => (
+              {latestUpdates.map((item, index) => (
                 <li key={`latest-${item.id}`} className="border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
                   <Link href={item.url} className="block py-3 px-1 text-sm text-slate-800 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">
                     {item.title}
+                    {index < 5 && <span className="ml-2 inline-block px-1.5 py-[1px] text-[10px] font-black bg-red-500 text-white rounded animate-pulse tracking-wide align-middle">NEW</span>}
                   </Link>
                 </li>
               ))}
@@ -82,10 +83,11 @@ export default async function ClassicUpdatesBoard() {
           </div>
           <div className="max-h-[450px] overflow-y-auto custom-thin-scroll bg-slate-50/30 dark:bg-slate-900/50">
             <ul className="flex flex-col px-3">
-              {jobUpdates.map(item => (
+              {jobUpdates.map((item, index) => (
                 <li key={`job-${item.id}`} className="border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
                   <Link href={`/jobs/${item.id}`} className="block py-3 px-1 text-sm text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
                     {item.title}
+                    {index < 5 && <span className="ml-2 inline-block px-1.5 py-[1px] text-[10px] font-black bg-red-500 text-white rounded animate-pulse tracking-wide align-middle">NEW</span>}
                   </Link>
                 </li>
               ))}
