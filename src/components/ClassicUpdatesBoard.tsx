@@ -39,7 +39,7 @@ export default async function ClassicUpdatesBoard() {
   const jobUpdates = jobs || [];
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
+    <div className="w-full box-border bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
       <style dangerouslySetInnerHTML={{__html: `
         .custom-thin-scroll::-webkit-scrollbar {
           width: 6px;
@@ -66,7 +66,7 @@ export default async function ClassicUpdatesBoard() {
             <ul className="flex flex-col px-3">
               {latestUpdates.map((item, index) => (
                 <li key={`latest-${item.id}`} className="border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
-                  <Link href={item.url} className="block py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">
+                  <Link href={item.url} className="block py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 break-words whitespace-normal dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">
                     {item.title}
                     {index < 5 && <span className="ml-2 inline-block px-1.5 py-[1px] text-[10px] font-black bg-red-500 text-white rounded animate-pulse tracking-wide align-middle">NEW</span>}
                   </Link>
@@ -85,7 +85,7 @@ export default async function ClassicUpdatesBoard() {
             <ul className="flex flex-col px-3">
               {jobUpdates.map((item, index) => (
                 <li key={`job-${item.id}`} className="border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
-                  <Link href={`/jobs/${item.id}`} className="block py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
+                  <Link href={`/jobs/${item.id}`} className="block py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 break-words whitespace-normal dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
                     {item.title}
                     {index < 5 && <span className="ml-2 inline-block px-1.5 py-[1px] text-[10px] font-black bg-red-500 text-white rounded animate-pulse tracking-wide align-middle">NEW</span>}
                   </Link>
