@@ -35,7 +35,16 @@ export default async function ClassicUpdatesBoard() {
     ...(tenders?.map(t => ({ id: t.id, title: t.title, date: t.created_at, url: `/tenders/${t.id}` })) || [])
   ]
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 15); // Show top 15 mixed items
+  .slice(0, 15);
+
+  const uniqueUpdates = [];
+  const seenIds = new Set();
+  for (const item of latestUpdates) {
+    if (!seenIds.has(item.id)) {
+      seenIds.add(item.id);
+      uniqueUpdates.push(item);
+    }
+  }
 
   const jobUpdates = jobs || [];
 
@@ -49,7 +58,7 @@ export default async function ClassicUpdatesBoard() {
             Latest Updates
           </div>
           <ul className="flex flex-col w-full min-w-0 flex-1">
-            {latestUpdates.map((item, index) => (
+            {uniqueUpdates.map((item, index) => (
               <li key={`latest-${item.id}`} className="min-w-0 w-full overflow-hidden odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40">
                 <Link href={item.url} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-2.5 px-3 md:px-4 hover:bg-purple-50 dark:hover:bg-purple-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-400 font-medium transition-colors group">
                   <div className="flex-1 min-w-0 pr-2">

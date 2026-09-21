@@ -53,7 +53,7 @@ export default async function Home() {
     }));
   };
 
-  const allRecent = [
+  const rawRecent = [
     ...mapToFeed(rJobs || [], 'JOB', '/jobs'),
     ...mapToFeed(rTenders || [], 'TENDER', '/tenders'),
     ...mapToFeed(rAdmissions || [], 'ADMISSION', '/admissions', 'institution_name'),
@@ -75,7 +75,16 @@ export default async function Home() {
     supabase.from('scholarships').select('id, title, provider, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10)
   ]);
 
-  const allClosing = [
+  const uniqueRecent = [];
+    const seenRecentIds = new Set();
+    for (const item of rawRecent) {
+      if (!seenRecentIds.has(item.id)) {
+        seenRecentIds.add(item.id);
+        uniqueRecent.push(item);
+      }
+    }
+
+    const allClosing = [
     ...mapToFeed(cJobs || [], 'JOB', '/jobs'),
     ...mapToFeed(cTenders || [], 'TENDER', '/tenders'),
     ...mapToFeed(cAdmissions || [], 'ADMISSION', '/admissions', 'institution_name'),
@@ -129,7 +138,7 @@ export default async function Home() {
       </div>
       
       <div className="max-w-7xl mx-auto px-4 mt-2">
-        <LatestUpdatesScroller recentItems={allRecent} closingSoonItems={allClosing} />
+        <LatestUpdatesScroller recentItems={uniqueRecent} closingSoonItems={allClosing} />
 
         {/* CLASSIC 3-COLUMN BOARD */}
         <ClassicUpdatesBoard />
