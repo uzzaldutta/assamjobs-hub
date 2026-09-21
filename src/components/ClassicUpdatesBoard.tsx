@@ -11,7 +11,7 @@ export default async function ClassicUpdatesBoard() {
     .eq('status', 'PUBLISHED')
     .neq('category', 'BANNED_KEYWORD')
     .order('scraped_at', { ascending: false })
-    .limit(15);
+    .limit(10);
 
   // Fetch Results, Admissions, Scholarships, and Tenders for the "Latest Updates" column
   const [
@@ -35,7 +35,7 @@ export default async function ClassicUpdatesBoard() {
     ...(tenders?.map(t => ({ id: t.id, title: t.title, date: t.created_at, url: `/tenders/${t.id}` })) || [])
   ]
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 15);
+  .slice(0, 10);
 
   const uniqueUpdates = [];
   const seenIds = new Set();
@@ -49,18 +49,18 @@ export default async function ClassicUpdatesBoard() {
   const jobUpdates = jobs || [];
 
   return (
-    <div className="w-full box-border bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
+    <div className="max-w-5xl mx-auto w-full box-border bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800">
         
         {/* Column 1: Latest Updates */}
         <div className="flex flex-col min-w-0 w-full h-full bg-slate-50/30 dark:bg-slate-900/50">
-          <div className="bg-slate-900 dark:bg-black text-white text-center py-3 font-bold text-lg border-b-4 border-purple-500">
+          <div className="bg-slate-900 dark:bg-black text-white text-center py-2 font-bold text-lg border-b-4 border-purple-500">
             Latest Updates
           </div>
           <ul className="flex flex-col w-full min-w-0 flex-1">
             {uniqueUpdates.map((item, index) => (
               <li key={`latest-${item.id}`} className="min-w-0 w-full overflow-hidden odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40">
-                <Link href={item.url} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-2.5 px-3 md:px-4 hover:bg-purple-50 dark:hover:bg-purple-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-400 font-medium transition-colors group">
+                <Link href={item.url} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-1.5 px-3 md:px-4 hover:bg-purple-50 dark:hover:bg-purple-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-400 font-medium transition-colors group">
                   <div className="flex-1 min-w-0 pr-2">
                     <span className="group-hover:underline underline-offset-2">{item.title}</span>
                   </div>
@@ -71,20 +71,20 @@ export default async function ClassicUpdatesBoard() {
               </li>
             ))}
           </ul>
-          <Link href="/updates" className="block text-center py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-400 font-bold text-sm transition-colors mt-auto border-t border-slate-200 dark:border-slate-700">
+          <Link href="/updates" className="block text-center py-2 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-400 font-bold text-sm transition-colors mt-auto border-t border-slate-200 dark:border-slate-700">
             View All Updates &rarr;
           </Link>
         </div>
 
         {/* Column 2: Job Updates */}
         <div className="flex flex-col min-w-0 w-full h-full bg-slate-50/30 dark:bg-slate-900/50">
-          <div className="bg-slate-900 dark:bg-black text-white text-center py-3 font-bold text-lg border-b-4 border-emerald-500">
+          <div className="bg-slate-900 dark:bg-black text-white text-center py-2 font-bold text-lg border-b-4 border-emerald-500">
             Job Updates
           </div>
           <ul className="flex flex-col w-full min-w-0 flex-1">
             {jobUpdates.map((item, index) => (
               <li key={`job-${item.id}`} className="min-w-0 w-full overflow-hidden odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40">
-                <Link href={`/jobs/${item.id}`} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-2.5 px-3 md:px-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400 font-medium transition-colors group">
+                <Link href={`/jobs/${item.id}`} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-1.5 px-3 md:px-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400 font-medium transition-colors group">
                   <div className="flex-1 min-w-0 pr-2">
                     <span className="group-hover:underline underline-offset-2">{item.title}</span>
                   </div>
@@ -95,7 +95,7 @@ export default async function ClassicUpdatesBoard() {
               </li>
             ))}
           </ul>
-          <Link href="/jobs" className="block text-center py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold text-sm transition-colors mt-auto border-t border-slate-200 dark:border-slate-700">
+          <Link href="/jobs" className="block text-center py-2 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold text-sm transition-colors mt-auto border-t border-slate-200 dark:border-slate-700">
             View All Jobs &rarr;
           </Link>
         </div>
