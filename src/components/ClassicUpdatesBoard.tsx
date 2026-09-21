@@ -58,15 +58,15 @@ export default async function ClassicUpdatesBoard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800">
         
         {/* Column 1: Latest Updates */}
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-0 w-full">
           <div className="bg-slate-900 dark:bg-black text-white text-center py-3 font-bold text-lg border-b-4 border-purple-500 sticky top-0 z-10">
             Latest Updates
           </div>
           <div className="max-h-[380px] md:max-h-[480px] overflow-y-auto custom-thin-scroll bg-slate-50/30 dark:bg-slate-900/50">
             <ul className="flex flex-col px-3">
               {latestUpdates.map((item, index) => (
-                <li key={`latest-${item.id}`} className="border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
-                  <Link href={item.url} className="block py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 break-words whitespace-normal dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">
+                <li key={`latest-${item.id}`} className="min-w-0 w-full overflow-hidden border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
+                  <Link href={item.url} className="block w-full break-words whitespace-normal py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 break-words whitespace-normal dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">
                     {item.title}
                     {index < 5 && <span className="ml-2 inline-block px-1.5 py-[1px] text-[10px] font-black bg-red-500 text-white rounded animate-pulse tracking-wide align-middle">NEW</span>}
                   </Link>
@@ -77,15 +77,15 @@ export default async function ClassicUpdatesBoard() {
         </div>
 
         {/* Column 2: Job Updates */}
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-0 w-full">
           <div className="bg-slate-900 dark:bg-black text-white text-center py-3 font-bold text-lg border-b-4 border-emerald-500 sticky top-0 z-10">
             Job Updates
           </div>
           <div className="max-h-[380px] md:max-h-[480px] overflow-y-auto custom-thin-scroll bg-slate-50/30 dark:bg-slate-900/50">
             <ul className="flex flex-col px-3">
               {jobUpdates.map((item, index) => (
-                <li key={`job-${item.id}`} className="border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
-                  <Link href={`/jobs/${item.id}`} className="block py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 break-words whitespace-normal dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
+                <li key={`job-${item.id}`} className="min-w-0 w-full overflow-hidden border-b border-dashed border-slate-300 dark:border-slate-700 last:border-0">
+                  <Link href={`/jobs/${item.id}`} className="block w-full break-words whitespace-normal py-3 px-2 md:px-3 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md my-0.5 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 break-words whitespace-normal dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
                     {item.title}
                     {index < 5 && <span className="ml-2 inline-block px-1.5 py-[1px] text-[10px] font-black bg-red-500 text-white rounded animate-pulse tracking-wide align-middle">NEW</span>}
                   </Link>
