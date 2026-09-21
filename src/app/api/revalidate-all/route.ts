@@ -2,10 +2,10 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  revalidatePath('/scholarships');
-  revalidatePath('/results');
-  revalidatePath('/admissions');
-  revalidatePath('/admit-cards');
-  revalidatePath('/');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   return NextResponse.json({ revalidated: true, now: Date.now() });
 }

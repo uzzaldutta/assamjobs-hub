@@ -27,8 +27,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 
-    revalidatePath('/');
-    revalidatePath('/jobs');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
     revalidatePath(`/jobs/${id}`);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

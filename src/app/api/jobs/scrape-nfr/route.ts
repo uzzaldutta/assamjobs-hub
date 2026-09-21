@@ -85,8 +85,8 @@ export async function GET(request: Request) {
       }
     }
 
-    revalidatePath('/');
-    revalidatePath('/jobs');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
     // Broad invalidation removed
     return NextResponse.json({
       success: true,

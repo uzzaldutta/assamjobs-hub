@@ -72,8 +72,8 @@ export async function POST(request: Request) {
       idsToDelete.forEach(id => revalidatePath(`/jobs/${id}`));
     }
 
-    revalidatePath('/');
-    revalidatePath('/jobs');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
     // Broad invalidation removed
     return NextResponse.json({ 
       success: true, 

@@ -171,18 +171,18 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
   await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
   
   // --- SURGICAL CACHE INVALIDATION ---
-  revalidatePath('/');
-  revalidatePath('/jobs');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   if (modifiedRecordId) revalidatePath(`/jobs/${modifiedRecordId}`);
-  revalidatePath('/tenders');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   if (modifiedRecordId) revalidatePath(`/tenders/${modifiedRecordId}`);
-  revalidatePath('/admissions');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   if (modifiedRecordId) revalidatePath(`/admissions/${modifiedRecordId}`);
-  revalidatePath('/results');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   if (modifiedRecordId) revalidatePath(`/results/${modifiedRecordId}`);
-  revalidatePath('/admit-cards');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   if (modifiedRecordId) revalidatePath(`/admit-cards/${modifiedRecordId}`);
-  revalidatePath('/scholarships');
+  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
   if (modifiedRecordId) revalidatePath(`/scholarships/${modifiedRecordId}`);
   // -----------------------------------
   

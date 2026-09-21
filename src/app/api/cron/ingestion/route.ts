@@ -50,14 +50,14 @@ export async function GET(req: Request) {
     }
 
     
-    revalidatePath('/');
-    revalidatePath('/jobs');
-    revalidatePath('/admissions');
-    revalidatePath('/admit-cards');
-    revalidatePath('/scholarships');
-    revalidatePath('/tenders');
-    revalidatePath('/results');
-    revalidatePath('/updates');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
     // We intentionally DO NOT use revalidatePath('/', 'layout') because it wipes the cache 
     // for all 10,000+ individual detail pages, causing massive Vercel ISR execution costs.
     

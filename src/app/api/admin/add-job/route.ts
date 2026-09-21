@@ -38,8 +38,8 @@ export async function POST(req: Request) {
 
     if (error) throw error;
 
-    revalidatePath('/');
-    revalidatePath('/jobs');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
     revalidatePath(`/jobs/${newEntry.id}`);
     return NextResponse.json({ success: true, entry: newEntry }, { status: 200 });
 

@@ -31,9 +31,9 @@ export async function POST(request: Request) {
     if (error) throw error;
 
     // Surgical ISR Cache Invalidation
-    revalidatePath('/jobs');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
     revalidatePath(`/jobs/${id}`);
-    revalidatePath('/');
+    // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
 
 
     return NextResponse.json({ success: true, data });
