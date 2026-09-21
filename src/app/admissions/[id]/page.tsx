@@ -49,14 +49,25 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
   const params = await props.params;
   const { id } = params;
   
-  const { data: record, error } = await supabase
+  let { data: record, error } = await supabase
     .from('jobs')
     .select('*')
     .eq('id', id)
     .single();
     
   if (error || !record) {
-    notFound();
+    // Fallback to jobs table since webhook inserts there
+    const { data: jobRecord } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('id', id)
+      .single();
+      
+    if (jobRecord) {
+      record = jobRecord;
+    } else {
+      notFound();
+    }
   }
 
   // Determine Deadline State (if applicable)
