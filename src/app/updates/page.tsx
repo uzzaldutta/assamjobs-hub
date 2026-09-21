@@ -1,5 +1,6 @@
 
 import PageHeader from "@/components/PageHeader";
+import JobCard from "@/components/JobCard";
 import TenderCard from "@/components/feeds/TenderCard";
 import AdmissionCard from "@/components/feeds/AdmissionCard";
 import ResultCard from "@/components/feeds/ResultCard";
@@ -7,14 +8,15 @@ import AdmitCard from "@/components/feeds/AdmitCard";
 import ScholarshipCard from "@/components/feeds/ScholarshipCard";
 import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
-import { Award, FileText, GraduationCap, LibraryBig, ClipboardList } from "lucide-react";
+import { Award, FileText, GraduationCap, LibraryBig, ClipboardList, Briefcase } from "lucide-react";
 
 export const revalidate = 600; // 24h caching - On-demand revalidation
 
 export default async function UpdatesPage() {
-  const { data: results } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('created_at', { ascending: false }).limit(6);
-  const { data: admitCards } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('created_at', { ascending: false }).limit(6);
-  const { data: admissions } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(6);
+  const { data: jobs } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(6);
+  const { data: results } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('scraped_at', { ascending: false }).limit(6);
+  const { data: admitCards } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('scraped_at', { ascending: false }).limit(6);
+  const { data: admissions } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(6);
   const { data: scholarships } = await supabase.from('scholarships').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
   const { data: tenders } = await supabase.from('tenders').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
 
@@ -24,6 +26,16 @@ export default async function UpdatesPage() {
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
         <div className="flex-1 space-y-12">
+           
+           <section id="jobs">
+              <div className="flex items-center gap-3 mb-6">
+                 <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl"><Briefcase size={24}/></div>
+                 <h2 className="text-2xl font-black text-slate-900 dark:text-white">Latest Jobs</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                 {jobs?.map(job => <JobCard key={job.id} job={job} />)}
+              </div>
+           </section>
            
            <section id="results">
               <div className="flex items-center gap-3 mb-6">
