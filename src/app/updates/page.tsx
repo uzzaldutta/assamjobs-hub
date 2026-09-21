@@ -12,9 +12,9 @@ import { Award, FileText, GraduationCap, LibraryBig, ClipboardList } from "lucid
 export const revalidate = 600; // 24h caching - On-demand revalidation
 
 export default async function UpdatesPage() {
-  const { data: results } = await supabase.from('results').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
-  const { data: admitCards } = await supabase.from('admit_cards').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
-  const { data: admissions } = await supabase.from('admissions').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
+  const { data: results } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('created_at', { ascending: false }).limit(6);
+  const { data: admitCards } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('created_at', { ascending: false }).limit(6);
+  const { data: admissions } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(6);
   const { data: scholarships } = await supabase.from('scholarships').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
   const { data: tenders } = await supabase.from('tenders').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(6);
 
