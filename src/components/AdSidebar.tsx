@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import AdBanner from "./AdBanner";
 import { Sparkles, Phone } from "lucide-react";
 
@@ -7,13 +7,9 @@ export default function AdSidebar() {
     <aside className="lg:col-span-4 hidden lg:block">
       <div className="sticky top-24 flex flex-col gap-6">
         
-        
         {/* ADSTERRA BANNER */}
-        <div className="flex justify-center">
+        <div className="flex justify-center w-full">
           <AdBanner />
-        </div>
-          <h4 className="text-slate-600 dark:text-slate-400 font-bold mb-1">Ad Space Available</h4>
-          <p className="text-xs text-slate-400 dark:text-slate-500 text-center max-w-[200px]">This premium slot is perfectly optimized for AdSense or direct sponsors.</p>
         </div>
 
         {/* PROMO: AI MOCK TESTS */}
