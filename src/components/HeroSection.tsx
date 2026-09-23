@@ -28,16 +28,16 @@ export default function HeroSection() {
          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4 py-8 md:py-12">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4 py-6 md:py-8">
         
-        <h1 className="text-2xl md:text-4xl font-black mb-4 leading-tight tracking-tight text-white">
+        <h1 className="text-2xl md:text-4xl font-black mb-2 md:mb-3 leading-tight tracking-tight text-white">
           The Ultimate Platform for <br className="hidden md:block"/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
             Assam Govt & Private Jobs
           </span>
         </h1>
         
-        <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto mb-8 font-medium">
+        <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto mb-5 md:mb-6 font-medium">
           Discover verified recruitment notifications, exam results, admit cards, and free mock tests. Your career journey starts here.
         </p>
 
@@ -76,3 +76,4 @@ export default function HeroSection() {
     </div>
   );
 }
+
