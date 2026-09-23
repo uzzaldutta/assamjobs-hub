@@ -4,6 +4,20 @@
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 
+
+async function generateUniqueSlug(title: string): Promise<string> {
+  const base = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  let finalSlug = base;
+  let counter = 2;
+  while (true) {
+    const { data } = await supabase.from('jobs').select('id').eq('slug', finalSlug).maybeSingle();
+    if (!data) break;
+    finalSlug = `${base}-${counter}`;
+    counter++;
+  }
+  return finalSlug;
+}
+
 export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'UPDATE' = 'NEW') {
   // 1. Fetch queue item
   const { data: item } = await supabase.from('ingestion_queue').select('*').eq('id', queueId).single();
@@ -49,6 +63,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     if (item.content_type === 'JOB' || item.content_type === 'PRIVATE_JOB') {
       const { data: newJob, error: insertErr } = await supabase.from('jobs').insert({
           id: item.id,
+        slug: await generateUniqueSlug(payload.title),
         title: payload.title,
         organization: payload.organization || 'Unknown',
         job_type: payload.category === 'RAILWAY' ? 'RAILWAY' : (item.content_type === 'JOB' ? 'GOVERNMENT' : 'PRIVATE'),
@@ -89,6 +104,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         title: payload.title,
         organization: payload.organization || 'Unknown',
         job_type: 'ADMISSION',
+        slug: await generateUniqueSlug(payload.title),
         closing_date: payload.applicationEnd || null,
         application_url: payload.applyUrl || payload.sourceUrl,
         official_source_url: payload.sourceUrl || null,

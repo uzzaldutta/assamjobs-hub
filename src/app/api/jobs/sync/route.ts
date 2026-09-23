@@ -65,6 +65,7 @@ export async function GET(request: Request) {
         if ((hasVacancies || hasLastDate) && (!existing || existing.length === 0)) {
           await supabase.from('jobs').insert({
             title: job.title,
+            slug: job.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Math.random().toString(36).substring(2, 6),
             organization: job.organization,
             job_type: job.jobType,
             category: job.category,

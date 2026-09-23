@@ -22,6 +22,7 @@ export interface SearchResultMetadata {
 }
 
 export interface SearchResultItem {
+  slug?: string;
   id: string;
   type: SearchItemType;
   title: string;

@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 1. Fetch published Jobs
     const { data: jobs } = await supabase
       .from('jobs')
-      .select('id, scraped_at')
+      .select('id, slug, scraped_at')
       .eq('status', 'PUBLISHED')
       .order('scraped_at', { ascending: false })
       .limit(1000);
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (jobs) {
       jobs.forEach((job) => {
         routes.push({
-          url: `${baseUrl}/jobs/${job.id}`,
+          url: `${baseUrl}/jobs/${job.slug || job.id}`,
           lastModified: new Date(job.scraped_at || Date.now()),
           changeFrequency: 'weekly',
           priority: 0.7,

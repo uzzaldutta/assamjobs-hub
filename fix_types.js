@@ -1,5 +1,5 @@
 ﻿const fs = require('fs');
-let p = 'src/app/search/SearchClient.tsx';
+let p = 'src/lib/search/searchTypes.ts';
 let c = fs.readFileSync(p, 'utf8');
 
 c = c.replace(
@@ -8,4 +8,4 @@ c = c.replace(
 );
 
 fs.writeFileSync(p, c);
-console.log("Patched SearchClient.tsx type");
+console.log("Patched searchTypes.ts");

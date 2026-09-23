@@ -73,7 +73,7 @@ export default function JobCard({ job }: JobCardProps) {
       </div>
 
       {/* Title & Org */}
-      <Link href={`/jobs/${job.id}`} className="group block mb-4">
+      <Link href={`/jobs/${job.slug || job.id}`} className="group block mb-4">
         <h3 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1 pr-4 line-clamp-2">
           {job.title}
         </h3>
@@ -143,7 +143,7 @@ export default function JobCard({ job }: JobCardProps) {
             <CheckCircle2 size={12} /> Am I Eligible?
           </button>
         </div>
-        <Link href={`/jobs/${job.id}`} className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+        <Link href={`/jobs/${job.slug || job.id}`} className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
           View Details
         </Link>
       </div>

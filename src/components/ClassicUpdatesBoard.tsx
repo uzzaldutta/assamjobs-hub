@@ -7,7 +7,7 @@ export default async function ClassicUpdatesBoard() {
   // Fetch up to 15 Jobs for the "Job Updates" column
   const { data: jobs } = await supabase
     .from('jobs')
-    .select('id, title, scraped_at, job_type, category')
+    .select('id, slug, title, scraped_at, job_type, category')
     .eq('status', 'PUBLISHED')
     .neq('category', 'BANNED_KEYWORD')
     .order('scraped_at', { ascending: false })
@@ -20,17 +20,17 @@ export default async function ClassicUpdatesBoard() {
     { data: scholarships },
     { data: tenders }
   ] = await Promise.all([
-    supabase.from('results').select('id, title, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, title, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('scholarships').select('id, title, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(5),
-    supabase.from('tenders').select('id, title, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(5)
+    supabase.from('results').select('id, slug, title, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, title, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('scholarships').select('id, slug, title, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(5),
+    supabase.from('tenders').select('id, slug, title, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(5)
   ]);
 
   // Mix them all for "Latest Updates"
   const latestUpdates = [
-    ...(jobs?.slice(0, 5).map(j => ({ id: j.id, title: j.title, date: j.scraped_at, url: `/jobs/${j.id}` })) || []),
+    ...(jobs?.slice(0, 5).map(j => ({ id: j.id, title: j.title, date: j.scraped_at, url: `/jobs/${j.slug || j.id}` })) || []),
     ...(results?.map(r => ({ id: r.id, title: r.title, date: r.created_at, url: `/results/${r.id}` })) || []),
-    ...(admissions?.map(a => ({ id: a.id, title: a.title, date: a.scraped_at, url: `/jobs/${a.id}` })) || []),
+    ...(admissions?.map(a => ({ id: a.id, title: a.title, date: a.scraped_at, url: `/jobs/${a.slug || a.id}` })) || []),
     ...(scholarships?.map(s => ({ id: s.id, title: s.title, date: s.created_at, url: `/scholarships/${s.id}` })) || []),
     ...(tenders?.map(t => ({ id: t.id, title: t.title, date: t.created_at, url: `/tenders/${t.id}` })) || [])
   ]
@@ -84,7 +84,7 @@ export default async function ClassicUpdatesBoard() {
           <ul className="flex flex-col w-full min-w-0 flex-1">
             {jobUpdates.map((item, index) => (
               <li key={`job-${item.id}`} className="min-w-0 w-full overflow-hidden odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40">
-                <Link href={`/jobs/${item.id}`} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-1.5 px-3 md:px-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400 font-medium transition-colors group">
+                <Link href={`/jobs/${item.slug || item.id}`} style={{ overflowWrap: "anywhere" }} className="flex items-start sm:items-center py-1.5 px-3 md:px-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[13px] md:text-sm leading-tight md:leading-normal text-slate-800 whitespace-normal dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400 font-medium transition-colors group">
                   <div className="flex-1 min-w-0 pr-2">
                     <span className="group-hover:underline underline-offset-2">{item.title}</span>
                   </div>

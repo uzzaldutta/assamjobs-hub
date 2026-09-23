@@ -54,7 +54,7 @@ export default function SearchClient({ initialQuery, initialType, paginatedData 
 
   const getHref = (item: SearchResultItem) => {
     switch (item.type) {
-      case 'JOB': return `/jobs/${item.id}`;
+      case 'JOB': return `/jobs/${item.slug || item.id}`;
       case 'EXAM': return `/exam/${item.metadata?.slug || item.id}`;
       case 'TENDER': return `/tenders/${item.id}`;
       case 'ADMISSION': return `/admissions/${item.id}`;

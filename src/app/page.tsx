@@ -41,12 +41,12 @@ export default async function Home() {
     { data: rAdmitCards },
     { data: rScholarships }
   ] = await Promise.all([
-    supabase.from('jobs').select('id, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(15),
-    supabase.from('tenders').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').or('job_type.eq.SCHOLARSHIP,title.ilike.%scholarship%,title.ilike.%scheme%').order('scraped_at', { ascending: false }).limit(10)
+    supabase.from('jobs').select('id, slug, slug, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(15),
+    supabase.from('tenders').select('id, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, slug, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, slug, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, slug, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, slug, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').or('job_type.eq.SCHOLARSHIP,title.ilike.%scholarship%,title.ilike.%scheme%').order('scraped_at', { ascending: false }).limit(10)
   ]);
 
   const mapToFeed = (items: any[], type: string, urlPrefix: string, orgField: string = 'organization'): FeedItem[] => {
@@ -78,10 +78,10 @@ export default async function Home() {
     { data: cAdmissions },
     { data: cScholarships }
   ] = await Promise.all([
-    supabase.from('jobs').select('id, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(15),
-    supabase.from('tenders').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
-    supabase.from('jobs').select('id, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
-    supabase.from('scholarships').select('id, title, provider, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10)
+    supabase.from('jobs').select('id, slug, slug, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(15),
+    supabase.from('tenders').select('id, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
+    supabase.from('jobs').select('id, slug, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
+    supabase.from('scholarships').select('id, slug, title, provider, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10)
   ]);
 
   const uniqueRecent = [];

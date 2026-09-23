@@ -16,9 +16,9 @@ export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 
 
-export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
-  const { data: job } = await supabase.from('jobs').select('*').eq('id', params.id).single();
+  const { data: job } = await supabase.from('jobs').select('*').or(`id.eq.${params.slug},slug.eq.${params.slug}`).single();
   
   if (!job || job.status !== 'PUBLISHED') {
     return { title: 'Not Found', robots: { index: false } };
@@ -29,7 +29,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   const desc = `Details for ${job.title} provided by ${org}. Check important dates, application links, and official notifications.`;
   
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com';
-  const url = `${baseUrl}/jobs/${job.id}`;
+  const url = `${baseUrl}/jobs/${job.slug || job.id}`;
 
   return {
     title,
@@ -49,14 +49,14 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   };
 }
 
-export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
+export default async function JobDetails(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const { id } = params;
+  const { slug } = params;
   
   const { data: job, error } = await supabase
     .from('jobs')
     .select('*')
-    .eq('id', id)
+    .or(`id.eq.${slug},slug.eq.${slug}`)
     .single();
     
   if (error || !job || job.status !== 'PUBLISHED') {
