@@ -1,6 +1,5 @@
 
 import HeroSection from "@/components/HeroSection";
-import ClassicUpdatesBoard from "@/components/ClassicUpdatesBoard";
 import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
 import SubscribeForm from "@/components/SubscribeForm";
@@ -16,16 +15,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, Briefcase, Building2, Bell, FileCheck, FileText } from "lucide-react";
 
-export const revalidate = 600; // 24h caching - On-demand revalidation // 1 minute cache
-
-
-export const metadata = {
-  title: "Assam Govt Jobs 2026 | Latest Assam Government & Private Jobs",
-  description: "Find the latest Assam government jobs, private jobs, recruitment notifications, admit cards, results, exam preparation, and free mock tests at AssamJobsHub.",
-  alternates: {
-    canonical: "/",
-  }
-};
+export const revalidate = 86400; // 24h caching - On-demand revalidation // 1 minute cache
 
 export default async function Home() {
 
@@ -62,7 +52,7 @@ export default async function Home() {
     }));
   };
 
-  const rawRecent = [
+  const allRecent = [
     ...mapToFeed(rJobs || [], 'JOB', '/jobs'),
     ...mapToFeed(rTenders || [], 'TENDER', '/tenders'),
     ...mapToFeed(rAdmissions || [], 'ADMISSION', '/admissions', 'institution_name'),
@@ -84,16 +74,7 @@ export default async function Home() {
     supabase.from('scholarships').select('id, title, provider, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10)
   ]);
 
-  const uniqueRecent = [];
-    const seenRecentIds = new Set();
-    for (const item of rawRecent) {
-      if (!seenRecentIds.has(item.id)) {
-        seenRecentIds.add(item.id);
-        uniqueRecent.push(item);
-      }
-    }
-
-    const allClosing = [
+  const allClosing = [
     ...mapToFeed(cJobs || [], 'JOB', '/jobs'),
     ...mapToFeed(cTenders || [], 'TENDER', '/tenders'),
     ...mapToFeed(cAdmissions || [], 'ADMISSION', '/admissions', 'institution_name'),
@@ -147,10 +128,7 @@ export default async function Home() {
       </div>
       
       <div className="max-w-7xl mx-auto px-4 mt-2">
-        <LatestUpdatesScroller recentItems={uniqueRecent} closingSoonItems={allClosing} />
-
-        {/* CLASSIC 3-COLUMN BOARD */}
-        <ClassicUpdatesBoard />
+        <LatestUpdatesScroller recentItems={allRecent} closingSoonItems={allClosing} />
       </div>
 <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
         

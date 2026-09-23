@@ -30,6 +30,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://assamjobshub.com'),
   title: {
     template: '%s | AssamJobs Hub',
     default: 'AssamJobs Hub - Government & Private Jobs in Assam',
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'AssamJobs Hub',
     description: 'The Ultimate Platform for Assam Govt Jobs and Mock Tests',
-    url: 'https://assamjobs-hub.vercel.app',
+    url: 'https://assamjobshub.com',
     siteName: 'AssamJobs Hub',
     locale: 'en_IN',
     type: 'website',
