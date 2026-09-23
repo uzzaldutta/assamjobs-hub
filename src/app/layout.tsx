@@ -56,6 +56,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AssamJobsHub",
+    "url": "https://assamjobshub.com",
+    "logo": "https://assamjobshub.com/logo.png"
+  };
+  
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AssamJobsHub",
+    "url": "https://assamjobshub.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://assamjobshub.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
       <head>
@@ -79,7 +100,10 @@ export default function RootLayout({
             </Script>
           </>
         )}
-      </head>
+      
+        <Script id="org-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+        <Script id="website-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+</head>
       <body className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import { supabase } from '@/lib/supabase';
+import { generateUniqueSlug } from '@/lib/slugify';
 import { revalidatePath } from 'next/cache';
 
 // Security token

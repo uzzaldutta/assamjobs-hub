@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchAdzunaJobs } from '@/lib/adzuna';
 import { supabase } from '@/lib/supabase';
+import { generateUniqueSlug } from '@/lib/slugify';
 import { revalidatePath } from 'next/cache';
 
 // To protect this route from arbitrary public execution, 
@@ -65,7 +66,7 @@ export async function GET(request: Request) {
         if ((hasVacancies || hasLastDate) && (!existing || existing.length === 0)) {
           await supabase.from('jobs').insert({
             title: job.title,
-            slug: job.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Math.random().toString(36).substring(2, 6),
+            slug: await generateUniqueSlug(job.title), 6),
             organization: job.organization,
             job_type: job.jobType,
             category: job.category,

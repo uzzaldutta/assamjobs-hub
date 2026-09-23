@@ -3,20 +3,9 @@
 
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
+import { generateUniqueSlug } from "@/lib/slugify";
 
 
-async function generateUniqueSlug(title: string): Promise<string> {
-  const base = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-  let finalSlug = base;
-  let counter = 2;
-  while (true) {
-    const { data } = await supabase.from('jobs').select('id').eq('slug', finalSlug).maybeSingle();
-    if (!data) break;
-    finalSlug = `${base}-${counter}`;
-    counter++;
-  }
-  return finalSlug;
-}
 
 export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'UPDATE' = 'NEW') {
   // 1. Fetch queue item

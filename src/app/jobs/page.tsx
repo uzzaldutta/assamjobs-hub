@@ -9,7 +9,23 @@ import { ChevronLeft, ChevronRight, Search, Briefcase, Building2, SlidersHorizon
 
 export const revalidate = 600; // 24h caching - On-demand revalidation
 
-export const metadata = {
+export async function generateMetadata(props: { searchParams?: Promise<{ [key: string]: string }> }) {
+  const searchParams = await props.searchParams;
+  const hasFilters = searchParams && Object.keys(searchParams).some(k => k !== 'page');
+  return {
+    title: "Jobs in Assam",
+    description: "Latest Government & Private jobs in Assam. Apply online for Assam Police, ADRE, APSC and other recruitment.",
+    alternates: {
+      canonical: searchParams?.page && searchParams.page !== '1' ? `/jobs?page=${searchParams.page}` : "/jobs",
+    },
+    robots: {
+      index: !hasFilters, // allow indexing pagination, but not arbitrary filters
+      follow: true
+    }
+  };
+}
+
+// export const metadata = {
   title: "Jobs in Assam",
   description: "Latest Government & Private jobs in Assam. Apply online for Assam Police, ADRE, APSC and other recruitment.",
   alternates: {

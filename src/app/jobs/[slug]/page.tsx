@@ -9,26 +9,48 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 
 
+
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
-  const { data: job } = await supabase.from('jobs').select('*').or(`id.eq.${params.slug},slug.eq.${params.slug}`).single();
+  const slug = params.slug;
+  let { data: job } = await supabase.from('jobs').select('*').eq('slug', slug).maybeSingle();
+  
+  if (!job) {
+    const { data: jobById } = await supabase.from('jobs').select('*').eq('id', slug).maybeSingle();
+    if (jobById) job = jobById;
+  }
   
   if (!job || job.status !== 'PUBLISHED') {
     return { title: 'Not Found', robots: { index: false } };
   }
 
   const org = job.organization || 'AssamJobs Hub';
-  const title = `${job.title} at ${org}`;
-  const desc = `Details for ${job.title} provided by ${org}. Check important dates, application links, and official notifications.`;
+  const title = `${job.title} - Vacancy, Eligibility & Apply`;
+  const vacanciesText = job.vacancies && job.vacancies !== 'Not Specified' ? ` | Vacancies: ${job.vacancies}` : '';
+  const dateText = job.last_date ? ` | Last Date: ${new Date(job.last_date).toLocaleDateString('en-IN')}` : '';
+  const desc = `AssamJobsHub: Details for ${job.title} by ${org}${vacanciesText}${dateText}. Check eligibility, age limit, and application process.`;
   
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com';
+  const baseUrl = 'https://assamjobshub.com';
+  const url = `${baseUrl}/jobs/${job.slug || job.id}`;
+
+  return {
+ title: 'Not Found', robots: { index: false } };
+  }
+
+  const org = job.organization || 'AssamJobs Hub';
+  const title = `${job.title} - Vacancy, Eligibility & Apply`;
+  const vacanciesText = job.vacancies && job.vacancies !== 'Not Specified' ? ` | Vacancies: ${job.vacancies}` : '';
+  const dateText = job.last_date ? ` | Last Date: ${new Date(job.last_date).toLocaleDateString('en-IN')}` : '';
+  const desc = `AssamJobsHub: Details for ${job.title} by ${org}${vacanciesText}${dateText}. Check eligibility, age limit, and application process.`;
+  
+  const baseUrl = 'https://assamjobshub.com';
   const url = `${baseUrl}/jobs/${job.slug || job.id}`;
 
   return {
@@ -53,14 +75,26 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
   const params = await props.params;
   const { slug } = params;
   
-  const { data: job, error } = await supabase
+  let { data: job, error } = await supabase
     .from('jobs')
     .select('*')
-    .or(`id.eq.${slug},slug.eq.${slug}`)
-    .single();
+    .eq('slug', slug)
+    .maybeSingle();
     
-  if (error || !job || job.status !== 'PUBLISHED') {
+  if (!job) {
+    const { data: jobById } = await supabase.from('jobs').select('*').eq('id', slug).maybeSingle();
+    if (jobById && jobById.slug) {
+      redirect(`/jobs/${jobById.slug}`);
+    }
+  }
+    
+  if (error && !job || !job || job.status !== 'PUBLISHED') {
     notFound();
+  }
+
+  // 301 Redirect for old URLs
+  if (job.slug && job.slug !== slug) {
+    redirect(`/jobs/${job.slug}`);
   }
 
   // Determine Deadline State
@@ -75,6 +109,40 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
 
   const isVerified = job.status === 'PUBLISHED' && job.verification_status === 'VERIFIED';
   const advtNo = extractAdvtNo(job.title) || extractAdvtNo(job.unique_description);
+
+  
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://assamjobshub.com" },
+      { "@type": "ListItem", "position": 2, "name": "Jobs", "item": "https://assamjobshub.com/jobs" },
+      { "@type": "ListItem", "position": 3, "name": job.title, "item": `https://assamjobshub.com/jobs/${job.slug || job.id}` }
+    ]
+  };
+
+  const jobSchema = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": job.title,
+    "description": job.unique_description || `Details for ${job.title} by ${job.organization}`,
+    "datePosted": job.scraped_at || new Date().toISOString(),
+    ...(job.last_date ? { "validThrough": new Date(job.last_date).toISOString() } : {}),
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": job.organization || "AssamJobs Hub",
+      "sameAs": "https://assamjobshub.com"
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "Assam",
+        "addressCountry": "IN"
+      }
+    },
+    "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : (job.job_type === "PRIVATE" ? "FULL_TIME" : "OTHER")
+  };
 
   return (
     <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20">
@@ -95,9 +163,28 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
       />
 
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/jobs" className="inline-flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400 mb-6 hover:underline">
-            <ArrowLeft size={16} className="mr-1" /> Back to Jobs
-          </Link>
+          
+            {/* Breadcrumbs */}
+            <nav className="flex text-sm text-gray-500 dark:text-gray-400 mb-6 font-medium" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                <li className="inline-flex items-center">
+                  <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Home</Link>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <span className="mx-2 text-gray-400">/</span>
+                    <Link href="/jobs" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Jobs</Link>
+                  </div>
+                </li>
+                <li aria-current="page">
+                  <div className="flex items-center">
+                    <span className="mx-2 text-gray-400">/</span>
+                    <span className="text-gray-800 dark:text-gray-200 truncate max-w-[150px] sm:max-w-[300px]">{job.title}</span>
+                  </div>
+                </li>
+              </ol>
+            </nav>
+
           
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <span className={`px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider ${job.job_type === 'GOVERNMENT' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800'}`}>
