@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
 import { Sparkles, CreditCard, Award, Bookmark, GraduationCap, FileText, Calendar, BookOpen, Compass, Mic, BrainCircuit, CheckCircle2 } from "lucide-react";
@@ -103,7 +103,12 @@ export default function RootLayout({
       
         <Script id="org-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <Script id="website-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
-</head>
+        {/* Adsterra Popunder */}
+        <Script type="text/javascript" src="//pl31478785.profitableratecpmnetwork.com/08/c0/c4/08c0c4bd4a2c7654b4a267f33cdd2a7f.js" strategy="afterInteractive" />
+        
+        {/* Adsterra Social Bar (Interstitial) */}
+        <Script type="text/javascript" src="//pl31478786.profitableratecpmnetwork.com/57/4c/1e/574c1e672663e012656ba0137c165f55.js" strategy="afterInteractive" />
+      </head>
       <body className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
@@ -296,5 +301,6 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
