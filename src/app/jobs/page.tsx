@@ -25,13 +25,7 @@ export async function generateMetadata(props: { searchParams?: Promise<{ [key: s
   };
 }
 
-// export const metadata = {
-  title: "Jobs in Assam",
-  description: "Latest Government & Private jobs in Assam. Apply online for Assam Police, ADRE, APSC and other recruitment.",
-  alternates: {
-    canonical: "/jobs",
-  }
-};
+
 
 export default async function JobsPage(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
