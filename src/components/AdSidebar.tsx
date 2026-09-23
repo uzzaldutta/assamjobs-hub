@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AdBanner from "./AdBanner";
 import { Sparkles, Phone } from "lucide-react";
 
 export default function AdSidebar() {
@@ -6,12 +7,11 @@ export default function AdSidebar() {
     <aside className="lg:col-span-4 hidden lg:block">
       <div className="sticky top-24 flex flex-col gap-6">
         
-        {/* AD PLACEHOLDER */}
-        <div className="bg-slate-50/50 dark:bg-slate-900/30 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8 flex flex-col items-center justify-center min-h-[300px] hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
-          <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Sponsored Content</span>
-          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-4 text-slate-300 dark:text-slate-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-          </div>
+        
+        {/* ADSTERRA BANNER */}
+        <div className="flex justify-center">
+          <AdBanner />
+        </div>
           <h4 className="text-slate-600 dark:text-slate-400 font-bold mb-1">Ad Space Available</h4>
           <p className="text-xs text-slate-400 dark:text-slate-500 text-center max-w-[200px]">This premium slot is perfectly optimized for AdSense or direct sponsors.</p>
         </div>
