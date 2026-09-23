@@ -1,4 +1,4 @@
-﻿import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ChevronRight } from "lucide-react";
@@ -49,7 +49,7 @@ export default async function ClassicUpdatesBoard() {
   const jobUpdates = jobs || [];
 
   return (
-    <div className="max-w-5xl mx-auto w-full box-border bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
+    <div className="w-full box-border bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800">
         
         {/* Column 1: Latest Updates */}
