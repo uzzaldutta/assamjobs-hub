@@ -17,6 +17,7 @@ import NotificationBell from "@/components/NotificationBell";
 import AccountPlaceholder from "@/components/AccountPlaceholder";
 import Script from "next/script";
 import AdBanner from "@/components/AdBanner";
+import AdStickyMobile from "@/components/AdStickyMobile";
 import HeaderScrollTracker from "@/components/HeaderScrollTracker";
 
 const inter = Inter({
@@ -293,6 +294,7 @@ export default function RootLayout({
               <Footer />
 
               <MobileBottomNav />
+              <AdStickyMobile />
             </div>
           </LanguageProvider>
           <HeaderScrollTracker />
@@ -301,6 +303,7 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
 
