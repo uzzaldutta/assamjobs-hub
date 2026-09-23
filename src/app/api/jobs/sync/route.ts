@@ -66,7 +66,7 @@ export async function GET(request: Request) {
         if ((hasVacancies || hasLastDate) && (!existing || existing.length === 0)) {
           await supabase.from('jobs').insert({
             title: job.title,
-            slug: await generateUniqueSlug(job.title), 6),
+            slug: await generateUniqueSlug(job.title),
             organization: job.organization,
             job_type: job.jobType,
             category: job.category,

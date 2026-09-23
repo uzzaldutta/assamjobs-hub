@@ -41,22 +41,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const url = `${baseUrl}/jobs/${job.slug || job.id}`;
 
   return {
- title: 'Not Found', robots: { index: false } };
-  }
-
-  const org = job.organization || 'AssamJobs Hub';
-  const title = `${job.title} - Vacancy, Eligibility & Apply`;
-  const vacanciesText = job.vacancies && job.vacancies !== 'Not Specified' ? ` | Vacancies: ${job.vacancies}` : '';
-  const dateText = job.last_date ? ` | Last Date: ${new Date(job.last_date).toLocaleDateString('en-IN')}` : '';
-  const desc = `AssamJobsHub: Details for ${job.title} by ${org}${vacanciesText}${dateText}. Check eligibility, age limit, and application process.`;
-  
-  const baseUrl = 'https://assamjobshub.com';
-  const url = `${baseUrl}/jobs/${job.slug || job.id}`;
-
-  return {
     title,
     description: desc,
     alternates: { canonical: url },
+    robots: { index: true, follow: true },
     openGraph: {
       title,
       description: desc,
