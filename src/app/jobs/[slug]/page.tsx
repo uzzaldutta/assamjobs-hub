@@ -381,6 +381,11 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
             </div>
           </div>
 
+          {/* BOTTOM ADSTERRA BANNER */}
+          <div className="w-full flex justify-center items-center py-6">
+            <AdBanner />
+          </div>
+
           <RecentlyViewed currentJob={job} />
           
         </div>
@@ -388,3 +393,5 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
     </div>
   );
 }
+
+

@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
-import { useState, useMemo, useRef, UIEvent, useEffect } from "react";
+import React, { useState, useMemo, useRef, UIEvent, useEffect } from "react";
 import JobCard from "@/components/JobCard";
+import AdBanner from "@/components/AdBanner";
 import { Search, ChevronDown } from "lucide-react";
 
 export default function ScrollableJobFeed({ 
@@ -94,11 +95,19 @@ export default function ScrollableJobFeed({
         className="max-h-[480px] overflow-y-auto custom-scroll pr-1 relative w-full max-w-full"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 pb-10">
-          {filteredJobs.map(job => (
+          {filteredJobs.map((job, index) => (
+            <React.Fragment key={job.id}>
             <div key={job.id} className="w-full">
               <JobCard job={job} />
-            </div>
-          ))}
+              </div>
+              {/* Inject Ad after every 3 jobs */}
+              {(index + 1) % 3 === 0 && (
+                <div key={"ad-" + index} className="w-full flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-1">
+                  <AdBanner className="transform scale-90 sm:scale-100" />
+                </div>
+              )}
+            </React.Fragment>
+            ))}
           {filteredJobs.length === 0 && (
             <div className="w-full shrink-0 col-span-full py-16 text-center">
               <div className="inline-block p-4 rounded-full bg-slate-100 dark:bg-slate-800 mb-3">
@@ -124,3 +133,6 @@ export default function ScrollableJobFeed({
     </div>
   );
 }
+
+
+

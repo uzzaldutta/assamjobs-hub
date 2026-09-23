@@ -17,6 +17,8 @@ import NotificationBell from "@/components/NotificationBell";
 import AccountPlaceholder from "@/components/AccountPlaceholder";
 import Script from "next/script";
 import AdBanner from "@/components/AdBanner";
+import { AdSkyscraperTall } from "@/components/AdSkyscraperTall";
+import AdLeaderboard from "@/components/AdLeaderboard";
 import AdStickyMobile from "@/components/AdStickyMobile";
 import HeaderScrollTracker from "@/components/HeaderScrollTracker";
 
@@ -200,7 +202,7 @@ export default function RootLayout({
 
                   {/* Sidebar Ad (Sticky) */}
                   <div className="sticky top-24 pt-2">
-                    <AdBanner dataAdSlot="SIDEBAR_TALL_SLOT" className="min-h-[600px] w-full" />
+                    <AdSkyscraperTall />
                   </div>
                 </aside>
 
@@ -285,7 +287,7 @@ export default function RootLayout({
                   </div>
                 </main>
               </div>
-
+              <div className="w-full py-6"><AdLeaderboard /></div>
               <Footer />
 
               <MobileBottomNav />
@@ -298,6 +300,8 @@ export default function RootLayout({
     </html>
   );
 }
+
+
 
 
 

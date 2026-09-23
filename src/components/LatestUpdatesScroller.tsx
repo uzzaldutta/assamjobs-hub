@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import AdBanner from "./AdBanner";
 import { ArrowRight, Clock, Sparkles } from 'lucide-react';
 
 export interface FeedItem {
@@ -143,11 +144,13 @@ export default function LatestUpdatesScroller({ recentItems, closingSoonItems }:
               </Link>
             );
           })}
-          {displayItems.length === 0 && (
-            <div className="w-full py-10 text-center text-slate-500 italic border border-dashed border-slate-300 dark:border-slate-700 rounded-xl mx-4">
-              No updates found for this category right now.
-            </div>
-          )}
+          
+            {/* Inject Native Ad into the Scroller */}
+            {displayItems.length > 0 && (
+              <div className="relative flex-shrink-0 w-[80vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] rounded-2xl overflow-hidden flex items-center justify-center">
+                <AdBanner className="transform scale-90 sm:scale-100" />
+              </div>
+            )}
         </div>
       </div>
       
@@ -178,3 +181,6 @@ export default function LatestUpdatesScroller({ recentItems, closingSoonItems }:
     </section>
   );
 }
+
+
+

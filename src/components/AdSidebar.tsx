@@ -1,5 +1,6 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import AdBanner from "./AdBanner";
+import { AdSkyscraperHalf } from "./AdSkyscraperHalf";
 import { Sparkles, Phone } from "lucide-react";
 
 export default function AdSidebar() {
@@ -32,8 +33,13 @@ export default function AdSidebar() {
           <p className="text-emerald-600 dark:text-emerald-500/80 text-sm mb-4 leading-relaxed">Get instant alerts for admit cards, job updates, and results directly on your phone.</p>
           <div className="bg-emerald-500 group-hover:bg-emerald-600 text-white text-center text-sm font-bold px-4 py-2 rounded-lg w-full transition-colors shadow-sm">Join WhatsApp Group</div>
         </a>
+        {/* BOTTOM ADSTERRA SKYSCRAPER */}
+        <div className="flex justify-center w-full mt-4">
+          <AdSkyscraperHalf />
+        </div>
 
       </div>
     </aside>
   );
 }
+
