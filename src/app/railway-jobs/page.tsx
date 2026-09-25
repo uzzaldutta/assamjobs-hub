@@ -1,10 +1,10 @@
-﻿import PageHeader from "@/components/PageHeader";
+import PageHeader from "@/components/PageHeader";
 import FeedList from "@/components/FeedList";
 import AdSidebar from "@/components/AdSidebar";
 import { supabase } from "@/lib/supabase";
 import { deduplicateJobs } from "@/lib/dedup";
 
-export const revalidate = 600; // 24h caching - On-demand revalidation
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export default async function RailwayJobsPage() {
   let jobs: any[] = [];
@@ -52,4 +52,5 @@ export default async function RailwayJobsPage() {
     </div>
   );
 }
+
 

@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { Search, ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 
-export const revalidate = 600; // 24h caching - On-demand revalidation
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export const metadata = {
   title: "Admissions in Assam",
@@ -163,5 +163,6 @@ export default async function AdmissionsPage(props: { searchParams?: Promise<{ [
     </div>
   );
 }
+
 
 

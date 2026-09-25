@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search, Briefcase, Building2, SlidersHorizontal } from "lucide-react";
 
-export const revalidate = 600; // 24h caching - On-demand revalidation
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export async function generateMetadata(props: { searchParams?: Promise<{ [key: string]: string }> }) {
   const searchParams = await props.searchParams;
@@ -169,4 +169,5 @@ export default async function JobsPage(props: { searchParams?: Promise<{ [key: s
     </div>
   );
 }
+
 

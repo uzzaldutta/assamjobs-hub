@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { FileText, Search, ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 
-export const revalidate = 600; // 24h caching - On-demand revalidation
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export const metadata = {
   title: "Tenders in Assam",
@@ -155,3 +155,4 @@ export default async function TendersPage(props: { searchParams?: Promise<{ [key
     </div>
   );
 }
+
