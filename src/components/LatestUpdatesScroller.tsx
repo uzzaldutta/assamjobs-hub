@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import AdBanner from "./AdBanner";
 import { ArrowRight, Clock, Sparkles } from 'lucide-react';
 
 export interface FeedItem {
@@ -145,12 +144,7 @@ export default function LatestUpdatesScroller({ recentItems, closingSoonItems }:
             );
           })}
           
-            {/* Inject Native Ad into the Scroller */}
-            {displayItems.length > 0 && (
-              <div className="relative flex-shrink-0 w-[80vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] rounded-2xl overflow-hidden flex items-center justify-center">
-                <AdBanner className="transform scale-90 sm:scale-100" />
-              </div>
-            )}
+            
         </div>
       </div>
       

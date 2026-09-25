@@ -1,5 +1,6 @@
 
 import HeroSection from "@/components/HeroSection";
+import FeaturedToolsBlock from "@/components/FeaturedToolsBlock";
 import ClassicUpdatesBoard from "@/components/ClassicUpdatesBoard";
 import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
@@ -180,6 +181,10 @@ export default async function Home() {
             </Link>
           </div>
         </section>
+
+      <section className="w-full">
+        <FeaturedToolsBlock />
+      </section>
 
         {/* LATEST PRIVATE JOBS */}
         <section>

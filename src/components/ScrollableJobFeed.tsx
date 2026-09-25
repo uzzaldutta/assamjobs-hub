@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo, useRef, UIEvent, useEffect } from "react";
 import JobCard from "@/components/JobCard";
-import AdBanner from "@/components/AdBanner";
 import { Search, ChevronDown } from "lucide-react";
 
 export default function ScrollableJobFeed({ 
@@ -101,11 +100,7 @@ export default function ScrollableJobFeed({
               <JobCard job={job} />
               </div>
               {/* Inject Ad after every 3 jobs */}
-              {(index + 1) % 3 === 0 && (
-                <div key={"ad-" + index} className="w-full flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-1">
-                  <AdBanner className="transform scale-90 sm:scale-100" />
-                </div>
-              )}
+              
             </React.Fragment>
             ))}
           {filteredJobs.length === 0 && (

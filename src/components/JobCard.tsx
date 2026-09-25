@@ -56,7 +56,7 @@ export default function JobCard({ job }: JobCardProps) {
           <span className={`text-[10px] md:text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${job.job_type === 'GOVERNMENT' ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-blue-700 bg-blue-50 border border-blue-200'}`}>
             {job.job_type || 'JOB'}
           </span>
-            <span className="text-[10px] md:text-xs font-mono text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700" title="Feed ID">ID: {job.id.split("-")[0]}</span>
+            
           {statusBadge}
         </div>
         <button 
