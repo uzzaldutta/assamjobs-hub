@@ -1,6 +1,5 @@
 
 import HeroSection from "@/components/HeroSection";
-import FeaturedToolsBlock from "@/components/FeaturedToolsBlock";
 import ClassicUpdatesBoard from "@/components/ClassicUpdatesBoard";
 import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
@@ -150,9 +149,7 @@ export default async function Home() {
         <AdLeaderboard />
       </div>
 
-      <div className="w-full pt-4">
-        <FeaturedToolsBlock />
-      </div>
+      
 
       <div className="max-w-7xl mx-auto px-4">
         <CategoryGrid />

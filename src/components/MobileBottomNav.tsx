@@ -8,7 +8,7 @@ import {
   Briefcase, 
   BookOpen, 
   Brain, 
-  Bell,
+  Bell, LayoutGrid, Sparkles,
   X,
   Building2,
   GraduationCap,
@@ -49,9 +49,9 @@ export default function MobileBottomNav() {
             <span className="text-[10px] font-bold">Practice</span>
           </Link>
 
-          <button onClick={() => setActivePopup(activePopup === "updates" ? null : "updates")} className={`flex flex-col items-center justify-center w-full h-full gap-1 rounded-xl ${activePopup === "updates" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
-            <Bell size={20} className={activePopup === "updates" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
-            <span className="text-[10px] font-bold">Updates</span>
+          <button onClick={() => setActivePopup(activePopup === "more" ? null : "more")} className={`flex flex-col items-center justify-center w-full h-full gap-1 rounded-xl ${activePopup === "more" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
+            <LayoutGrid size={20} className={activePopup === "more" ? "fill-emerald-100 dark:fill-emerald-900/30" : ""} />
+            <span className="text-[10px] font-bold">Explore</span>
           </button>
 
         </div>
@@ -100,7 +100,7 @@ export default function MobileBottomNav() {
           </div>
         )}
 
-        {activePopup === "updates" && (
+        {activePopup === "more" && (
           <div className="grid grid-cols-3 gap-3">
             <Link href="/results" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-2 p-3 bg-indigo-50 rounded-2xl border border-indigo-100 hover:bg-indigo-100 transition-colors group">
               <div className="p-2 bg-indigo-100 text-indigo-600 rounded-full group-hover:scale-110 transition-transform"><ClipboardList size={20} /></div>
@@ -122,7 +122,11 @@ export default function MobileBottomNav() {
               <div className="p-2 bg-pink-100 text-pink-600 rounded-full group-hover:scale-110 transition-transform"><GraduationCap size={20} /></div>
               <span className="font-bold text-pink-900 text-[11px] text-center">Scholarships</span>
             </Link>
-          </div>
+            <Link href="/tools" onClick={() => setActivePopup(null)} className="flex flex-col items-center gap-2 p-3 bg-teal-50 rounded-2xl border border-teal-100 hover:bg-teal-100 transition-colors group">
+              <div className="p-2 bg-teal-100 text-teal-600 rounded-full group-hover:scale-110 transition-transform"><Sparkles size={20} /></div>
+              <span className="font-bold text-teal-900 text-[11px] text-center">Tools</span>
+            </Link>
+</div>
         )}
       </div>
     </>
