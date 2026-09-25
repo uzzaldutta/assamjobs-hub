@@ -76,8 +76,19 @@ export default function MobileMenu() {
                 </div>
               </div>
 
-              {/* Settings Link */}
-              <div className="pt-2">
+                              {/* About & Legal */}
+                <div>
+                  <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3 uppercase tracking-wider">About & Info</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link onClick={() => setIsOpen(false)} href="/about" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">About Us</Link>
+                    <Link onClick={() => setIsOpen(false)} href="/contact" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">Contact</Link>
+                    <Link onClick={() => setIsOpen(false)} href="/privacy-policy" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">Privacy Policy</Link>
+                    <Link onClick={() => setIsOpen(false)} href="/terms" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">Terms & Conds</Link>
+                  </div>
+                </div>
+
+                {/* Settings Link */}
+                <div className="pt-2">
                 <Link onClick={() => setIsOpen(false)} href="/settings" className="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold text-sm text-slate-800 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700">
                   <Settings size={20} className="text-slate-500" /> App Settings & Admin
                 </Link>

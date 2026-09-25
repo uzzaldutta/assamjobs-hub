@@ -83,8 +83,13 @@ export default function DesktopNav() {
         </div>
       </div>
 
-      {/* Calendar */}
-      <Link href="/saved" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-2 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
+              {/* About */}
+        <Link href="/about" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-2 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
+          <Info size={16} /> About Us
+        </Link>
+
+        {/* Saved Jobs */}
+        <Link href="/saved" className="flex items-center gap-1.5 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:shadow-sm hover:border-slate-200 dark:hover:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400 px-2 py-2 rounded-xl backdrop-blur-sm border border-transparent transition-colors">
         <Bookmark size={16} /> Saved Jobs
       </Link>
 
