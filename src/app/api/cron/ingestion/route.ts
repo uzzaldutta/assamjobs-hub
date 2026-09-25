@@ -15,6 +15,8 @@ import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter'
 // Secure the route with a cron secret
 const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret';
 
+export const maxDuration = 60;
+
 export async function GET(req: Request) {
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${CRON_SECRET}` && process.env.NODE_ENV === 'production') {
@@ -29,6 +31,7 @@ export async function GET(req: Request) {
     // For this Phase 6.x architecture, we will process sequentially or via Promise.allSettled
     
     const results = [];
+    const promises = [];
     for (const source of sources) {
         let adapterInstance: any;
         if (source.adapter_name === 'APSCAdapter') adapterInstance = new APSCAdapter(source);
@@ -41,8 +44,7 @@ export async function GET(req: Request) {
         else if (source.adapter_name === 'IndGovtJobsAdapter') adapterInstance = new IndGovtJobsAdapter(source);
         
         if (adapterInstance) {
-            // Background execution
-            IngestionPipeline.processSource(adapterInstance).catch(err => console.error(err));
+            promises.push(IngestionPipeline.processSource(adapterInstance));
             results.push({ source: source.source_name, status: 'started' });
         } else {
             results.push({ source: source.source_name, status: 'unsupported_adapter' });
@@ -61,8 +63,8 @@ export async function GET(req: Request) {
     // We intentionally DO NOT use revalidatePath('/', 'layout') because it wipes the cache 
     // for all 10,000+ individual detail pages, causing massive Vercel ISR execution costs.
     
-    return NextResponse.json({
-      success: true, triggered: results });
+    await Promise.allSettled(promises);
+    return NextResponse.json({ success: true, triggered: results });
 
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
