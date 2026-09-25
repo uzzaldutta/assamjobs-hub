@@ -15,7 +15,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-16 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-10 pb-24 md:pb-10 px-4 md:px-0 z-10 relative print:hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
         
         {/* Brand */}
         <div className="col-span-1 lg:col-span-1">
@@ -49,6 +49,18 @@ export default function Footer() {
             <li><Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Admit Cards</Link></li>
             <li><Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Exam Results</Link></li>
             <li><Link href="/tenders" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Assam Tenders</Link></li>
+          </ul>
+        </div>
+
+        {/* Legal & Info */}
+        <div className="col-span-1 lg:col-span-1">
+          <h3 className="font-bold text-slate-800 dark:text-white mb-4 uppercase tracking-wider text-sm">Legal & Info</h3>
+          <ul className="space-y-3">
+            <li><Link href="/about" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">About Us</Link></li>
+            <li><Link href="/contact" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Contact Us</Link></li>
+            <li><Link href="/privacy-policy" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Terms & Conditions</Link></li>
+            <li><Link href="/editorial-policy" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Editorial Policy</Link></li>
           </ul>
         </div>
       </div>
