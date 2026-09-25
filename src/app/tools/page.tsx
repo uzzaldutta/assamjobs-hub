@@ -1,6 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
-import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield, Camera } from "lucide-react";
+import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield, Camera, UserSquare, CalendarClock, Receipt, Briefcase \} from "lucide-react";
 
 const toolsData = [
   {
@@ -18,6 +18,7 @@ const toolsData = [
     category: "Job Application Tools",
     description: "Everything you need to prepare your documents perfectly",
     items: [
+      { name: "Resume Builder", icon: <UserSquare className="text-violet-500" size={24} />, link: "/tools/resume-builder", color: "bg-violet-50 dark:bg-violet-900/30", border: "border-violet-200 dark:border-violet-800" },
       { name: "Photo & Sign Resizer", icon: <ImageIcon className="text-pink-500" size={24} />, link: "/tools/photo-resizer", color: "bg-pink-50 dark:bg-pink-900/30", border: "border-pink-200 dark:border-pink-800" },
       { name: "Image to PDF", icon: <FileOutput className="text-red-500" size={24} />, link: "/tools/pdf-merger", color: "bg-red-50 dark:bg-red-900/30", border: "border-red-200 dark:border-red-800" },
       { name: "Standard Form", icon: <FileSpreadsheet className="text-amber-500" size={24} />, link: "/tools/standard-form", color: "bg-amber-50 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800" },
@@ -27,6 +28,9 @@ const toolsData = [
     category: "Calculators & Tests",
     description: "Quick utilities for students and job seekers",
     items: [
+      { name: "Age Calculator", icon: <CalendarClock className="text-blue-500" size={24} />, link: "/tools/age-calculator", color: "bg-blue-50 dark:bg-blue-900/30", border: "border-blue-200 dark:border-blue-800" },
+      { name: "Fee Calculator", icon: <Receipt className="text-rose-500" size={24} />, link: "/tools/fee-calculator", color: "bg-rose-50 dark:bg-rose-900/30", border: "border-rose-200 dark:border-rose-800" },
+      { name: "Tender Calculator", icon: <Briefcase className="text-amber-500" size={24} />, link: "/tools/tender-calculator", color: "bg-amber-50 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800" },
       { name: "Salary Calculator", icon: <Calculator className="text-teal-500" size={24} />, link: "/tools/salary-calculator", color: "bg-teal-50 dark:bg-teal-900/30", border: "border-teal-200 dark:border-teal-800" },
       { name: "CGPA to Percentage", icon: <GraduationCap className="text-orange-500" size={24} />, link: "/tools/cgpa-converter", color: "bg-orange-50 dark:bg-orange-900/30", border: "border-orange-200 dark:border-orange-800" },
       { name: "Marks Calculator", icon: <BarChart className="text-fuchsia-500" size={24} />, link: "/tools/marks-calculator", color: "bg-fuchsia-50 dark:bg-fuchsia-900/30", border: "border-fuchsia-200 dark:border-fuchsia-800" },
