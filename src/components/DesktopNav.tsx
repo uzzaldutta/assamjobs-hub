@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
-import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home, Bell , Bookmark} from "lucide-react";
+import { ChevronDown, Briefcase, GraduationCap, BookOpen, Wrench, CalendarDays, Search, FileText, Home, Bell , Bookmark, Info} from "lucide-react";
 
 export default function DesktopNav() {
   const { t } = useLanguage();
