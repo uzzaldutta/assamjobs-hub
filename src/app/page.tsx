@@ -144,8 +144,10 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen">
       <HeroSection />
 
-      <div className="px-4 w-full">
-        <AdLeaderboard />
+      
+
+      <div className="w-full pt-6">
+        <FeaturedToolsBlock />
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
@@ -181,10 +183,6 @@ export default async function Home() {
             </Link>
           </div>
         </section>
-
-      <section className="w-full">
-        <FeaturedToolsBlock />
-      </section>
 
         {/* LATEST PRIVATE JOBS */}
         <section>
