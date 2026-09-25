@@ -1,6 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
-import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield, Camera, UserSquare, CalendarClock, Receipt, Briefcase \} from "lucide-react";
+import { Compass, Calendar, Mic, FileText, Image as ImageIcon, FileOutput, FileSpreadsheet, Calculator, GraduationCap, BarChart, Keyboard, Shield, Camera, UserSquare, CalendarClock, Receipt, Briefcase } from "lucide-react";
 
 const toolsData = [
   {
