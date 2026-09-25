@@ -146,7 +146,11 @@ export default async function Home() {
 
       
 
-      <div className="w-full pt-6">
+      <div className="px-4 w-full pt-2 pb-2">
+        <AdLeaderboard />
+      </div>
+
+      <div className="w-full pt-4">
         <FeaturedToolsBlock />
       </div>
 
