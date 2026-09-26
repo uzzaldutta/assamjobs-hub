@@ -98,7 +98,8 @@ export class AssamCareerAdapter implements SourceAdapter {
       lastDate: dateMatch ? dateMatch[1].trim() : undefined,
       vacancy: vacancyMatch ? vacancyMatch[1].trim() : undefined,
       applyUrl,
-      notificationUrl
+      notificationUrl,
+      descriptionHTML: $(".post-body").html() || ""
     };
   }
 
@@ -113,7 +114,8 @@ export class AssamCareerAdapter implements SourceAdapter {
       organization: extracted.organization,
       applicationEnd: extracted.lastDate,
       vacancy: extracted.vacancy,
-      externalId: extracted.url
+      externalId: extracted.url,
+      description: extracted.descriptionHTML
     };
   }
 
