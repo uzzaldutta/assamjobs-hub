@@ -138,17 +138,33 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
       <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-8 pb-8">
         
       <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "JobPosting",
-            "name": job.title,
-            "description": `Details for ${job.title} by ${job.organization}`,
-            "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com'}/jobs/${job.id}`
-          })
-        }}
-      />
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "JobPosting",
+              "title": job.title,
+              "description": job.unique_description ? job.unique_description.replace(/<[^>]*>?/gm, "").substring(0, 1000) : "Details for " + job.title,
+              "datePosted": job.scraped_at || job.created_at || new Date().toISOString(),
+              "validThrough": job.last_date ? new Date(job.last_date).toISOString() : new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+              "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : "OTHER",
+              "hiringOrganization": {
+                "@type": "Organization",
+                "name": job.organization || "Assam Govt / Private Sector",
+                "sameAs": "https://assamjobshub.com"
+              },
+              "jobLocation": {
+                "@type": "Place",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": job.district || "Assam",
+                  "addressRegion": "AS",
+                  "addressCountry": "IN"
+                }
+              }
+            })
+          }}
+        />
 
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           
