@@ -1,3 +1,4 @@
+import { proxyFetch } from '../proxyFetch';
 
 import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
@@ -12,7 +13,7 @@ export class AssamCareerAdapter implements SourceAdapter {
 
   async discover(): Promise<RawContent[]> {
     try {
-      const res = await fetch(this.sourceConfig.base_url, { 
+      const res = await proxyFetch(this.sourceConfig.base_url, { 
         headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
         next: { revalidate: 3600 } 
       });
@@ -41,7 +42,7 @@ export class AssamCareerAdapter implements SourceAdapter {
 
   async fetch(content: RawContent): Promise<RawContent> {
     try {
-       const res = await fetch(content.url, { headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' }});
+       const res = await proxyFetch(content.url, { headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' }});
        if (res.ok) {
          content.html = await res.text();
        }

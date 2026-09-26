@@ -1,4 +1,5 @@
-﻿import { GenericAggregatorAdapter } from "./GenericAggregatorAdapter";
+import { proxyFetch } from '../proxyFetch';
+import { GenericAggregatorAdapter } from "./GenericAggregatorAdapter";
 import { RawContent, NormalizedPayload } from "../types";
 
 export class IndGovtJobsAdapter extends GenericAggregatorAdapter {
