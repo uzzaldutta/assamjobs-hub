@@ -1,3 +1,4 @@
+import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
 
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import crypto from "crypto";
@@ -413,7 +414,7 @@ export class IngestionPipeline {
 
           if (validation.warnings.length > 0) warnings += validation.warnings.length;
 
-          await supabase.from('ingestion_queue').insert({
+          const { data: qItem } = await supabase.from('ingestion_queue').insert({
             source_id: source.id,
             content_type: normalized.contentType,
             external_id: normalized.externalId,
