@@ -219,6 +219,7 @@ export default function RootLayout({
           </LanguageProvider>
           <HeaderScrollTracker />
         </ThemeProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID as string} />
       </body>
     </html>
   );
