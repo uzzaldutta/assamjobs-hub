@@ -98,7 +98,8 @@ export class JobAssamAdapter implements SourceAdapter {
       lastDate: dateMatch ? dateMatch[1].trim() : undefined,
       vacancy: vacancyMatch ? vacancyMatch[1].trim() : undefined,
       applyUrl,
-      notificationUrl
+      notificationUrl,
+      descriptionHTML: $(".entry-content").html() || ""
     };
   }
 
@@ -111,7 +112,8 @@ export class JobAssamAdapter implements SourceAdapter {
       contentType: extracted.detectedType || 'JOB',
       title: extracted.title,
       organization: extracted.organization,
-      externalId: extracted.url
+      externalId: extracted.url,
+      description: extracted.descriptionHTML
     };
 
     if (payload.contentType === 'JOB') {
