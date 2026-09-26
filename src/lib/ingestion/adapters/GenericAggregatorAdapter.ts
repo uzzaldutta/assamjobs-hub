@@ -1,4 +1,4 @@
-﻿import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource } from "../types";
 
@@ -105,7 +105,8 @@ export class GenericAggregatorAdapter implements SourceAdapter {
       lastDate: dateMatch ? dateMatch[1].trim() : undefined,
       vacancy: vacancyMatch ? vacancyMatch[1].trim() : undefined,
       applyUrl,
-      notificationUrl
+      notificationUrl,
+      descriptionHTML: $('.entry-content').html() || $('article').html() || ''
     };
   }
 
@@ -119,7 +120,8 @@ export class GenericAggregatorAdapter implements SourceAdapter {
       title: extracted.title || 'Unknown Post',
       organization: extracted.organization || 'Unknown',
       applicationEnd: extracted.lastDate || undefined,
-      externalId: extracted.url
+      externalId: extracted.url,
+      description: extracted.descriptionHTML
     };
     if (extracted.vacancy) payload.vacancy = extracted.vacancy;
     return payload;
