@@ -430,7 +430,16 @@ export class IngestionPipeline {
             change_diff: changeDiff.length > 0 ? changeDiff : null,
             validation_errors: validation.errors,
             validation_warnings: validation.warnings
-          });
+            }).select('id').single();
+
+            if (qItem && finalStatus === 'NEW' && qualityScore >= 70 && (source.tier <= 2 || source.is_official || 'govt' in normalized.title.toLowerCase() || 'government' in normalized.title.toLowerCase() || 'police' in normalized.title.toLowerCase() || 'railway' in normalized.title.toLowerCase())) {
+              try {
+                await approveQueueItemAction(qItem.id, 'NEW');
+                console.log(Auto-approved high-quality Govt job: );
+              } catch (e) {
+                console.error(Auto-approve failed: );
+              }
+            }
 
         } catch (itemErr) {
           console.error("Item processing error", itemErr);
