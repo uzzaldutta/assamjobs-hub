@@ -64,10 +64,11 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         official_pdf_url: payload.notificationUrl || null,
         status: 'PUBLISHED', 
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: payload.sourceUrl || null
-      }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newJob.id;
+        official_source_url: payload.sourceUrl || null,
+          unique_description: payload.description || null
+        }).select('id').single();
+        if (insertErr) throw new Error(insertErr.message);
+        newRecordId = newJob.id;
       modifiedRecordId = newRecordId;
     } 
     else if (item.content_type === 'TENDER') {
@@ -97,11 +98,12 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         closing_date: payload.applicationEnd || null,
         application_url: payload.applyUrl || payload.sourceUrl,
         official_source_url: payload.sourceUrl || null,
-        status: 'PUBLISHED',
-        verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING'
-      }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newAdm.id;
+          status: 'PUBLISHED',
+          verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+          unique_description: payload.description || null
+        }).select('id').single();
+        if (insertErr) throw new Error(insertErr.message);
+        newRecordId = newAdm.id;
       modifiedRecordId = newRecordId;
     }
     else if (item.content_type === 'RESULT') {
