@@ -133,6 +133,10 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
     "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : (job.job_type === "PRIVATE" ? "FULL_TIME" : "OTHER")
   };
 
+
+  const cleanDesc = job.unique_description ? job.unique_description.replace(/\t/g, '').replace(/^ {4,}/gm, '') : '';
+  const cleanAssamese = job.unique_description_assamese ? job.unique_description_assamese.replace(/\t/g, '').replace(/^ {4,}/gm, '') : '';
+
   return (
     <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20">
       {/* Top Banner / Header */}
@@ -308,7 +312,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
                 </h2>
               </div>
               <div className="p-6 prose prose-slate dark:prose-invert max-w-none prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-img:rounded-xl">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{job.unique_description}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{cleanDesc}</ReactMarkdown>
               </div>
             </div>
           )}
@@ -323,7 +327,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
                 <h2 className="text-lg font-bold text-slate-800 dark:text-white">অসমীয়াত বিৱৰণ (Assamese Description)</h2>
               </div>
               <div className="p-6 prose prose-slate dark:prose-invert max-w-none">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{job.unique_description_assamese}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{cleanAssamese}</ReactMarkdown>
               </div>
             </div>
           )}
