@@ -29,14 +29,14 @@ export async function POST(req: Request) {
       });
 
       if (!response.ok) {
-        throw new Error(\Failed to fetch URL: \\);
+        throw new Error(`Failed to fetch URL: ${response.statusText}`);
       }
 
       const html = await response.text();
       const $ = cheerio.load(html);
       
-      script, style, noscript, iframe, img, svg.remove();
-      rawText = body.text().replace(/\s+/g, ' ').trim().substring(0, 15000);
+      $('script, style, noscript, iframe, img, svg').remove();
+      rawText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 15000);
     }
 
     const aiData = await rewriteJobWithGemini(rawText);
