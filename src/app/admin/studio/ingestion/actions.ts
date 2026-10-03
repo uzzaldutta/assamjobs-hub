@@ -65,7 +65,8 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         status: 'PUBLISHED', 
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
         official_source_url: payload.sourceUrl || null,
-          unique_description: payload.description || null
+          unique_description: payload.unique_description || payload.description || null,
+          unique_description_assamese: payload.unique_description_assamese || null
         }).select('id').single();
         if (insertErr) throw new Error(insertErr.message);
         newRecordId = newJob.id;
@@ -100,7 +101,8 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         official_source_url: payload.sourceUrl || null,
           status: 'PUBLISHED',
           verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-          unique_description: payload.description || null
+          unique_description: payload.unique_description || payload.description || null,
+          unique_description_assamese: payload.unique_description_assamese || null
         }).select('id').single();
         if (insertErr) throw new Error(insertErr.message);
         newRecordId = newAdm.id;
