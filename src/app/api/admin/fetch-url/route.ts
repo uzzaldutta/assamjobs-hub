@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const authHeader = req.headers.get("authorization");
     const correctPassword = process.env.ADMIN_PASSWORD || 'assamhub2026';
     
-    if (authHeader !== \Bearer \\) {
+    if (authHeader !== `Bearer ${correctPassword}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
