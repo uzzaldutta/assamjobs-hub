@@ -435,9 +435,9 @@ export class IngestionPipeline {
             if (qItem && finalStatus === 'NEW' && qualityScore >= 70 && (source.tier <= 2 || source.is_official || 'govt' in normalized.title.toLowerCase() || 'government' in normalized.title.toLowerCase() || 'police' in normalized.title.toLowerCase() || 'railway' in normalized.title.toLowerCase())) {
               try {
                 await approveQueueItemAction(qItem.id, 'NEW');
-                console.log(Auto-approved high-quality Govt job: );
+                console.log('Auto-approved high-quality Govt job: ' + normalized.title);
               } catch (e) {
-                console.error(Auto-approve failed: );
+                console.error('Auto-approve failed: ' + e);
               }
             }
 
