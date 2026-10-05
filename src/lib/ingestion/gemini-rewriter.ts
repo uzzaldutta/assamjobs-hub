@@ -58,7 +58,7 @@ export async function rewriteJobWithGemini(rawText: string) {
       ${rawText.substring(0, 15000)}
     `;
 
-    const modelsToTry = ["gemini-3.6-flash", "gemini-3.1-pro"];
+    const modelsToTry = ["gemini-3.8-flash", "gemini-3.7-flash"];
     let result = null;
     let lastError = null;
 
