@@ -176,7 +176,14 @@ export class IngestionPipeline {
               
               let matchScore = 0;
               let matchCount = 0;
-              let sameOrg = pNormOrg && eNormOrg && pNormOrg === eNormOrg;
+                            let sameOrg = pNormOrg && eNormOrg && pNormOrg === eNormOrg;
+              let sameClosing = normClosing && eClosing && normClosing === eClosing;
+              let sameVacancy = payload.vacancy && existing.vacancies && String(payload.vacancy).trim().toLowerCase() === String(existing.vacancies).trim().toLowerCase();
+              
+              // EXPLICIT RULE: Same Org + Same Last Date + Same Vacancies = EXACT DUPLICATE
+              if (sameOrg && sameClosing && sameVacancy && payload.vacancy !== 'Not Specified' && payload.vacancy !== 'Various') {
+                 bestMatch = existing; highestScore = 1.0; bestRisk = 'EXACT'; break;
+              }
               
               // SIGNAL: Same Advt Number + Same Org (Level 1)
               if (sameOrg && pAdvt && eAdvt && pAdvt === eAdvt) {
