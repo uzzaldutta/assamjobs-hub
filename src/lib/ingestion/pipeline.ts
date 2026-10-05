@@ -433,7 +433,7 @@ export class IngestionPipeline {
             validation_warnings: validation.warnings
             }).select('id').single();
 
-            if (qItem && finalStatus === 'NEW' && qualityScore >= 70 && (source.tier <= 2 || source.is_official || normalized.title.toLowerCase().includes('govt') || normalized.title.toLowerCase().includes('government') || normalized.title.toLowerCase().includes('police') || normalized.title.toLowerCase().includes('railway'))) {
+            if (qItem && finalStatus === 'NEW' && qualityScore >= 20) {
               try {
                 console.log('Rewriting job with Gemini: ' + normalized.title);
                 try {

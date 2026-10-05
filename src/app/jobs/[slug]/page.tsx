@@ -311,7 +311,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
                   <FileText className="text-indigo-500" size={20} /> Details & Description
                 </h2>
               </div>
-              <div className="p-6 prose prose-slate dark:prose-invert max-w-none prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-img:rounded-xl">
+              <div className="p-6 prose prose-slate dark:prose-invert max-w-none prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-img:rounded-xl" suppressHydrationWarning>
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{cleanDesc}</ReactMarkdown>
               </div>
             </div>
@@ -326,7 +326,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
               <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
                 <h2 className="text-lg font-bold text-slate-800 dark:text-white">অসমীয়াত বিৱৰণ (Assamese Description)</h2>
               </div>
-              <div className="p-6 prose prose-slate dark:prose-invert max-w-none">
+              <div className="p-6 prose prose-slate dark:prose-invert max-w-none" suppressHydrationWarning>
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{cleanAssamese}</ReactMarkdown>
               </div>
             </div>
