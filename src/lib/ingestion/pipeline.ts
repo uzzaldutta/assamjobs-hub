@@ -411,7 +411,7 @@ export class IngestionPipeline {
              itemsDuplicate++;
           }
 
-          if (qualityScore < 50 && finalStatus !== 'CHANGE_DETECTED' && finalStatus !== 'FAILED') {
+          if (qualityScore < 20 && finalStatus !== 'CHANGE_DETECTED' && finalStatus !== 'FAILED') {
              finalStatus = 'LOW_QUALITY';
              itemsLowQuality++;
           }
