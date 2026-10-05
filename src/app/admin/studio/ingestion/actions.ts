@@ -196,12 +196,14 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
   // -----------------------------------
   
   revalidatePath('/admin/studio/ingestion/queue');
+  revalidatePath('/', 'layout');
   return { success: true };
 }
 
 export async function rejectQueueItemAction(queueId: string) {
   await supabase.from('ingestion_queue').update({ status: 'REJECTED', rejected_at: new Date().toISOString() }).eq('id', queueId);
   revalidatePath('/admin/studio/ingestion/queue');
+  revalidatePath('/', 'layout');
   return { success: true };
 }
 
