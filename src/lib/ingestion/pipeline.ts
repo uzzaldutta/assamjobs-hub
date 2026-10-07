@@ -22,7 +22,13 @@ export class IngestionPipeline {
     const type = payload.contentType;
     
     // Universal basics (20 points max)
-    if (payload.title && payload.title.length > 5) score += 10;
+      if (payload.title && payload.title.length > 5) score += 10;
+      if (payload.sourceUrl && this.isValidUrl(payload.sourceUrl)) score += 10;
+      
+      const tLow = payload.title ? payload.title.toLowerCase().trim() : '';
+      if (tLow === 'advertisement' || tLow === 'notice' || tLow === 'corrigendum' || tLow === 'notification' || tLow === 'order' || tLow === 'results' || tLow === 'merit list' || tLow.length <= 15) {
+          score -= 50; // Penalize junk/generic titles heavily
+      }
     if (payload.sourceUrl && this.isValidUrl(payload.sourceUrl)) score += 10;
 
     // Feed specific scoring (80 points max)
