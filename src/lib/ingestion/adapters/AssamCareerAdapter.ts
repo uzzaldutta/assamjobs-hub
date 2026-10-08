@@ -22,7 +22,7 @@ export class AssamCareerAdapter implements SourceAdapter {
       const $ = cheerio.load(html);
       
       const items: RawContent[] = [];
-      $('.post-title a').each((i, el) => {
+      $('.entry-title a, h3.title a, h2.title a, .post-title a').each((i, el) => {
         const title = $(el).text().trim();
         const link = $(el).attr('href');
         
@@ -56,7 +56,7 @@ export class AssamCareerAdapter implements SourceAdapter {
     if (!raw.html) return {};
     const $ = cheerio.load(raw.html);
     
-    const title = $('.post-title').text().trim() || '';
+    const title = ($('.entry-title').text().trim() || $('.post-title').text().trim() || $('h1.title').text().trim()) || '';
     const bodyText = $('.post-body').text();
     const titleLower = title.toLowerCase();
 
