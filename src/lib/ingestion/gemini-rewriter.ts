@@ -58,7 +58,9 @@ export async function rewriteJobWithGemini(rawText: string) {
       ${rawText.substring(0, 15000)}
     `;
 
-    const modelsToTry = ["gemini-3.8-flash", "gemini-3.7-flash"];
+    await new Promise(res => setTimeout(res, 13000)); // Sleep 13s to respect 5 RPM quota
+    const modelsToTry = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];
+    await new Promise(res => setTimeout(res, 4000));
     let result = null;
     let lastError = null;
 
