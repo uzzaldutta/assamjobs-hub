@@ -36,6 +36,11 @@ export interface NormalizedPayload {
   amount?: string;
   resultDate?: string;
   eligibility?: string;
+  age_limit?: string;
+  application_fee?: string;
+  selection_process?: string;
+  unique_description?: string;
+  unique_description_assamese?: string;
   
   externalId?: string;
   attachments?: any[];

@@ -1,0 +1,1 @@
+const fs = require('fs');\nlet content = fs.readFileSync('src/app/api/admin/fetch-url/route.ts', 'utf8');\ncontent = content.replace('authHeader !== \\\\Bearer \\\\\\\\', 'authHeader !== Bearer ');\nfs.writeFileSync('src/app/api/admin/fetch-url/route.ts', content);\n

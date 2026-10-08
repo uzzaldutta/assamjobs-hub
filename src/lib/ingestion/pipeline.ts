@@ -450,12 +450,14 @@ export class IngestionPipeline {
               try {
                 console.log('Rewriting job with Gemini: ' + normalized.title);
                 try {
-                  const aiData = await rewriteJobWithGemini(normalized.description || normalized.title);
-                  normalized.unique_description = aiData.unique_description;
-                  normalized.unique_description_assamese = aiData.unique_description_assamese;
-                  normalized.vacancies = aiData.vacancies || normalized.vacancies;
-                  normalized.district = aiData.district || normalized.district;
-                  normalized.qualification = aiData.qualification || normalized.qualification;
+                                      const aiData = await rewriteJobWithGemini(normalized.description || normalized.title);
+                    normalized.unique_description = aiData.unique_description;
+                    normalized.unique_description_assamese = aiData.unique_description_assamese;
+                    normalized.vacancy = aiData.vacancies || normalized.vacancy;
+                    normalized.location = aiData.district || normalized.location;
+                    normalized.qualification = aiData.qualification || normalized.qualification;
+                    normalized.category = aiData.category || normalized.category;
+                    normalized.age_limit = aiData.ageLimit || normalized.age_limit;
                   await supabase.from('ingestion_queue').update({ normalized_payload: normalized }).eq('id', qItem.id);
                 } catch(aiErr) {
                   console.error('Gemini rewrite failed for auto-approve: ' + aiErr);
