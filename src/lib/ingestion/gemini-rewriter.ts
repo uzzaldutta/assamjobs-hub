@@ -44,23 +44,29 @@ export async function rewriteJobWithGemini(rawText: string) {
       If a field is not explicitly mentioned, provide a reasonable default (e.g. "Not Specified").
 
       CRITICAL INSTRUCTIONS FOR DESCRIPTIONS:
-      1. Make the 'unique_description' EXTREMELY COMPREHENSIVE. Extract absolutely everything: Age limits, age relaxations, educational qualifications, selection process, syllabus, application fee, how to apply steps, salary details.
-      2. Use <h3> or <h4> tags for clear section headings. 
-      3. CRITICAL: Whenever there is structured data (e.g., Important Dates, Vacancy Breakdowns, Application Fees), you MUST strictly format it as an HTML <table> with proper <thead>, <tbody>, <tr>, <th>, and <td> tags. 
-      4. Ensure all tables have the class name "table-auto w-full mb-4 border-collapse border border-slate-300 dark:border-slate-700".
-      5. Use <ul> and <li> for standard lists like eligibility criteria or educational qualifications.
-      6. Extract the Official Advertisement PDF link and Apply Online link from the text and put them into the apply_url and official_pdf_url schema fields.
-      7. The 'unique_description_assamese' MUST be a direct, professional Assamese language translation of the exact same HTML layout. Do not drop any tables or formatting.
+      1. Structure both 'unique_description' and 'unique_description_assamese' with clear, comprehensive sections using <h3> or <h4> tags:
+         - An introductory paragraph introducing the recruitment drive.
+         - <h3>Overview of Recruitment</h3> with key highlights (Post Name, Total Vacancies, Organization, Qualification, Salary/Pay Scale, Application Start & End Dates).
+         - <h3>Recruitment Details</h3> explaining the recruitment scope and authority.
+         - <h3>Vacancy Details</h3> with exact breakdowns per post/department.
+         - <h3>Eligibility Conditions</h3> including detailed Educational Qualifications and Age Limits (mentioning category-wise age relaxations: OBC/SC/ST/PwBD).
+         - <h3>Documents Required</h3> needed for the application.
+         - <h3>How to Apply</h3> step-by-step instructions.
+         - <h3>Important Dates & Links</h3> with start date, deadline, official website, and application links.
+         - <h3>Frequently Asked Questions (FAQs)</h3> with at least 3 relevant Q&As.
+      2. Whenever there is structured data (e.g., Important Dates, Vacancy Breakdowns, Application Fees), you MUST strictly format it as an HTML <table> with class "table-auto w-full mb-4 border-collapse border border-slate-300 dark:border-slate-700" with <thead>, <tbody>, <tr>, <th>, and <td> tags.
+      3. Use <ul> and <li> for lists.
+      4. Extract the Official Advertisement PDF link and Apply Online link from the text into apply_url and official_pdf_url schema fields.
+      5. The 'unique_description_assamese' MUST be an authentic, professional Assamese translation of the exact same structured layout, retaining all headings, lists, and tables without omitting anything.
 
-      Do not output any Markdown wrapping like \`\`\`html.
+      Do not output any Markdown wrapping like \`\`\`html or \`\`\`json.
 
       Website Text:
       ${rawText.substring(0, 15000)}
     `;
 
-    await new Promise(res => setTimeout(res, 13000)); // Sleep 13s to respect 5 RPM quota
-    const modelsToTry = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];
-    await new Promise(res => setTimeout(res, 4000));
+    await new Promise(res => setTimeout(res, 12000)); // Sleep 12s to respect 5 RPM quota
+    const modelsToTry = ["gemini-3.8-flash"];
     let result = null;
     let lastError = null;
 

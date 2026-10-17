@@ -1,4 +1,4 @@
-﻿import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource, ContentType } from "../types";
 
@@ -55,7 +55,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
   async extract(content: RawContent): Promise<any> {
     if (!content.html) return content;
     const $ = cheerio.load(content.html);
-    const title = $('h1.entry-title').text() || $('h2.entry-title').text() || $('title').text();
+    const title = ($('h1.entry-title').first().text().trim() || $('h2.entry-title').first().text().trim() || $('title').first().text().trim()) || '';
     
     let description = "";
     let notificationUrl = "";

@@ -317,7 +317,7 @@ export class IngestionPipeline {
           const validation = adapter.validate(normalized);
           
           let finalStatus = 'NEW';
-          if (source.tier > 1 && !source.is_official) finalStatus = 'VERIFICATION_PENDING';
+          // In 100% automated mode: Clean, valid feeds remain 'NEW' to trigger instant AI rewriting and auto-approval.
 
           // --- JOBASSAM PROMOTIONAL FIREWALL ---
           if (source.source_name.toLowerCase().includes('jobassam')) {
@@ -458,6 +458,8 @@ export class IngestionPipeline {
                     normalized.qualification = aiData.qualification || normalized.qualification;
                     normalized.category = aiData.category || normalized.category;
                     normalized.age_limit = aiData.ageLimit || normalized.age_limit;
+                    if (aiData.apply_url && !normalized.applyUrl) normalized.applyUrl = aiData.apply_url;
+                    if (aiData.official_pdf_url && !normalized.notificationUrl) normalized.notificationUrl = aiData.official_pdf_url;
                   await supabase.from('ingestion_queue').update({ normalized_payload: normalized }).eq('id', qItem.id);
                 } catch(aiErr) {
                   console.error('Gemini rewrite failed for auto-approve: ' + aiErr);

@@ -56,7 +56,7 @@ export class AssamCareerAdapter implements SourceAdapter {
     if (!raw.html) return {};
     const $ = cheerio.load(raw.html);
     
-    const title = ($('.entry-title').text().trim() || $('.post-title').text().trim() || $('h1.title').text().trim()) || '';
+    const title = ($('h1.entry-title, .post h1, h1.post-title, h1.title').first().text().trim() || $('.entry-title, .post-title').first().text().trim()) || '';
     const bodyText = $('.post-body').text();
     const titleLower = title.toLowerCase();
 
