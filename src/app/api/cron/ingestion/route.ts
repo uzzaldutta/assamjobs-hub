@@ -64,6 +64,7 @@ export async function GET(req: Request) {
     // for all 10,000+ individual detail pages, causing massive Vercel ISR execution costs.
     
     await Promise.allSettled(promises);
+    revalidatePath('/');
     return NextResponse.json({ success: true, triggered: results });
 
   } catch (err: any) {

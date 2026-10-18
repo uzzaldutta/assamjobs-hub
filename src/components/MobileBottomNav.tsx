@@ -20,7 +20,7 @@ import { useState } from "react";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
-  const [activePopup, setActivePopup] = useState<"jobs" | "updates" | null>(null);
+  const [activePopup, setActivePopup] = useState<"jobs" | "updates" | "more" | null>(null);
 
   return (
     <>

@@ -95,75 +95,148 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     }
     else if (item.content_type === 'ADMISSION') {
       const { data: newAdm, error: insertErr } = await supabase.from('jobs').insert({
-          id: item.id,
+        id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         job_type: 'ADMISSION',
+        category: payload.category || 'EDUCATION',
         slug: await generateUniqueSlug(payload.title),
-        closing_date: payload.applicationEnd || null,
-        application_url: payload.applyUrl || payload.sourceUrl,
+        last_date: payload.applicationEnd || null,
+        apply_url: payload.applyUrl || payload.sourceUrl || null,
+        official_pdf_url: payload.notificationUrl || null,
         official_source_url: payload.sourceUrl || null,
-          status: 'PUBLISHED',
-          verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-          unique_description: payload.unique_description || payload.description || null,
-          unique_description_assamese: payload.unique_description_assamese || null
-        }).select('id').single();
-        if (insertErr) throw new Error(insertErr.message);
-        newRecordId = newAdm.id;
+        status: 'PUBLISHED',
+        verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+        unique_description: payload.unique_description || payload.description || null,
+        unique_description_assamese: payload.unique_description_assamese || null
+      }).select('id').single();
+      if (insertErr) throw new Error(insertErr.message);
+      newRecordId = newAdm.id;
       modifiedRecordId = newRecordId;
     }
     else if (item.content_type === 'RESULT') {
-      const { data: newRes, error: insertErr } = await supabase.from('results').insert({
-          id: item.id,
+      // 1. Primary insert into jobs table so it appears in /results, homepage scroller, and search
+      const { data: newResJob, error: insertJobErr } = await supabase.from('jobs').insert({
+        id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
-        exam_name: payload.examName,
-        result_date: payload.resultDate || null,
-        result_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl,
+        job_type: 'RESULT',
+        category: payload.category || 'OTHER',
+        slug: await generateUniqueSlug(payload.title),
+        last_date: payload.resultDate || payload.applicationEnd || null,
+        apply_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl || null,
+        official_pdf_url: payload.notificationUrl || null,
+        official_source_url: payload.sourceUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: payload.sourceUrl || null
+        unique_description: payload.unique_description || payload.description || null,
+        unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newRes.id;
+      if (insertJobErr) throw new Error(insertJobErr.message);
+      newRecordId = newResJob.id;
       modifiedRecordId = newRecordId;
+
+      // 2. Dual-sync mirror to dedicated results table
+      try {
+        await supabase.from('results').insert({
+          id: item.id,
+          title: payload.title,
+          organization: payload.organization || 'Unknown',
+          exam_name: payload.examName || payload.title,
+          result_date: payload.resultDate || payload.applicationEnd || null,
+          result_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl || null,
+          status: 'PUBLISHED',
+          verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+          official_source_url: payload.sourceUrl || null
+        });
+      } catch (mirrorErr) {
+        console.warn('Dual-sync mirror to results failed (non-critical):', mirrorErr);
+      }
     }
     else if (item.content_type === 'ADMIT_CARD') {
-      const { data: newAdc, error: insertErr } = await supabase.from('admit_cards').insert({
-          id: item.id,
+      // 1. Primary insert into jobs table so it appears in /admit-cards, homepage scroller, and search
+      const { data: newAdcJob, error: insertJobErr } = await supabase.from('jobs').insert({
+        id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
-        exam_name: payload.examName,
-        exam_date: payload.examDate || payload.applicationEnd || null,
-        release_date: payload.releaseDate || null,
-        download_url: payload.applyUrl || payload.sourceUrl,
+        job_type: 'ADMIT_CARD',
+        category: payload.category || 'OTHER',
+        slug: await generateUniqueSlug(payload.title),
+        last_date: payload.examDate || payload.applicationEnd || null,
+        apply_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl || null,
+        official_pdf_url: payload.notificationUrl || null,
+        official_source_url: payload.sourceUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: payload.sourceUrl || null
+        unique_description: payload.unique_description || payload.description || null,
+        unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newAdc.id;
+      if (insertJobErr) throw new Error(insertJobErr.message);
+      newRecordId = newAdcJob.id;
       modifiedRecordId = newRecordId;
+
+      // 2. Dual-sync mirror to dedicated admit_cards table
+      try {
+        await supabase.from('admit_cards').insert({
+          id: item.id,
+          title: payload.title,
+          organization: payload.organization || 'Unknown',
+          exam_name: payload.examName || payload.title,
+          exam_date: payload.examDate || payload.applicationEnd || null,
+          release_date: payload.releaseDate || null,
+          download_url: payload.applyUrl || payload.notificationUrl || payload.sourceUrl || null,
+          notification_url: payload.notificationUrl || null,
+          status: 'PUBLISHED',
+          verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+          official_source_url: payload.sourceUrl || null
+        });
+      } catch (mirrorErr) {
+        console.warn('Dual-sync mirror to admit_cards failed (non-critical):', mirrorErr);
+      }
     }
     else if (item.content_type === 'SCHOLARSHIP') {
-      const { data: newSch, error: insertErr } = await supabase.from('scholarships').insert({
-          id: item.id,
+      // 1. Primary insert into jobs table so it appears in /scholarships, homepage scroller, and search
+      const { data: newSchJob, error: insertJobErr } = await supabase.from('jobs').insert({
+        id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
-        scheme: payload.scheme || null,
-        amount: payload.amount || null,
-        eligibility: payload.qualification || null,
-        application_start: payload.applicationStart || null,
-        application_deadline: payload.applicationEnd || null,
-        application_url: payload.applyUrl || payload.sourceUrl,
-        notification_url: payload.notificationUrl || null,
+        job_type: 'SCHOLARSHIP',
+        category: payload.category || 'EDUCATION',
+        slug: await generateUniqueSlug(payload.title),
+        qualification: payload.qualification || payload.eligibility || null,
+        last_date: payload.applicationEnd || null,
+        apply_url: payload.applyUrl || payload.sourceUrl || null,
+        official_pdf_url: payload.notificationUrl || null,
+        official_source_url: payload.sourceUrl || null,
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
-        official_source_url: payload.sourceUrl || null
+        unique_description: payload.unique_description || payload.description || null,
+        unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newSch.id;
+      if (insertJobErr) throw new Error(insertJobErr.message);
+      newRecordId = newSchJob.id;
       modifiedRecordId = newRecordId;
+
+      // 2. Dual-sync mirror to dedicated scholarships table
+      try {
+        await supabase.from('scholarships').insert({
+          id: item.id,
+          title: payload.title,
+          organization: payload.organization || 'Unknown',
+          scheme: payload.scheme || payload.title,
+          amount: payload.amount || null,
+          eligibility: payload.qualification || payload.eligibility || null,
+          application_start: payload.applicationStart || null,
+          application_deadline: payload.applicationEnd || null,
+          application_url: payload.applyUrl || payload.sourceUrl || null,
+          notification_url: payload.notificationUrl || null,
+          status: 'PUBLISHED',
+          verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
+          official_source_url: payload.sourceUrl || null
+        });
+      } catch (mirrorErr) {
+        console.warn('Dual-sync mirror to scholarships failed (non-critical):', mirrorErr);
+      }
     } else {
       throw new Error(`Unsupported content type: ${item.content_type}`);
     }
@@ -184,30 +257,31 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
   await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
   
   // --- SURGICAL CACHE INVALIDATION ---
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  if (modifiedRecordId) revalidatePath(`/jobs/${modifiedRecordId}`);
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  if (modifiedRecordId) revalidatePath(`/tenders/${modifiedRecordId}`);
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  if (modifiedRecordId) revalidatePath(`/admissions/${modifiedRecordId}`);
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  if (modifiedRecordId) revalidatePath(`/results/${modifiedRecordId}`);
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  if (modifiedRecordId) revalidatePath(`/admit-cards/${modifiedRecordId}`);
-  // Removed broad revalidatePath in favor of Time-Based Revalidation (TTL)
-  if (modifiedRecordId) revalidatePath(`/scholarships/${modifiedRecordId}`);
-  // -----------------------------------
+  // Revalidate only the specific item detail page and ingestion queue.
+  // We NEVER call revalidatePath('/', 'layout') to prevent busting ISR cache across 10,000+ pages.
+  if (modifiedRecordId) {
+    if (item.content_type === 'TENDER') {
+      revalidatePath(`/tenders/${modifiedRecordId}`);
+    } else if (item.content_type === 'ADMISSION') {
+      revalidatePath(`/admissions/${modifiedRecordId}`);
+    } else if (item.content_type === 'RESULT') {
+      revalidatePath(`/results/${modifiedRecordId}`);
+    } else if (item.content_type === 'ADMIT_CARD') {
+      revalidatePath(`/admit-cards/${modifiedRecordId}`);
+    } else if (item.content_type === 'SCHOLARSHIP') {
+      revalidatePath(`/scholarships/${modifiedRecordId}`);
+    } else {
+      revalidatePath(`/jobs/${modifiedRecordId}`);
+    }
+  }
   
   revalidatePath('/admin/studio/ingestion/queue');
-  revalidatePath('/', 'layout');
   return { success: true };
 }
 
 export async function rejectQueueItemAction(queueId: string) {
   await supabase.from('ingestion_queue').update({ status: 'REJECTED', rejected_at: new Date().toISOString() }).eq('id', queueId);
   revalidatePath('/admin/studio/ingestion/queue');
-  revalidatePath('/', 'layout');
   return { success: true };
 }
 

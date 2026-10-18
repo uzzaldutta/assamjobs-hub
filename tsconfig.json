@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "fix-ai.ts", "test_adapter.ts", "run-local-cron.ts"]
 }

@@ -33,7 +33,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
            });
         }
       });
-      return items.slice(0, 15);
+      return items.slice(0, 5);
     } catch (error) {
        console.error("JobAssamHub Discovery Error:", error);
        throw error;
@@ -116,10 +116,10 @@ export class JobAssamHubAdapter implements SourceAdapter {
     const catString = cats.join(' ').toLowerCase();
     const title = (extractedData.extractedTitle || "").toLowerCase();
 
-    if (catString.includes('admission') || title.includes('admission')) contentType = 'ADMISSION';
-    else if (catString.includes('result') || title.includes('result')) contentType = 'RESULT';
-    else if (catString.includes('admit card') || title.includes('admit card')) contentType = 'ADMIT_CARD';
-    else if (catString.includes('scholarship') || title.includes('scholarship') || catString.includes('scheme')) contentType = 'SCHOLARSHIP';
+    if (catString.includes('admission') || title.includes('admission') || title.includes('entrance') || title.includes('counseling')) contentType = 'ADMISSION';
+    else if (catString.includes('result') || title.includes('result') || title.includes('merit list') || title.includes('cut off') || title.includes('scorecard')) contentType = 'RESULT';
+    else if (catString.includes('admit card') || title.includes('admit card') || title.includes('hall ticket') || title.includes('call letter') || title.includes('exam date')) contentType = 'ADMIT_CARD';
+    else if (catString.includes('scholarship') || title.includes('scholarship') || catString.includes('scheme') || title.includes('fellowship')) contentType = 'SCHOLARSHIP';
     
     return {
         source: this.sourceConfig.source_name,

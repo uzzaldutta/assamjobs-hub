@@ -13,27 +13,50 @@ export class AssamCareerAdapter implements SourceAdapter {
 
   async discover(): Promise<RawContent[]> {
     try {
-      const res = await proxyFetch(this.sourceConfig.base_url, { 
-        headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
-        next: { revalidate: 3600 } 
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const html = await res.text();
-      const $ = cheerio.load(html);
-      
+      const endpoints = [
+        { url: this.sourceConfig.base_url, limit: 4 },
+        { url: 'https://www.assamcareer.com/search/label/Admit%20Card', limit: 2 },
+        { url: 'https://www.assamcareer.com/search/label/Result', limit: 2 },
+        { url: 'https://www.assamcareer.com/search/label/Scholarship', limit: 2 },
+        { url: 'https://www.assamcareer.com/search/label/Admission', limit: 2 },
+      ];
+
       const items: RawContent[] = [];
-      $('.entry-title a, h3.title a, h2.title a, .post-title a').each((i, el) => {
-        const title = $(el).text().trim();
-        const link = $(el).attr('href');
-        
-        if (title && link) {
-           items.push({
-             url: link,
-             externalId: link
-           });
-        }
-      });
-      return items.slice(0, 15); // Limit Discovery per run
+      const seen = new Set<string>();
+
+      await Promise.allSettled(
+        endpoints.map(async (ep) => {
+          try {
+            const res = await proxyFetch(ep.url, { 
+              headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
+              next: { revalidate: 3600 } 
+            });
+            if (!res.ok) return;
+            const html = await res.text();
+            const $ = cheerio.load(html);
+            
+            let count = 0;
+            $('.entry-title a, h3.title a, h2.title a, .post-title a').each((i, el) => {
+              if (count >= ep.limit) return;
+              const title = $(el).text().trim();
+              const link = $(el).attr('href');
+              
+              if (title && link && !seen.has(link)) {
+                 seen.add(link);
+                 items.push({
+                   url: link,
+                   externalId: link
+                 });
+                 count++;
+              }
+            });
+          } catch (e) {
+            console.warn(`Failed fetching label ${ep.url}:`, e);
+          }
+        })
+      );
+
+      return items;
     } catch (error) {
        console.error("AssamCareer Discovery Error:", error);
        throw error; // Fail loudly so it logs in ingestion_runs
@@ -84,11 +107,17 @@ export class AssamCareerAdapter implements SourceAdapter {
     
 
     let detectedType: 'JOB' | 'TENDER' | 'ADMISSION' | 'RESULT' | 'ADMIT_CARD' | 'SCHOLARSHIP' = 'JOB';
-    if (titleLower.includes('result') || titleLower.includes('merit list')) detectedType = 'RESULT';
-    else if (titleLower.includes('admit card') || titleLower.includes('call letter') || titleLower.includes('hall ticket')) detectedType = 'ADMIT_CARD';
-    else if (titleLower.includes('admission')) detectedType = 'ADMISSION';
-    else if (titleLower.includes('scholarship')) detectedType = 'SCHOLARSHIP';
-    else if (titleLower.includes('tender')) detectedType = 'TENDER';
+    if (titleLower.includes('result') || titleLower.includes('merit list') || titleLower.includes('cut off') || titleLower.includes('scorecard')) {
+      detectedType = 'RESULT';
+    } else if (titleLower.includes('admit card') || titleLower.includes('call letter') || titleLower.includes('hall ticket') || titleLower.includes('exam date')) {
+      detectedType = 'ADMIT_CARD';
+    } else if (titleLower.includes('admission') || titleLower.includes('entrance') || titleLower.includes('counseling')) {
+      detectedType = 'ADMISSION';
+    } else if (titleLower.includes('scholarship') || titleLower.includes('fellowship') || titleLower.includes('scheme')) {
+      detectedType = 'SCHOLARSHIP';
+    } else if (titleLower.includes('tender')) {
+      detectedType = 'TENDER';
+    }
     
     return {
       title,
@@ -109,7 +138,7 @@ export class AssamCareerAdapter implements SourceAdapter {
       sourceUrl: extracted.url, // Original provenance link
       applyUrl: extracted.applyUrl || extracted.url, // Fallback if no specific link
       notificationUrl: extracted.notificationUrl,
-      contentType: 'JOB',
+      contentType: (extracted.detectedType as any) || 'JOB',
       title: extracted.title,
       organization: extracted.organization,
       applicationEnd: extracted.lastDate,

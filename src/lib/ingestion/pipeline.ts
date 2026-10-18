@@ -112,11 +112,15 @@ export class IngestionPipeline {
     let applyCol: string | null = 'apply_url';
     let officialCol = 'official_source_url';
     
-    if (payload.contentType === 'TENDER') { targetTable = 'tenders'; applyCol = null; }
-    else if (payload.contentType === 'ADMISSION') { targetTable = 'admissions'; applyCol = 'application_link'; }
-    else if (payload.contentType === 'RESULT') { targetTable = 'results'; applyCol = 'result_url'; }
-    else if (payload.contentType === 'ADMIT_CARD') { targetTable = 'admit_cards'; applyCol = 'download_url'; }
-    else if (payload.contentType === 'SCHOLARSHIP') { targetTable = 'scholarships'; applyCol = 'application_url'; }
+    if (payload.contentType === 'TENDER') { 
+      targetTable = 'tenders'; 
+      applyCol = null; 
+      officialCol = 'official_source_url';
+    } else {
+      targetTable = 'jobs';
+      applyCol = 'apply_url';
+      officialCol = 'official_source_url';
+    }
 
     // LEVEL 1 - DEFINITE DUPLICATE
     // Exact Action URL Match
@@ -290,6 +294,8 @@ export class IngestionPipeline {
     let itemsLowQuality = 0;
     let errors = 0;
     let warnings = 0;
+    const processStartTime = Date.now();
+    let aiRewritesCount = 0;
 
     try {
       const rawItems = await adapter.discover();
@@ -448,9 +454,12 @@ export class IngestionPipeline {
 
             if (qItem && finalStatus === 'NEW' && qualityScore >= 20) {
               try {
-                console.log('Rewriting job with Gemini: ' + normalized.title);
-                try {
-                                      const aiData = await rewriteJobWithGemini(normalized.description || normalized.title);
+                const canAiRewrite = aiRewritesCount < 3 && (Date.now() - processStartTime < 42000);
+                if (canAiRewrite) {
+                  aiRewritesCount++;
+                  console.log(`Rewriting ${normalized.contentType} with Gemini: ` + normalized.title);
+                  try {
+                    const aiData = await rewriteJobWithGemini(normalized.description || normalized.title, normalized.contentType);
                     normalized.unique_description = aiData.unique_description;
                     normalized.unique_description_assamese = aiData.unique_description_assamese;
                     normalized.vacancy = aiData.vacancies || normalized.vacancy;
@@ -460,13 +469,17 @@ export class IngestionPipeline {
                     normalized.age_limit = aiData.ageLimit || normalized.age_limit;
                     if (aiData.apply_url && !normalized.applyUrl) normalized.applyUrl = aiData.apply_url;
                     if (aiData.official_pdf_url && !normalized.notificationUrl) normalized.notificationUrl = aiData.official_pdf_url;
-                  await supabase.from('ingestion_queue').update({ normalized_payload: normalized }).eq('id', qItem.id);
-                } catch(aiErr) {
-                  console.error('Gemini rewrite failed for auto-approve: ' + aiErr);
-                  // fallback to original payload if AI fails
+                    await supabase.from('ingestion_queue').update({ normalized_payload: normalized }).eq('id', qItem.id);
+                  } catch(aiErr) {
+                    console.error('Gemini rewrite failed for auto-approve: ' + aiErr);
+                    // fallback to original payload if AI fails
+                  }
+                } else {
+                  console.log(`Skipping AI rewrite for ${normalized.title} (within execution safety budget) - auto-approving directly`);
                 }
+
                 await approveQueueItemAction(qItem.id, 'NEW');
-                console.log('Auto-approved high-quality Govt job: ' + normalized.title);
+                console.log(`Auto-approved high-quality ${normalized.contentType}: ` + normalized.title);
               } catch (e) {
                 console.error('Auto-approve failed: ' + e);
               }
