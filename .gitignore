@@ -44,3 +44,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+run-local-cron.*
+test-categories.js

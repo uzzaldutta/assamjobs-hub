@@ -10,7 +10,7 @@ export default function Footer() {
     { name: "Standard Form Generator", href: "/tools/standard-form", icon: FileText, color: "text-slate-600 dark:text-slate-400" },
     { name: "Typing Speed Tester", href: "/tools/typing-test", icon: Keyboard, color: "text-slate-600 dark:text-slate-400" },
     { name: "Tender Contractor Toolkit", href: "/tools/tender-calculator", icon: Briefcase, color: "text-slate-600 dark:text-slate-400" },
-    { name: "CGPA to Percentage Calculator", href: "/tools/cgpa-calculator", icon: Award, color: "text-slate-600 dark:text-slate-400" }
+    { name: "CGPA to Percentage Calculator", href: "/tools/cgpa-converter", icon: Award, color: "text-slate-600 dark:text-slate-400" }
   ];
 
   return (
@@ -48,6 +48,8 @@ export default function Footer() {
             <li><Link href="/" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Latest Jobs</Link></li>
             <li><Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Admit Cards</Link></li>
             <li><Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Exam Results</Link></li>
+            <li><Link href="/scholarships" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Scholarships</Link></li>
+            <li><Link href="/admissions" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Admissions</Link></li>
             <li><Link href="/tenders" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Assam Tenders</Link></li>
           </ul>
         </div>
@@ -58,11 +60,19 @@ export default function Footer() {
           <ul className="space-y-3">
             <li><Link href="/about" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">About Us</Link></li>
             <li><Link href="/contact" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Contact Us</Link></li>
+            <li><Link href="/disclaimer" className="text-sm font-medium text-emerald-600 dark:text-emerald-400 font-semibold hover:underline transition">Disclaimer</Link></li>
             <li><Link href="/privacy-policy" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Privacy Policy</Link></li>
             <li><Link href="/terms" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Terms & Conditions</Link></li>
             <li><Link href="/editorial-policy" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Editorial Policy</Link></li>
           </ul>
         </div>
+      </div>
+
+      {/* Prominent Legal Disclaimer Banner for AdSense Compliance */}
+      <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-slate-100 dark:border-slate-800/80 text-center">
+        <p className="text-xs text-slate-400 dark:text-slate-500 max-w-4xl mx-auto leading-relaxed">
+          <strong>Disclaimer:</strong> AssamJobsHub (assamjobshub.com) is an independent career news, exam guidance, and job alerts aggregator. We are NOT affiliated with, sponsored by, or endorsed by the Government of Assam, Government of India, APSC, SLPRB, or any official recruitment board. All job notifications and exam dates are compiled from official public gazettes and authorized portals for educational purposes. Candidates are strongly advised to verify details with official sources before applying.
+        </p>
       </div>
     </footer>
   );
