@@ -1,0 +1,29 @@
+name: Automated Feed Ingestion (Twice Daily)
+
+on:
+  schedule:
+    # 02:30 UTC = 8:00 AM IST (Morning Run)
+    - cron: '30 2 * * *'
+    # 14:30 UTC = 8:00 PM IST (Evening Run)
+    - cron: '30 14 * * *'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
+
+jobs:
+  ingest:
+    name: Crawl & Ingest Feeds
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Trigger Production Ingestion Endpoint
+        run: |
+          echo "Executing scheduled feed extraction at $(date -u)"
+          HTTP_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X GET "https://assamjobshub.com/api/cron/ingestion?token=assamhub_cron_2026" -H "User-Agent: AssamJobsHub-AutoCron/1.0")
+          echo "$HTTP_RESPONSE"
+          
+          STATUS=$(echo "$HTTP_RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::error::Ingestion failed with HTTP status $STATUS"
+            exit 1
+          fi
+          echo "Feed ingestion completed successfully!"
