@@ -1,48 +1,84 @@
-# AssamJobs Hub - Project Handover Document
-Date: September 29, 2026
+# AssamJobsHub - Comprehensive Handover Document (October 23, 2026)
 
-## 1. Project Overview
-AssamJobs Hub is a Next.js (App Router) web application hosted on Vercel, utilizing Supabase as the backend database. The system automatically scrapes job postings from various Assamese and Government job portals and presents them with high SEO visibility.
+## 1. System & Deployment Overview
+- **Live Production URL**: [https://assamjobshub.com](https://assamjobshub.com)
+- **GitHub Repository**: [https://github.com/uzzaldutta/assamjobs-hub](https://github.com/uzzaldutta/assamjobs-hub) (Branch: `main`)
+- **Vercel Account**: `uggaldutta@gmail.com` | Project: `assamjobs-hub` (`prj_k5sxcMjUAUZC3cp7MOpCVWVdnvIi`)
+- **Database (Supabase)**: `https://smpedqhskoamagndfbfc.supabase.co`
+- **AdSense Publisher ID**: `pub-4651508083326671` (Active `ads.txt` verified live)
 
-## 2. Core Architecture
-- **Frontend/Backend:** Next.js 14+ (App Router)
-- **Database:** Supabase (PostgreSQL)
-- **Hosting:** Vercel
-- **Analytics:** Google Analytics 4 (via @next/third-parties/google)
-- **AI Processing:** Google Gemini API (@google/generative-ai)
+---
 
-## 3. Automated Ingestion Pipeline (Phase 6)
-The site uses an advanced automated scraping pipeline that runs daily (via Vercel Cron Jobs). 
-- **Endpoint:** /api/cron/ingestion (Triggered via curl/run-ingest.js or Vercel Cron using CRON_SECRET).
-- **Proxy Bypass:** Because sites like AssamCareer use Cloudflare to block Vercel IPs, the system routes these requests through **ScraperAPI** using the proxyFetch utility (src/lib/ingestion/proxyFetch.ts).
-- **Data Flow:** Scraped jobs are inserted into the ingestion_queue table for manual review.
-- **Auto-Approval:** High-quality Government jobs (Tier 1/2) that pass validation are **auto-approved** directly to the live jobs table, bypassing the manual queue.
-- **HTML Extraction:** The scrapers capture the raw HTML of the job posts (via cheerio .post-body / .entry-content) so that standard formatting (tables, links) is preserved even without AI generation.
+## 2. Google AdSense Full Compliance & Re-Review Status
+All root causes cited in the AdSense rejection email were resolved and deployed live:
+1. **Dedicated Non-Affiliation Disclaimer (`/disclaimer`)**:
+   - Explicit statement disclaiming official affiliation with Govt of Assam, Govt of India, APSC, SLPRB, SLRC, AHSEC, SEBA.
+   - Transparent advisory requiring candidates to verify details with primary official gazettes.
+   - Strict 100% free public service clause warning candidates against fraudulent fee solicitors.
+   - Persistent disclaimer banner embedded across all pages via `Footer.tsx`.
+2. **Elimination of 0-Item Navigation Sections ("Under Construction")**:
+   - Seeded 4 official state exams in `prep_exams` (ADRE 2.0, Assam Police SI/Constable, APSC CCE 2026, Assam TET 2026).
+   - Seeded 8 comprehensive study materials & syllabus guides in `prep_materials`.
+   - Updated `/previous-papers` to query dynamic documents and study guides.
+3. **Broken Footer Link Fixed**: Corrected `/tools/cgpa-calculator` to `/tools/cgpa-converter`.
+4. **E-E-A-T Trust Signals**: Enhanced `/about` and `/contact` with Guwahati physical operating office, grievance redressal desk, and fact-checking standards.
+5. **Crawler Sitemap**: Updated `/sitemap.xml` with canonical URLs for all legal and trust pages.
 
-## 4. AI Content Generator
-For high-quality, formatted Assamese translations, the system includes an AI Rewriter powered by Gemini.
-- Located in the Legacy Admin Panel (/admin).
-- The Admin can input a URL, and the etch-url API route will download the text and command Gemini to format it into perfectly structured HTML tables and output an Assamese translation.
+---
 
-## 5. SEO & Structured Data
-- The dynamic job pages (src/app/jobs/[slug]/page.tsx) automatically inject standard **JobPosting JSON-LD** schema.
-- Fields mapped include: 	itle, description, datePosted, alidThrough, hiringOrganization, jobLocation (Assam, IN), and employmentType.
+## 3. Fully Automated Ingestion Pipeline (Twice Daily - 100% Autonomous)
+The extraction system now runs automatically **twice every day without requiring any user supervision**:
+1. **GitHub Actions Scheduled Cloud Workflow (`.github/workflows/auto-ingest.yml`)**:
+   - **Morning Run**: `02:30 UTC` = **8:00 AM IST**
+   - **Evening Run**: `14:30 UTC` = **8:00 PM IST**
+   - Runs in GitHub's cloud 24/7 completely free without needing the user's PC to be on.
+   - Includes `workflow_dispatch` for optional 1-click manual trigger anytime via the GitHub Actions tab.
+2. **Secured API Endpoint (`/api/cron/ingestion`)**:
+   - Authenticated via token query param or bearer header: `token=assamhub_cron_2026`.
+   - Can also be pinged by external webcrons (e.g. cron-job.org).
+3. **Vercel Built-In Cron Backup (`vercel.json`)**:
+   - Maintained at `14:00 UTC` = **7:30 PM IST** as a secondary cloud backup.
+4. **Adapter Performance Overhaul (`AssamCareerAdapter.ts`)**:
+   - Migrated to the official Blogger JSON Feed (`/feeds/posts/default?alt=json&max-results=12`).
+   - Discovery + fetch execution time dropped from 40s to **under 2 seconds**, completely eliminating serverless connection timeouts.
+5. **Universal Auto-Approval**:
+   - Clean feeds with quality score >= 20 automatically insert into `jobs`, `scholarships`, `admissions`, `results`, `admit_cards`, or `tenders`.
 
-## 6. Required Environment Variables (.env.local / Vercel)
-The following keys MUST be configured in Vercel for the site to function:
+---
 
-| Variable | Purpose |
-|----------|---------|
-| \NEXT_PUBLIC_SUPABASE_URL\ | Supabase API URL |
-| \NEXT_PUBLIC_SUPABASE_ANON_KEY\ | Public Supabase access |
-| \SUPABASE_SERVICE_ROLE_KEY\ | Admin DB access (CRITICAL for Cron Jobs inserting data) |
-| \CRON_SECRET\ | Protects the ingestion endpoint from unauthorized triggers |
-| \SCRAPER_API_KEY\ | ScraperAPI key (1,000 free requests/mo) to bypass Cloudflare blocks |
-| \GEMINI_API_KEY\ | Google AI Studio key for the AI Rewriter / Translation |
-| \NEXT_PUBLIC_GA_ID\ | Google Analytics Measurement ID (G-XXXXXXX) |
+## 4. Enhanced Typing Test Tool (`/tools/typing-test`)
+Per the latest requirements to prevent memorization and simulate real competitive exams:
+1. **350+ Tough Vocabulary Bank (`src/data/typing-passages.ts`)**:
+   - Multi-syllable, difficult administrative, legal, bureaucratic, and Assamese geographic terms.
+2. **Infinite Dynamic Passage Generator (`generateRandomToughPassage`)**:
+   - Assembles fresh paragraphs of 60 randomized tough words on every test start/shuffle so the user **never sees the same text twice**.
+3. **10 Curated Exam Presets**:
+   - Secretariat & Admin, Legal & Court, Assam Heritage, Numbers & Symbols (`§12(a)`, dates, percentages, brackets).
+4. **Exam Timers & Metrics**:
+   - 1-minute, 2-minute, and 5-minute standard government exam modes with Net WPM, accuracy, and error tracking.
 
-## 7. Common Maintenance Tasks
-- **Trigger Scraper Manually:** Run 
-ode run-ingest.js in the terminal.
-- **Approve Queued Jobs:** Navigate to https://assamjobshub.com/admin/studio/ingestion/queue.
-- **Delete Broken Jobs:** Remove them from the "Manage Feeds" page, and the scraper will re-discover them on the next run.
+---
+
+## 5. Environment Variables Reference
+The following environment variables are set up in Vercel and local `.env.local`:
+- `NEXT_PUBLIC_SUPABASE_URL`: `https://smpedqhskoamagndfbfc.supabase.co`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anon/public key
+- `SUPABASE_SERVICE_ROLE_KEY`: Supabase service role key (admin writes)
+- `GEMINI_API_KEY`: Google Gemini API key for automated rewriting
+- `NEXT_PUBLIC_GA_ID`: Google Analytics tracking ID
+- `CRON_SECRET`: Vercel cron authorization secret
+- `SCRAPER_API_KEY`: Scraper proxy key (optional)
+
+---
+
+## 6. How to Run Manual Ingestion Anytime
+- **From Terminal (Local CLI)**:
+  ```bash
+  npx tsx --env-file=.env.local scripts/extract-feeds-cli.ts
+  ```
+- **From Browser / Terminal (Remote Trigger)**:
+  ```bash
+  curl "https://assamjobshub.com/api/cron/ingestion?token=assamhub_cron_2026"
+  ```
+- **From GitHub UI**:
+  Go to your repo `uzzaldutta/assamjobs-hub` -> **Actions** -> **Automated Feed Ingestion** -> **Run workflow**.
