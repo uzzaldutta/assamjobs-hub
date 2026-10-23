@@ -17,10 +17,6 @@ import DesktopNav from "@/components/DesktopNav";
 import NotificationBell from "@/components/NotificationBell";
 import AccountPlaceholder from "@/components/AccountPlaceholder";
 import Script from "next/script";
-import AdBanner from "@/components/AdBanner";
-import { AdSkyscraperTall } from "@/components/AdSkyscraperTall";
-import AdLeaderboard from "@/components/AdLeaderboard";
-import AdStickyMobile from "@/components/AdStickyMobile";
 import HeaderScrollTracker from "@/components/HeaderScrollTracker";
 
 const inter = Inter({
@@ -200,22 +196,15 @@ export default function RootLayout({
                     <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Get Job Alerts</h4>
                     <SubscribeForm />
                   </div>
-
-                  {/* Sidebar Ad (Sticky) */}
-                  <div className="sticky top-24 pt-2">
-                    <AdSkyscraperTall />
-                  </div>
                 </aside>
 
                 <main className="flex-1 min-w-0 flex flex-col">
                   {children}
                   </main>
               </div>
-              <div className="w-full py-6"><AdLeaderboard /></div>
               <Footer />
 
               <MobileBottomNav />
-              <AdStickyMobile />
             </div>
           </LanguageProvider>
           <HeaderScrollTracker />

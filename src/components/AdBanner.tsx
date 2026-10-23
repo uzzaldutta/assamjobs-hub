@@ -1,47 +1,44 @@
 "use client";
 
-import { memo } from "react";
+import { useEffect, memo } from "react";
 
 interface AdBannerProps {
   className?: string;
-  dataAdSlot?: string; // Kept for backwards compatibility if any imports use it
+  dataAdSlot?: string;
   dataAdFormat?: string;
   dataFullWidthResponsive?: boolean;
 }
 
-const AdBanner = memo(function AdBanner({ className = "" }: AdBannerProps) {
-  const html = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <style>body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; background: transparent; overflow: hidden; }</style>
-      </head>
-      <body>
-        <script type="text/javascript">
-          atOptions = {
-            'key' : 'd8f486099a4c6a545205addb6b9dcfee',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-          };
-        </script>
-        <script type="text/javascript" src="https://www.highrevenueformat.com/d8f486099a4c6a545205addb6b9dcfee/invoke.js"></script>
-      </body>
-    </html>
-  `;
+const AdBanner = memo(function AdBanner({
+  className = "",
+  dataAdSlot,
+  dataAdFormat = "auto",
+  dataFullWidthResponsive = true,
+}: AdBannerProps) {
+  // If no real Google AdSense ad slot is assigned, return null so Google Auto Ads handles placements cleanly
+  if (!dataAdSlot || dataAdSlot === "1234567890" || dataAdSlot === "YOUR_INFEED_SLOT_ID") {
+    return null;
+  }
+
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+      }
+    } catch (err) {
+      console.error("Google AdSense error:", err);
+    }
+  }, []);
 
   return (
-    <div className={`flex justify-center items-center my-4 overflow-hidden w-full max-w-[300px] mx-auto min-h-[250px] bg-slate-50/50 dark:bg-slate-900/30 rounded-lg ${className}`}>
-      <iframe 
-        srcDoc={html} 
-        width="300" 
-        height="250" 
-        frameBorder="0" 
-        scrolling="no" 
-        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin"
-        className="w-[300px] h-[250px]"
-        title="Advertisement"
+    <div className={`overflow-hidden my-4 text-center ${className}`}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-4651508083326671"
+        data-ad-slot={dataAdSlot}
+        data-ad-format={dataAdFormat}
+        data-full-width-responsive={dataFullWidthResponsive ? "true" : "false"}
       />
     </div>
   );

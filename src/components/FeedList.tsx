@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import JobCard from "./JobCard";
-import InFeedAd from "./InFeedAd";
 import { Search, Filter, Briefcase, GraduationCap, FileText, Activity, Building2 } from "lucide-react";
 
 export default function FeedList({ 
@@ -239,10 +238,6 @@ export default function FeedList({
           <>
             {visibleJobs.map((job, index) => (
               <React.Fragment key={`fragment-${job.id}`}>
-                {/* Insert an ad after every 5th job card */}
-                {index > 0 && index % 5 === 0 && (
-                  <InFeedAd key={`ad-${index}`} />
-                )}
                 <JobCard key={job.id} job={job} />
               </React.Fragment>
             ))}

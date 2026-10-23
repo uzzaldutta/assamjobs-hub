@@ -12,7 +12,6 @@ import ResultCard from "@/components/feeds/ResultCard";
 import AdmitCard from "@/components/feeds/AdmitCard";
 import ScholarshipCard from "@/components/feeds/ScholarshipCard";
 import AdSidebar from "@/components/AdSidebar";
-import AdLeaderboard from "@/components/AdLeaderboard";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, Briefcase, Building2, Bell, FileCheck, FileText } from "lucide-react";
@@ -142,12 +141,6 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <HeroSection />
-
-      
-
-      <div className="px-4 w-full pt-2 pb-2">
-        <AdLeaderboard />
-      </div>
 
       
 
