@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Clock, Sparkles } from 'lucide-react';
+import { formatSafeDate } from '@/lib/dateUtils';
 
 export interface FeedItem {
   id: string;
@@ -132,7 +133,7 @@ export default function LatestUpdatesScroller({ recentItems, closingSoonItems }:
                   </p>
                   {isClosing && item.last_date ? (
                     <span className="text-[11px] sm:text-xs font-bold text-red-600 dark:text-red-400 whitespace-nowrap">
-                      End: {new Date(item.last_date).toISOString().split('T')[0]}
+                      End: {formatSafeDate(item.last_date, { day: 'numeric', month: 'short' })}
                     </span>
                   ) : (
                     <span className="text-[11px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 whitespace-nowrap">

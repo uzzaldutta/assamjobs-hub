@@ -1,4 +1,6 @@
-﻿export function normalizeString(str: string | undefined | null): string {
+import { parseFlexibleDate } from '@/lib/dateUtils';
+
+export function normalizeString(str: string | undefined | null): string {
   if (!str) return '';
   return str.toLowerCase()
     .replace(/[^\w\s]/g, ' ')
@@ -36,15 +38,10 @@ export function extractAdvtNo(text: string | undefined | null): string | null {
 
 export function normalizeDate(d: string | undefined | null): string | null {
   if (!d) return null;
-  // Handle DD/MM/YYYY
-  const parts = d.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-  if (parts) {
-    return `${parts[3]}-${parts[2].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+  const parsed = parseFlexibleDate(d);
+  if (parsed && !isNaN(parsed.getTime())) {
+    return parsed.toISOString().split('T')[0];
   }
-  try {
-    const parsed = new Date(d);
-    if (!isNaN(parsed.getTime())) return parsed.toISOString().split('T')[0];
-  } catch {}
   return null;
 }
 

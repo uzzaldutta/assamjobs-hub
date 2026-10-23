@@ -12,11 +12,9 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { notFound, redirect } from "next/navigation";
 import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
+import { formatSafeDate, toSafeISOString, calculateDaysLeft } from "@/lib/dateUtils";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
-
-
-
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
@@ -35,7 +33,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const org = job.organization || 'AssamJobs Hub';
   const title = `${job.title} - Vacancy, Eligibility & Apply`;
   const vacanciesText = job.vacancies && job.vacancies !== 'Not Specified' ? ` | Vacancies: ${job.vacancies}` : '';
-  const dateText = job.last_date ? ` | Last Date: ${new Date(job.last_date).toLocaleDateString('en-IN')}` : '';
+  const dateText = job.last_date ? ` | Last Date: ${formatSafeDate(job.last_date)}` : '';
   const desc = `AssamJobsHub: Details for ${job.title} by ${org}${vacanciesText}${dateText}. Check eligibility, age limit, and application process.`;
   
   const baseUrl = 'https://assamjobshub.com';
@@ -87,14 +85,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
   }
 
   // Determine Deadline State
-  let deadlineState = "ACTIVE";
-  if (job.last_date) {
-    const end = new Date(job.last_date);
-    const now = new Date();
-    const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
-    if (daysLeft < 0) deadlineState = "CLOSED";
-    else if (daysLeft <= 7) deadlineState = "CLOSING_SOON";
-  }
+  const { state: deadlineState } = calculateDaysLeft(job.last_date);
 
   const isVerified = job.status === 'PUBLISHED' && job.verification_status === 'VERIFIED';
   const advtNo = extractAdvtNo(job.title) || extractAdvtNo(job.unique_description);
@@ -110,13 +101,16 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
     ]
   };
 
+  const validThroughDate = toSafeISOString(job.last_date);
+  const datePosted = toSafeISOString(job.scraped_at) || new Date().toISOString();
+
   const jobSchema = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
     "title": job.title,
     "description": job.unique_description || `Details for ${job.title} by ${job.organization}`,
-    "datePosted": job.scraped_at || new Date().toISOString(),
-    ...(job.last_date ? { "validThrough": new Date(job.last_date).toISOString() } : {}),
+    "datePosted": datePosted,
+    ...(validThroughDate ? { "validThrough": validThroughDate } : {}),
     "hiringOrganization": {
       "@type": "Organization",
       "name": job.organization || "AssamJobs Hub",
@@ -150,8 +144,8 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
               "@type": "JobPosting",
               "title": job.title,
               "description": job.unique_description ? job.unique_description.replace(/<[^>]*>?/gm, "").substring(0, 1000) : "Details for " + job.title,
-              "datePosted": job.scraped_at || job.created_at || new Date().toISOString(),
-              "validThrough": job.last_date ? new Date(job.last_date).toISOString() : new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+              "datePosted": datePosted,
+              ...(validThroughDate ? { "validThrough": validThroughDate } : {}),
               "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : "OTHER",
               "hiringOrganization": {
                 "@type": "Organization",
@@ -350,7 +344,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Last Date to Apply</span>
                     <span className={`font-bold ${deadlineState === 'CLOSED' ? 'text-red-500' : deadlineState === 'CLOSING_SOON' ? 'text-amber-500' : 'text-slate-800 dark:text-white'}`}>
-                      {new Date(job.last_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {formatSafeDate(job.last_date)}
                     </span>
                   </div>
                 )}
@@ -358,7 +352,7 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Date Posted</span>
                   <span className="font-medium text-slate-700 dark:text-slate-300">
-                    {job.scraped_at ? new Date(job.scraped_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Unknown'}
+                    {formatSafeDate(job.scraped_at)}
                   </span>
                 </div>
               </div>

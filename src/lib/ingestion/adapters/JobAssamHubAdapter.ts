@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import { SourceAdapter } from "../BaseAdapter";
 import { RawContent, NormalizedPayload, IngestionSource, ContentType } from "../types";
+import { normalizeDate } from "../duplicate-matcher";
 
 export class JobAssamHubAdapter implements SourceAdapter {
   sourceConfig: IngestionSource;
@@ -13,7 +14,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
     try {
       const res = await fetch(`${this.sourceConfig.base_url}/feed/`, { 
         headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
-        next: { revalidate: 3600 } 
+        signal: AbortSignal.timeout(8000)
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const xml = await res.text();
@@ -33,7 +34,7 @@ export class JobAssamHubAdapter implements SourceAdapter {
            });
         }
       });
-      return items.slice(0, 5);
+      return items.slice(0, 8);
     } catch (error) {
        console.error("JobAssamHub Discovery Error:", error);
        throw error;
@@ -42,7 +43,10 @@ export class JobAssamHubAdapter implements SourceAdapter {
 
   async fetch(content: RawContent): Promise<RawContent> {
     try {
-       const res = await fetch(content.url, { headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' }});
+       const res = await fetch(content.url, { 
+         headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
+         signal: AbortSignal.timeout(8000)
+       });
        if (res.ok) {
          content.html = await res.text();
        }
@@ -61,52 +65,77 @@ export class JobAssamHubAdapter implements SourceAdapter {
     let notificationUrl = "";
     let applyUrl = "";
     let lastDate = "";
-    
-    // Convert tables to markdown
-    $('figure.wp-block-table table').each((i, el) => {
-        const headers: string[] = [];
-        $(el).find('th').each((j, th) => { headers.push($(th).text().trim()); });
-        
-        if (headers.length > 0) {
-            description += `| ${headers.join(" | ")} |\n`;
-            description += `| ${headers.map(() => '---').join(' | ')} |\n`;
+    let organization = "";
+    let vacancies = "";
+
+    // 1. Scan all tables for metadata & links
+    $('table tr').each((_, tr) => {
+      const rowText = $(tr).text().toLowerCase();
+      const firstCell = $(tr).find('th, td').first().text().trim().toLowerCase();
+      const lastCell = $(tr).find('td').last().text().trim();
+      const linkEl = $(tr).find('a');
+      const href = linkEl.attr('href');
+
+      // Key-value metadata
+      if (firstCell.includes('organization') || firstCell.includes('department')) {
+        if (!organization) organization = lastCell;
+      } else if (firstCell.includes('no of post') || firstCell.includes('vacancy') || firstCell.includes('posts')) {
+        if (!vacancies) vacancies = lastCell;
+      } else if (firstCell.includes('last date') || firstCell.includes('closing date')) {
+        if (!lastDate) lastDate = lastCell;
+      }
+
+      // Links
+      if (href) {
+        const lowerHref = href.toLowerCase();
+        if (!lowerHref.includes('whatsapp') && !lowerHref.includes('telegram') && !lowerHref.includes('t.me')) {
+          if ((rowText.includes('apply') || rowText.includes('application form') || rowText.includes('online application')) && !applyUrl) {
+            applyUrl = href;
+          } else if ((rowText.includes('notification') || rowText.includes('advertisement') || href.endsWith('.pdf')) && !notificationUrl) {
+            notificationUrl = href;
+          }
         }
-        
-        $(el).find('tbody tr').each((j, tr) => {
-            const row: string[] = [];
-            $(tr).find('td').each((k, td) => {
-                const text = $(td).text().replace(/\s+/g, ' ').trim();
-                const link = $(td).find('a').attr('href');
-                if (link && text.toLowerCase().includes('click here')) {
-                    row.push(`[Click Here](${link})`);
-                    if ($(td).prev().text().toLowerCase().includes('notification')) notificationUrl = link;
-                    if ($(td).prev().text().toLowerCase().includes('apply') || $(td).prev().text().toLowerCase().includes('online')) applyUrl = link;
-                } else {
-                    row.push(text);
-                    if (text && $(td).prev().text().toLowerCase().includes('last date')) {
-                        lastDate = text;
-                    }
-                }
-            });
-            if(row.length > 0) {
-                if (headers.length === 0 && j === 0) {
-                    // No headers, fake them for markdown
-                    description += `| ${row.map((_, idx) => `Col ${idx+1}`).join(" | ")} |\n`;
-                    description += `| ${row.map(() => '---').join(' | ')} |\n`;
-                }
-                description += `| ${row.join(" | ")} |\n`;
-            }
-        });
-        description += "\n\n";
+      }
     });
+
+    // 2. Fallback organization extraction from title
+    if (!organization) {
+      const matchOrg = title.match(/^([A-Za-z0-9\s\.\,\&]+?)\s+(?:Recruitment|Vacancy|Jobs|Admit Card|Result|Admission)/i);
+      if (matchOrg && matchOrg[1].length > 2 && matchOrg[1].length < 50) {
+        organization = matchOrg[1].trim();
+      }
+    }
+
+    // 3. Fallback links from content body
+    if (!applyUrl || !notificationUrl) {
+      $('.entry-content a').each((_, a) => {
+        const text = $(a).text().toLowerCase().trim();
+        const href = $(a).attr('href');
+        if (!href) return;
+        const lowerHref = href.toLowerCase();
+        if (lowerHref.includes('whatsapp') || lowerHref.includes('telegram') || lowerHref.includes('t.me')) return;
+
+        if (!applyUrl && (text.includes('apply online') || text.includes('click here to apply'))) {
+          applyUrl = href;
+        } else if (!notificationUrl && (text.includes('official notification') || text.includes('advertisement') || href.endsWith('.pdf'))) {
+          notificationUrl = href;
+        }
+      });
+    }
+
+    const cleanBody = $('.entry-content').clone();
+    cleanBody.find('script, style, ins, iframe, .adsbygoogle').remove();
+    description = cleanBody.html() || "";
 
     return {
         ...content,
-        extractedTitle: title,
+        extractedTitle: title.replace(" - Job Assam Hub", "").trim(),
         extractedDescription: description,
-        notificationUrl,
-        applyUrl,
-        lastDate
+        organization: organization || 'Unknown',
+        vacancies: vacancies || undefined,
+        notificationUrl: notificationUrl || undefined,
+        applyUrl: applyUrl || undefined,
+        lastDate: normalizeDate(lastDate) || lastDate || undefined
     };
   }
 
@@ -125,12 +154,13 @@ export class JobAssamHubAdapter implements SourceAdapter {
         source: this.sourceConfig.source_name,
         sourceUrl: extractedData.url,
         contentType,
-        title: extractedData.extractedTitle?.replace(" - Job Assam Hub", "").trim() || "Unknown Title",
-        organization: "AssamJobs Hub", // Or try to parse from title
+        title: extractedData.extractedTitle || "Unknown Title",
+        organization: extractedData.organization || "Various Departments",
         description: extractedData.extractedDescription || "",
         notificationUrl: extractedData.notificationUrl || undefined,
-        applyUrl: extractedData.applyUrl || undefined,
+        applyUrl: extractedData.applyUrl || extractedData.notificationUrl || extractedData.url,
         applicationEnd: extractedData.lastDate || undefined,
+        vacancy: extractedData.vacancies || undefined,
         externalId: extractedData.externalId
     };
   }
