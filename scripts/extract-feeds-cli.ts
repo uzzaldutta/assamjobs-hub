@@ -11,8 +11,12 @@ import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { IngestionPipeline } from '@/lib/ingestion/pipeline';
 import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter';
 import { JobAssamHubAdapter } from '@/lib/ingestion/adapters/JobAssamHubAdapter';
+import { JobAssamAdapter } from '@/lib/ingestion/adapters/JobAssamAdapter';
 import { APSCAdapter } from '@/lib/ingestion/adapters/APSCAdapter';
 import { GenericAssamGovAdapter } from '@/lib/ingestion/adapters/GenericAssamGovAdapter';
+import { NHMAssamAdapter } from '@/lib/ingestion/adapters/NHMAssamAdapter';
+import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggregatorAdapter';
+import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
 
 async function runExtraction() {
   console.log('=== Starting Feed Extraction ===');
@@ -29,7 +33,7 @@ async function runExtraction() {
     return;
   }
 
-  console.log(`Found ${sources.length} active sources:`, sources.map(s => s.source_name).join(', '));
+  console.log(`Found ${sources.length} active sources:`, sources.map(s => `${s.source_name} (${s.adapter_name})`).join(', '));
 
   for (const source of sources) {
     console.log(`\n--- Processing Source: ${source.source_name} (${source.adapter_name}) ---`);
@@ -37,8 +41,12 @@ async function runExtraction() {
 
     if (source.adapter_name === 'AssamCareerAdapter') adapterInstance = new AssamCareerAdapter(source);
     else if (source.adapter_name === 'JobAssamHubAdapter') adapterInstance = new JobAssamHubAdapter(source);
+    else if (source.adapter_name === 'JobAssamAdapter') adapterInstance = new JobAssamAdapter(source);
     else if (source.adapter_name === 'APSCAdapter') adapterInstance = new APSCAdapter(source);
     else if (source.adapter_name === 'GenericAssamGovAdapter') adapterInstance = new GenericAssamGovAdapter(source);
+    else if (source.adapter_name === 'NHMAssamAdapter') adapterInstance = new NHMAssamAdapter(source);
+    else if (source.adapter_name === 'GenericAggregatorAdapter') adapterInstance = new GenericAggregatorAdapter(source);
+    else if (source.adapter_name === 'IndGovtJobsAdapter') adapterInstance = new IndGovtJobsAdapter(source);
     else {
       console.log(`Adapter ${source.adapter_name} not mapped, skipping`);
       continue;

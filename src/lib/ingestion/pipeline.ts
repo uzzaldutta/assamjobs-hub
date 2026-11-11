@@ -1,5 +1,6 @@
 import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
 import { rewriteJobWithGemini } from './gemini-rewriter';
+import { parseFlexibleDate, toSafeISOString } from '@/lib/dateUtils';
 
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import crypto from "crypto";
@@ -247,9 +248,11 @@ export class IngestionPipeline {
     
     // Abstract date mapping logic
     let existingDate = existing.last_date || existing.closing_date || existing.application_deadline || existing.result_date;
-    const oldDate = existingDate ? new Date(existingDate).toISOString().split('T')[0] : null;
-    const newDate = incoming.applicationEnd ? new Date(incoming.applicationEnd).toISOString().split('T')[0] : null;
-    if (incoming.applicationEnd && oldDate !== newDate) {
+    const oldISO = toSafeISOString(existingDate);
+    const oldDate = oldISO ? oldISO.split('T')[0] : null;
+    const newISO = toSafeISOString(incoming.applicationEnd);
+    const newDate = newISO ? newISO.split('T')[0] : null;
+    if (incoming.applicationEnd && oldDate && newDate && oldDate !== newDate) {
       changes.push({ field: 'deadline_date', old_value: existingDate || 'N/A', new_value: incoming.applicationEnd });
     }
 
@@ -340,12 +343,11 @@ export class IngestionPipeline {
           
           // --- EXPIRATION CHECK ---
           if (normalized.applicationEnd) {
-             const parsedDate = Date.parse(normalized.applicationEnd);
-             if (!isNaN(parsedDate)) {
-                 const lastDate = new Date(parsedDate);
+             const parsedDate = parseFlexibleDate(normalized.applicationEnd);
+             if (parsedDate) {
                  const today = new Date();
                  today.setHours(0, 0, 0, 0);
-                 if (lastDate < today) {
+                 if (parsedDate < today) {
                     finalStatus = 'REJECTED';
                     validation.errors.push('EXPIRED_LAST_DATE');
                  }
