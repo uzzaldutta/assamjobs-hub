@@ -18,6 +18,7 @@ import { NHMAssamAdapter } from '@/lib/ingestion/adapters/NHMAssamAdapter';
 import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggregatorAdapter';
 import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
 import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
+import { runAutoCleanup } from '@/lib/autoCleanup';
 
 async function runExtraction() {
   console.log('=== Starting Feed Extraction ===');
@@ -79,6 +80,15 @@ async function runExtraction() {
         console.error(`✗ Error approving ${item.title}:`, err.message);
       }
     }
+  }
+
+  // 3. Automated 30-day cleanup of old feeds & queue
+  console.log('\n--- Running Automated 30-Day Cleanup ---');
+  try {
+    const cleanResult = await runAutoCleanup({ daysThreshold: 30 });
+    console.log(`✓ Auto-cleanup finished: ${cleanResult.jobsRemoved} expired jobs removed, ${cleanResult.queuePruned} queue items pruned, ${cleanResult.runsPruned} old logs deleted.`);
+  } catch (cleanErr: any) {
+    console.error('Auto-cleanup error:', cleanErr.message);
   }
 
   console.log('\n=== Ingestion Completed ===');

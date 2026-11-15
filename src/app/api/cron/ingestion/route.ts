@@ -10,6 +10,7 @@ import { GenericAssamGovAdapter } from '@/lib/ingestion/adapters/GenericAssamGov
 import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter';
 import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggregatorAdapter';
 import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
+import { runAutoCleanup } from '@/lib/autoCleanup';
 
 // Secure the route with a cron secret or automated webhook token
 const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret';
@@ -58,11 +59,21 @@ export async function GET(req: Request) {
     }
 
     await Promise.allSettled(promises);
+
+    // Run automated 30-day cleanup of old feeds & queue
+    let cleanupReport = null;
+    try {
+      cleanupReport = await runAutoCleanup({ daysThreshold: 30 });
+    } catch (cleanErr: any) {
+      console.error('Auto-cleanup error during cron:', cleanErr.message);
+    }
+
     revalidatePath('/');
     return NextResponse.json({ 
       success: true, 
       timestamp: new Date().toISOString(),
-      triggered: results 
+      triggered: results,
+      cleanup: cleanupReport 
     });
 
   } catch (err: any) {
