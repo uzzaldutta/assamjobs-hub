@@ -17,6 +17,7 @@ import { GenericAssamGovAdapter } from '@/lib/ingestion/adapters/GenericAssamGov
 import { NHMAssamAdapter } from '@/lib/ingestion/adapters/NHMAssamAdapter';
 import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggregatorAdapter';
 import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
+import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
 
 async function runExtraction() {
   console.log('=== Starting Feed Extraction ===');
@@ -57,6 +58,26 @@ async function runExtraction() {
       console.log(`✓ Completed extraction for: ${source.source_name}`);
     } catch (err: any) {
       console.error(`✗ Error processing ${source.source_name}:`, err.message);
+    }
+  }
+
+  // 2. Auto-approve any new quality items
+  const { data: newItems } = await supabase
+    .from('ingestion_queue')
+    .select('id, title, content_type, quality_score')
+    .eq('status', 'NEW')
+    .gte('quality_score', 20);
+
+  if (newItems && newItems.length > 0) {
+    console.log(`\n--- Auto-approving ${newItems.length} Clean Feeds ---`);
+    for (const item of newItems) {
+      if (!item.title || item.title.toLowerCase().includes('unknown')) continue;
+      try {
+        await approveQueueItemAction(item.id, 'NEW');
+        console.log(`✓ Auto-approved: ${item.title}`);
+      } catch (err: any) {
+        console.error(`✗ Error approving ${item.title}:`, err.message);
+      }
     }
   }
 
