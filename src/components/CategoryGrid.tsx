@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Home, Building2, GraduationCap, FileText, CheckSquare, Receipt, IdCard, BookOpen, FileArchive, Train } from 'lucide-react';
 
@@ -17,7 +17,7 @@ const categories = [
 
 export default function CategoryGrid() {
   return (
-    <section className="py-6 sm:py-8 px-2 sm:px-4 max-w-7xl mx-auto w-full">
+    <section className="pt-3 pb-4 sm:pt-4 sm:pb-6 px-2 sm:px-4 max-w-7xl mx-auto w-full">
       <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 gap-2 sm:gap-4">
         {categories.map((cat, idx) => (
           <Link 

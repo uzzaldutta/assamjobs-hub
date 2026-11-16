@@ -84,22 +84,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#4f46e5" />
         <link rel="apple-touch-icon" href="/logo.jpg" />
-        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4651508083326671" crossOrigin="anonymous" strategy="afterInteractive" />
-        
-        {/* Google Analytics Setup */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} strategy="afterInteractive" />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-              `}
-            </Script>
-          </>
-        )}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4651508083326671" crossOrigin="anonymous"></script>
       
         <Script id="org-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <Script id="website-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
@@ -209,7 +194,7 @@ export default function RootLayout({
           </LanguageProvider>
           <HeaderScrollTracker />
         </ThemeProvider>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID as string} />
+        <GoogleAnalytics gaId={(process.env.NEXT_PUBLIC_GA_ID || 'G-ZQZLJCQZWF') as string} />
       </body>
     </html>
   );

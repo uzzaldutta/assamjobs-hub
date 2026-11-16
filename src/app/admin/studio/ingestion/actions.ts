@@ -4,6 +4,7 @@
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { generateUniqueSlug } from "@/lib/slugify";
+import { classifyJobType } from "@/lib/jobClassifier";
 
 
 
@@ -55,7 +56,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         slug: await generateUniqueSlug(payload.title),
         title: payload.title,
         organization: payload.organization || 'Unknown',
-        job_type: payload.category === 'RAILWAY' ? 'RAILWAY' : (item.content_type === 'JOB' ? 'GOVERNMENT' : 'PRIVATE'),
+        job_type: item.content_type === 'PRIVATE_JOB' ? 'PRIVATE' : classifyJobType(payload.title, payload.organization, payload.categories),
                 category: payload.category || 'OTHER',
         vacancies: payload.vacancy || 'Not Specified',
         district: payload.location || 'Assam',

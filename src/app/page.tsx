@@ -1,23 +1,16 @@
-
 import HeroSection from "@/components/HeroSection";
 import ClassicUpdatesBoard from "@/components/ClassicUpdatesBoard";
 import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
 import SubscribeForm from "@/components/SubscribeForm";
-import JobCard from "@/components/JobCard";
-import ScrollableJobFeed from "@/components/ScrollableJobFeed";
+import UnifiedJobMatrix from "@/components/UnifiedJobMatrix";
 import TenderCard from "@/components/feeds/TenderCard";
-import AdmissionCard from "@/components/feeds/AdmissionCard";
-import ResultCard from "@/components/feeds/ResultCard";
-import AdmitCard from "@/components/feeds/AdmitCard";
 import ScholarshipCard from "@/components/feeds/ScholarshipCard";
-import AdSidebar from "@/components/AdSidebar";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { ArrowRight, Briefcase, Building2, Bell, FileCheck, FileText } from "lucide-react";
+import { ArrowRight, FileCheck, Receipt, GraduationCap, Sparkles } from "lucide-react";
 
-export const revalidate = 86400; // 24h caching - On-demand revalidation // 1 minute cache
-
+export const revalidate = 86400; // 24h caching - On-demand revalidation
 
 export const metadata = {
   title: "Assam Govt Jobs 2026 | Latest Assam Government & Private Jobs",
@@ -28,11 +21,9 @@ export const metadata = {
 };
 
 export default async function Home() {
-
-  // Unified Data Fetching for Latest Updates Scroller
   const today = new Date().toISOString();
   
-  // 1. Fetch Recent Items
+  // 1. Fetch Feeds for Ticker
   const [
     { data: rJobs },
     { data: rTenders },
@@ -41,12 +32,12 @@ export default async function Home() {
     { data: rAdmitCards },
     { data: rScholarships }
   ] = await Promise.all([
-    supabase.from('jobs').select('id, slug, slug, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(15),
+    supabase.from('jobs').select('id, slug, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').order('scraped_at', { ascending: false }).limit(15),
     supabase.from('tenders').select('id, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, slug, slug, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, slug, slug, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, slug, slug, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('scraped_at', { ascending: false }).limit(10),
-    supabase.from('jobs').select('id, slug, slug, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').or('job_type.eq.SCHOLARSHIP,title.ilike.%scholarship%,title.ilike.%scheme%').order('scraped_at', { ascending: false }).limit(10)
+    supabase.from('jobs').select('id, slug, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%result%,title.ilike.%merit list%').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, title, organization, scraped_at').eq('status', 'PUBLISHED').or('title.ilike.%admit card%,title.ilike.%hall ticket%').order('scraped_at', { ascending: false }).limit(10),
+    supabase.from('jobs').select('id, slug, title, organization, last_date, scraped_at').eq('status', 'PUBLISHED').or('job_type.eq.SCHOLARSHIP,title.ilike.%scholarship%,title.ilike.%scheme%').order('scraped_at', { ascending: false }).limit(10)
   ]);
 
   const mapToFeed = (items: any[], type: string, urlPrefix: string, orgField: string = 'organization'): FeedItem[] => {
@@ -56,7 +47,7 @@ export default async function Home() {
       title: item.title,
       organization: item[orgField] || 'Various Departments',
       badge_text: type === 'JOB' ? (item.job_type || 'GOVERNMENT') : type,
-      url: `${urlPrefix}/${item.id}`,
+      url: `${urlPrefix}/${item.slug || item.id}`,
       last_date: item.last_date || null,
       created_at: item.created_at || item.scraped_at
     }));
@@ -71,262 +62,178 @@ export default async function Home() {
     ...mapToFeed(rScholarships || [], 'SCHOLARSHIP', '/scholarships', 'provider')
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 25);
 
-  // 2. Fetch Closing Soon Items (Future dates)
   const [
     { data: cJobs },
     { data: cTenders },
     { data: cAdmissions },
     { data: cScholarships }
   ] = await Promise.all([
-    supabase.from('jobs').select('id, slug, slug, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(15),
+    supabase.from('jobs').select('id, slug, title, organization, job_type, last_date, scraped_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(15),
     supabase.from('tenders').select('id, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
-    supabase.from('jobs').select('id, slug, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
+    supabase.from('jobs').select('id, slug, title, organization, last_date, created_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').gte('last_date', today).order('last_date', { ascending: true }).limit(10),
     supabase.from('scholarships').select('id, slug, title, provider, last_date, created_at').eq('status', 'PUBLISHED').gte('last_date', today).order('last_date', { ascending: true }).limit(10)
   ]);
 
-  const uniqueRecent = [];
-    const seenRecentIds = new Set();
-    for (const item of rawRecent) {
-      if (!seenRecentIds.has(item.id)) {
-        seenRecentIds.add(item.id);
-        uniqueRecent.push(item);
-      }
+  const uniqueRecent: FeedItem[] = [];
+  const seenRecentIds = new Set();
+  for (const item of rawRecent) {
+    if (!seenRecentIds.has(item.id)) {
+      seenRecentIds.add(item.id);
+      uniqueRecent.push(item);
     }
+  }
 
-    const allClosing = [
+  const allClosing = [
     ...mapToFeed(cJobs || [], 'JOB', '/jobs'),
     ...mapToFeed(cTenders || [], 'TENDER', '/tenders'),
     ...mapToFeed(cAdmissions || [], 'ADMISSION', '/admissions', 'institution_name'),
     ...mapToFeed(cScholarships || [], 'SCHOLARSHIP', '/scholarships', 'provider')
   ].sort((a, b) => new Date(a.last_date!).getTime() - new Date(b.last_date!).getTime()).slice(0, 25);
 
-  // Fetch Latest Govt Jobs
-
-  const { data: govtJobs } = await supabase
-    .from('jobs')
-    .select('*')
-    .eq('status', 'PUBLISHED')
-    .eq('job_type', 'GOVERNMENT')
-    .order('scraped_at', { ascending: false })
-    .limit(30);
-
-  // Fetch Latest Private Jobs
-  const { data: privateJobs } = await supabase
-    .from('jobs')
-    .select('*')
-    .eq('status', 'PUBLISHED')
-    .eq('job_type', 'PRIVATE')
-    .order('scraped_at', { ascending: false })
-    .limit(30);
-
-  // Fetch Closing Soon Jobs (Any type)
-  const { data: closingSoonJobs } = await supabase
-    .from('jobs')
-    .select('*')
-    .eq('status', 'PUBLISHED')
-    .gte('last_date', new Date().toISOString())
-    .lte('last_date', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString())
-    .order('last_date', { ascending: true })
-    .limit(30);
-
-  // Fetch Latest Updates (Results, Admit Cards, Admissions)
-  const { data: recentResults } = await supabase.from('results').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
-  const { data: recentAdmitCards } = await supabase.from('admit_cards').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
-  const { data: recentAdmissions } = await supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(2);
-
-  // Fetch Latest Tenders
-  const { data: latestTenders } = await supabase.from('tenders').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
-  const { data: scholarships } = await supabase.from('scholarships').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(2);
+  // 2. Fetch Data for Unified Job Matrix
+  const [
+    { data: govtJobs },
+    { data: privateJobs },
+    { data: railwayJobs },
+    { data: closingSoonJobs },
+    { data: recentResults },
+    { data: recentAdmitCards },
+    { data: recentAdmissions },
+    { data: scholarships },
+    { data: latestTenders }
+  ] = await Promise.all([
+    supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'GOVERNMENT').order('scraped_at', { ascending: false }).limit(24),
+    supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'PRIVATE').order('scraped_at', { ascending: false }).limit(24),
+    supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'RAILWAY').order('scraped_at', { ascending: false }).limit(24),
+    supabase.from('jobs').select('*').eq('status', 'PUBLISHED').gte('last_date', today).lte('last_date', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()).order('last_date', { ascending: true }).limit(24),
+    supabase.from('results').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(12),
+    supabase.from('admit_cards').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(12),
+    supabase.from('jobs').select('*').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').order('created_at', { ascending: false }).limit(12),
+    supabase.from('scholarships').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(4),
+    supabase.from('tenders').select('*').eq('status', 'PUBLISHED').order('created_at', { ascending: false }).limit(4)
+  ]);
 
   return (
     <div className="flex flex-col min-h-screen">
+      
+      {/* 1. HERO & FAST SEARCH SECTION (Compact Phase 1) */}
       <HeroSection />
 
-      
-
+      {/* 2. CATEGORY ICON SHORTCUTS */}
       <div className="max-w-7xl mx-auto px-4">
         <CategoryGrid />
       </div>
       
-      <div className="max-w-7xl mx-auto px-4 mt-2">
+      {/* 3. LATEST UPDATES TICKER & CLASSIC UPDATES BOARD */}
+      <div className="max-w-7xl mx-auto px-4 mt-1">
         <LatestUpdatesScroller recentItems={uniqueRecent} closingSoonItems={allClosing} />
-
-        {/* CLASSIC 3-COLUMN BOARD */}
         <ClassicUpdatesBoard />
       </div>
-<main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+      {/* 4. MAIN INTERACTIVE CONTENT AREA */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-10 sm:space-y-14">
         
-        {/* LATEST GOVERNMENT JOBS */}
-        <section>
-          <div className="flex justify-between items-end mb-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <Briefcase className="text-emerald-600 dark:text-emerald-400" /> Latest Government Jobs
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 mt-1">Recently verified government recruitment notifications.</p>
-            </div>
-            <Link href="/jobs?type=GOVERNMENT" className="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 backdrop-blur-md font-bold text-sm hover:bg-emerald-500/20 hover:scale-105 transition-all flex items-center gap-1 hidden sm:flex shadow-sm">
-              View All <ArrowRight size={16} />
-            </Link>
-          </div>
-          
-          <ScrollableJobFeed jobs={govtJobs || []} emptyMessage="No recent government jobs found." theme="slate" />
-          <div className="mt-6 sm:hidden text-center">
-            <Link href="/jobs?type=GOVERNMENT" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-bold rounded-xl w-full justify-center hover:bg-emerald-500/20 transition-all shadow-sm">
-              View All Govt Jobs <ArrowRight size={18} />
-            </Link>
-          </div>
-        </section>
+        {/* PHASE 2: UNIFIED TABBED JOB MATRIX (Govt, Private, Railway, Closing, Admits, Results, Admissions) */}
+        <UnifiedJobMatrix
+          govtJobs={govtJobs || []}
+          privateJobs={privateJobs || []}
+          railwayJobs={railwayJobs || []}
+          closingSoonJobs={closingSoonJobs || []}
+          recentResults={recentResults || []}
+          recentAdmitCards={recentAdmitCards || []}
+          recentAdmissions={recentAdmissions || []}
+        />
 
-        {/* LATEST PRIVATE JOBS */}
-        <section>
-          <div className="flex justify-between items-end mb-6">
+        {/* EXAM PREPARATION & FREE MOCK TESTS SHOWCASE */}
+        <section className="bg-gradient-to-r from-indigo-900/10 via-purple-900/10 to-emerald-900/10 rounded-3xl p-6 sm:p-8 border border-indigo-100 dark:border-indigo-900/40">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <Building2 className="text-blue-600 dark:text-blue-400" /> Latest Private Jobs
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 mt-1">Verified opportunities in the private sector.</p>
-            </div>
-            <Link href="/jobs?type=PRIVATE" className="px-4 py-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 backdrop-blur-md font-bold text-sm hover:bg-blue-500/20 hover:scale-105 transition-all flex items-center gap-1 hidden sm:flex shadow-sm">
-              View All <ArrowRight size={16} />
-            </Link>
-          </div>
-          
-          <ScrollableJobFeed jobs={privateJobs || []} emptyMessage="No recent private jobs found." theme="slate" />
-        </section>
-
-        {/* CLOSING SOON SECTION */}
-        {closingSoonJobs && closingSoonJobs.length > 0 && (
-          <section className="bg-amber-50 dark:bg-amber-900/10 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-12 border-y border-amber-100 dark:border-amber-900/30">
-            <div className="max-w-7xl mx-auto">
-              <div className="flex justify-between items-end mb-6">
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-amber-900 dark:text-amber-500 flex items-center gap-2">
-                    <Bell className="text-amber-600 dark:text-amber-400" /> Closing Soon
-                  </h2>
-                  <p className="text-amber-700/70 dark:text-amber-500/70 mt-1">Don't miss these upcoming deadlines.</p>
-                </div>
-                <Link href="/jobs?status=CLOSING_SOON" className="px-4 py-2 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 backdrop-blur-md font-bold text-sm hover:bg-amber-500/20 hover:scale-105 transition-all flex items-center gap-1 hidden sm:flex shadow-sm">
-                  View All <ArrowRight size={16} />
-                </Link>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold mb-2">
+                <Sparkles size={14} /> Exam Preparation Studio
               </div>
-              <ScrollableJobFeed jobs={closingSoonJobs || []} emptyMessage="No closing soon jobs found." theme="amber" />
-            </div>
-          </section>
-        )}
-
-        {/* UPCOMING EXAMS & PRACTICE */}
-        <section>
-          <div className="flex justify-between items-end mb-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <FileCheck className="text-indigo-600 dark:text-indigo-400" /> Exams & Practice
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                ADRE 2.0, APSC & Police Mock Tests
               </h2>
-              <p className="text-slate-500 dark:text-slate-400 mt-1">Prepare for your next test.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
+                Full-length practice tests, topic-wise study notes, and syllabus breakdowns.
+              </p>
             </div>
-            <Link href="/exams" className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 font-bold flex items-center gap-1 text-sm hidden sm:flex">
-              Start Practice <ArrowRight size={16} />
+            <Link 
+              href="/mock-tests"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md self-start md:self-auto"
+            >
+              Start Free Mock Test <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <Link href="/exams" className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-indigo-300 transition-colors">
-               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-indigo-600">Upcoming Exams</h3>
-               <p className="text-slate-500 text-sm">View scheduled exam dates and syllabus.</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link href="/mock-tests" className="group p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-indigo-400 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold mb-3 group-hover:scale-110 transition-transform">
+                <FileCheck size={20} />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-indigo-600">10 Full Mock Tests</h3>
+              <p className="text-slate-500 text-xs">Simulated computer-based tests for ADRE Grade III/IV and APSC CCE.</p>
             </Link>
-            <Link href="/exams" className="group p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800/30 shadow-sm hover:border-indigo-300 transition-colors">
-               <h3 className="text-xl font-bold text-indigo-900 dark:text-indigo-300 mb-2 group-hover:text-indigo-600">Free Mock Tests</h3>
-               <p className="text-indigo-600/70 text-sm">Start a free practice test instantly.</p>
+
+            <Link href="/study-materials" className="group p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-teal-400 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold mb-3 group-hover:scale-110 transition-transform">
+                <GraduationCap size={20} />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-teal-600">15 In-Depth Study Guides</h3>
+              <p className="text-slate-500 text-xs">Assam history, geography factsheets, formulas, and PET exam guidelines.</p>
+            </Link>
+
+            <Link href="/syllabus" className="group p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-purple-400 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold mb-3 group-hover:scale-110 transition-transform">
+                <FileCheck size={20} />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-purple-600">Official Exam Syllabus</h3>
+              <p className="text-slate-500 text-xs">Official mark distributions, question patterns, and recommended booklists.</p>
             </Link>
           </div>
         </section>
 
-        {/* UPDATES HUB (RESULTS, ADMISSIONS, ADMIT CARDS, SCHOLARSHIPS, TENDERS) */}
-        <section>
-          <div className="flex justify-between items-end mb-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <Bell className="text-purple-600 dark:text-purple-400" /> Latest Updates
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 mt-1">Results, Admit Cards, Scholarships and Tenders.</p>
-            </div>
-            <Link href="/updates" className="px-4 py-2 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 backdrop-blur-md font-bold text-sm hover:bg-purple-500/20 hover:scale-105 transition-all flex items-center gap-1 hidden sm:flex shadow-sm">
-              View All Updates <ArrowRight size={16} />
-            </Link>
-          </div>
+        {/* SCHOLARSHIPS & TENDERS QUICK HUB */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
-             
-             {/* RESULTS */}
-             <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-                   <h3 className="font-black text-lg text-slate-800 dark:text-slate-200 flex items-center gap-2">Results</h3>
-                   <Link href="/updates#results" className="text-xs font-bold text-slate-500 hover:text-purple-600 uppercase">More</Link>
-                </div>
-                <div className="space-y-4">
-                   {recentResults?.map(res => <ResultCard key={res.id} result={res} />)}
-                   {(!recentResults || recentResults.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent results.</div>}
-                </div>
-             </div>
-
-             {/* ADMIT CARDS */}
-             <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-                   <h3 className="font-black text-lg text-slate-800 dark:text-slate-200 flex items-center gap-2">Admit Cards</h3>
-                   <Link href="/updates#admit-cards" className="text-xs font-bold text-slate-500 hover:text-purple-600 uppercase">More</Link>
-                </div>
-                <div className="space-y-4">
-                   {recentAdmitCards?.map(adm => <AdmitCard key={adm.id} admitCard={adm} />)}
-                   {(!recentAdmitCards || recentAdmitCards.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent admit cards.</div>}
-                </div>
-             </div>
-
-             {/* ADMISSIONS */}
-             <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-                   <h3 className="font-black text-lg text-slate-800 dark:text-slate-200 flex items-center gap-2">Admissions</h3>
-                   <Link href="/updates#admissions" className="text-xs font-bold text-slate-500 hover:text-purple-600 uppercase">More</Link>
-                </div>
-                <div className="space-y-4">
-                   {recentAdmissions?.map(adm => <AdmissionCard key={adm.id} admission={adm} />)}
-                   {(!recentAdmissions || recentAdmissions.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent admissions.</div>}
-                </div>
-             </div>
-
-             {/* SCHOLARSHIPS & TENDERS (Combined column for space) */}
-             <div className="space-y-8">
-               <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-                     <h3 className="font-black text-lg text-slate-800 dark:text-slate-200 flex items-center gap-2">Scholarships</h3>
-                     <Link href="/updates#scholarships" className="text-xs font-bold text-slate-500 hover:text-purple-600 uppercase">More</Link>
-                  </div>
-                  <div className="space-y-4">
-                     {scholarships?.map(sch => <ScholarshipCard key={sch.id} scholarship={sch} />)}
-                     {(!scholarships || scholarships.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent scholarships.</div>}
-                  </div>
-               </div>
-
-               <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-                     <h3 className="font-black text-lg text-slate-800 dark:text-slate-200 flex items-center gap-2">Tenders</h3>
-                     <Link href="/updates#tenders" className="text-xs font-bold text-slate-500 hover:text-purple-600 uppercase">More</Link>
-                  </div>
-                  <div className="space-y-4">
-                     {latestTenders?.map(tender => <TenderCard key={tender.id} tender={tender} />)}
-                     {(!latestTenders || latestTenders.length === 0) && <div className="text-sm text-slate-500 italic py-4">No recent tenders.</div>}
-                  </div>
-               </div>
-             </div>
-
+          {/* SCHOLARSHIPS */}
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+              <h3 className="font-black text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                <GraduationCap className="text-teal-600" size={20} /> Latest Scholarships & Schemes
+              </h3>
+              <Link href="/scholarships" className="text-xs font-bold text-teal-600 hover:text-teal-700">View All →</Link>
+            </div>
+            <div className="space-y-3">
+              {scholarships?.map(sch => <ScholarshipCard key={sch.id} scholarship={sch} />)}
+              {(!scholarships || scholarships.length === 0) && (
+                <div className="text-xs text-slate-500 italic py-4 text-center">No active scholarships listed today.</div>
+              )}
+            </div>
           </div>
+
+          {/* TENDERS */}
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+              <h3 className="font-black text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                <Receipt className="text-rose-600" size={20} /> Official Assam Tenders
+              </h3>
+              <Link href="/tenders" className="text-xs font-bold text-rose-600 hover:text-rose-700">View All →</Link>
+            </div>
+            <div className="space-y-3">
+              {latestTenders?.map(tender => <TenderCard key={tender.id} tender={tender} />)}
+              {(!latestTenders || latestTenders.length === 0) && (
+                <div className="text-xs text-slate-500 italic py-4 text-center">No active tenders listed today.</div>
+              )}
+            </div>
+          </div>
+
         </section>
 
+        {/* NEWSLETTER SUBSCRIBE */}
         <SubscribeForm />
 
       </main>
     </div>
   );
 }
-
-
-
-

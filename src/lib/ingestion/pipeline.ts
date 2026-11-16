@@ -1,6 +1,5 @@
 import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
 import { rewriteJobWithGemini } from './gemini-rewriter';
-import { parseFlexibleDate, toSafeISOString } from '@/lib/dateUtils';
 
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import crypto from "crypto";
@@ -248,11 +247,14 @@ export class IngestionPipeline {
     
     // Abstract date mapping logic
     let existingDate = existing.last_date || existing.closing_date || existing.application_deadline || existing.result_date;
-    const oldISO = toSafeISOString(existingDate);
-    const oldDate = oldISO ? oldISO.split('T')[0] : null;
-    const newISO = toSafeISOString(incoming.applicationEnd);
-    const newDate = newISO ? newISO.split('T')[0] : null;
-    if (incoming.applicationEnd && oldDate && newDate && oldDate !== newDate) {
+    const safeDateIso = (d: any): string | null => {
+      if (!d) return null;
+      const parsed = new Date(d);
+      return isNaN(parsed.getTime()) ? null : parsed.toISOString().split('T')[0];
+    };
+    const oldDate = safeDateIso(existingDate);
+    const newDate = safeDateIso(incoming.applicationEnd);
+    if (incoming.applicationEnd && oldDate !== newDate) {
       changes.push({ field: 'deadline_date', old_value: existingDate || 'N/A', new_value: incoming.applicationEnd });
     }
 
@@ -343,11 +345,12 @@ export class IngestionPipeline {
           
           // --- EXPIRATION CHECK ---
           if (normalized.applicationEnd) {
-             const parsedDate = parseFlexibleDate(normalized.applicationEnd);
-             if (parsedDate) {
+             const parsedDate = Date.parse(normalized.applicationEnd);
+             if (!isNaN(parsedDate)) {
+                 const lastDate = new Date(parsedDate);
                  const today = new Date();
                  today.setHours(0, 0, 0, 0);
-                 if (parsedDate < today) {
+                 if (lastDate < today) {
                     finalStatus = 'REJECTED';
                     validation.errors.push('EXPIRED_LAST_DATE');
                  }
