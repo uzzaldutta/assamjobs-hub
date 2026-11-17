@@ -12,29 +12,46 @@ export class JobAssamHubAdapter implements SourceAdapter {
 
   async discover(): Promise<RawContent[]> {
     try {
-      const res = await fetch(`${this.sourceConfig.base_url}/feed/`, { 
-        headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
-        signal: AbortSignal.timeout(8000)
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const xml = await res.text();
-      const $ = cheerio.load(xml, { xmlMode: true });
-      
+      const baseUrl = this.sourceConfig.base_url || 'https://jobassamhub.com';
+      const endpoints = [
+        `${baseUrl}/feed/`,
+        `${baseUrl}/category/admit-card/feed/`,
+        `${baseUrl}/category/results/feed/`,
+        `${baseUrl}/category/admission/feed/`
+      ];
+
       const items: RawContent[] = [];
-      $('item').each((i, el) => {
-        const title = $(el).find('title').text().trim();
-        const link = $(el).find('link').text().trim();
-        const categories = $(el).find('category').map((i, c) => $(c).text()).get();
-        
-        if (title && link) {
-           items.push({
-             url: link,
-             externalId: link,
-             json: { categories }
-           });
+      const seen = new Set<string>();
+
+      for (const ep of endpoints) {
+        try {
+          const res = await fetch(ep, { 
+            headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
+            signal: AbortSignal.timeout(8000)
+          });
+          if (!res.ok) continue;
+          const xml = await res.text();
+          const $ = cheerio.load(xml, { xmlMode: true });
+          
+          $('item').each((i, el) => {
+            const title = $(el).find('title').text().trim();
+            const link = $(el).find('link').text().trim();
+            const categories = $(el).find('category').map((i, c) => $(c).text()).get();
+            
+            if (title && link && !seen.has(link)) {
+              seen.add(link);
+              items.push({
+                url: link,
+                externalId: link,
+                json: { categories }
+              });
+            }
+          });
+        } catch (epErr) {
+          console.warn(`JobAssamHub discovery error for ${ep}:`, epErr);
         }
-      });
-      return items.slice(0, 8);
+      }
+      return items.slice(0, 25);
     } catch (error) {
        console.error("JobAssamHub Discovery Error:", error);
        throw error;

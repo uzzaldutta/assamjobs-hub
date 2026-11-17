@@ -1,0 +1,100 @@
+========================================================
+[10-11-2026 11:36:26.81] Starting AssamJobsHub Autonomous Ingestion
+========================================================
+--- Step 1: Extracting Feeds from Active Sources ---
+========================================================
+[10-11-2026 12:00:01.72] Starting AssamJobsHub Autonomous Ingestion
+========================================================
+--- Step 1: Extracting Feeds from Active Sources ---
+◇ injected env (6) from .env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+=== Starting Feed Extraction ===
+Timestamp: 2026-11-10T06:30:06.425Z
+(node:8044) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Found 2 active sources: AssamCareer, Job Assam Hub
+
+--- Processing Source: AssamCareer (AssamCareerAdapter) ---
+✓ Completed extraction for: AssamCareer
+
+--- Processing Source: Job Assam Hub (JobAssamHubAdapter) ---
+✓ Completed extraction for: Job Assam Hub
+
+=== Ingestion Completed ===
+
+Latest Jobs in Database:
+┌─────────┬────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────┬──────────┬────────────────────────────────────┐
+│ (index) │ id                                     │ title                                                                              │ category │ scraped_at                         │
+├─────────┼────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────┼──────────┼────────────────────────────────────┤
+│ 0       │ 'c2232b85-743c-4101-ad2b-17076f5ec519' │ 'POWERGRID Engineer Trainee Recruitment 2026 – 319 Posts'                          │ 'OTHER'  │ '2026-11-10T05:45:21.883824+00:00' │
+│ 1       │ '2e4f94b3-4579-44f0-b338-494d411bdbfe' │ 'Bhattadev University Faculty Recruitment 2026 – 16 Posts, Online Apply'           │ 'OTHER'  │ '2026-11-10T05:45:20.334425+00:00' │
+│ 2       │ 'e47f80c9-2b2a-4055-9ae6-0807f830990d' │ 'BTC TET Recruitment 2026 – 852 GT & PGT Vacancy, Apply Online'                    │ 'OTHER'  │ '2026-11-10T05:45:18.394763+00:00' │
+│ 3       │ '45de44da-bfe8-4938-9245-6e7f51f733fe' │ 'Bank of Baroda Recruitment 2026 – 837 Posts for Wealth Management Services (WMS)' │ 'OTHER'  │ '2026-11-10T05:45:16.505206+00:00' │
+│ 4       │ 'ed3e9d34-5506-4fca-8e1f-c79d01f06941' │ 'Supreme Court of India Recruitment 2026 – 130 Junior Court Attendant Posts'       │ 'OTHER'  │ '2026-11-10T05:45:12.034162+00:00' │
+└─────────┴────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────┴──────────┴────────────────────────────────────┘
+
+Latest Ingestion Queue Items:
+┌─────────┬────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────┬──────────────┬────────────┬───────────────┬────────────────────────────────────┐
+│ (index) │ id                                     │ title                                                                 │ content_type │ status     │ quality_score │ created_at                         │
+├─────────┼────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────┼──────────────┼────────────┼───────────────┼────────────────────────────────────┤
+│ 0       │ '8257de17-69d8-4ac8-b16f-bbcb400d16d6' │ 'AEES Faculty Recruitment 2026 – 254 Posts, Online Apply'             │ 'JOB'        │ 'APPROVED' │ 100           │ '2026-11-10T05:43:54.820946+00:00' │
+│ 1       │ '62338f30-e73b-4010-aea8-58836c1c5d7d' │ 'IIM CAT Notification 2026 – Download CAT Hall Ticket'                │ 'ADMIT_CARD' │ 'APPROVED' │ 70            │ '2026-11-10T05:43:48.876402+00:00' │
+│ 2       │ '447c7653-d02b-431e-9e34-10d6173ba2f7' │ 'IRCON International Limited Recruitment – 37 Posts [Walk-in]'        │ 'JOB'        │ 'APPROVED' │ 70            │ '2026-11-10T05:43:45.19899+00:00'  │
+│ 3       │ '011ba175-d687-4b5f-8102-c10dd8fe2e90' │ 'Armed Forces Medical Services Recruitment – 120 Posts, Online Apply' │ 'JOB'        │ 'APPROVED' │ 100           │ '2026-11-10T05:43:09.117019+00:00' │
+│ 4       │ 'c2232b85-743c-4101-ad2b-17076f5ec519' │ 'POWERGRID Engineer Trainee Recruitment 2026 – 319 Posts'             │ 'JOB'        │ 'APPROVED' │ 90            │ '2026-11-09T23:32:14.452368+00:00' │
+└─────────┴────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────┴──────────────┴────────────┴───────────────┴────────────────────────────────────┘
+--- Step 2: Approving and Publishing High Quality Posts ---
+◇ injected env (6) from .env.local // tip: ⌁ auth for agents [www.vestauth.com]
+Items eligible for approval: 1
+✗ Failed to approve Central Warehousing Corporation Recruitment 2026 – 327 Posts, Online Apply: duplicate key value violates unique constraint "jobs_pkey"
+Finished approving items!
+--- Step 3: Revalidating Production Edge Cache ---
+{"revalidated":true,"now":1794292256183}[10-11-2026 12:00:01.72] Autonomous Ingestion Finished Successfully.
+
+========================================================
+[16-11-2026 12:00:02.54] Starting AssamJobsHub Autonomous Ingestion
+========================================================
+--- Step 1: Extracting Feeds from Active Sources ---
+◇ injected env (6) from .env.local // tip: ⌁ auth for agents [www.vestauth.com]
+=== Starting Feed Extraction ===
+Timestamp: 2026-11-16T06:30:15.696Z
+(node:4108) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Found 2 active sources: AssamCareer, Job Assam Hub
+
+--- Processing Source: AssamCareer (AssamCareerAdapter) ---
+✓ Completed extraction for: AssamCareer
+
+--- Processing Source: Job Assam Hub (JobAssamHubAdapter) ---
+✓ Completed extraction for: Job Assam Hub
+
+=== Ingestion Completed ===
+
+Latest Jobs in Database:
+┌─────────┬────────────────────────────────────────┬─────────────────────────────────────────────────────────────────────────────┬─────────────────┬────────────────────────────────────┐
+│ (index) │ id                                     │ title                                                                       │ category        │ scraped_at                         │
+├─────────┼────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────┼─────────────────┼────────────────────────────────────┤
+│ 0       │ 'f9a37f06-c330-4510-af49-1ec3bc6667e3' │ 'ASRB ICAR Recruitment 2026 – 1393 Technical Assistant Posts, Online Apply' │ 'OTHER'         │ '2026-11-16T06:01:10.463303+00:00' │
+│ 1       │ '7f5b0e5e-62a1-4765-87a8-c711538989bd' │ 'Apex Bank Result 2026 – Check 150 Assistant Posts Final Result'            │ 'OTHER'         │ '2026-11-16T06:00:25.731617+00:00' │
+│ 2       │ '446c1af1-1f40-4738-b1c8-46b0e670aa73' │ 'AISSEE 2027 – Sainik School Class 6 & 9 Admission Form'                    │ 'CENTRAL_GOVT'  │ '2026-11-16T06:00:08.658204+00:00' │
+│ 3       │ '60522c0a-f556-4273-bfb0-9b5628d46f66' │ 'Patkai Senior Secondary School Recruitment – Faculty Posts, Online Apply'  │ 'LOCAL_PRIVATE' │ '2026-11-15T12:57:54.159133+00:00' │
+│ 4       │ 'd3e1201b-1f15-445c-9a71-86f67f1d5d3e' │ 'Food Safety Assam Recruitment 2026 – 5 Vacancy, Online Apply'              │ 'OTHER'         │ '2026-11-15T12:57:49.729629+00:00' │
+└─────────┴────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────┴─────────────────┴────────────────────────────────────┘
+
+Latest Ingestion Queue Items:
+┌─────────┬────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────┬──────────────┬───────────────────┬───────────────┬────────────────────────────────────┐
+│ (index) │ id                                     │ title                                                                                     │ content_type │ status            │ quality_score │ created_at                         │
+├─────────┼────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────┼──────────────┼───────────────────┼───────────────┼────────────────────────────────────┤
+│ 0       │ '7f5b0e5e-62a1-4765-87a8-c711538989bd' │ 'Apex Bank Result 2026 – Check 150 Assistant Posts Final Result'                          │ 'RESULT'     │ 'APPROVED'        │ 90            │ '2026-11-16T06:00:24.879028+00:00' │
+│ 1       │ '446c1af1-1f40-4738-b1c8-46b0e670aa73' │ 'AISSEE 2027 – Sainik School Class 6 & 9 Admission Form'                                  │ 'ADMISSION'  │ 'APPROVED'        │ 90            │ '2026-11-16T05:56:20.424111+00:00' │
+│ 2       │ 'f9a37f06-c330-4510-af49-1ec3bc6667e3' │ 'ASRB ICAR Recruitment 2026 – 1393 Technical Assistant Posts, Online Apply'               │ 'JOB'        │ 'APPROVED'        │ 100           │ '2026-11-15T19:55:07.16484+00:00'  │
+│ 3       │ '393ca20f-fa4d-46db-a4ba-2283b3d3f467' │ 'Janata College Cachar Recruitment 2026 – 3 Assistant Professor & Junior Assistant Posts' │ 'JOB'        │ 'CHANGE_DETECTED' │ 100           │ '2026-11-15T14:05:35.084365+00:00' │
+│ 4       │ '952465d3-df2d-44ba-b3d4-7f2f9ea9a1fa' │ 'Don Bosco School Bahari Recruitment 2026 – PGT Post'                                     │ 'JOB'        │ 'APPROVED'        │ 70            │ '2026-11-15T12:56:25.056322+00:00' │
+└─────────┴────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────┴──────────────┴───────────────────┴───────────────┴────────────────────────────────────┘
+--- Step 2: Approving and Publishing High Quality Posts ---
+◇ injected env (6) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+Items eligible for approval: 1
+✗ Failed to approve Central Warehousing Corporation Recruitment 2026 – 327 Posts, Online Apply: duplicate key value violates unique constraint "jobs_pkey"
+Finished approving items!
+--- Step 3: Revalidating Production Edge Cache ---
+{"revalidated":true,"now":1794810668654}[16-11-2026 12:00:02.54] Autonomous Ingestion Finished Successfully.
+

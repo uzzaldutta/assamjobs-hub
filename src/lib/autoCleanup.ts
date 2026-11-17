@@ -36,7 +36,7 @@ export async function runAutoCleanup(options: { daysThreshold?: number } = {}): 
     // Exclude BANNED_KEYWORD blocklist rows
     const { data: jobs, error: fetchErr } = await supabase
       .from('jobs')
-      .select('id, title, last_date, scraped_at, created_at, category')
+      .select('id, title, last_date, scraped_at, category')
       .neq('category', 'BANNED_KEYWORD');
 
     if (fetchErr) {
@@ -58,9 +58,9 @@ export async function runAutoCleanup(options: { daysThreshold?: number } = {}): 
           }
         }
 
-        // Check 2: If no last date, or if scraped/created more than 30 days ago
+        // Check 2: If no last date, or if scraped more than 30 days ago
         if (!isExpired) {
-          const postedDateStr = job.scraped_at || job.created_at;
+          const postedDateStr = job.scraped_at;
           if (postedDateStr) {
             const postedDate = new Date(postedDateStr);
             if (!isNaN(postedDate.getTime()) && postedDate < cutoffDate) {

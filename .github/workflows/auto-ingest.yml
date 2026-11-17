@@ -1,11 +1,20 @@
-name: Automated Feed Ingestion (Twice Daily)
+name: Automated Feed Ingestion (Continuous Cloud Automation)
 
 on:
   schedule:
-    # 02:30 UTC = 8:00 AM IST (Morning Run)
-    - cron: '30 2 * * *'
-    # 14:30 UTC = 8:00 PM IST (Evening Run)
-    - cron: '30 14 * * *'
+    # Runs 6 times daily (every 3-4 hours during peak publishing hours):
+    # 00:30 UTC = 6:00 AM IST (Early morning notices)
+    - cron: '30 0 * * *'
+    # 03:30 UTC = 9:00 AM IST (Morning official circulars)
+    - cron: '30 3 * * *'
+    # 06:30 UTC = 12:00 PM IST (Midday updates)
+    - cron: '30 6 * * *'
+    # 09:30 UTC = 3:00 PM IST (Afternoon notifications)
+    - cron: '30 9 * * *'
+    # 12:30 UTC = 6:00 PM IST (Evening exam results & admit cards)
+    - cron: '30 12 * * *'
+    # 15:30 UTC = 9:00 PM IST (Nightly wrap-up & late releases)
+    - cron: '30 15 * * *'
   workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
 
 jobs:
@@ -17,8 +26,8 @@ jobs:
     steps:
       - name: Trigger Production Ingestion Endpoint
         run: |
-          echo "Executing scheduled feed extraction at $(date -u)"
-          HTTP_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X GET "https://assamjobshub.com/api/cron/ingestion?token=assamhub_cron_2026" -H "User-Agent: AssamJobsHub-AutoCron/1.0")
+          echo "Executing automated continuous feed extraction at $(date -u)"
+          HTTP_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X GET "https://assamjobshub.com/api/cron/ingestion?token=assamhub_cron_2026" -H "User-Agent: AssamJobsHub-AutoCron/1.0" --max-time 180)
           echo "$HTTP_RESPONSE"
           
           STATUS=$(echo "$HTTP_RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
@@ -26,4 +35,4 @@ jobs:
             echo "::error::Ingestion failed with HTTP status $STATUS"
             exit 1
           fi
-          echo "Feed ingestion completed successfully!"
+          echo "Automated feed extraction completed and published successfully!"

@@ -15,39 +15,52 @@ export class AssamCareerAdapter implements SourceAdapter {
       const items: RawContent[] = [];
       const seen = new Set<string>();
 
-      // 1. Primary Ultra-Fast Discovery: Official Blogger JSON Feed (takes ~1.5s)
-      try {
-        const feedUrl = 'https://www.assamcareer.com/feeds/posts/default?alt=json&max-results=15';
-        const res = await fetch(feedUrl, {
-          headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
-          signal: AbortSignal.timeout(6000)
-        });
+      // 1. Primary Ultra-Fast Discovery: Official Blogger JSON Feeds (All Categories: Jobs, Admissions, Results, Admit Cards, Scholarships)
+      // All categories: General Govt, Private Jobs, Railway, Admission, Result, Admit Card, Scholarship, Tender
+      const feedEndpoints = [
+        'https://www.assamcareer.com/feeds/posts/default?alt=json&max-results=15',
+        'https://www.assamcareer.com/feeds/posts/default/-/Private%20Jobs?alt=json&max-results=8',
+        'https://www.assamcareer.com/feeds/posts/default/-/Railway?alt=json&max-results=8',
+        'https://www.assamcareer.com/feeds/posts/default/-/Admission?alt=json&max-results=8',
+        'https://www.assamcareer.com/feeds/posts/default/-/Result?alt=json&max-results=8',
+        'https://www.assamcareer.com/feeds/posts/default/-/Admit%20Card?alt=json&max-results=8',
+        'https://www.assamcareer.com/feeds/posts/default/-/Scholarship?alt=json&max-results=8',
+        'https://www.assamcareer.com/feeds/posts/default/-/Tender?alt=json&max-results=8'
+      ];
 
-        if (res.ok) {
-          const data = await res.json();
-          const entries = data.feed?.entry || [];
-          for (const entry of entries) {
-            const altLink = entry.link?.find((l: any) => l.rel === 'alternate');
-            const link = altLink ? altLink.href : '';
-            const title = entry.title?.$t?.trim() || '';
-            const categories = entry.category ? entry.category.map((c: any) => c.term) : [];
+      for (const feedUrl of feedEndpoints) {
+        try {
+          const res = await fetch(feedUrl, {
+            headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
+            signal: AbortSignal.timeout(6000)
+          });
 
-            if (link && !seen.has(link)) {
-              seen.add(link);
-              items.push({
-                url: link,
-                externalId: link,
-                json: { title, categories }
-              });
+          if (res.ok) {
+            const data = await res.json();
+            const entries = data.feed?.entry || [];
+            for (const entry of entries) {
+              const altLink = entry.link?.find((l: any) => l.rel === 'alternate');
+              const link = altLink ? altLink.href : '';
+              const title = entry.title?.$t?.trim() || '';
+              const categories = entry.category ? entry.category.map((c: any) => c.term) : [];
+
+              if (link && !seen.has(link)) {
+                seen.add(link);
+                items.push({
+                  url: link,
+                  externalId: link,
+                  json: { title, categories }
+                });
+              }
             }
           }
+        } catch (feedErr) {
+          console.warn(`AssamCareer JSON feed error for ${feedUrl}:`, feedErr);
         }
-      } catch (feedErr) {
-        console.warn('AssamCareer JSON feed discovery warning, trying fallback:', feedErr);
       }
 
       if (items.length > 0) {
-        return items.slice(0, 10);
+        return items;
       }
 
       // 2. Fallback: Direct HTML scraping if feed was unavailable
