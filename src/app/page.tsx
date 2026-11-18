@@ -4,6 +4,8 @@ import CategoryGrid from "@/components/CategoryGrid";
 import LatestUpdatesScroller, { FeedItem } from "@/components/LatestUpdatesScroller";
 import SubscribeForm from "@/components/SubscribeForm";
 import UnifiedJobMatrix from "@/components/UnifiedJobMatrix";
+import CommunityBadges from "@/components/CommunityBadges";
+import DailyMicroQuiz from "@/components/DailyMicroQuiz";
 import TenderCard from "@/components/feeds/TenderCard";
 import ScholarshipCard from "@/components/feeds/ScholarshipCard";
 import Link from "next/link";
@@ -124,6 +126,11 @@ export default async function Home() {
         <CategoryGrid />
       </div>
       
+      {/* PHASE 3: HIGH-CONVERTING WHATSAPP & TELEGRAM COMMUNITY BANNER */}
+      <div className="max-w-7xl mx-auto px-4 mt-3">
+        <CommunityBadges variant="banner" />
+      </div>
+      
       {/* 3. LATEST UPDATES TICKER & CLASSIC UPDATES BOARD */}
       <div className="max-w-7xl mx-auto px-4 mt-1">
         <LatestUpdatesScroller recentItems={uniqueRecent} closingSoonItems={allClosing} />
@@ -143,6 +150,9 @@ export default async function Home() {
           recentAdmitCards={recentAdmitCards || []}
           recentAdmissions={recentAdmissions || []}
         />
+
+        {/* PHASE 4: DAILY 5-MINUTE MICRO-QUIZ CAROUSEL */}
+        <DailyMicroQuiz />
 
         {/* EXAM PREPARATION & FREE MOCK TESTS SHOWCASE */}
         <section className="bg-gradient-to-r from-indigo-900/10 via-purple-900/10 to-emerald-900/10 rounded-3xl p-6 sm:p-8 border border-indigo-100 dark:border-indigo-900/40">

@@ -18,6 +18,8 @@ import NotificationBell from "@/components/NotificationBell";
 import AccountPlaceholder from "@/components/AccountPlaceholder";
 import Script from "next/script";
 import HeaderScrollTracker from "@/components/HeaderScrollTracker";
+import CommunityBadges from "@/components/CommunityBadges";
+import MobileCommunityBar from "@/components/MobileCommunityBar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -176,6 +178,9 @@ export default function RootLayout({
                     </ul>
                   </div>
 
+                  {/* Phase 3: Desktop Sidebar Community Hub */}
+                  <CommunityBadges variant="compact" />
+
                   {/* Subscribe Form */}
                   <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
                     <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-sm">Get Job Alerts</h4>
@@ -188,6 +193,9 @@ export default function RootLayout({
                   </main>
               </div>
               <Footer />
+
+              {/* Phase 3: High-Converting Mobile Sticky Alerts Bar */}
+              <MobileCommunityBar />
 
               <MobileBottomNav />
             </div>
