@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ testId: s
   
   const title = record.title || 'AssamJobs Hub';
   const desc = record.description || record.excerpt || `Access ${title} on AssamJobs Hub.`;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com';
   const url = `${baseUrl}/mock-tests/${record.id}`;
 
   return {
@@ -56,7 +56,7 @@ export default async function MockTestDetail(props: { params: Promise<{ testId: 
             "@context": "https://schema.org",
             "@type": "WebPage",
             "name": test?.title || "AssamJobs Hub",
-            "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com'}/mock-tests/${test?.id}`
+            "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com'}/mock-tests/${test?.id}`
           })
         }}
       />

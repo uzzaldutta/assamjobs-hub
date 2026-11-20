@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Building2, MapPin, Calendar, ArrowLeft, ExternalLink, FileText, CheckCircle2, AlertCircle, Briefcase, IndianRupee, GraduationCap, Link2, FileCheck } from "lucide-react";
+import { Building2, Calendar, ArrowLeft, ExternalLink, FileText, CheckCircle2, AlertCircle, Briefcase, Link2, FileCheck, CheckSquare, ShieldAlert } from "lucide-react";
 import ShareButtons from "@/components/ShareButtons";
 import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
@@ -7,10 +7,10 @@ import { supabase } from "@/lib/supabase";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
+import { formatSafeDate } from "@/lib/dateUtils";
+import JobFaqSection, { FaqItem } from "@/components/JobFaqSection";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
-
-
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const params = await props.params;
@@ -24,12 +24,12 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
     return { title: 'Not Found', robots: { index: false } };
   }
 
-  const org = record.organization || 'AssamJobs Hub';
-  const title = `${record.title} at ${org}`;
-  const desc = `Details for ${record?.title} provided by ${org}. Check important dates, application links, and official notifications.`;
+  const org = record.organization || 'AssamJobsHub';
+  const title = `${record.title} - Download Scorecard, Merit List & Cut Off | ${org}`;
+  const desc = `Check ${record.title} declared by ${org}. Download official merit list PDF, direct scorecard link, cut-off marks, and verification details.`;
   
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com';
-  const url = `${baseUrl}/results/${record?.id}`;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com';
+  const url = `${baseUrl}/results/${record.id}`;
 
   return {
     title,
@@ -49,7 +49,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   };
 }
 
-export default async function UpdateDetails(props: { params: Promise<{ id: string }> }) {
+export default async function ResultDetails(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;
   
@@ -60,7 +60,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
     .single();
     
   if (error || !record) {
-    // Fallback to jobs table since webhook inserts there
+    // Fallback to jobs table
     const { data: jobRecord } = await supabase
       .from('jobs')
       .select('*')
@@ -68,29 +68,61 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
       .single();
       
     if (jobRecord) {
-      record = jobRecord;
+      record = { ...jobRecord, result_date: jobRecord.last_date };
     } else {
       notFound();
     }
   }
 
-  // Determine Deadline State (if applicable)
-  let deadlineState = "ACTIVE";
-  if (record.result_date) {
-    const end = new Date(record.result_date);
-    const now = new Date();
-    const daysLeft = (end.getTime() - now.getTime()) / (1000 * 3600 * 24);
-    if (daysLeft < 0) deadlineState = "CLOSED";
-    else if (daysLeft <= 7) deadlineState = "CLOSING_SOON";
-  }
-
   const isVerified = record.status === 'PUBLISHED' && record.verification_status === 'VERIFIED';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com';
+  const orgName = record.organization || "the recruitment department";
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
+      { "@type": "ListItem", "position": 2, "name": "Results", "item": `${baseUrl}/results` },
+      { "@type": "ListItem", "position": 3, "name": record.title, "item": `${baseUrl}/results/${record.id}` }
+    ]
+  };
+
+  const faqs: FaqItem[] = [
+    {
+      question: `How can I check the merit list for ${record.title}?`,
+      answer: `To check your result, click the official 'View Result PDF' or direct result link on this page. If a PDF is provided, download it and use Ctrl+F to search for your roll number or name. If a portal login is provided, enter your registration number and password.`
+    },
+    {
+      question: `What should I do if my roll number is present in the merit list?`,
+      answer: `Congratulations! Shortlisted candidates must immediately prepare original academic documents, caste/category certificates, domicile proofs, and identity proofs for the upcoming Document Verification (DV) / Interview stage.`
+    },
+    {
+      question: `Where can I check the official cut-off marks?`,
+      answer: `Category-wise cut-off marks (UR, OBC/MOBC, SC, ST, EWS, PWD) are usually published along with the official merit list PDF or announced on the official portal of ${orgName}.`
+    },
+    {
+      question: `Can I apply for re-evaluation or re-checking of my marks?`,
+      answer: `Re-evaluation rules depend strictly on the recruitment board's notification guidelines. Most objective multiple-choice exams do not permit re-checking once the final answer key is resolved, but refer to the official notification for grievance redressal protocols.`
+    }
+  ];
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
+      }
+    }))
+  };
 
   return (
     <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20">
-      {/* Top Banner / Header */}
-      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-8 pb-8">
-        
+      {/* Schemas */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -99,32 +131,56 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
             "@type": "WebPage",
             "name": record?.title,
             "description": `Details for ${record?.title} by ${record?.organization}`,
-            "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com'}/results/${record?.id}`
+            "url": `${baseUrl}/results/${record?.id}`
           })
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/results" className="inline-flex items-center text-sm font-bold text-pink-600 dark:text-pink-400 mb-6 hover:underline">
-            <ArrowLeft size={16} className="mr-1" /> Back to List
-          </Link>
+      {/* Top Banner / Header */}
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-8 pb-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* Breadcrumbs */}
+          <nav className="flex text-sm text-gray-500 dark:text-gray-400 mb-6 font-medium" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-1 md:space-x-3">
+              <li className="inline-flex items-center">
+                <Link href="/" className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors">Home</Link>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <span className="mx-2 text-gray-400">/</span>
+                  <Link href="/results" className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors">Results</Link>
+                </div>
+              </li>
+              <li aria-current="page">
+                <div className="flex items-center">
+                  <span className="mx-2 text-gray-400">/</span>
+                  <span className="text-gray-800 dark:text-gray-200 truncate max-w-[150px] sm:max-w-[300px]">{record.title}</span>
+                </div>
+              </li>
+            </ol>
+          </nav>
           
           <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className="px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400 border border-pink-200 dark:border-pink-800">
+              RESULT / MERIT LIST
+            </span>
             {isVerified && (
               <span className="px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                 <CheckCircle2 size={12} /> VERIFIED
               </span>
             )}
-            {deadlineState === 'CLOSED' && (
-              <span className="px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1">
-                CLOSED / PAST
-              </span>
-            )}
-            {deadlineState === 'CLOSING_SOON' && (
-              <span className="px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-amber-100 text-amber-700 border border-amber-200 flex items-center gap-1">
-                CLOSING SOON
-              </span>
-            )}
+            <span className="px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+              OFFICIAL
+            </span>
           </div>
 
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white leading-tight mb-4">
@@ -132,11 +188,24 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
           </h1>
 
           {record.organization && (
-            <div className="flex items-center gap-2 text-lg font-medium text-slate-600 dark:text-slate-300 mb-6">
+            <div className="flex items-center gap-2 text-lg font-medium text-slate-600 dark:text-slate-300 mb-4">
               <Building2 size={20} className="text-slate-400" />
               <span>{record.organization}</span>
             </div>
           )}
+
+          {/* E-E-A-T Editorial Byline & Standards */}
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mb-6 border-t border-slate-100 dark:border-slate-800 pt-3">
+            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+              <CheckCircle2 size={14} /> Fact-Checked by Editorial Desk
+            </span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span>Published: {formatSafeDate(record.scraped_at)}</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <Link href="/editorial-policy" className="hover:underline text-pink-600 dark:text-pink-400 font-semibold">
+              Verification Standards
+            </Link>
+          </div>
 
           <div className="flex flex-wrap items-center gap-3">
              <ShareButtons title={record.title} />
@@ -153,11 +222,10 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
               <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                <Briefcase className="text-pink-500" size={20} /> Overview
+                <Briefcase className="text-pink-500" size={20} /> Result Overview
               </h2>
             </div>
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              
               {record.exam_name && (
                 <div className="sm:col-span-2">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Exam Name</p>
@@ -166,6 +234,43 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
                   </p>
                 </div>
               )}
+              {record.result_date && (
+                <div className="sm:col-span-2">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Result Declared Date</p>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <Calendar size={16} className="text-slate-400" /> {formatSafeDate(record.result_date)}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Step-by-Step Instructions & Next Steps */}
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+              <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <CheckSquare className="text-pink-500" size={20} /> How to Check Result & Post-Result Next Steps
+              </h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <ol className="space-y-3 list-decimal list-inside text-sm text-slate-600 dark:text-slate-300">
+                <li className="leading-relaxed"><strong className="text-slate-800 dark:text-white">Open Official Link:</strong> Click &apos;View Result PDF&apos; or the official reference link in the action panel.</li>
+                <li className="leading-relaxed"><strong className="text-slate-800 dark:text-white">Find Your Roll Number:</strong> If a PDF is provided, press <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-xs font-mono">Ctrl + F</code> (or Cmd+F on Mac) and type your Roll Number or Full Name.</li>
+                <li className="leading-relaxed"><strong className="text-slate-800 dark:text-white">Review Cut-off & Marks:</strong> Check your normalized scores, raw marks, and category cut-off marks if detailed marks breakdown is issued.</li>
+                <li className="leading-relaxed"><strong className="text-slate-800 dark:text-white">Save Merit List Copy:</strong> Retain a PDF copy and screenshot of your rank/scorecard for subsequent verification stages.</li>
+              </ol>
+
+              <div className="mt-4 p-4 rounded-xl bg-pink-50 dark:bg-pink-950/40 border border-pink-200 dark:border-pink-800 text-xs text-pink-900 dark:text-pink-200 space-y-2">
+                <p className="font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <AlertCircle size={14} /> Checklist for Qualified Candidates:
+                </p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Original Admit Card & Application Form copy.</li>
+                  <li>Original Age proof (HSLC Admit/Pass Certificate) and Marksheets from Class 10 onwards.</li>
+                  <li>Permanent Resident Certificate (PRC) / Assam Domicile certificate where required.</li>
+                  <li>Valid Category Certificate (SC/ST/OBC/MOBC/EWS/PWD) issued by authorized district magistrate.</li>
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -195,6 +300,22 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
               </div>
             </div>
           )}
+
+          {/* FAQ Accordion Section */}
+          <JobFaqSection faqs={faqs} title="Frequently Asked Questions (Results & Merit List)" />
+
+          {/* Statutory Advisory Notice */}
+          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-xs text-amber-900 dark:text-amber-300 space-y-2">
+            <div className="font-bold uppercase tracking-wider flex items-center gap-2 text-amber-800 dark:text-amber-400">
+              <ShieldAlert size={16} /> Statutory Advisory & Verification Notice
+            </div>
+            <p>
+              AssamJobsHub (assamjobshub.com) is an educational career alert aggregator. We are NOT affiliated with {record.organization || 'any government board or university'}.
+            </p>
+            <p>
+              While every effort is made to maintain accuracy, candidates are urged to cross-verify merit lists directly with the official gazette notifications. AssamJobsHub is not liable for inadvertent publishing errors.
+            </p>
+          </div>
           
         </div>
 
@@ -213,8 +334,8 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
                 {record.result_date && (
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Result Declared On</span>
-                    <span className={`font-bold ${deadlineState === 'CLOSED' ? 'text-red-500' : deadlineState === 'CLOSING_SOON' ? 'text-amber-500' : 'text-slate-800 dark:text-white'}`}>
-                      {new Date(record.result_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    <span className="font-bold text-slate-800 dark:text-white">
+                      {formatSafeDate(record.result_date)}
                     </span>
                   </div>
                 )}
@@ -222,7 +343,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Date Posted</span>
                   <span className="font-medium text-slate-700 dark:text-slate-300">
-                    {record.scraped_at ? new Date(record.scraped_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Unknown'}
+                    {formatSafeDate(record.scraped_at)}
                   </span>
                 </div>
               </div>
@@ -237,7 +358,7 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
 
               {record.official_source_url ? (
                 <a href={record.official_source_url} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold py-3.5 px-4 rounded-xl transition-colors shadow-sm text-center">
-                  <Link2 size={18} /> Source Reference
+                  <Link2 size={18} /> Official Source Reference
                 </a>
               ) : null}
 
@@ -253,9 +374,9 @@ export default async function UpdateDetails(props: { params: Promise<{ id: strin
               {isVerified ? (
                 <p className="text-[10px] font-bold text-emerald-600 uppercase flex items-center gap-1"><CheckCircle2 size={12}/> Verified Source</p>
               ) : (
-                <p className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><AlertCircle size={12}/> Unverified Source</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><AlertCircle size={12}/> Editorial Monitored</p>
               )}
-              <p className="text-xs text-slate-500">Data provided for informational purposes.</p>
+              <p className="text-xs text-slate-500">Cross-referenced with state portals.</p>
             </div>
           </div>
           

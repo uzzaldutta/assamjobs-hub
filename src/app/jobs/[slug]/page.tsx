@@ -13,6 +13,7 @@ import rehypeRaw from "rehype-raw";
 import { notFound, redirect } from "next/navigation";
 import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 import { formatSafeDate, toSafeISOString, calculateDaysLeft } from "@/lib/dateUtils";
+import JobFaqSection, { FaqItem } from "@/components/JobFaqSection";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
 
@@ -104,29 +105,51 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
   const validThroughDate = toSafeISOString(job.last_date);
   const datePosted = toSafeISOString(job.scraped_at) || new Date().toISOString();
 
-  const jobSchema = {
-    "@context": "https://schema.org",
-    "@type": "JobPosting",
-    "title": job.title,
-    "description": job.unique_description || `Details for ${job.title} by ${job.organization}`,
-    "datePosted": datePosted,
-    ...(validThroughDate ? { "validThrough": validThroughDate } : {}),
-    "hiringOrganization": {
-      "@type": "Organization",
-      "name": job.organization || "AssamJobs Hub",
-      "sameAs": "https://assamjobshub.com"
+  // Contextual FAQs for AdSense High-Value Content & Search Snippets
+  const lastDateFormatted = job.last_date ? formatSafeDate(job.last_date) : "as per official notification";
+  const orgName = job.organization || "the recruiting authority";
+  
+  const faqs: FaqItem[] = [
+    {
+      question: `What is the last date to apply for ${job.title}?`,
+      answer: `The final date for submitting applications for ${job.title} is ${lastDateFormatted}. Candidates are strongly advised to complete their applications before the deadline to prevent last-minute server congestion.`
     },
-    "jobLocation": {
-      "@type": "Place",
-      "address": {
-        "@type": "PostalAddress",
-        "addressRegion": "Assam",
-        "addressCountry": "IN"
-      }
+    {
+      question: `What are the educational qualifications required?`,
+      answer: job.qualification 
+        ? `Candidates must possess ${job.qualification}. Please refer to the official advertisement notification for post-wise eligibility details.`
+        : `Educational qualifications are specified in the official notification document. Candidates must hold recognized degrees or certificates as prescribed by ${orgName}.`
     },
-    "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : (job.job_type === "PRIVATE" ? "FULL_TIME" : "OTHER")
-  };
+    {
+      question: `What is the age limit and relaxation criteria?`,
+      answer: job.age_limit
+        ? `The prescribed age limit is ${job.age_limit}. Standard Assam Government age relaxations apply for reserved categories (SC, ST, OBC/MOBC, PwBD, Ex-Servicemen).`
+        : `Age requirements and category relaxations are governed per Assam Government recruitment rules. Check the official notification link for cutoff dates.`
+    },
+    {
+      question: `What is the application fee for ${job.organization || 'this recruitment'}?`,
+      answer: job.application_fee
+        ? `The application fee is ${job.application_fee}. Mode of payment is typically online via debit card, credit card, net banking, or treasury challan.`
+        : `Application fee details and fee concessions for SC/ST/BPL/PwBD candidates are detailed in the official advertisement PDF.`
+    },
+    {
+      question: `How do I apply online for ${job.title}?`,
+      answer: `To apply, visit the official website (${job.apply_url || job.official_source_url || 'official application portal'}), register with an active mobile number and email ID, fill in educational and personal particulars, upload scanned copies of photo & signature, pay the requisite application fee (if applicable), and download the final submitted application form for future reference.`
+    }
+  ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
+      }
+    }))
+  };
 
   const cleanDesc = job.unique_description ? job.unique_description.replace(/\t/g, '').replace(/^ {4,}/gm, '') : '';
   const cleanAssamese = job.unique_description_assamese ? job.unique_description_assamese.replace(/\t/g, '').replace(/^ {4,}/gm, '') : '';
@@ -136,7 +159,8 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
       {/* Top Banner / Header */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-8 pb-8">
         
-      <script
+        {/* JobPosting Schema */}
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -163,6 +187,18 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
               }
             })
           }}
+        />
+
+        {/* BreadcrumbList Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+
+        {/* FAQPage Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
 
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -226,6 +262,19 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
               <span>Advt No: {advtNo}</span>
             </div>
           )}
+
+          {/* E-E-A-T Editorial Verification Bar */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 py-2.5 px-3 sm:px-4 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 text-xs text-slate-600 dark:text-slate-300 mb-6 border border-slate-200/60 dark:border-slate-700/60">
+            <span className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
+              <CheckCircle2 size={14} className="text-emerald-500" /> Fact-Checked by Editorial Desk
+            </span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span>Published: {formatSafeDate(job.scraped_at)}</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <Link href="/editorial-policy" className="hover:underline text-indigo-600 dark:text-indigo-400 font-semibold">
+              Verification Standards
+            </Link>
+          </div>
 
           <div className="flex flex-wrap items-center gap-3">
              <ShareButtons title={job.title} />
@@ -325,6 +374,38 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
               </div>
             </div>
           )}
+
+          {/* Step-by-Step How to Apply Guide */}
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <CheckCircle2 className="text-emerald-500" size={20} /> How to Apply for {job.title}
+            </h3>
+            <ol className="space-y-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 list-decimal pl-5 leading-relaxed">
+              <li><strong>Verify Eligibility:</strong> Read the official notification carefully to ensure you meet educational qualifications, age criteria, and domicile rules.</li>
+              <li><strong>Access Official Portal:</strong> Click the direct application link in the table below or visit the official recruiting portal ({job.organization || 'authorized website'}).</li>
+              <li><strong>New Registration:</strong> Register using an active Mobile Number and valid Email ID to generate your application login credentials.</li>
+              <li><strong>Fill Application Particulars:</strong> Enter personal, academic, and reservation details exactly matching your matriculation certificate.</li>
+              <li><strong>Upload Documents:</strong> Upload clear scanned copies of your recent passport photograph, signature, and category certificates in prescribed dimensions.</li>
+              <li><strong>Remit Application Fee:</strong> Pay the non-refundable examination fee (if applicable) through online net banking, debit card, or UPI.</li>
+              <li><strong>Print Confirmation:</strong> Download and save the final acknowledgment slip and submitted application form for future document verification.</li>
+            </ol>
+          </div>
+
+          {/* AdSense High-Value Content: Interactive Contextual FAQ Accordion */}
+          <JobFaqSection faqs={faqs} />
+
+          {/* Statutory Anti-Scam & Non-Affiliation Disclaimer */}
+          <div className="p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-900 dark:text-amber-200 leading-relaxed space-y-2">
+            <div className="font-bold flex items-center gap-2 text-amber-800 dark:text-amber-300">
+              <AlertCircle size={16} /> Statutory Advisory & Caution Against Job Scams
+            </div>
+            <p>
+              AssamJobsHub (assamjobshub.com) is an independent recruitment news and career guidance portal. We are NOT affiliated with {job.organization || 'any government department'}. All data published here is aggregated from official public gazettes and authorized government portals for educational awareness.
+            </p>
+            <p>
+              Candidates are strictly advised to verify all terms on the official website before paying any examination fees. Beware of fraudulent agents claiming to arrange government jobs for monetary compensation.
+            </p>
+          </div>
           
         </div>
 

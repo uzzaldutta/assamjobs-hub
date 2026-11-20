@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ materialI
   
   const title = record.title || 'AssamJobs Hub';
   const desc = record.description || record.excerpt || `Access ${title} on AssamJobs Hub.`;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com';
   const url = `${baseUrl}/study-materials/${record.id}`;
 
   return {
@@ -57,7 +57,7 @@ export default async function StudyMaterialDetail(props: { params: Promise<{ mat
             "@context": "https://schema.org",
             "@type": "Article",
             "name": material?.title || "AssamJobs Hub",
-            "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com'}/study-materials/${material?.id}`
+            "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com'}/study-materials/${material?.id}`
           })
         }}
       />

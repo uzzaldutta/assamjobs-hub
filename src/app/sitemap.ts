@@ -23,8 +23,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/mock-tests`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
     { url: `${baseUrl}/updates`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
     
-    // Tools & Utilities
-    { url: `${baseUrl}/tools`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    // Tools & Utilities (High-Value Interactive Assets for AdSense & SEO)
+    { url: `${baseUrl}/tools`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/career-advisor`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/study-planner`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/interview-prep`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/marks-calculator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/age-calculator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/typing-test`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/standard-form`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/resume-builder`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/cv-maker`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/cgpa-converter`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/eligibility-checker`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/fee-calculator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/salary-calculator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/tender-calculator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/photo-resizer`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/photo-maker`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/tools/pdf-merger`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
 
     // Institutional Trust & Legal Pages (AdSense Compliance)
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
@@ -61,22 +78,46 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       tenders.forEach((t) => routes.push({ url: `${baseUrl}/tenders/${t.id}`, lastModified: new Date(t.created_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 }));
     }
 
-    // 3. Admissions
-    const { data: admissions } = await supabase.from('admissions').select('id, created_at').eq('status', 'PUBLISHED').limit(500);
-    if (admissions) {
-      admissions.forEach((a) => routes.push({ url: `${baseUrl}/admissions/${a.id}`, lastModified: new Date(a.created_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 }));
+    // 3. Admissions (Primary from jobs where job_type = ADMISSION + fallback admissions table)
+    const { data: admissionsJobs } = await supabase.from('jobs').select('id, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMISSION').limit(500);
+    if (admissionsJobs) {
+      admissionsJobs.forEach((a) => routes.push({ url: `${baseUrl}/admissions/${a.id}`, lastModified: new Date(a.scraped_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 }));
     }
 
-    // 4. Results
+    // 4. Results (Dual sync: results table + jobs where job_type = RESULT)
+    const seenResults = new Set<string>();
     const { data: results } = await supabase.from('results').select('id, created_at').eq('status', 'PUBLISHED').limit(500);
     if (results) {
-      results.forEach((r) => routes.push({ url: `${baseUrl}/results/${r.id}`, lastModified: new Date(r.created_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 }));
+      results.forEach((r) => {
+        seenResults.add(r.id);
+        routes.push({ url: `${baseUrl}/results/${r.id}`, lastModified: new Date(r.created_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 });
+      });
+    }
+    const { data: resultsJobs } = await supabase.from('jobs').select('id, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'RESULT').limit(500);
+    if (resultsJobs) {
+      resultsJobs.forEach((r) => {
+        if (!seenResults.has(r.id)) {
+          routes.push({ url: `${baseUrl}/results/${r.id}`, lastModified: new Date(r.scraped_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 });
+        }
+      });
     }
 
-    // 5. Admit Cards
+    // 5. Admit Cards (Dual sync: admit_cards table + jobs where job_type = ADMIT_CARD)
+    const seenAdmitCards = new Set<string>();
     const { data: admitCards } = await supabase.from('admit_cards').select('id, created_at').eq('status', 'PUBLISHED').limit(500);
     if (admitCards) {
-      admitCards.forEach((a) => routes.push({ url: `${baseUrl}/admit-cards/${a.id}`, lastModified: new Date(a.created_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 }));
+      admitCards.forEach((a) => {
+        seenAdmitCards.add(a.id);
+        routes.push({ url: `${baseUrl}/admit-cards/${a.id}`, lastModified: new Date(a.created_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 });
+      });
+    }
+    const { data: admitJobs } = await supabase.from('jobs').select('id, scraped_at').eq('status', 'PUBLISHED').eq('job_type', 'ADMIT_CARD').limit(500);
+    if (admitJobs) {
+      admitJobs.forEach((a) => {
+        if (!seenAdmitCards.has(a.id)) {
+          routes.push({ url: `${baseUrl}/admit-cards/${a.id}`, lastModified: new Date(a.scraped_at || Date.now()), changeFrequency: 'weekly', priority: 0.7 });
+        }
+      });
     }
 
     // 6. Scholarships

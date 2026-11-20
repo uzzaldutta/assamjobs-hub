@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   const title = `${exam.title} Preparation, Syllabus & Mock Tests`;
   const desc = exam.description || `Prepare for ${exam.title} with complete syllabus, study materials, and mock tests.`;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobs-hub.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com';
   const url = `${baseUrl}/exam/${exam.slug}`;
 
   return {

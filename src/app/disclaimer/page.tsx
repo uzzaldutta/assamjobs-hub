@@ -8,7 +8,7 @@ export const revalidate = false;
 export const metadata: Metadata = {
   title: 'Disclaimer | AssamJobsHub',
   description: 'Official non-affiliation disclaimer and educational policy of AssamJobsHub.',
-  alternates: { canonical: '/disclaimer' },
+  alternates: { canonical: 'https://assamjobshub.com/disclaimer' },
 };
 
 export default function DisclaimerPage() {

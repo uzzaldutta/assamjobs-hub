@@ -6,8 +6,8 @@ export const revalidate = false;
 
 export const metadata: Metadata = {
   title: 'Terms of Service | AssamJobsHub',
-  description: 'Terms and Conditions for using AssamJobsHub.',
-  alternates: { canonical: '/terms' },
+  description: 'Terms and Conditions for using AssamJobsHub career guidance and alerts portal.',
+  alternates: { canonical: 'https://assamjobshub.com/terms' },
 };
 
 export default function TermsPage() {

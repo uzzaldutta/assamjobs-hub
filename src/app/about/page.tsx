@@ -8,7 +8,7 @@ export const revalidate = false;
 export const metadata: Metadata = {
   title: 'About Us | AssamJobsHub',
   description: 'Learn about AssamJobsHub, your trusted portal for verified government and private recruitment in Assam.',
-  alternates: { canonical: '/about' },
+  alternates: { canonical: 'https://assamjobshub.com/about' },
 };
 
 export default function AboutPage() {
