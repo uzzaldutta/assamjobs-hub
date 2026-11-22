@@ -11,6 +11,7 @@ import { AssamCareerAdapter } from '@/lib/ingestion/adapters/AssamCareerAdapter'
 import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggregatorAdapter';
 import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
 import { runAutoCleanup } from '@/lib/autoCleanup';
+import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
 
 // Secure the route with a cron secret or automated webhook token
 const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret';
@@ -60,6 +61,26 @@ export async function GET(req: Request) {
 
     await Promise.allSettled(promises);
 
+    // Auto-approve newly queued quality items
+    const { data: newItems } = await supabase
+      .from('ingestion_queue')
+      .select('id, title, content_type, quality_score')
+      .eq('status', 'NEW')
+      .gte('quality_score', 20);
+
+    let autoApprovedCount = 0;
+    if (newItems && newItems.length > 0) {
+      for (const item of newItems) {
+        if (!item.title || item.title.toLowerCase().includes('unknown')) continue;
+        try {
+          await approveQueueItemAction(item.id, 'NEW');
+          autoApprovedCount++;
+        } catch (approveErr: any) {
+          console.error(`Error auto-approving ${item.title}:`, approveErr.message);
+        }
+      }
+    }
+
     // Run automated 30-day cleanup of old feeds & queue
     let cleanupReport = null;
     try {
@@ -73,6 +94,7 @@ export async function GET(req: Request) {
       success: true, 
       timestamp: new Date().toISOString(),
       triggered: results,
+      autoApprovedCount,
       cleanup: cleanupReport 
     });
 

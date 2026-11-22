@@ -1,12 +1,16 @@
 "use server";
 
-
 import { supabaseAdmin as supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { generateUniqueSlug } from "@/lib/slugify";
 import { classifyJobType } from "@/lib/jobClassifier";
 
-
+function isDuplicateKeyError(err: any): boolean {
+  if (!err) return false;
+  return err.code === '23505' || 
+         String(err.message || '').toLowerCase().includes('duplicate key') || 
+         String(err.message || '').toLowerCase().includes('unique constraint');
+}
 
 export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'UPDATE' = 'NEW') {
   // 1. Fetch queue item
@@ -52,12 +56,12 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
     
     if (item.content_type === 'JOB' || item.content_type === 'PRIVATE_JOB') {
       const { data: newJob, error: insertErr } = await supabase.from('jobs').insert({
-          id: item.id,
+        id: item.id,
         slug: await generateUniqueSlug(payload.title),
         title: payload.title,
         organization: payload.organization || 'Unknown',
         job_type: item.content_type === 'PRIVATE_JOB' ? 'PRIVATE' : classifyJobType(payload.title, payload.organization, payload.categories),
-                category: payload.category || 'OTHER',
+        category: payload.category || 'OTHER',
         vacancies: payload.vacancy || 'Not Specified',
         district: payload.location || 'Assam',
         qualification: payload.qualification || null,
@@ -70,16 +74,25 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         status: 'PUBLISHED', 
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING',
         official_source_url: payload.sourceUrl || null,
-          unique_description: payload.unique_description || payload.description || null,
-          unique_description_assamese: payload.unique_description_assamese || null
-        }).select('id').single();
-        if (insertErr) throw new Error(insertErr.message);
+        unique_description: payload.unique_description || payload.description || null,
+        unique_description_assamese: payload.unique_description_assamese || null
+      }).select('id').single();
+
+      if (insertErr) {
+        if (isDuplicateKeyError(insertErr)) {
+          newRecordId = item.id;
+          modifiedRecordId = newRecordId;
+        } else {
+          throw new Error(insertErr.message);
+        }
+      } else {
         newRecordId = newJob.id;
-      modifiedRecordId = newRecordId;
+        modifiedRecordId = newRecordId;
+      }
     } 
     else if (item.content_type === 'TENDER') {
       const { data: newTender, error: insertErr } = await supabase.from('tenders').insert({
-          id: item.id,
+        id: item.id,
         title: payload.title,
         organization: payload.organization || 'Unknown',
         department: payload.department,
@@ -90,9 +103,18 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         status: 'PUBLISHED',
         verification_status: sourceMeta?.is_official ? 'VERIFIED' : 'VERIFICATION_PENDING'
       }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newTender.id;
-      modifiedRecordId = newRecordId;
+
+      if (insertErr) {
+        if (isDuplicateKeyError(insertErr)) {
+          newRecordId = item.id;
+          modifiedRecordId = newRecordId;
+        } else {
+          throw new Error(insertErr.message);
+        }
+      } else {
+        newRecordId = newTender.id;
+        modifiedRecordId = newRecordId;
+      }
     }
     else if (item.content_type === 'ADMISSION') {
       const { data: newAdm, error: insertErr } = await supabase.from('jobs').insert({
@@ -111,9 +133,18 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         unique_description: payload.unique_description || payload.description || null,
         unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertErr) throw new Error(insertErr.message);
-      newRecordId = newAdm.id;
-      modifiedRecordId = newRecordId;
+
+      if (insertErr) {
+        if (isDuplicateKeyError(insertErr)) {
+          newRecordId = item.id;
+          modifiedRecordId = newRecordId;
+        } else {
+          throw new Error(insertErr.message);
+        }
+      } else {
+        newRecordId = newAdm.id;
+        modifiedRecordId = newRecordId;
+      }
     }
     else if (item.content_type === 'RESULT') {
       // 1. Primary insert into jobs table so it appears in /results, homepage scroller, and search
@@ -133,9 +164,18 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         unique_description: payload.unique_description || payload.description || null,
         unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertJobErr) throw new Error(insertJobErr.message);
-      newRecordId = newResJob.id;
-      modifiedRecordId = newRecordId;
+
+      if (insertJobErr) {
+        if (isDuplicateKeyError(insertJobErr)) {
+          newRecordId = item.id;
+          modifiedRecordId = newRecordId;
+        } else {
+          throw new Error(insertJobErr.message);
+        }
+      } else {
+        newRecordId = newResJob.id;
+        modifiedRecordId = newRecordId;
+      }
 
       // 2. Dual-sync mirror to dedicated results table
       try {
@@ -151,7 +191,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
           official_source_url: payload.sourceUrl || null
         });
       } catch (mirrorErr) {
-        console.warn('Dual-sync mirror to results failed (non-critical):', mirrorErr);
+        console.warn('Dual-sync mirror to results handled:', mirrorErr);
       }
     }
     else if (item.content_type === 'ADMIT_CARD') {
@@ -172,9 +212,18 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         unique_description: payload.unique_description || payload.description || null,
         unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertJobErr) throw new Error(insertJobErr.message);
-      newRecordId = newAdcJob.id;
-      modifiedRecordId = newRecordId;
+
+      if (insertJobErr) {
+        if (isDuplicateKeyError(insertJobErr)) {
+          newRecordId = item.id;
+          modifiedRecordId = newRecordId;
+        } else {
+          throw new Error(insertJobErr.message);
+        }
+      } else {
+        newRecordId = newAdcJob.id;
+        modifiedRecordId = newRecordId;
+      }
 
       // 2. Dual-sync mirror to dedicated admit_cards table
       try {
@@ -192,7 +241,7 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
           official_source_url: payload.sourceUrl || null
         });
       } catch (mirrorErr) {
-        console.warn('Dual-sync mirror to admit_cards failed (non-critical):', mirrorErr);
+        console.warn('Dual-sync mirror to admit_cards handled:', mirrorErr);
       }
     }
     else if (item.content_type === 'SCHOLARSHIP') {
@@ -214,9 +263,18 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
         unique_description: payload.unique_description || payload.description || null,
         unique_description_assamese: payload.unique_description_assamese || null
       }).select('id').single();
-      if (insertJobErr) throw new Error(insertJobErr.message);
-      newRecordId = newSchJob.id;
-      modifiedRecordId = newRecordId;
+
+      if (insertJobErr) {
+        if (isDuplicateKeyError(insertJobErr)) {
+          newRecordId = item.id;
+          modifiedRecordId = newRecordId;
+        } else {
+          throw new Error(insertJobErr.message);
+        }
+      } else {
+        newRecordId = newSchJob.id;
+        modifiedRecordId = newRecordId;
+      }
 
       // 2. Dual-sync mirror to dedicated scholarships table
       try {
@@ -236,30 +294,32 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
           official_source_url: payload.sourceUrl || null
         });
       } catch (mirrorErr) {
-        console.warn('Dual-sync mirror to scholarships failed (non-critical):', mirrorErr);
+        console.warn('Dual-sync mirror to scholarships handled:', mirrorErr);
       }
     } else {
       throw new Error(`Unsupported content type: ${item.content_type}`);
     }
 
     // Create initial provenance
-    await supabase.from('job_provenance').insert({
-      canonical_id: newRecordId,
-      content_type: item.content_type,
-      source_name: sourceMeta?.source_name || payload.source,
-      source_url: payload.sourceUrl,
-      source_tier: sourceMeta?.tier || 2,
-      is_official: sourceMeta?.is_official || false,
-      content_hash: item.content_hash
-    });
+    try {
+      await supabase.from('job_provenance').insert({
+        canonical_id: newRecordId,
+        content_type: item.content_type,
+        source_name: sourceMeta?.source_name || payload.source,
+        source_url: payload.sourceUrl,
+        source_tier: sourceMeta?.tier || 2,
+        is_official: sourceMeta?.is_official || false,
+        content_hash: item.content_hash
+      });
+    } catch {
+      // Non-fatal if provenance record already exists
+    }
   }
 
   // Mark queue item as APPROVED. This retains the change_diff as a permanent audit trail.
   await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
   
   // --- SURGICAL CACHE INVALIDATION ---
-  // Revalidate only the specific item detail page and ingestion queue.
-  // We NEVER call revalidatePath('/', 'layout') to prevent busting ISR cache across 10,000+ pages.
   if (modifiedRecordId) {
     if (item.content_type === 'TENDER') {
       revalidatePath(`/tenders/${modifiedRecordId}`);
