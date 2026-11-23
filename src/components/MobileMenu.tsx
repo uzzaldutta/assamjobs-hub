@@ -47,6 +47,7 @@ export default function MobileMenu() {
                 <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3 uppercase tracking-wider">Quick Links</h3>
                 <div className="grid grid-cols-1 gap-2">
                   <Link onClick={() => setIsOpen(false)} href="/syllabus" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">Syllabus & Exam Pattern</Link>
+                  <Link onClick={() => setIsOpen(false)} href="/books" className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl font-medium text-sm text-blue-700 dark:text-blue-400">📚 Preparation Books & PDFs</Link>
                   <Link onClick={() => setIsOpen(false)} href="/study-materials" className="p-3 bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-xl font-medium text-sm text-fuchsia-700 dark:text-fuchsia-400">Study Materials (PDF)</Link>
                   <Link onClick={() => setIsOpen(false)} href="/admissions" className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-medium text-sm text-slate-700 dark:text-slate-300">All-India Admissions</Link>
                   <Link onClick={() => setIsOpen(false)} href="/scholarships" className="p-3 bg-pink-50 dark:bg-pink-900/20 rounded-xl font-medium text-sm text-pink-700 dark:text-pink-400">Govt Schemes & Scholarships</Link>

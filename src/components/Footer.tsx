@@ -45,6 +45,7 @@ export default function Footer() {
         <div className="col-span-1 lg:col-span-1">
           <h3 className="font-bold text-slate-800 dark:text-white mb-4 uppercase tracking-wider text-sm">Navigation</h3>
           <ul className="space-y-3">
+            <li><Link href="/books" className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline transition">📚 Books & E-Books</Link></li>
             <li><Link href="/" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Latest Jobs</Link></li>
             <li><Link href="/admit-cards" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Admit Cards</Link></li>
             <li><Link href="/results" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Exam Results</Link></li>

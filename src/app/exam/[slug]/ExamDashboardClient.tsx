@@ -84,6 +84,12 @@ export default function ExamDashboardClient({ exam, subjects, chapters, topics, 
             >
               <FileText size={18} /> Study Materials
             </button>
+            <Link 
+              href={`/books?exam=${exam.slug}`}
+              className="pb-4 px-2 text-sm md:text-base font-bold whitespace-nowrap border-b-4 border-transparent text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-2"
+            >
+              <BookOpen size={18} /> Books & E-Books
+            </Link>
           </div>
         </div>
       </div>

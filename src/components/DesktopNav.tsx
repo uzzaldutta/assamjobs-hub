@@ -54,6 +54,7 @@ export default function DesktopNav() {
           <BookOpen size={16} /> Preparation <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
         </button>
         <div className="absolute top-full left-0 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-2 translate-y-2 group-hover:translate-y-0">
+          <Link href="/books" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📚 Books & E-Books</Link>
           <Link href="/study-materials" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📖 {t("nav_study")}</Link>
           <Link href="/previous-papers" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">📄 Previous Papers</Link>
           <Link href="/mock-tests" className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">🎯 {t("nav_mock")}</Link>
