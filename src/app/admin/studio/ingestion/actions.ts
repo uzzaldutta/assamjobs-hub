@@ -4,6 +4,7 @@ import { supabaseAdmin as supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { generateUniqueSlug } from "@/lib/slugify";
 import { classifyJobType } from "@/lib/jobClassifier";
+import { notifyGoogleIndexing } from "@/lib/googleIndexing";
 
 function isDuplicateKeyError(err: any): boolean {
   if (!err) return false;
@@ -319,21 +320,31 @@ export async function approveQueueItemAction(queueId: string, action: 'NEW' | 'U
   // Mark queue item as APPROVED. This retains the change_diff as a permanent audit trail.
   await supabase.from('ingestion_queue').update({ status: 'APPROVED', approved_at: new Date().toISOString() }).eq('id', queueId);
   
-  // --- SURGICAL CACHE INVALIDATION ---
+  // --- SURGICAL CACHE INVALIDATION & GOOGLE INDEXING ---
   if (modifiedRecordId) {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://assamjobshub.com';
+    let targetPath = `/jobs/${modifiedRecordId}`;
     if (item.content_type === 'TENDER') {
-      revalidatePath(`/tenders/${modifiedRecordId}`);
+      targetPath = `/tenders/${modifiedRecordId}`;
+      revalidatePath(targetPath);
     } else if (item.content_type === 'ADMISSION') {
-      revalidatePath(`/admissions/${modifiedRecordId}`);
+      targetPath = `/admissions/${modifiedRecordId}`;
+      revalidatePath(targetPath);
     } else if (item.content_type === 'RESULT') {
-      revalidatePath(`/results/${modifiedRecordId}`);
+      targetPath = `/results/${modifiedRecordId}`;
+      revalidatePath(targetPath);
     } else if (item.content_type === 'ADMIT_CARD') {
-      revalidatePath(`/admit-cards/${modifiedRecordId}`);
+      targetPath = `/admit-cards/${modifiedRecordId}`;
+      revalidatePath(targetPath);
     } else if (item.content_type === 'SCHOLARSHIP') {
-      revalidatePath(`/scholarships/${modifiedRecordId}`);
+      targetPath = `/scholarships/${modifiedRecordId}`;
+      revalidatePath(targetPath);
     } else {
-      revalidatePath(`/jobs/${modifiedRecordId}`);
+      revalidatePath(targetPath);
     }
+
+    // Automated instant search engine ping & fast indexing
+    notifyGoogleIndexing(`${baseUrl}${targetPath}`, 'URL_UPDATED').catch(() => {});
   }
   
   revalidatePath('/admin/studio/ingestion/queue');

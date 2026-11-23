@@ -169,7 +169,14 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
               "title": job.title,
               "description": job.unique_description ? job.unique_description.replace(/<[^>]*>?/gm, "").substring(0, 1000) : "Details for " + job.title,
               "datePosted": datePosted,
-              ...(validThroughDate ? { "validThrough": validThroughDate } : {}),
+              "validThrough": validThroughDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+              "directApply": Boolean(job.apply_url),
+              "url": `https://assamjobshub.com/jobs/${job.slug || job.id}`,
+              "identifier": {
+                "@type": "PropertyValue",
+                "name": job.organization || "Assam Govt",
+                "value": job.id
+              },
               "employmentType": job.job_type === "GOVERNMENT" ? "FULL_TIME" : "OTHER",
               "hiringOrganization": {
                 "@type": "Organization",
@@ -184,7 +191,20 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
                   "addressRegion": "AS",
                   "addressCountry": "IN"
                 }
-              }
+              },
+              "applicantLocationRequirements": {
+                "@type": "Country",
+                "name": "IN"
+              },
+              ...(job.qualification ? {
+                "educationRequirements": {
+                  "@type": "EducationalOccupationalCredential",
+                  "credentialCategory": job.qualification
+                }
+              } : {}),
+              ...(job.vacancies && !isNaN(parseInt(job.vacancies)) ? {
+                "totalJobOpenings": parseInt(job.vacancies)
+              } : {})
             })
           }}
         />

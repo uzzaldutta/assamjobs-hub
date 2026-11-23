@@ -12,6 +12,7 @@ import { GenericAggregatorAdapter } from '@/lib/ingestion/adapters/GenericAggreg
 import { IndGovtJobsAdapter } from '@/lib/ingestion/adapters/IndGovtJobsAdapter';
 import { runAutoCleanup } from '@/lib/autoCleanup';
 import { approveQueueItemAction } from '@/app/admin/studio/ingestion/actions';
+import { pingSearchEngineSitemaps } from '@/lib/googleIndexing';
 
 // Secure the route with a cron secret or automated webhook token
 const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret';
@@ -90,6 +91,7 @@ export async function GET(req: Request) {
     }
 
     revalidatePath('/');
+    pingSearchEngineSitemaps().catch(() => {});
     return NextResponse.json({ 
       success: true, 
       timestamp: new Date().toISOString(),
