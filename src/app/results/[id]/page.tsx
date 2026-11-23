@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 import { formatSafeDate } from "@/lib/dateUtils";
 import JobFaqSection, { FaqItem } from "@/components/JobFaqSection";
+import MobileStickyActionDock from "@/components/MobileStickyActionDock";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
 
@@ -382,6 +383,15 @@ export default async function ResultDetails(props: { params: Promise<{ id: strin
           
         </div>
       </div>
+
+      {/* Mobile Sticky Action Dock (Reversible & High-Converting) */}
+      <MobileStickyActionDock
+        title={record.title}
+        applyUrl={record.result_url || record.official_pdf_url}
+        officialPdfUrl={record.official_pdf_url || record.official_source_url}
+        primaryActionLabel="View Scorecard / Result"
+        deadlineState="ACTIVE"
+      />
     </div>
   );
 }

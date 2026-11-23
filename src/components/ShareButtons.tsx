@@ -1,6 +1,6 @@
 "use client";
 
-import { Share2, MessageCircle, Send } from "lucide-react";
+import { Share2, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface ShareButtonsProps {
@@ -19,7 +19,6 @@ export default function ShareButtons({ title, compact = false }: ShareButtonsPro
   const encodedTitle = encodeURIComponent(title);
   
   const whatsappUrl = `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`;
-  const telegramUrl = `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
 
   const handleNativeShare = async () => {
@@ -60,15 +59,6 @@ export default function ShareButtons({ title, compact = false }: ShareButtonsPro
         className="flex items-center gap-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl font-medium transition shadow-sm"
       >
         <MessageCircle size={18} /> WhatsApp
-      </a>
-      
-      <a 
-        href={telegramUrl} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="flex items-center gap-2 px-4 py-2.5 bg-[#0088cc] hover:bg-[#0077b5] text-white rounded-xl font-medium transition shadow-sm"
-      >
-        <Send size={18} /> Telegram
       </a>
       
       <a 

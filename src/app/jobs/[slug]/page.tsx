@@ -14,6 +14,7 @@ import { notFound, redirect } from "next/navigation";
 import { extractAdvtNo } from "@/lib/ingestion/duplicate-matcher";
 import { formatSafeDate, toSafeISOString, calculateDaysLeft } from "@/lib/dateUtils";
 import JobFaqSection, { FaqItem } from "@/components/JobFaqSection";
+import MobileStickyActionDock from "@/components/MobileStickyActionDock";
 
 export const revalidate = 86400; // 24h caching - On-demand revalidation
 
@@ -506,6 +507,15 @@ export default async function JobDetails(props: { params: Promise<{ slug: string
           
         </div>
       </div>
+
+      {/* Mobile Sticky Action Dock (Reversible & High-Converting) */}
+      <MobileStickyActionDock
+        title={job.title}
+        applyUrl={job.apply_url}
+        officialPdfUrl={job.official_pdf_url || job.official_source_url}
+        primaryActionLabel="Apply Online"
+        deadlineState={deadlineState}
+      />
     </div>
   );
 }
