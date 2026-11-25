@@ -31,8 +31,11 @@ export class AssamCareerAdapter implements SourceAdapter {
       for (const feedUrl of feedEndpoints) {
         try {
           const res = await fetch(feedUrl, {
-            headers: { 'User-Agent': 'AssamJobsHub-Bot/1.0' },
-            signal: AbortSignal.timeout(6000)
+            headers: { 
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+              'Accept': 'application/json, text/plain, */*'
+            },
+            signal: AbortSignal.timeout(10000)
           });
 
           if (res.ok) {
