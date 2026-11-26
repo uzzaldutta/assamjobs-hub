@@ -113,8 +113,11 @@ export class AssamCareerAdapter implements SourceAdapter {
   async fetch(content: RawContent): Promise<RawContent> {
     try {
        const res = await fetch(content.url, { 
-         headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-         signal: AbortSignal.timeout(8000)
+         headers: { 
+           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+         },
+         signal: AbortSignal.timeout(12000)
        });
        if (res.ok) {
          content.html = await res.text();
